@@ -1,7 +1,7 @@
-import { SwapType } from '../../addUpdateBook/types/enum';
+import { SwapType } from '../../../../types/enum';
 
 export interface ISwappableBookData {
-  id: string;
+  id?: string;
   title: string;
   author: string;
   coverPhotoUrl: string;

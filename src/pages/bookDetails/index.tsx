@@ -1,36 +1,35 @@
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import bookIcon2 from '../../assets/bookIcon2.png';
-import lng from '../../assets/EN.png';
 import bookDetailsBg from '../../assets/bookdetailsbg.jpg';
+import editIcon from '../../assets/editBlack.png';
+import exchangeIcon from '../../assets/exchange.png';
 import BookMarkIcon from '../../assets/icon_bookmark.png';
 import leftArrowIcon from '../../assets/leftArrow.png';
-import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
-import exchangeIcon from '../../assets/exchange.png';
 import profileIcon from '../../assets/profileIcon.png';
 import shareIcon from '../../assets/share-icon.png';
 import upArrowIcon from '../../assets/upArrow.png';
 import Button from '../../components/shared/Button';
 import Image from '../../components/shared/Image';
-import { goToTop } from '../../utility/helper';
-import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import Loader from '../../components/shared/Loader';
-import { useEffect, useState } from 'react';
-import Exchanges from './components/Exchanges';
-import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
-import SwapModal from '../../components/shared/SwapModal';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { setSwapModal } from '../../redux/feature/open/openSlice';
-import { FormProvider, useForm } from 'react-hook-form';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
+import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
+import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
+import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
+import { useAppSelector } from '../../redux/hooks';
+import { goToTop } from '../../utility/helper';
+import BookType from './_components/BookType';
+import Exchanges from './_components/Exchanges';
+import SwapRequestButton from './_components/SwapRequestButton';
 
 export default function BookDetails() {
   const MAX_LENGTH = 95;
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isProfile, setProfile] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const dispatch = useAppDispatch();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
   const { data: userProfile } = useGetUserProfileImageQuery(
@@ -39,12 +38,6 @@ export default function BookDetails() {
       skip: !bookData?.owner?.id,
     },
   );
-  const methods = useForm({
-    mode: 'onChange',
-    defaultValues: { radio: 'swap' },
-  });
-  const { handleSubmit } = methods;
-
   useEffect(() => {
     if (userInformation?.id === bookData?.owner?.id) {
       setProfile(true);
@@ -61,16 +54,22 @@ export default function BookDetails() {
     setIsExpanded(!isExpanded);
   };
 
+  const loginModalOrSwapRequestModal = (): void => {
+    // =========== If user has in state show the swap request modal ===========
+    // console.log('test', bookData);
+    if (userInformation.email) {
+      dispatch(setSwapModal(true));
+      dispatch(setSwapBook(bookData));
+    } else {
+      // =========== If user state is empty show the login modal for login user ===========
+      console.log('ok');
+    }
+  };
+
   if (bookLoading) return <Loader />;
   goToTop();
   return (
     <div>
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit((data) => console.log({ data }))}>
-          <SwapModal />
-        </form>
-      </FormProvider>
-
       <div className="absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14">
         <div className="flex items-center gap-4">
           <Image
@@ -144,27 +143,8 @@ export default function BookDetails() {
             )}
           </p>
         </div>
-        <div className="bg-white py-6 grid grid-cols-3">
-          <div className="flex flex-col items-center border-r border-platinumDark px-1">
-            <p className="text-grayDark text-xs font-poppins font-light">Book Condition</p>
-            <Image src={bookIcon2} alt="book" className="mt-2 mb-1" />
-            <h3 className="text-black text-xs font-normal font-poppins">
-              {bookData?.condition || '-'}
-            </h3>
-          </div>
-          <div className="flex flex-col items-center border-r border-platinumDark px-1">
-            <p className="text-grayDark text-xs font-poppins font-normal">Language</p>
-            <Image src={lng} alt="book" className="mt-2 mb-1" />
-            <h3 className="text-black text-xs font-normal font-poppins">English</h3>
-          </div>
-          <div className="flex flex-col items-center border-r border-platinumDark px-1">
-            <p className="text-grayDark text-xs font-poppins font-normal">Length</p>
-            <p className="text-xl font-semibold text-smokyBlack">-</p>
-            <h3 className="text-black text-xs font-normal font-poppins flex items-center gap-1">
-              Pages
-            </h3>
-          </div>
-        </div>
+        {/* ================== START BOOK CONDITION TYPE [BOOK -> CONDITION, LANGUAGE, & LENGTH]================== */}
+        {bookData?.condition && <BookType condition={bookData?.condition} />}
         <div className="container">
           <div className=" flex items-center gap-1 my-5">
             <Image src={locationIcon} alt="location" />
@@ -204,26 +184,12 @@ export default function BookDetails() {
           ))}
         </div>
       </div>
+      {/* ==================SWAP REQUEST BUTTON CONTAINER ON THE FOOTER [SCREEN SIZE: MOBILE]================== */}
       {!isProfile && (
-        <div
-          className="h-16 flex items-center gap-1 justify-between text-xs font-normal px-6 fixed bottom-0  bg-white w-full"
-          style={{
-            boxShadow: '0px 0px 1px 0px #33333345',
-          }}
-        >
-          <div>
-            <p className="text-[8px] font-poppins ">Offered by</p>
-            <h3 className="text-sm font-poppins font-normal">{bookData?.owner?.name}</h3>
-          </div>
-          <div>
-            <Button
-              onClick={() => dispatch(setSwapModal(true))}
-              className="bg-primary text-white w-[130px] sm:w-[150px] py-2 text-sm font-poppins font-normal rounded-md"
-            >
-              Request Swap
-            </Button>
-          </div>
-        </div>
+        <SwapRequestButton
+          ownerName={bookData?.owner?.name}
+          onClick={loginModalOrSwapRequestModal}
+        />
       )}
     </div>
   );

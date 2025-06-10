@@ -1,9 +1,9 @@
+import { SwapType } from '../../../../types/enum';
 import BookIcon from '../../../assets/bookIcon.svg';
 import BookIconBlue from '../../../assets/bookIconBlue.png';
 import { Carousel, CarouselContent, CarouselItem } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
-import { SwapType } from '../../addUpdateBook/types/enum';
-import { IExchange, ISwapConditionData } from '../interface';
+import { IExchange, ISwapConditionData } from '../types/interface';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
   if (!swapCondition) return null;
@@ -11,7 +11,7 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
   const swapConditionExchange = (swapConditionData: ISwapConditionData): Array<IExchange> => {
     switch (swapConditionData.swapType) {
       case SwapType.BYBOOKS:
-        return swapConditionData.swappableBooks.map((swappableBook) => ({
+        return (swapConditionData?.swappableBooks ?? []).map((swappableBook) => ({
           swapType: swapConditionData.swapType,
           title: swappableBook.title,
           value: swappableBook.author,
@@ -69,7 +69,7 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
                   className="w-5"
                 />
                 <div className="w-[120px] text-left">
-                  <h3 className="text-sm font-poppins leading-[18px] font-normal text-smokyBlack capitalize">
+                  <h3 className="text-sm font-poppins leading-[18px] font-normal text-smokyBlack capitalize line-clamp-2">
                     {item?.title}
                   </h3>
                   <p className="text-xs font-poppins font-light mt-1 text-smokyBlack">
@@ -81,20 +81,6 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
           );
         })}
       </CarouselContent>
-
-      {/* left arrow */}
-      {/* <div className="absolute left-16 top-1/2 -translate-y-1/2 hidden lg:block">
-        <CarouselPrevious className="h-[20px] w-[20px] rounded-full bg-gray-light hover:bg-gray-light">
-          <ChevronLeft />
-        </CarouselPrevious>
-      </div> */}
-
-      {/* right arrow */}
-      {/* <div className="absolute right-16 top-1/2 -translate-y-1/2 hidden lg:block">
-        <CarouselNext className="h-[20px] w-[20px] rounded-full bg-gray-light hover:bg-gray-light">
-          <ChevronsRight />
-        </CarouselNext>
-      </div> */}
     </Carousel>
   );
 }

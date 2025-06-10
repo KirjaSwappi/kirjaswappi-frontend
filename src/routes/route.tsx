@@ -1,7 +1,8 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-restricted-globals */
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
+import AddUpdateBook from '../pages/addUpdateBook';
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
 import ResetPassword from '../pages/auth/resetPassword';
@@ -10,12 +11,10 @@ import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
 import UserProfile from '../pages/profile/components/UserProfile';
+import Inbox from '../pages/user/inbox/Inbox';
+import { Index } from '../pages/user/inboxChat';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
-import AddUpdateBook from '../pages/addUpdateBook';
-import Inbox from '../pages/user/inbox/Inbox';
-import { Navigate } from 'react-router-dom';
-import { Index } from '../pages/user/inboxChat';
 
 const routes = createBrowserRouter([
   {

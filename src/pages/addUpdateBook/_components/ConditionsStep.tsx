@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { FaDeleteLeft } from 'react-icons/fa6';
+import { SwapType } from '../../../../types/enum';
 import closeIcon from '../../../assets/close.svg';
 import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
@@ -12,7 +13,6 @@ import { setOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getFileToUrl } from '../../../utility/helper';
 import { SWAP_TYPES } from '../helper';
-import { SwapType } from '../types/enum';
 import { ISwappableBook } from '../types/interface';
 import AddAnotherBookButton from './AddAnotherBookButton';
 import ConditionMessageBox from './ConditionMessageBox';

@@ -27,7 +27,7 @@ export const authApi = api.injectEndpoints({
             data: { id, email },
           } = await queryFulfilled;
           if (id && email) {
-            setCookie('user', { id, email }, 24);
+            setCookie('user', { id, email }, 240);
           }
         } catch (error) {
           console.error("Can't set data in cookie. failed:", error);

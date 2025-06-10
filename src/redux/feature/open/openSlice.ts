@@ -20,11 +20,8 @@ const openSlice = createSlice({
     setOpen: (state, action: PayloadAction<boolean>) => {
       state.open = action.payload;
     },
-    setSwapModal: (state, action: PayloadAction<boolean>) => {
-      state.swapModal = action.payload;
-    },
   },
 });
 
-export const { setOpen, setSwapModal } = openSlice.actions;
+export const { setOpen } = openSlice.actions;
 export default openSlice.reducer;

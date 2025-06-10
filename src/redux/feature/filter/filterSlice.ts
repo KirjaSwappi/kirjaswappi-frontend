@@ -22,7 +22,7 @@ const initialState: IFilterInitialState = {
   },
 };
 const filterSlice = createSlice({
-  name: 'filter',
+  name: 'book',
   initialState,
   reducers: {
     setSearch: (state, action) => {
