@@ -2,10 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BookCard from '../../components/shared/BookCard';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
+import { setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import { IBook } from './interface';
-import { setPageNumber } from '../../redux/feature/filter/filterSlice';
+
 export default function Books() {
   const observer = useRef<IntersectionObserver>();
   const [books, setBooks] = useState<IBook[]>([]);
@@ -64,7 +65,12 @@ export default function Books() {
   if (isError) return <p>Something went wrong</p>;
   return (
     <section>
-      <div className="container min-h-[80vh] pb-28">
+      <div className="container min-h-[80vh]">
+        {/* Search bar for small devices */}
+        {/* <div className="block md:hidden mb-4">
+          <MobileSearch></MobileSearch>
+        </div> */}
+        {/* Hero section */}
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 gap-2">
           {books.map((book: IBook, idx: number) => {
             if (idx === books.length - 1) {

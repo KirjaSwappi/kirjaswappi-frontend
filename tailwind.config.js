@@ -12,12 +12,13 @@ export default {
           sm: '100%',
           md: '100%',
           tab: '100%',
-          lg: '1024px',
-          xl: '1245px',
+          lg: '100%',
+          xl: '100%',
+          '2xl': '1440px',
         },
         padding: {
           DEFAULT: '1rem',
-          xl: '0rem',
+          '2xl': '0rem',
         },
       },
       colors: {

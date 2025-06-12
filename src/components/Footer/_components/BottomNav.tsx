@@ -17,7 +17,7 @@ export default function BottomNav() {
     <div
       className={`${
         isFooterBarShow && 'hidden'
-      } h-20 flex items-center gap-5 justify-between text-xs font-normal px-6 `}
+      } h-20 flex items-center lg:hidden gap-5 justify-between text-xs font-normal px-6 `}
     >
       {menu.map((menuItem) => {
         const isActive = location.pathname === menuItem?.route;
