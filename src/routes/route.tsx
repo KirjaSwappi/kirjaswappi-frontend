@@ -16,6 +16,9 @@ import AddUpdateBook from '../pages/addUpdateBook';
 import Inbox from '../pages/user/inbox/Inbox';
 import { Navigate } from 'react-router-dom';
 import { Index } from '../pages/user/inboxChat';
+import PrivacyPolicy from '../pages/privacyPolicy';
+import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
+import ContactUs from '../pages/privacyPolicy/components/ContactUs';
 
 const routes = createBrowserRouter([
   {
@@ -63,6 +66,18 @@ const routes = createBrowserRouter([
           {
             path: 'update-book/:id',
             element: <AddUpdateBook />,
+          },
+          {
+            path: 'privacy',
+            element: <PrivacyPolicy />,
+          },
+          {
+            path: 'privacy/:sectionKey',
+            element: <PrivacyPolicyDetail />,
+          },
+          {
+            path: 'contact',
+            element: <ContactUs />,
           },
           // {
           //   path: "book-details/:id",
