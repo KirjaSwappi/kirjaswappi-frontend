@@ -1,7 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
+import * as React from 'react';
+import { cn } from '../../utility/cn';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -135,7 +136,7 @@ const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
     const { carouselRef, orientation } = useCarousel();
 
     return (
-      <div ref={carouselRef} className="overflow-hidden">
+      <div ref={carouselRef} className={cn('overflow-hidden')}>
         <div
           ref={ref}
           className={`flex ${orientation === 'horizontal' ? '-ml-4' : '-mt-4 flex-col'} ${className}`}
@@ -222,11 +223,4 @@ CarouselItem.displayName = 'CarouselItem';
 // })
 // CarouselNext.displayName = "CarouselNext"
 
-export {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  //   CarouselPrevious,
-  //   CarouselNext,
-};
+export { Carousel, CarouselContent, CarouselItem, type CarouselApi };
