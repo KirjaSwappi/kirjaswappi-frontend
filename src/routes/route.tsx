@@ -1,7 +1,6 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-restricted-globals */
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
+import AddUpdateBook from '../pages/addUpdateBook';
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
 import ResetPassword from '../pages/auth/resetPassword';
@@ -10,12 +9,14 @@ import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
 import UserProfile from '../pages/profile/components/UserProfile';
+import Inbox from '../pages/user/inbox/Inbox';
+import { Index } from '../pages/user/inboxChat';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
-import AddUpdateBook from '../pages/addUpdateBook';
-import Inbox from '../pages/user/inbox/Inbox';
-import { Navigate } from 'react-router-dom';
-import { Index } from '../pages/user/inboxChat';
+
+import ContactUs from '../pages/contactUs/ContactUs';
+import PrivacyPolicy from '../pages/privacyPolicy';
+import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 
 const routes = createBrowserRouter([
   {
@@ -37,7 +38,18 @@ const routes = createBrowserRouter([
         path: '/book-details/:id',
         element: <BookDetails />,
       },
-
+      {
+        path: '/contact',
+        element: <ContactUs />,
+      },
+      {
+        path: '/privacy-policy',
+        element: <PrivacyPolicy />,
+      },
+      {
+        path: '/privacy-policy/:sectionKey',
+        element: <PrivacyPolicyDetail />,
+      },
       {
         path: '/profile',
         element: (
@@ -64,10 +76,6 @@ const routes = createBrowserRouter([
             path: 'update-book/:id',
             element: <AddUpdateBook />,
           },
-          // {
-          //   path: "book-details/:id",
-          //   element: <BookDetails />,
-          // },
         ],
       },
       {

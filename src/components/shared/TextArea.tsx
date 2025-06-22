@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { cn } from '../../utility/cn';
 
 interface TextAreaProps {
   name?: string;
@@ -23,11 +24,12 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           onBlur={onBlur}
           value={value}
           placeholder={placeholder}
-          className={`w-full h-[48px] px-[14px] py-2  bg-white border border-[#E6E6E6] ${
-            error ? 'border border-rose-500' : 'focus:ring-grayDark focus:border-grayDark'
-          } bg-[#F2F2F2] focus:outline-none  placeholder:text-sm placeholder:text-grayDark ${
-            className && className
-          }`}
+          className={cn(
+            `w-full h-[48px] px-[14px] py-2  bg-white border border-[#E6E6E6] ${
+              error ? 'border-rose-500' : 'focus:ring-grayDark focus:border-grayDark'
+            } bg-[#F2F2F2] focus:outline-none  placeholder:text-sm placeholder:text-grayDark `,
+            className,
+          )}
         ></textarea>
         {showErrorMessage && error && (
           <div className="text-rose-500 text-xs mt-1 pl-2">{error}</div>
