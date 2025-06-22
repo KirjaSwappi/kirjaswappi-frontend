@@ -1,13 +1,16 @@
-import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from 'react-icons/md';
+import { Link, useLocation } from 'react-router-dom';
 import blankProfileIcon from '../../../assets/blankProfileIcon.png';
+import { useMouseClick } from '../../../hooks/useMouse';
 import { useGetUserProfileImageQuery } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
 import Image from '../../shared/Image';
+import UserMenuDropdown from './UserMenuDropdown';
 import UserProfileSkeleton from './UserProfileSkeleton';
-
 export default function HeaderUserProfile() {
-  // const { clicked, setClicked, reference } = useMouseClick();
+  const location = useLocation();
+  const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { data: profilePicture, isLoading } = useGetUserProfileImageQuery(
     { userId: userInformation.id },
@@ -15,6 +18,11 @@ export default function HeaderUserProfile() {
       skip: !userInformation.id,
     },
   );
+
+  // ======= RESET THE USER MENU OPEN STATE =======
+  useEffect(() => {
+    setClicked(false);
+  }, [location]);
   return (
     <div>
       {isLoading ? (
@@ -30,8 +38,15 @@ export default function HeaderUserProfile() {
               />
             </Link>
           ) : (
-            <div>
-              <div className="flex items-center gap-2">
+            <div ref={reference} className="relative">
+              <button
+                type="button"
+                onClick={() => setClicked((prev) => !prev)}
+                className="flex items-center gap-2"
+                tabIndex={0}
+                aria-haspopup="true"
+                aria-expanded={clicked}
+              >
                 <Image
                   src={profilePicture?.imageUrl ?? blankProfileIcon}
                   alt="profile"
@@ -41,9 +56,14 @@ export default function HeaderUserProfile() {
                   <p className="text-grayDark font-poppins font-normal text-sm">
                     {userInformation.firstName}
                   </p>
-                  <MdOutlineKeyboardArrowDown size={24} />
+                  {clicked ? (
+                    <MdOutlineKeyboardArrowUp size={24} />
+                  ) : (
+                    <MdOutlineKeyboardArrowDown size={24} />
+                  )}
                 </div>
-              </div>
+              </button>
+              {clicked && <UserMenuDropdown />}
             </div>
           )}
         </div>

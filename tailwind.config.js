@@ -74,7 +74,7 @@ export default {
         // "deals-background-sm": "url('/src/assets/images/dealOfTheWeekBG.jpg')",
       },
       boxShadow: {
-        'custom-box-shadow': '0px 0px 5px #64646439',
+        'custom-box-shadow': '0px 0px 5px #23232326',
       },
       dropShadow: {},
       animation: {

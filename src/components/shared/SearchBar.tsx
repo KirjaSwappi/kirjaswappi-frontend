@@ -5,9 +5,10 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import filterIcon from '../../assets/filterBlue.png';
 import sortIcon from '../../assets/sorticon.png';
 import useDebounce from '../../hooks/useDebounce';
-import { setSearch } from '../../redux/feature/filter/filterSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setFilterOpen, setSearch } from '../../redux/feature/filter/filterSlice';
+import { useAppDispatch } from '../../redux/hooks';
 import { cn } from '../../utility/cn';
+import Button from './Button';
 import Image from './Image';
 import Input from './Input';
 export default function SearchBar({
@@ -25,21 +26,24 @@ export default function SearchBar({
 }) {
   const dispatch = useAppDispatch();
   // const [query, setQuery] = useState<string>('');
-  const {
-    filter: { search },
-  } = useAppSelector((state) => state.filter);
+  // const {
+  //   filter: { search },
+  // } = useAppSelector((state) => state.filter);
   const queryValue = useDebounce(query, 300);
 
   useEffect(() => {
     dispatch(setSearch(queryValue));
   }, [queryValue]);
-  console.log(search);
+
   return (
     <div className="flex items-center justify-between gap-2">
       {isShowFilterIcon && (
-        <div className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light">
+        <Button
+          onClick={() => dispatch(setFilterOpen(true))}
+          className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light"
+        >
           <Image src={filterIcon} alt="Filter Icon" className="w-6" />
-        </div>
+        </Button>
       )}
       <div
         className={cn(

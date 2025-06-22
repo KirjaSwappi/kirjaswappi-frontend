@@ -7,13 +7,14 @@ import {
   setGenreFilter,
   setLanguageFilter,
 } from '../../redux/feature/filter/filterSlice';
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import BookFilter from './_components/BookFilter';
 import SideLeftDrawer from './_components/LeftSideDrawer';
 import TopBar from './_components/TopBar';
 export default function Header() {
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { isFilterOpen } = useAppSelector((state) => state.filter);
   const { clicked, reference } = useMouseClick<HTMLFormElement>();
   const pathname = location.pathname;
   const showTopHeaderPath = ['/', `/book-details/${pathname?.split('/').reverse()[0]}`];
@@ -32,10 +33,14 @@ export default function Header() {
     dispatch(setConditionFilter(data.condition));
     dispatch(setLanguageFilter(data.language));
   };
+  console.log(clicked);
+  // useEffect(() => {
+
+  // }, []);
   return (
     <header className={`${isHeaderShow ? 'pb-28' : 'pb-0'}`}>
       <FormProvider {...methods}>
-        <SideLeftDrawer open={clicked}>
+        <SideLeftDrawer left open={isFilterOpen}>
           <form ref={reference} onSubmit={handleSubmit((data) => handleSubmitFn(data))}>
             <BookFilter />
           </form>
