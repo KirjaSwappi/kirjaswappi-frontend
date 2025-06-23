@@ -1,4 +1,4 @@
-export default function SideLeftDrawer({
+export default function SideDrawer({
   open,
   left = false,
   children,

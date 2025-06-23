@@ -3,6 +3,7 @@ import { IoSearch } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { menu } from '../../data/menu';
 import { useMouseClick } from '../../hooks/useMouse';
+import Button from './Button';
 import Image from './Image';
 import Search from './Search';
 
@@ -52,14 +53,14 @@ export default function ScrollSearch() {
             );
           })}
           {/* Search icon as part of menu group */}
-          <button
+          <Button
             onClick={() => setClicked((prev) => !prev)}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 ml-2"
             style={{ position: 'relative' }}
             aria-label="Search"
           >
             <IoSearch className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
 
         {/* Search bar fades in over menu texts */}

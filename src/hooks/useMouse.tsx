@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function useMouseClick<T extends HTMLElement = HTMLDivElement>() {
+export function useMouseClick<T extends HTMLElement = HTMLDivElement>(onOutsideClick?: () => void) {
   const reference = useRef<T>(null);
   const [clicked, setClicked] = useState<boolean>(false);
   const handleClickOutSide = (event: MouseEvent) => {
@@ -9,6 +9,7 @@ export function useMouseClick<T extends HTMLElement = HTMLDivElement>() {
       !reference.current.contains(event.target as Node) &&
       !(event.target instanceof HTMLButtonElement)
     ) {
+      onOutsideClick?.();
       setClicked(false);
     }
   };
@@ -17,6 +18,6 @@ export function useMouseClick<T extends HTMLElement = HTMLDivElement>() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutSide);
     };
-  }, [reference]);
+  }, [onOutsideClick]);
   return { clicked, setClicked, reference };
 }

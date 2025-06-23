@@ -1,6 +1,7 @@
 import { BiSupport } from 'react-icons/bi';
 import { IoLogOut } from 'react-icons/io5';
 import { MdContactPage, MdFeedback, MdLock } from 'react-icons/md';
+import { TbUserCircle } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { logout } from '../../../redux/feature/auth/authSlice';
@@ -10,6 +11,11 @@ import DropdownItem from './DropdownItem';
 export default function UserMenuDropdown() {
   const dispatch = useDispatch();
   const UserMenu = [
+    {
+      label: 'View Profile',
+      icon: TbUserCircle,
+      location: '/profile/user-profile',
+    },
     {
       label: 'Privacy Center',
       icon: MdLock,
@@ -41,7 +47,11 @@ export default function UserMenuDropdown() {
     <div className="absolute top-12 py-2 right-0 w-56 bg-white rounded-lg shadow-custom-box-shadow z-50 text-[#404040] ">
       {UserMenu.map((menu, index) => {
         return menu.location === '/logout' ? (
-          <Button onClick={() => dispatch(logout())} className="w-full">
+          <Button
+            key={`${menu.label}-${index}`}
+            onClick={() => dispatch(logout())}
+            className="w-full"
+          >
             <DropdownItem
               className="group hover:bg-primary hover:text-white"
               icon={<menu.icon className="text-primary group-hover:text-white" />}

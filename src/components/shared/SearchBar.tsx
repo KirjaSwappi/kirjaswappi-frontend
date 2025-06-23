@@ -54,7 +54,7 @@ export default function SearchBar({
         <div className="w-6 h-6 flex items-center justify-center">
           <IoIosSearch size={24} className="text-grayDark" />
         </div>
-        <div>
+        <div className="w-[82%]">
           <Input
             type="text"
             placeholder="Find Books"

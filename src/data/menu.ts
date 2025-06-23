@@ -1,6 +1,6 @@
 import home from '../assets/bookIcon.svg';
 import message from '../assets/message.svg';
-import profile from '../assets/profile.svg';
+import notification from '../assets/notification.svg';
 import map from '../assets/uiw_map.svg';
 
 export const menu = [
@@ -33,10 +33,10 @@ export const menu = [
   },
   {
     id: 5,
-    icon: profile,
-    selected: profile,
-    value: 'Profile',
-    route: '/profile/user-profile',
+    icon: notification,
+    selected: notification,
+    value: 'Notification',
+    route: '/profile/notification',
     isRoute: true,
     isShow: false,
   },
