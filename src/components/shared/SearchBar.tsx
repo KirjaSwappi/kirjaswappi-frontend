@@ -25,10 +25,6 @@ export default function SearchBar({
   setQuery: (value: string) => void;
 }) {
   const dispatch = useAppDispatch();
-  // const [query, setQuery] = useState<string>('');
-  // const {
-  //   filter: { search },
-  // } = useAppSelector((state) => state.filter);
   const queryValue = useDebounce(query, 300);
 
   useEffect(() => {

@@ -1,9 +1,7 @@
-// import leftArrowGray from '../../../assets/leftArrowGray.png';
-import logo from '../../../assets/logo.png';
-// import logoIcon from '../../../assets/logoIcon.png';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import country from '../../../assets/flag.png';
+import logo from '../../../assets/logo.png';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
 import ScrollSearch from '../../shared/ScrollSearch';

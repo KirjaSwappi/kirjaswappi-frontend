@@ -4,14 +4,7 @@ import BottomNavItem from './BottomNavItem';
 
 export default function BottomNav() {
   const location = useLocation();
-  const ignorePath: string[] = [
-    // '/profile/edit-user',
-    // '/profile/add-book',
-    // `/book-details/${location?.pathname?.split('/').reverse()[0]}`,
-    // `/profile/update-book/${location?.pathname?.split('/').reverse()[0]}`,
-    // `/book-details/${location?.pathname?.split('/').reverse()[0]}`,
-    // `/user/inbox/chat/${location?.pathname?.split('/').reverse()[0]}`,
-  ];
+  const ignorePath: string[] = [];
   const isFooterBarShow = ignorePath.includes(location.pathname);
   return (
     <div

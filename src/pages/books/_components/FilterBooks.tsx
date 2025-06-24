@@ -1,1 +1,0 @@
-//filtering of book card

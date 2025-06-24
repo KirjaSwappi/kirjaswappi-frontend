@@ -16,10 +16,6 @@ export default function Search({ onClose }: { onClose?: () => void }) {
   const { clicked, reference } = useMouseClick();
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   inputRef.current?.focus();
-  // }, []);
-
   useEffect(() => {
     dispatch(setSearch(debouncedSearch));
   }, [debouncedSearch, dispatch]);
