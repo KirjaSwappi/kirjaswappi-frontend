@@ -3,13 +3,6 @@ import { SUPPORTED_FORMATS } from '../../../utility/constant';
 
 const FILE_SIZE = 1 * 1024 * 1024; // 10MB
 
-const bookDetails = yup.object().shape({
-  title: yup.string().required('Book title is required'),
-  author: yup.string().required('Author name is required'),
-  language: yup.string().required('Book language is required'),
-  condition: yup.string().required('Book condition is required'),
-});
-
 const imageSchema = yup
   .mixed<File | string>()
   .required('Image is required')
@@ -28,13 +21,20 @@ const imageSchema = yup
     return value instanceof File;
   });
 
+const bookDetails = yup.object().shape({
+  coverPhotos: yup.array().of(imageSchema).min(1, 'At least one image is required'),
+  title: yup.string().required('Book title is required'),
+  author: yup.string().required('Author name is required'),
+  language: yup.string().required('Book language is required'),
+  condition: yup.string().required('Book condition is required'),
+});
+
 const otherDetails = yup.object().shape({
   genres: yup
     .array()
     .of(yup.string())
     .min(1, 'Please select at least one genre.')
     .required('Genres are required.'),
-  coverPhotos: yup.array().of(imageSchema).min(1, 'At least one image is required'),
 });
 
 const conditionDetails = yup.object().shape({

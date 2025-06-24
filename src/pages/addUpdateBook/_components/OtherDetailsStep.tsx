@@ -1,12 +1,10 @@
+import { FieldError, FieldErrors, useFormContext } from 'react-hook-form';
+import closeIcon from '../../../assets/close.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
+import InputLabel from '../../../components/shared/InputLabel';
 import { setOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import closeIcon from '../../../assets/close.svg';
-import { useFormContext } from 'react-hook-form';
-import InputLabel from '../../../components/shared/InputLabel';
-import MultipleImageFileInput from './MultipleImageControllerField';
-import { FieldErrors, FieldError } from 'react-hook-form';
 
 export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   const { open } = useAppSelector((state) => state.open);
@@ -24,27 +22,18 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   };
 
   return (
-    <div className="pt-12 lg:-pt-0">
+    <div className="pt-5 lg:pt-0">
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="w-full lg:w-1/2">
-          <div className="py-4 border-b lg:border-b-0 border-platinumDark">
-            <InputLabel label="Cover Photo" required />
-            <MultipleImageFileInput
-              errors={errors as Record<string, FieldError>}
-              name="coverPhotos"
-            />
-          </div>
-        </div>
-        <div className="w-full lg:w-1/2">
           <div className="flex items-center justify-between py-4 border-b lg:border-b-0 border-platinumDark">
-            <InputLabel label="Genre" required />
-            <button
+            <InputLabel label="Genre" required className="mb-0" />
+            <Button
               type="button"
               onClick={() => dispatch(setOpen(!open))}
               className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
             >
               Add
-            </button>
+            </Button>
           </div>
           <div>
             {genres && genres.length > 0 ? (
@@ -62,7 +51,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 ))}
               </div>
             ) : (
-              <div className="h-[50px] bg-white  mt-3 flex items-center justify-center rounded-md">
+              <div className="h-[50px] bg-white mt-3 flex items-center justify-center rounded-md">
                 <p className="text-xs text-grayDark">No Genre Added.</p>
               </div>
             )}

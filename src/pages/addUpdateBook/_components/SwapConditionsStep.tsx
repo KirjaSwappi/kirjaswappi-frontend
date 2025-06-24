@@ -19,7 +19,7 @@ import ImageFileInput from './ImageControllerField';
 import SwappableBookCard from './SwappableBookCard';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ConditionsStep({ errors }: { errors: any }) {
+export default function SwapConditionsStep({ errors }: { errors: any }) {
   const dispatch = useAppDispatch();
   const [swappableBookIndex, setSwappableBookIndex] = useState<number | null>(null);
   const { open } = useAppSelector((state) => state.open);
@@ -88,10 +88,9 @@ export default function ConditionsStep({ errors }: { errors: any }) {
 
   return (
     <div>
-      {/* Swap Type for sm devices */}
-      <div className="block lg:hidden mb-6">
+      <div className="block lg:hidden">
         <div className="mb-4">
-          <InputLabel label="Swap Type" required />
+          <InputLabel label="Condition Type" required />
         </div>
         <div className="flex flex-col gap-4">
           {SWAP_TYPES.map(({ value, label }) => (
@@ -100,7 +99,7 @@ export default function ConditionsStep({ errors }: { errors: any }) {
               name="swapType"
               control={control}
               render={({ field }) => (
-                <div className="px-4 py-4 bg-gray-100 border border-[#E6E6E6] rounded-lg">
+                <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border lg:border-grayDark border-gray rounded-lg">
                   <label className="flex items-center gap-2 w-full cursor-pointer">
                     <input
                       type="radio"

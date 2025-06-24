@@ -1,3 +1,4 @@
+import { FieldErrors } from 'react-hook-form';
 import { SwapType } from '../../../../types/enum';
 
 export type TOptions = {
@@ -6,6 +7,7 @@ export type TOptions = {
 };
 
 export interface IBookDetailsProps {
+  errors: FieldErrors;
   languageOptions: TOptions[] | undefined;
   conditionOptions: TOptions[] | undefined;
 }

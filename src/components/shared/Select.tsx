@@ -22,7 +22,7 @@ const Select = forwardRef<HTMLSelectElement, ISelectProps>(
           ref={ref}
           value={value}
           name={name}
-          className={`w-full border rounded-md px-[14px] py-4 outline-none text-sm  text-[#31373D] border-[#E6E6E6]  ${error ? 'border border-rose-500' : ''}  ${
+          className={`w-full border rounded-md px-[14px] py-4 outline-none text-sm  text-[#31373D] bg-white lg:bg-AntiFlashWhite lg:border-grayDark border-gray  ${error ? 'border border-rose-500' : ''}  ${
             className && className
           }`}
           onChange={onChange}
