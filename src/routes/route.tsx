@@ -20,7 +20,6 @@ import ContactUs from '../pages/contactUs/ContactUs';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 
-
 const routes = createBrowserRouter([
   {
     path: '/',
