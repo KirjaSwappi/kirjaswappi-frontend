@@ -89,7 +89,7 @@ export default function BookDetails() {
           />
         </div>
       </div>
-      <div className="w-full h-[172px] mt-14">
+      <div className="w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
       </div>
       <div className="mx-auto w-[160px] h-[190px] -mt-32">
