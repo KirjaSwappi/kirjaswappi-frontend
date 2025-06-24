@@ -1,5 +1,5 @@
+import { SwapType } from '../../../types/enum';
 import { blobToBase64, convertedURLToFile, urlToDataUrl } from '../../utility/helper';
-import { SwapType } from './types/enum';
 import { IAddUpdateBook, IBookData } from './types/interface';
 
 // DEFAULT VALUES
