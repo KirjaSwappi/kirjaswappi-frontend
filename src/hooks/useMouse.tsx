@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-export function useMouseClick() {
-  const reference = useRef<HTMLElement>(null);
+export function useMouseClick<T extends HTMLElement = HTMLDivElement>(onOutsideClick?: () => void) {
+  const reference = useRef<T>(null);
   const [clicked, setClicked] = useState<boolean>(false);
   const handleClickOutSide = (event: MouseEvent) => {
     if (
@@ -9,6 +9,7 @@ export function useMouseClick() {
       !reference.current.contains(event.target as Node) &&
       !(event.target instanceof HTMLButtonElement)
     ) {
+      onOutsideClick?.();
       setClicked(false);
     }
   };
@@ -17,6 +18,6 @@ export function useMouseClick() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutSide);
     };
-  }, [reference]);
+  }, [onOutsideClick]);
   return { clicked, setClicked, reference };
 }

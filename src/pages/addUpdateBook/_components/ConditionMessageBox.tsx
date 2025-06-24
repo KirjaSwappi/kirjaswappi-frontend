@@ -4,7 +4,7 @@ import Open from '../../../assets/3d-condition-icon-Open-to-Offer.png';
 import book from '../../../assets/3d-condition-icon-by-book.png';
 import Image from '../../../components/shared/Image';
 
-import { SwapType } from '../types/enum';
+import { SwapType } from '../../../../types/enum';
 
 export default function ConditionMessageBox({ swapType }: { swapType: string }) {
   if (!swapType) return null;
