@@ -171,7 +171,7 @@ export default function AddUpdateBook() {
                 </div>
                 <div className="w-full lg:w-[70%]">
                   <FormProvider {...methods}>
-                    <h1 className="font-poppins lg:mt-3 mb-2 font-semibold text-[20px] hidden lg:block">
+                    <h1 className="font-poppins lg:mt-0 mb-2 font-semibold text-[20px] hidden lg:block">
                       {steps[active].label}
                     </h1>
                     <AddGenre

@@ -3,6 +3,7 @@ import { Controller, FieldError, useFormContext } from 'react-hook-form';
 import closeIcon from '../../../assets/close.png';
 import Image from '../../../components/shared/Image';
 import { SUPPORTED_FORMATS } from '../../../utility/constant';
+import UploadPicture from './UploadPicture';
 
 interface IImageFileInputProps {
   name: string;
@@ -82,7 +83,7 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
 
   const fieldError = errors?.[name];
   const { messages: errorMessages, indexes: errorIndex } = parseFieldErrors(fieldError);
-
+  const imagesLength = previews.length;
   return (
     <Controller
       name={name}
@@ -91,167 +92,51 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
       render={({ field }) => {
         return (
           <div>
-            {/* Mobile/Small screens */}
-            <div className="block lg:hidden">
-              {previews.length < 5 && (
-                <div className="w-[126px] h-[150px] border-[1px] border-dashed border-grayDark rounded-lg cursor-pointer block mx-auto">
-                  <label
-                    htmlFor="file"
-                    className="flex flex-col items-center justify-center h-full"
-                  >
-                    <span className="text-grayDark text-3xl font-poppins font-extralight">+</span>
-                    <span className="text-grayDark text-xs font-poppins font-normal">
-                      Upload Picture
-                    </span>
-                    <input
-                      id="file"
-                      type="file"
-                      multiple
-                      accept={SUPPORTED_FORMATS.join(',')}
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, field)}
-                    />
-                  </label>
-                </div>
-              )}
-              <div className="grid grid-cols-5 gap-1 mt-4">
-                {previews &&
-                  previews?.map((src, index: number) => {
-                    return (
+            {imagesLength < 5 && (
+              <UploadPicture
+                className="lg:hidden mx-auto w-[126px] h-[150px]"
+                onChange={(e) => handleFileChange(e, field)}
+              />
+            )}
+            <div
+              className={`grid ${imagesLength < 1 ? 'grid-cols-1' : 'grid-cols-5 lg:grid-cols-2'}  gap-1 lg:gap-4 mt-4`}
+            >
+              {previews &&
+                previews?.map((src, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`w-[56px] lg:w-[163px] h-[56px] lg:h-[157px] border bg-[#DAE6F5] lg:p-2 ${
+                        errorIndex.includes(index) ? 'border-2 border-rose-600' : 'border-[#B2B2B2]'
+                      } rounded-lg relative group`}
+                    >
                       <div
-                        key={index}
-                        className={`w-[56px] h-[56px] border ${
-                          errorIndex.includes(index)
-                            ? 'border-2 border-rose-600'
-                            : 'border-[#B2B2B2]'
-                        } rounded-lg relative group`}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => handleDelete(index, field)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') handleDelete(index, field);
+                        }}
+                        className="absolute w-5 h-5 flex items-center justify-center bg-smokyBlack text-white rounded-full -right-2 -top-2 cursor-pointer z-10"
                       >
-                        <div
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => handleDelete(index, field)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') handleDelete(index, field);
-                          }}
-                          className="absolute w-5 h-5 flex items-center justify-center bg-smokyBlack text-white rounded-full -right-2 -top-2 cursor-pointer z-10"
-                        >
-                          <Image src={closeIcon} alt="Remove" className="w-[7px] h-[7px]" />
-                        </div>
-                        <img
-                          src={src}
-                          alt={`Preview ${index}`}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
+                        <Image src={closeIcon} alt="Remove" className="w-[7px] h-[7px] " />
                       </div>
-                    );
-                  })}
-              </div>
-            </div>
-
-            {/* Desktop/Large screens */}
-            <div className="hidden lg:block">
-              {previews.length === 0 ? (
-                <div className="w-full h-[200px] border-[1px] border-dashed border-grayDark rounded-lg cursor-pointer">
-                  <label
-                    htmlFor="file-lg"
-                    className="flex flex-col items-center justify-center h-full"
-                  >
-                    <span className="text-grayDark text-3xl font-poppins font-extralight">+</span>
-                    <span className="text-grayDark text-xs font-poppins font-normal">
-                      Upload Picture
-                    </span>
-                    <input
-                      id="file-lg"
-                      type="file"
-                      multiple
-                      accept={SUPPORTED_FORMATS.join(',')}
-                      className="hidden"
-                      onChange={(e) => handleFileChange(e, field)}
-                    />
-                  </label>
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
-                    {previews.map((src, index: number) => (
-                      <div
-                        key={index}
-                        className={`w-full h-[200px] border ${
-                          errorIndex.includes(index)
-                            ? 'border-2 border-rose-600'
-                            : 'border-[#B2B2B2]'
-                        } rounded-lg relative group`}
-                      >
-                        <div
-                          role="button"
-                          tabIndex={0}
-                          onClick={() => handleDelete(index, field)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') handleDelete(index, field);
-                          }}
-                          className="absolute w-5 h-5 flex items-center justify-center bg-smokyBlack text-white rounded-full -right-2 -top-2 cursor-pointer z-10"
-                        >
-                          <Image src={closeIcon} alt="Remove" className="w-[7px] h-[7px]" />
-                        </div>
-                        <img
-                          src={src}
-                          alt={`Preview ${index}`}
-                          className="w-full h-full object-cover rounded-lg"
-                        />
-                      </div>
-                    ))}
-                    {previews.length < 5 && previews.length % 2 === 1 && (
-                      <div className="w-full h-[200px] border-[1px] border-dashed border-grayDark rounded-lg cursor-pointer">
-                        <label
-                          htmlFor="file-lg-add"
-                          className="flex flex-col items-center justify-center h-full"
-                        >
-                          <span className="text-grayDark text-3xl font-poppins font-extralight">
-                            +
-                          </span>
-                          <span className="text-grayDark text-xs font-poppins font-normal">
-                            Upload Picture
-                          </span>
-                          <input
-                            id="file-lg-add"
-                            type="file"
-                            multiple
-                            accept={SUPPORTED_FORMATS.join(',')}
-                            className="hidden"
-                            onChange={(e) => handleFileChange(e, field)}
-                          />
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                  {previews.length < 5 && previews.length % 2 === 0 && (
-                    <div className="w-full h-[80px] border-[1px] border-dashed border-grayDark rounded-lg cursor-pointer mt-4">
-                      <label
-                        htmlFor="file-lg-below"
-                        className="flex flex-col items-center justify-center h-full"
-                      >
-                        <span className="text-grayDark text-3xl font-poppins font-extralight">
-                          +
-                        </span>
-                        <span className="text-grayDark text-xs font-poppins font-normal">
-                          Upload Picture
-                        </span>
-                        <input
-                          id="file-lg-below"
-                          type="file"
-                          multiple
-                          accept={SUPPORTED_FORMATS.join(',')}
-                          className="hidden"
-                          onChange={(e) => handleFileChange(e, field)}
-                        />
-                      </label>
+                      <Image
+                        src={src}
+                        alt={`Preview ${index}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     </div>
-                  )}
-                </>
+                  );
+                })}
+              {imagesLength <= 4 && (
+                <UploadPicture
+                  className={`hidden lg:block ] ${imagesLength > 3 ? 'h-[48px] col-span-full' : 'w-[163px] h-[157px] '}`}
+                  labelClassName={`${imagesLength > 3 ? 'flex-row items-center gap-1' : 'flex-col'}`}
+                  onChange={(e) => handleFileChange(e, field)}
+                />
               )}
             </div>
-
-            {/* Validation Error */}
             {errorMessages.length > 0 && (
               <p className="text-rose-500 text-xs mt-1 pl-2">{errorMessages[0]}</p>
             )}

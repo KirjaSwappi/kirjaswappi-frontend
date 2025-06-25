@@ -10,11 +10,11 @@ export default function BookDetailsStep({
   conditionOptions,
 }: IBookDetailsProps) {
   return (
-    <div className="lg:grid lg:grid-cols-2 lg:gap-6 md:gap-4">
+    <div className="lg:grid lg:grid-cols-2 lg:gap-10 2xl:gap-20 md:gap-4">
       <div>
-        <div className="w-full lg:w-1/2">
+        <div className="w-full">
           <div className="py-4 lg:py-0 border-b lg:border-b-0 border-platinumDark">
-            <InputLabel label="Cover Photo" required />
+            <InputLabel className="mb-2" label="Cover Photo" required />
             <MultipleImageFileInput
               errors={errors as Record<string, FieldError>}
               name="coverPhotos"

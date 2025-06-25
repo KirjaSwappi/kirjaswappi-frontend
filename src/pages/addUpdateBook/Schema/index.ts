@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { SUPPORTED_FORMATS } from '../../../utility/constant';
 
-const FILE_SIZE = 1 * 1024 * 1024; // 10MB
+const FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 const imageSchema = yup
   .mixed<File | string>()
