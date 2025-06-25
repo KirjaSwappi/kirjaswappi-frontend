@@ -1,7 +1,7 @@
 import home from '../assets/bookIcon.svg';
 import message from '../assets/message.svg';
-import profile from '../assets/profile.svg';
 import map from '../assets/uiw_map.svg';
+import profile from '../assets/profileIcon.png';
 
 export const menu = [
   {
@@ -11,6 +11,7 @@ export const menu = [
     value: 'books',
     route: '/',
     isRoute: true,
+    isShow: true,
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ export const menu = [
     value: 'map',
     route: '/map',
     isRoute: true,
+    isShow: true,
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ export const menu = [
     value: 'messages',
     route: '/user/inbox',
     isRoute: true,
+    isShow: true,
   },
   {
     id: 5,
@@ -35,5 +38,6 @@ export const menu = [
     value: 'profile',
     route: '/profile/user-profile',
     isRoute: true,
+    isShow: false,
   },
 ];

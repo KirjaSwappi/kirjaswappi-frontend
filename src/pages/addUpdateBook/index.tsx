@@ -51,7 +51,6 @@ export default function AddUpdateBook() {
     mode: 'onChange',
     defaultValues: getDefaultValues(bookData),
   });
-
   const {
     handleSubmit,
     trigger,
