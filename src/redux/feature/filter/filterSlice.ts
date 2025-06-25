@@ -9,6 +9,7 @@ export interface IFilterInitialState {
     pageNumber: number;
     hasMore: boolean;
   };
+  isFilterOpen: boolean;
 }
 
 const initialState: IFilterInitialState = {
@@ -20,9 +21,10 @@ const initialState: IFilterInitialState = {
     pageNumber: 0,
     hasMore: false,
   },
+  isFilterOpen: false,
 };
 const filterSlice = createSlice({
-  name: 'filter',
+  name: 'book',
   initialState,
   reducers: {
     setSearch: (state, action) => {
@@ -43,6 +45,9 @@ const filterSlice = createSlice({
     setPageNumber: (state, action: PayloadAction<number>) => {
       state.filter.pageNumber = action.payload;
     },
+    setFilterOpen: (state, action: PayloadAction<boolean>) => {
+      state.isFilterOpen = action.payload;
+    },
   },
 });
 
@@ -53,5 +58,6 @@ export const {
   setSearch,
   setHasMore,
   setPageNumber,
+  setFilterOpen,
 } = filterSlice.actions;
 export default filterSlice.reducer;

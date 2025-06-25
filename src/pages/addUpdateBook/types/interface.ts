@@ -1,4 +1,4 @@
-import { SwapType } from './enum';
+import { SwapType } from '../../../../types/enum';
 
 export type TOptions = {
   label: string;

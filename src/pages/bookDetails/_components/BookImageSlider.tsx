@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import Image from '../../../components/shared/Image';
-import { BookImageSliderProps } from '../interface';
+import { BookImageSliderProps } from '../types/interface';
 
 const BookImageSlider: React.FC<BookImageSliderProps> = ({ images, className }) => {
   const [current, setCurrent] = useState(0);
@@ -41,7 +41,7 @@ const BookImageSlider: React.FC<BookImageSliderProps> = ({ images, className }) 
   return (
     <div className={`flex flex-col items-center justify-center w-full ${className || ''}`}>
       <div className="relative w-full max-w-[180px] h-[200px] flex items-center justify-center">
-        {images.map((img, i) => (
+        {images.map((img: string, i: number) => (
           <div
             key={i}
             style={getStyle(i)}
@@ -85,7 +85,7 @@ const BookImageSlider: React.FC<BookImageSliderProps> = ({ images, className }) 
 
       {total > 1 && (
         <div className="flex justify-center gap-2 mt-6">
-          {images.map((_, i) => (
+          {images.map((_: string, i: number) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
