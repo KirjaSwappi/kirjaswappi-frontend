@@ -1,7 +1,6 @@
 import home from '../assets/bookIcon.svg';
 import message from '../assets/message.svg';
 import map from '../assets/uiw_map.svg';
-import profile from '../assets/profileIcon.png';
 import notification from '../assets/notification.svg';
 
 export const menu = [
