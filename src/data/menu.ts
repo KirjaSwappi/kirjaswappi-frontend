@@ -2,12 +2,13 @@ import home from '../assets/bookIcon.svg';
 import message from '../assets/message.svg';
 import map from '../assets/uiw_map.svg';
 import profile from '../assets/profileIcon.png';
+import notification from '../assets/notification.svg';
 
 export const menu = [
   {
     id: 1,
     icon: home,
-    //   selected: home,
+    //selected: home,
     value: 'books',
     route: '/',
     isRoute: true,
@@ -16,7 +17,7 @@ export const menu = [
   {
     id: 2,
     icon: map,
-    //   selected: store,
+    // selected: store,
     value: 'map',
     route: '/map',
     isRoute: true,
@@ -25,7 +26,7 @@ export const menu = [
   {
     id: 3,
     icon: message,
-    //   selected: category,
+    //selected: category,
     value: 'messages',
     route: '/user/inbox',
     isRoute: true,
@@ -33,10 +34,10 @@ export const menu = [
   },
   {
     id: 5,
-    icon: profile,
-    selected: profile,
-    value: 'profile',
-    route: '/profile/user-profile',
+    icon: notification,
+    // selected: notification,
+    value: 'Notification',
+    route: '/profile/notification',
     isRoute: true,
     isShow: false,
   },
