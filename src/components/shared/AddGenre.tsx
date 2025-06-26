@@ -44,11 +44,11 @@ export default function AddGenre({
               <h3 className="font-poppins text-sm font-light">{genreItem.name}</h3>
               {isGenActive ? (
                 <Button>
-                  <Image src={tickMarkIcon} alt="Selected" className="h-auto" />
+                  <Image src={tickMarkIcon} alt="Selected" className="h-4" />
                 </Button>
               ) : (
                 <Button onClick={() => handleAddGenre(genreItem.name)}>
-                  <Image src={plusIcon} alt="Add" className="h-auto" />
+                  <Image src={plusIcon} alt="Add" className="h-4" />
                 </Button>
               )}
             </div>

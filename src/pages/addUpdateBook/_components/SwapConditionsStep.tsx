@@ -7,6 +7,7 @@ import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
 import InputLabel from '../../../components/shared/InputLabel';
+import Separator from '../../../components/shared/Separator';
 import { useMouseClick } from '../../../hooks/useMouse';
 import { setOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
@@ -88,18 +89,17 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
 
   return (
     <div>
-      <div className="block lg:hidden">
-        <div className="mb-4">
-          <InputLabel label="Condition Type" required />
-        </div>
-        <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+        <div className="flex flex-col gap-2">
+          <Separator className="lg:hidden" />
+          <InputLabel className="mb-0 lg:hidden" label="Swap Type" required />
           {SWAP_TYPES.map(({ value, label }) => (
             <Controller
               key={value}
               name="swapType"
               control={control}
               render={({ field }) => (
-                <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border lg:border-grayDark border-gray rounded-lg">
+                <div className="px-4 py-4 bg-white border border-[#E6E6E6] rounded-lg">
                   <label className="flex items-center gap-2 w-full cursor-pointer">
                     <input
                       type="radio"
@@ -115,126 +115,47 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
             />
           ))}
         </div>
-      </div>
-
-      {/* Headers for lg devices */}
-      <div className="hidden lg:flex lg:gap-8 pt-4">
-        <div className="w-[320px] flex-shrink-0">
-          <div className="text-left mb-2">
-            <InputLabel label="Swap Type" required />
-          </div>
-        </div>
-        <div className="flex-1">
-          {swapType === SwapType.BYBOOKS && (
-            <div className="text-left mb-2">
-              <InputLabel
-                label={
-                  fields.some((_, index) => watch(`swappableBooks.${index}.flag`))
-                    ? 'Book Cover'
-                    : 'Cover Photo'
-                }
-                required
-              />
-            </div>
-          )}
-          {swapType === SwapType.BYGENRES && (
-            <div className="flex items-center justify-between mb-2">
-              <InputLabel label="Genre To Swap With" required />
-              <Button
-                type="button"
-                onClick={() => dispatch(setOpen(!open))}
-                className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
-              >
-                Add
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Main content layout */}
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 mt-2">
-        {/* Left Column - Swap Type Options for lg devices */}
-        <div className="hidden lg:block w-[320px] flex-shrink-0">
-          <div className="flex flex-col gap-4">
-            {SWAP_TYPES.map(({ value, label }) => (
-              <Controller
-                key={value}
-                name="swapType"
-                control={control}
-                render={({ field }) => (
-                  <div className="px-4 py-4 bg-gray-100 border border-[#E6E6E6] rounded-lg">
-                    <label className="flex items-center gap-2 w-full cursor-pointer">
-                      <input
-                        type="radio"
-                        value={value}
-                        checked={field.value === value}
-                        onChange={field.onChange}
-                        className="w-4 h-4"
-                      />
-                      {label}
-                    </label>
-                  </div>
-                )}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Right Column - Dynamic Content */}
-        <div className="flex-1">
-          <hr className="w-full border-t border-platinumDark block lg:hidden my-4" />
-
+        <Separator className="lg:hidden" />
+        <div>
           {swapType === SwapType.BYBOOKS && (
             <div>
-              {/* Grid for completed books on lg, single column on sm */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {fields.map((swappableBook, index) => {
-                  const flag = watch(`swappableBooks.${index}.flag`);
-                  const { coverPhoto, title, author } = watch(`swappableBooks.${index}`);
-                  return flag ? (
-                    <SwappableBookCard
-                      key={swappableBook.id}
-                      id={swappableBook.id}
-                      index={index}
-                      title={title}
-                      author={author}
-                      coverPhotoUrl={getFileToUrl(coverPhoto)}
-                      swappableBookIndex={swappableBookIndex}
-                      clicked={clicked}
-                      reference={reference}
-                      setSwappableBookIndex={setSwappableBookIndex}
-                      setClicked={setClicked}
-                      editAnotherBook={editAnotherBook}
-                      deleteSwappableBookByIndex={deleteSwappableBookByIndex}
-                    />
-                  ) : null;
-                })}
-              </div>
-
-              {/* Form fields for incomplete books */}
               {fields.map((swappableBook, index) => {
                 const flag = watch(`swappableBooks.${index}.flag`);
-                return !flag ? (
-                  <div key={swappableBook.id}>
-                    <div className="pt-4 lg:pt-0">
-                      <div className="flex items-center justify-between mb-2 lg:mb-0">
+                const { coverPhoto, title, author } = watch(`swappableBooks.${index}`);
+                return flag ? (
+                  <SwappableBookCard
+                    key={swappableBook.id}
+                    id={swappableBook.id}
+                    index={index}
+                    title={title}
+                    author={author}
+                    coverPhotoUrl={getFileToUrl(coverPhoto)}
+                    swappableBookIndex={swappableBookIndex}
+                    clicked={clicked}
+                    reference={reference}
+                    setSwappableBookIndex={setSwappableBookIndex}
+                    setClicked={setClicked}
+                    editAnotherBook={editAnotherBook}
+                    deleteSwappableBookByIndex={deleteSwappableBookByIndex}
+                  />
+                ) : (
+                  <div id={`swappableBook-${swappableBook.id}`} key={swappableBook.id}>
+                    <div className="">
+                      <div className="flex items-center justify-between">
+                        <InputLabel label="Cover Photo" required className="lg:mb-0" />
                         {index > 0 && (
                           <Button
                             type="button"
                             onClick={() => remove(index)}
-                            className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm ml-auto"
+                            className="text-red-500 w-7 h-7 flex items-center justify-center rounded-sm"
                           >
                             <FaDeleteLeft />
                           </Button>
                         )}
                       </div>
-                      {/* Image upload - hidden on sm for first section, shown on lg */}
-                      <div className="lg:mb-4 ">
-                        <ImageFileInput name={`swappableBooks.${index}.coverPhoto`} />
-                      </div>
+                      <ImageFileInput name={`swappableBooks.${index}.coverPhoto`} />
                     </div>
-                    <div className="mt-4 pb-4 border-b border-[#E4E4E4] lg:border-b-0 lg:pb-0">
+                    <div className="pb-4 border-b border-[#E4E4E4]">
                       <InputLabel label="Book Title" required />
                       <ControlledInputField
                         name={`swappableBooks.${index}.title`}
@@ -243,7 +164,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                         showErrorMessage
                       />
                     </div>
-                    <div className="mt-4 pb-4 border-b border-[#E4E4E4] lg:border-b-0 lg:pb-0">
+                    <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
                       <InputLabel label="Author Name" required />
                       <ControlledInputField
                         name={`swappableBooks.${index}.author`}
@@ -253,22 +174,19 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                       />
                     </div>
                   </div>
-                ) : null;
+                );
               })}
-
-              <div className="mt-4 pb-4 border-t border-[#E4E4E4] lg:border-t-0 lg:pt-0">
-                <AddAnotherBookButton addAnotherBook={addAnotherBook} />
-              </div>
+              <AddAnotherBookButton addAnotherBook={addAnotherBook} />
             </div>
           )}
-
           {swapType === SwapType.BYGENRES && (
             <div>
-              <div className="flex items-center justify-between mb-4 lg:hidden">
+              <div className="flex items-center justify-between py-4">
+                <InputLabel label="Genre To Swap With" required />
                 <Button
                   type="button"
                   onClick={() => dispatch(setOpen(!open))}
-                  className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline ml-auto"
+                  className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
                 >
                   Add
                 </Button>
@@ -297,7 +215,6 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
               )}
             </div>
           )}
-
           {[SwapType.OPENTOOFFERS, SwapType.GIVEAWAY].includes(swapType) && (
             <ConditionMessageBox swapType={swapType} />
           )}

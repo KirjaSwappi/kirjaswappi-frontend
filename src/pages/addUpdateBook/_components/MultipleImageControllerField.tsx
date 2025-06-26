@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Controller, FieldError, useFormContext } from 'react-hook-form';
-import closeIcon from '../../../assets/close.png';
+import { IoCloseOutline } from 'react-icons/io5';
 import Image from '../../../components/shared/Image';
 import { SUPPORTED_FORMATS } from '../../../utility/constant';
 import UploadPicture from './UploadPicture';
@@ -99,14 +99,14 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
               />
             )}
             <div
-              className={`grid ${imagesLength < 1 ? 'grid-cols-1' : 'grid-cols-5 lg:grid-cols-2'}  gap-1 lg:gap-4 mt-4`}
+              className={`grid ${imagesLength < 1 ? 'grid-cols-1' : 'grid-cols-5 lg:grid-cols-2'}  gap-1 lg:gap-4`}
             >
               {previews &&
                 previews?.map((src, index: number) => {
                   return (
                     <div
                       key={index}
-                      className={`w-[56px] lg:w-[163px] h-[56px] lg:h-[157px] border bg-[#DAE6F5] lg:p-2 ${
+                      className={`w-[56px] lg:w-full xl:w-[163px] h-[56px] lg:h-[157px] border lg:border-none bg-[#DAE6F5] lg:p-2 ${
                         errorIndex.includes(index) ? 'border-2 border-rose-600' : 'border-[#B2B2B2]'
                       } rounded-lg relative group`}
                     >
@@ -117,9 +117,9 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
                         onKeyDown={(e) => {
                           if (e.key === 'Enter' || e.key === ' ') handleDelete(index, field);
                         }}
-                        className="absolute w-5 h-5 flex items-center justify-center bg-smokyBlack text-white rounded-full -right-2 -top-2 cursor-pointer z-10"
+                        className="absolute w-5 lg:w-6 h-5 lg:h-6 flex items-center justify-center bg-smokyBlack lg:bg-white lg:text-[#1A1A1A] text-white rounded-full -right-2 lg:right-3 lg:top-3 -top-2 cursor-pointer z-10 lg:shadow-md"
                       >
-                        <Image src={closeIcon} alt="Remove" className="w-[7px] h-[7px] " />
+                        <IoCloseOutline />
                       </div>
                       <Image
                         src={src}
@@ -131,8 +131,16 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
                 })}
               {imagesLength <= 4 && (
                 <UploadPicture
-                  className={`hidden lg:block ] ${imagesLength > 3 ? 'h-[48px] col-span-full' : 'w-[163px] h-[157px] '}`}
-                  labelClassName={`${imagesLength > 3 ? 'flex-row items-center gap-1' : 'flex-col'}`}
+                  className={`hidden lg:block bg-AntiFlashWhite ${
+                    imagesLength <= 0
+                      ? 'h-[157px] col-span-full'
+                      : imagesLength > 3
+                        ? 'h-[48px] col-span-full'
+                        : 'lg:w-full xl:w-[163px] h-[56px] lg:h-[157px]'
+                  }`}
+                  labelClassName={`${
+                    imagesLength > 3 ? 'flex-row items-center gap-1' : 'flex-col'
+                  }`}
                   onChange={(e) => handleFileChange(e, field)}
                 />
               )}

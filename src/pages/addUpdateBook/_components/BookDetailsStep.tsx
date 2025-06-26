@@ -10,7 +10,7 @@ export default function BookDetailsStep({
   conditionOptions,
 }: IBookDetailsProps) {
   return (
-    <div className="lg:grid lg:grid-cols-2 lg:gap-10 2xl:gap-20 md:gap-4">
+    <div className="lg:grid lg:grid-cols-2 gap-9 xl:gap-10 2xl:gap-20 md:gap-4">
       <div>
         <div className="w-full">
           <div className="py-4 lg:py-0 border-b lg:border-b-0 border-platinumDark">

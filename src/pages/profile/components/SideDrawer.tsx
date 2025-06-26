@@ -1,3 +1,4 @@
+import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import leftArrowIcon from '../../../assets/leftArrow.png';
 import Button from '../../../components/shared/Button';
@@ -32,7 +33,8 @@ export default function SideDrawer({
               onClick={() => dispatch(setOpen(false))}
               aria-label="Close side drawer"
             >
-              <Image src={leftArrowIcon} alt="left" />
+              <Image className="lg:hidden" src={leftArrowIcon} alt="left" />
+              <IoCloseOutline className="hidden lg:block text-2xl text-red" />
             </button>
             <h3 className="font-poppins text-base font-medium ">{title}</h3>
           </div>

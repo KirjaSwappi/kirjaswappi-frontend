@@ -16,7 +16,7 @@ import {
   useUpdateBookMutation,
 } from '../../redux/feature/book/bookApi';
 import { options } from '../../utility/helper';
-import { Stepper } from './_components/Stepper';
+import Stepper from './_components/Stepper';
 import { validationSchemas } from './Schema';
 
 import AddGenre from '../../components/shared/AddGenre';
@@ -144,12 +144,12 @@ export default function AddUpdateBook() {
 
   return (
     <div className="lg:px-6 pb-6">
-      <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-[47px] 2xl:pr-36 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
+      <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-7 xl:pr-[47px] 2xl:pr-48 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
         <div className="w-full">
           <BookAddUpdateHeader title="Add Book" onBack={() => navigate('/profile/user-profile')} />
           <div className="pt-7 lg:pt-0">
             <div>
-              <div className="hidden lg:flex items-center pl-12 pb-14">
+              <div className="hidden lg:flex items-center pl-12 pb-6 xl:pb-14">
                 <Button
                   className="cursor-pointer w-[42px] h-10 flex items-center justify-center rounded-lg bg-[#F5F6F7] border-none mr-2"
                   onClick={() => navigate('/profile/user-profile')}
@@ -163,13 +163,13 @@ export default function AddUpdateBook() {
                   {id ? 'Update' : 'Add'} Book
                 </h3>
               </div>
-              <div className="lg:flex pt-2 pb-3">
-                <div className="w-full lg:w-[30%] lg:pr-9">
-                  <div className="relative flex justify-between gap-4 md:gap-6 lg:flex-col">
+              <div className="lg:flex xl:gap-28 pt-8 lg:pt-4 pb-3">
+                <div className="w-full lg:w-[32%] xl:w-[30%] lg:pr-9">
+                  <div className="relative flex justify-between gap-4 md:gap-6 lg:flex-col lg:border-r border-[#E5E5E5] h-full">
                     <Stepper steps={steps} />
                   </div>
                 </div>
-                <div className="w-full lg:w-[70%]">
+                <div className="w-full lg:w-[68%] xl:w-[70%]">
                   <FormProvider {...methods}>
                     <h1 className="font-poppins lg:mt-0 mb-2 font-semibold text-[20px] hidden lg:block">
                       {steps[active].label}
