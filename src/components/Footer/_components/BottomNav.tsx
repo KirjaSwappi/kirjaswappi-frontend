@@ -3,7 +3,7 @@ import BottomNavItem from './BottomNavItem';
 
 export default function BottomNav() {
   return (
-    <div className={`h-20 flex items-center lg:hidden justify-between text-xs font-normal`}>
+    <div className={`h-[70px] flex items-center lg:hidden justify-between text-xs font-normal`}>
       <div className="grid grid-cols-2 gap-9">
         {menu.slice(0, 2).map((menuItem, index) => {
           const isActive = location.pathname === menuItem?.route;
