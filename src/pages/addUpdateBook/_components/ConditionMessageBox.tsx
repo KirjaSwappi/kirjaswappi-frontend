@@ -33,7 +33,7 @@ export default function ConditionMessageBox({ swapType }: { swapType: string }) 
   return (
     <div
       className={`border border-yellow bg-yellow-light flex flex-col items-center justify-center p-5 gap-2 rounded-lg 
-      lg:min-h-[258px] ${SwapType.GIVEAWAY === swapType || SwapType.OPENTOOFFERS === swapType ? 'mt-[26px]' : ''}`}
+      lg:min-h-[258px] ${SwapType.GIVEAWAY === swapType || SwapType.OPENTOOFFERS === swapType ? 'lg:mt-[26px]' : ''}`}
     >
       <Image src={swapCondition.image} alt={swapType} className="h-[64px]" />
       <p className="text-smokyBlack font-poppins text-sm font-normal text-center">
