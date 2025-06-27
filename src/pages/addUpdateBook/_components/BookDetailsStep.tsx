@@ -14,7 +14,7 @@ export default function BookDetailsStep({
       <div>
         <div className="w-full">
           <div className="py-4 lg:py-0 border-b lg:border-b-0 border-platinumDark">
-            <InputLabel className="mb-2" label="Cover Photo" required />
+            <InputLabel className="mb-2 lg:text-smokyBlack" label="Cover Photo" required />
             <MultipleImageFileInput
               errors={errors as Record<string, FieldError>}
               name="coverPhotos"
@@ -22,52 +22,52 @@ export default function BookDetailsStep({
           </div>
         </div>
         <div className="mt-4 pb-4">
-          <InputLabel label="Book Title" required className="mb-2" />
+          <InputLabel label="Book Title" required className="mb-2 lg:text-smokyBlack" />
           <ControlledInputField
             name="title"
             placeholder="Enter book title"
-            className="rounded-md"
+            className="rounded-md lg:border-gray"
             showErrorMessage
           />
         </div>
         <div className="pb-4">
-          <InputLabel label="Author Name" required className="mb-2" />
+          <InputLabel label="Author Name" required className="mb-2 lg:text-smokyBlack" />
           <ControlledInputField
             name="author"
             placeholder="Enter book author"
-            className="rounded-md"
+            className="rounded-md lg:border-gray"
             showErrorMessage
           />
         </div>
       </div>
       <div>
         <div className="pb-4">
-          <InputLabel label="Book Language" required className="mb-2" />
+          <InputLabel label="Book Language" required className="mb-2 lg:text-smokyBlack" />
           <ControlledInputField
             type="select"
             name="language"
-            className="rounded-md "
+            className="rounded-md lg:border-gray"
             options={languageOptions}
             showErrorMessage
           />
         </div>
         <div className="lg:mt-0 pb-4">
-          <InputLabel label="Book Condition" required className="mb-2" />
+          <InputLabel label="Book Condition" required className="mb-2 lg:text-smokyBlack" />
           <ControlledInputField
             type="select"
             name="condition"
-            className="rounded-md bg-white"
+            className="rounded-md lg:border-gray"
             options={conditionOptions}
             showErrorMessage
           />
         </div>
         <div className="pb-4">
-          <InputLabel label="Short Description" className="mb-2" />
+          <InputLabel label="Short Description" className="mb-2 lg:text-smokyBlack" />
           <ControlledInputField
             type="textarea"
             name="description"
             placeholder="Enter a short description of the book"
-            className="rounded-md h-[83px]"
+            className="rounded-md lg:border-gray h-[83px]"
             showErrorMessage
           />
         </div>

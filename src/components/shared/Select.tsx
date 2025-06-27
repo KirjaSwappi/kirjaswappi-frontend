@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { cn } from '../../utility/cn';
 
 interface ISelectProps {
   value?: string;
@@ -22,9 +23,10 @@ const Select = forwardRef<HTMLSelectElement, ISelectProps>(
           ref={ref}
           value={value}
           name={name}
-          className={`w-full border rounded-md px-[14px] py-4 outline-none text-sm  text-[#31373D] bg-white lg:bg-AntiFlashWhite lg:border-grayDark border-gray  ${error ? 'border border-rose-500' : ''}  ${
-            className && className
-          }`}
+          className={cn(
+            `w-full border rounded-md px-[14px] py-4 outline-none text-sm  text-[#31373D] bg-white lg:bg-AntiFlashWhite lg:border-grayDark border-gray  ${error ? 'border border-rose-500' : ''} `,
+            className,
+          )}
           onChange={onChange}
         >
           <option value="">Select {name || 'options'}</option>

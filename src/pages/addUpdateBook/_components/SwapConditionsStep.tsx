@@ -6,6 +6,7 @@ import closeIcon from '../../../assets/close.svg';
 import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
+import Input from '../../../components/shared/Input';
 import InputLabel from '../../../components/shared/InputLabel';
 import Separator from '../../../components/shared/Separator';
 import { useMouseClick } from '../../../hooks/useMouse';
@@ -73,7 +74,6 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
     },
     [setValue],
   );
-
   // DELETE SWAPPABLE BOOK
   const deleteSwappableBookByIndex = useCallback(
     (index: number) => {
@@ -92,7 +92,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-20">
         <div className="flex flex-col gap-2">
           <Separator className="lg:hidden" />
-          <InputLabel className="mb-0" label="Swap Type" required />
+          <InputLabel className="mb-0 lg:text-smokyBlack" label="Swap Type" required />
           {SWAP_TYPES.map(({ value, label }) => (
             <Controller
               key={value}
@@ -101,7 +101,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
               render={({ field }) => (
                 <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border border-platinum lg:border-[#E5E5E5] rounded-lg">
                   <label className="flex items-center gap-2 w-full cursor-pointer">
-                    <input
+                    <Input
                       type="radio"
                       value={value}
                       checked={field.value === value}
@@ -139,10 +139,18 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                     deleteSwappableBookByIndex={deleteSwappableBookByIndex}
                   />
                 ) : (
-                  <div id={`swappableBook-${swappableBook.id}`} key={swappableBook.id}>
-                    <div className="">
+                  <div
+                    className={index == 1 ? 'mt-3' : ''}
+                    id={`swappableBook-${swappableBook.id}`}
+                    key={swappableBook.id}
+                  >
+                    <div>
                       <div className="flex items-center justify-between">
-                        <InputLabel label="Cover Photo" required className="lg:mb-0" />
+                        <InputLabel
+                          label="Cover Photo"
+                          required
+                          className="lg:mb-3 lg:text-smokyBlack"
+                        />
                         {index > 0 && (
                           <Button
                             type="button"
@@ -155,21 +163,29 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                       </div>
                       <ImageFileInput name={`swappableBooks.${index}.coverPhoto`} />
                     </div>
-                    <div className="pb-4 border-b border-[#E4E4E4]">
-                      <InputLabel label="Book Title" required />
+                    <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                      <InputLabel
+                        className="lg:text-smokyBlack lg:mb-1 lg:mt-2"
+                        label="Book Title"
+                        required
+                      />
                       <ControlledInputField
                         name={`swappableBooks.${index}.title`}
                         placeholder="Enter book title"
-                        className="rounded-md"
+                        className="rounded-md lg:border-gray"
                         showErrorMessage
                       />
                     </div>
-                    <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
-                      <InputLabel label="Author Name" required />
+                    <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
+                      <InputLabel
+                        className="lg:text-smokyBlack lg:mb-2 lg:mt-2"
+                        label="Author Name"
+                        required
+                      />
                       <ControlledInputField
                         name={`swappableBooks.${index}.author`}
                         placeholder="Enter author name"
-                        className="rounded-md"
+                        className="rounded-md lg:border-gray"
                         showErrorMessage
                       />
                     </div>

@@ -131,7 +131,7 @@ const MultipleImageFileInput = ({ name, errors }: IImageFileInputProps) => {
                 })}
               {imagesLength <= 4 && (
                 <UploadPicture
-                  className={`hidden lg:block bg-AntiFlashWhite ${
+                  className={`hidden lg:block bg-AntiFlashWhite lg:border-gray ${
                     imagesLength <= 0
                       ? 'h-[157px] col-span-full'
                       : imagesLength > 3
