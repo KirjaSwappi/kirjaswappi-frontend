@@ -146,7 +146,10 @@ export default function AddUpdateBook() {
     <div className="lg:px-6 pb-6">
       <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-7 xl:pr-[47px] 2xl:pr-48 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
         <div className="w-full">
-          <BookAddUpdateHeader title="Add Book" onBack={() => navigate('/profile/user-profile')} />
+          <BookAddUpdateHeader
+            title={id ? 'Update Book' : 'Add Book'}
+            onBack={() => navigate('/profile/user-profile')}
+          />
           <div className="pt-7 lg:pt-0">
             <div>
               <div className="hidden lg:flex items-center pl-12 pb-6 xl:pb-14">

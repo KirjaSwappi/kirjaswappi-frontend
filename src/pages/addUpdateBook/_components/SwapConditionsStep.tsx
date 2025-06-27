@@ -89,17 +89,17 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
 
   return (
     <div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-20">
         <div className="flex flex-col gap-2">
           <Separator className="lg:hidden" />
-          <InputLabel className="mb-0 lg:hidden" label="Swap Type" required />
+          <InputLabel className="mb-0" label="Swap Type" required />
           {SWAP_TYPES.map(({ value, label }) => (
             <Controller
               key={value}
               name="swapType"
               control={control}
               render={({ field }) => (
-                <div className="px-4 py-4 bg-white border border-[#E6E6E6] rounded-lg">
+                <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border border-platinum lg:border-[#E5E5E5] rounded-lg">
                   <label className="flex items-center gap-2 w-full cursor-pointer">
                     <input
                       type="radio"
@@ -181,8 +181,8 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
           )}
           {swapType === SwapType.BYGENRES && (
             <div>
-              <div className="flex items-center justify-between py-4">
-                <InputLabel label="Genre To Swap With" required />
+              <div className="flex items-center justify-between py-4 lg:py-0 lg:pb-2">
+                <InputLabel className="lg:mb-0 leading-none" label="Genre To Swap With" required />
                 <Button
                   type="button"
                   onClick={() => dispatch(setOpen(!open))}
