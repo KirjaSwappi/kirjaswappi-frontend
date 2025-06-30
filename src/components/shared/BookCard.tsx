@@ -5,35 +5,15 @@ import userProfileImg from '../../assets/userprofile.png';
 import locationIcon from '../../assets/location-icon.png';
 import clockIcon from '../../assets/clock.png';
 import exchangeIcon from '../../assets/exchangeicon.png';
-
 export default function BookCard({ book }: { book: IBook }) {
   if (!book) return null;
   const navigate = useNavigate();
   const { title, author, coverPhotoUrl, id } = book;
-
   return (
     <div
-      className="
-    w-[145px]
-    xm:w-[158px]
-    xlg:w-[165px]
-    sm:w-[168px]
-    lg:w-[212px]
-    sm:h-[264px]
-    lg:h-[314px]
-    gap-[20px]
-    xm:gap-[24px]
-    xlg:gap-[28px]
-    sm:gap-[32px]
-    lg:gap-[56px]
-    shadow-lg
-    flex flex-col
-    bg-white
-    rounded-lg
-    shadow-sm
-    overflow-hidden
-    font-poppins
-  "
+      className="w-[145px] xm:w-[158px] xlg:w-[165px] sm:w-[168px] lg:w-[212px] sm:h-[264px] lg:h-[314px] 
+        gap-[20px] xm:gap-[24px] xlg:gap-[28px] sm:gap-[32px] lg:gap-[56px] shadow-lg flex flex-col 
+        bg-white rounded-lg shadow-sm overflow-hidden font-poppins"
     >
       <div
         role="button"
@@ -53,7 +33,10 @@ export default function BookCard({ book }: { book: IBook }) {
         className="cursor-pointer h-full flex flex-col"
       >
         {/* Book Cover Image */}
-        <div className="w-full h-[156px] lg:h-[214px] lg:w-[212px] bg-gray-100 overflow-hidden rounded-t-lg flex-shrink-0 relative">
+        <div
+          className="w-full h-[156px] lg:h-[214px] lg:w-[212px] bg-gray-100 overflow-hidden rounded-t-lg 
+          flex-shrink-0 relative"
+        >
           <Image
             className="w-full h-full object-cover"
             src={coverPhotoUrl}
@@ -63,7 +46,9 @@ export default function BookCard({ book }: { book: IBook }) {
           <div className="absolute bottom-2 left-2">
             <button
               type="button"
-              className="relative group flex items-center bg-blue-500 rounded-full p-2 gap-2.5 transition-all duration-300 w-7 h-7 hover:w-[100px] hover:h-[28px] hover:rounded-[20px] focus:w-[97px] focus:h-[28px] focus:rounded-[20px] overflow-hidden shadow-md"
+              className="relative group flex items-center bg-blue-500 rounded-full p-2 gap-2.5 
+                transition-all duration-300 w-7 h-7 hover:w-[100px] hover:h-[28px] hover:rounded-[20px] 
+                focus:w-[97px] focus:h-[28px] focus:rounded-[20px] overflow-hidden shadow-md"
               tabIndex={0}
               aria-label="Swap Book"
             >
@@ -73,36 +58,35 @@ export default function BookCard({ book }: { book: IBook }) {
                 className="w-[10px] h-[8.33px] flex-shrink-0"
               />
               <span
-                className="
-                  absolute
-                  opacity-0 group-hover:opacity-100 group-focus:opacity-100
-                  transition-opacity duration-300
-                  pointer-events-none select-none
-                  text-white font-poppins font-normal text-[12px] leading-[100%] whitespace-nowrap
-                  w-[66px] h-[18px] top-[9px] left-[23.33px]
-                  [letter-spacing:0]
-                "
+                className="absolute opacity-0 group-hover:opacity-100 group-focus:opacity-100 
+                  transition-opacity duration-300 pointer-events-none select-none text-white font-poppins 
+                  font-normal text-[12px] leading-[100%] whitespace-nowrap w-[66px] h-[18px] top-[9px] 
+                  left-[23.33px] [letter-spacing:0]"
               >
                 Swap Book
               </span>
             </button>
           </div>
         </div>
-
         {/* Book Info Section */}
         <div className="flex-1 px-3 py-1.5 lg:px-4 lg:py-2 flex flex-col">
           {/* Book Title */}
-          <h1 className="font-poppins font-medium text-[12px] mt-1 leading-[100%] text-gray-900 mb-0.5 truncate">
+          <h1
+            className="font-poppins font-medium text-[12px] mt-1 leading-[100%] text-gray-900 mb-0.5 
+            truncate"
+          >
             {title && title}
           </h1>
-
           {/* Author */}
           {author && (
-            <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600 mb-1.5">
+            <p
+              className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600 
+              mb-1.5"
+            >
+              {' '}
               by {author}
             </p>
           )}
-
           {/* Location */}
           <div className="flex items-center mb-1.5 lg:mb-2">
             <img src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
@@ -110,7 +94,6 @@ export default function BookCard({ book }: { book: IBook }) {
               Helsinki
             </span>
           </div>
-
           {/* User Info - Different layout for sm vs lg */}
           <div className="lg:flex lg:items-center lg:justify-between">
             {/* User Info */}
@@ -122,7 +105,6 @@ export default function BookCard({ book }: { book: IBook }) {
                 Tanvir Rayhan
               </span>
             </div>
-
             {/* Timestamp - Below name on small, beside on large */}
             <div className="flex items-center ml-0 lg:ml-0 mt-1 lg:mt-0">
               <img src={clockIcon} alt="Clock" className="mr-1 w-[9px] h-[9px]" />
