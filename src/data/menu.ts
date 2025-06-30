@@ -34,7 +34,7 @@ export const menu = [
   {
     id: 5,
     icon: notification,
-    selected: notification,
+    // selected: notification,
     value: 'Notification',
     route: '/profile/notification',
     isRoute: true,
