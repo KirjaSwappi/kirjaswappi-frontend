@@ -12,7 +12,12 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import BookFilter from './_components/BookFilter';
 import SideDrawer from './_components/SideDrawer';
 import TopBar from './_components/TopBar';
-export default function Header() {
+
+interface HeaderProps {
+  showOn404?: boolean;
+}
+
+export default function Header({ showOn404 = false }: HeaderProps) {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { isFilterOpen } = useAppSelector((state) => state.filter);
@@ -22,8 +27,9 @@ export default function Header() {
     }
   });
   const pathname = location.pathname;
+
   const showTopHeaderPath = ['/', `/book-details/${pathname?.split('/').reverse()[0]}`];
-  const isHeaderShow = showTopHeaderPath.includes(pathname);
+  const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {

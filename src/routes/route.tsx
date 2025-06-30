@@ -19,6 +19,7 @@ import PrivateRoute from './PrivateRoute';
 import ContactUs from '../pages/contactUs/ContactUs';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
+import NotFound from '../components/error/NotFound';
 
 const routes = createBrowserRouter([
   {
@@ -148,13 +149,13 @@ const routes = createBrowserRouter([
 
       //   ],
       // },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
     ],
   },
 
-  // {
-  //   path: "*",
-  //   element: <NotFound />,
-  // },
   // {
   //   path: "/notFound",
   //   element: <NotFound />,

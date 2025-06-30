@@ -20,7 +20,7 @@ const GlobalError: React.FC<GlobalErrorProps> = ({
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-center min-h-screen px-4 font-poppins">
-      <div className="bg-white p-8 max-w-md w-full text-center">
+      <div className="p-8 max-w-md w-full text-center">
         <div className="mb-6 flex justify-center">
           <BiSolidError className="text-red-500 w-20 h-20" />
         </div>
