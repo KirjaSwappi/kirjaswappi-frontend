@@ -28,7 +28,11 @@ export default function Header({ showOn404 = false }: HeaderProps) {
   });
   const pathname = location.pathname;
 
-  const showTopHeaderPath = ['/', `/book-details/${pathname?.split('/').reverse()[0]}`];
+  const showTopHeaderPath = [
+    '/',
+    `/book-details/${pathname?.split('/').reverse()[0]}`,
+    '/profile/add-book',
+  ];
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({
     mode: 'onChange',
