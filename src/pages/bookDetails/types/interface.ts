@@ -22,3 +22,8 @@ export interface IExchange {
   title: string;
   value: string;
 }
+
+export interface BookImageSliderProps {
+  images: string[];
+  className?: string;
+}
