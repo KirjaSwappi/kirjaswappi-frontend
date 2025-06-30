@@ -21,6 +21,22 @@ interface ISwappableBookCard {
   deleteSwappableBookByIndex: (index: number) => void;
 }
 
+interface ISwappableBookCard {
+  id: string;
+  index: number;
+  title: string;
+  author: string;
+  coverPhotoUrl: string;
+  swappableBookIndex: number | null;
+  clicked: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  reference: React.RefObject<any>;
+  setSwappableBookIndex: (index: number | null) => void;
+  setClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  editAnotherBook: (index: number) => void;
+  deleteSwappableBookByIndex: (index: number) => void;
+}
+
 function SwappableBookCard({
   id,
   index,
@@ -42,7 +58,10 @@ function SwappableBookCard({
   };
 
   return (
-    <div id={`swappableBook-${id}`} className="bg-white p-4 rounded-xl flex gap-4 mt-3 shadow-sm">
+    <div
+      id={`swappableBook-${id}`}
+      className="bg-white p-4 rounded-xl flex gap-4 mt-3 lg:mt-0 shadow-sm lg:border border-gray"
+    >
       <div className="w-3/12 h-20 max-h-20">
         <Image src={coverPhotoUrl} alt="Cover" className="w-20 h-20 object-cover rounded-md" />
       </div>

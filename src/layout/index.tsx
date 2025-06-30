@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import SwapModal from '../components/shared/SwapRequestModal/SwapRequestModal';
 export default function Layout() {
   return (
-    <div className="bg-light ">
+    <div className="bg-light min-h-screen">
       <Header />
       <main>
         <SwapModal />
