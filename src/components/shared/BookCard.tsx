@@ -1,6 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { IBook } from '../../pages/books/interface';
 import Image from './Image';
+import userProfileImg from '../../assets/userprofile.png';
+import locationIcon from '../../assets/location-icon.png';
+import clockIcon from '../../assets/clock.png';
+import exchangeIcon from '../../assets/exchangeicon.png';
 
 export default function BookCard({ book }: { book: IBook }) {
   if (!book) return null;
@@ -56,7 +60,7 @@ export default function BookCard({ book }: { book: IBook }) {
           />
           {/* Exchange Icon */}
           <div className="absolute bottom-2 left-2 bg-blue-500 flex items-center justify-center w-7 h-7 rounded-full p-2 gap-2.5">
-            <img src="/src/assets/exchangeicon.png" alt="Exchange" className="w-2.5 h-2" />
+            <img src={exchangeIcon} alt="Exchange" className="w-[10px] h-[8.33px]" />
           </div>
         </div>
 
@@ -76,11 +80,7 @@ export default function BookCard({ book }: { book: IBook }) {
 
           {/* Location */}
           <div className="flex items-center mb-1.5 lg:mb-2">
-            <img
-              src="/src/assets/location-icon.png"
-              alt="Location"
-              className="mr-1 flex-shrink-0 w-4 h-4"
-            />
+            <img src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
             <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
               Helsinki
             </span>
@@ -91,11 +91,7 @@ export default function BookCard({ book }: { book: IBook }) {
             {/* User Info */}
             <div className="flex items-center mb-1.5 lg:mb-0">
               <div className="flex-shrink-0 mr-1.5 overflow-hidden w-3.5 h-3.5 rounded-full">
-                <img
-                  src="/src/assets/userprofile.png"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
-                />
+                <img src={userProfileImg} alt="Profile" className="w-full h-full object-cover" />
               </div>
               <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
                 Tanvir Rayhan
@@ -104,7 +100,7 @@ export default function BookCard({ book }: { book: IBook }) {
 
             {/* Timestamp - Below name on small, beside on large */}
             <div className="flex items-center ml-0 lg:ml-0 mt-1 lg:mt-0">
-              <img src="/src/assets/clock.png" alt="Clock" className="mr-1 w-[9px] h-[9px]" />
+              <img src={clockIcon} alt="Clock" className="mr-1 w-[9px] h-[9px]" />
               <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-[#808080]">
                 29 mins ago
               </span>
