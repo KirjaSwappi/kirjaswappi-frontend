@@ -24,7 +24,10 @@ const NoInternetConnection: React.FC<NoInternetConnectionProps> = ({ children })
 
   if (!isOnline) {
     return (
-      <div className="flex items-center font-poppins justify-center min-h-screen bg-gray-100">
+      <div
+        className="flex items-center font-poppins justify-center min-h-screen bg-gray-100"
+        aria-live="assertive"
+      >
         <div className="bg-white p-8 container text-center">
           <div className="text-6xl mb-4 text-gray-700">
             <TbWorldOff className="inline-block" />

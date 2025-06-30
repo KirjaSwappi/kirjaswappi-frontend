@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import ErrorBoundary from './ErrorBoundary';
 import GlobalError from './GlobalError';
 import NoInternetConnection from './NoInternetConnection';
@@ -8,6 +9,7 @@ interface AppErrorBoundaryProps {
 }
 
 const AppErrorBoundary: React.FC<AppErrorBoundaryProps> = ({ children }) => {
+  const navigate = useNavigate();
   return (
     <NoInternetConnection>
       <ErrorBoundary
@@ -18,7 +20,7 @@ const AppErrorBoundary: React.FC<AppErrorBoundaryProps> = ({ children }) => {
             onRetry={resetErrorBoundary}
           />
         )}
-        onReset={() => (window.location.href = '/')}
+        onReset={() => navigate('/')}
       >
         {children}
       </ErrorBoundary>
