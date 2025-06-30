@@ -30,7 +30,7 @@ export default function Search({ onClose }: { onClose?: () => void }) {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           type="text"
-          className="w-full h-full outline-none border-none px-3 py-1 placeholder:pl-3 md:placeholder:pl-8 placeholder:text-grayDark placeholder:font-poppins placeholder:text-xs bg-transparent"
+          className="w-full h-full lg:bg-white outline-none border-none px-3 py-1 placeholder:pl-3 md:placeholder:pl-8 placeholder:text-grayDark placeholder:font-poppins placeholder:text-xs bg-transparent"
         />
         <div
           className="flex items-center justify-between gap-1 rounded-full bg-primary-light h-[26px] px-2 text-primary py-1 transition-all duration-300 ease-in-out"

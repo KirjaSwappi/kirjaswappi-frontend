@@ -49,7 +49,7 @@
   --a: 28deg;
   --p: 50%;
 
-  height: 80px;
+  height: 70px;
   aspect-ratio: 3/2;
   background: #fff;
   --_m: var(--r), #000 calc(100% - 1px), #0000;
