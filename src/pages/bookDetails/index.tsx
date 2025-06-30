@@ -19,6 +19,7 @@ import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
 import { useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
+import BookImageSlider from './_components/BookImageSlider';
 import BookType from './_components/BookType';
 import Exchanges from './_components/Exchanges';
 import SwapRequestButton from './_components/SwapRequestButton';
@@ -92,11 +93,11 @@ export default function BookDetails() {
       <div className="w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
       </div>
-      <div className="mx-auto w-[160px] h-[190px] -mt-32">
-        <Image src={bookData?.coverPhotoUrls[0]} className="w-full h-full rounded-lg" />
+      <div className="mx-auto w-[160px] h-[190px] -mt-32 mb-16">
+        <BookImageSlider images={bookData?.coverPhotoUrls || []} />
       </div>
       <div className=" pb-32">
-        <div className="container text-center my-5 ">
+        <div className="container text-center my-5">
           <h1 className="font-medium text-black text-sm leading-none mb-1 font-poppins">
             {bookData?.title}
           </h1>
