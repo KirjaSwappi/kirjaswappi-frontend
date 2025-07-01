@@ -1,3 +1,4 @@
+import { FaRegClock } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import exchangeIcon from '../../assets/exchangeicon.png';
 import locationIcon from '../../assets/location-icon.png';
@@ -81,7 +82,7 @@ export default function BookCard({ book }: { book: IBook }) {
               Helsinki
             </span>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
               {ownerProfilePhoto && (
                 <div className="w-3.5 h-3.5 rounded-full">
@@ -97,6 +98,10 @@ export default function BookCard({ book }: { book: IBook }) {
                   {ownerName}
                 </span>
               )}
+            </div>
+            <div className="flex items-center gap-1">
+              <FaRegClock className="text-sx text-grayDark" />
+              <p className="font-poppins font-normal text-sx text-grayDark">29 mins. ago</p>
             </div>
           </div>
         </div>
