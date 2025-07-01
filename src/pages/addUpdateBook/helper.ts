@@ -38,6 +38,14 @@ const getDefaultSwappableBooks = (bookData?: IBookData) =>
 const getDefaultSwappableGenres = (bookData?: IBookData) =>
   bookData?.swapCondition?.swappableGenres?.map(({ name }) => name) || [];
 
+// SWAP TYPES CONSTANT
+export const SWAP_TYPES = [
+  { value: SwapType.OPENTOOFFERS, label: 'Open To Offers' },
+  { value: SwapType.BYBOOKS, label: 'By Books' },
+  { value: SwapType.BYGENRES, label: 'By Genres' },
+  { value: SwapType.GIVEAWAY, label: 'Give Away' },
+];
+
 // <========= BUILD CREATE AND UPDATE BOOK FORM DATA =========>
 export const buildFormData = async (
   data: IAddUpdateBook,
@@ -124,10 +132,3 @@ export const appendSwapConditionInformation = async (formData: FormData, data: I
 
   formData.append('swapCondition', JSON.stringify(swapCondition));
 };
-
-export const SWAP_TYPES = [
-  { value: SwapType.OPENTOOFFERS, label: 'Open To Offers' },
-  { value: SwapType.BYBOOKS, label: 'By Books' },
-  { value: SwapType.BYGENRES, label: 'By Genres' },
-  { value: SwapType.GIVEAWAY, label: 'Give Away' },
-];
