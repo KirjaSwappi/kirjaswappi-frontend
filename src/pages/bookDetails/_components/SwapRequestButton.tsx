@@ -9,7 +9,7 @@ export default function SwapRequestButton({
 }) {
   return (
     <div
-      className="h-16 flex items-center gap-1 justify-between text-xs font-normal px-6 fixed bottom-0  bg-white w-full"
+      className="lg:hidden h-16 flex items-center gap-1 justify-between text-xs font-normal px-6 fixed bottom-0  bg-white w-full"
       style={{
         boxShadow: '0px 0px 1px 0px #33333345',
       }}

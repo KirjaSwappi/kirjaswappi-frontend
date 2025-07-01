@@ -71,7 +71,7 @@ export default function BookDetails() {
   goToTop();
   return (
     <div>
-      <div className="absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14">
+      <div className="lg:hidden absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14">
         <div className="flex items-center gap-4">
           <Image
             src={leftArrowIcon}
@@ -93,7 +93,7 @@ export default function BookDetails() {
       <div className="w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
       </div>
-      <div className="mx-auto w-[160px] h-[190px] -mt-32 mb-16">
+      <div className="lg:hidden mx-auto w-[160px] h-[190px] -mt-32 mb-16">
         <BookImageSlider images={bookData?.coverPhotoUrls || []} />
       </div>
       <div className=" pb-32">
