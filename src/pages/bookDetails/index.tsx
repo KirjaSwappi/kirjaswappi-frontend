@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import bookDetailsBg from '../../assets/bookdetailsbg.jpg';
 import editIcon from '../../assets/editBlack.png';
-import exchangeIcon from '../../assets/exchange.png';
+import exchangeIcon from '../../assets/exchangeIcon.png';
 import BookMarkIcon from '../../assets/icon_bookmark.png';
 import leftArrowIcon from '../../assets/leftArrow.png';
 import locationIcon from '../../assets/location-icon.png';
@@ -23,6 +23,7 @@ import BookImageSlider from './_components/BookImageSlider';
 import BookType from './_components/BookType';
 import Exchanges from './_components/Exchanges';
 import SwapRequestButton from './_components/SwapRequestButton';
+import VerticalImageSlider from './_components/VerticalImageSlider';
 
 export default function BookDetails() {
   const MAX_LENGTH = 95;
@@ -70,7 +71,7 @@ export default function BookDetails() {
   if (bookLoading) return <Loader />;
   goToTop();
   return (
-    <div>
+    <div className="bg-white ">
       <div className="lg:hidden absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14">
         <div className="flex items-center gap-4">
           <Image
@@ -90,37 +91,66 @@ export default function BookDetails() {
           />
         </div>
       </div>
-      <div className="w-full h-[172px] mt-14 lg:mt-0">
+      <div className="lg:hidden w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
       </div>
-      <div className="lg:hidden mx-auto w-[160px] h-[190px] -mt-32 mb-16">
-        <BookImageSlider images={bookData?.coverPhotoUrls || []} />
-      </div>
-      <div className=" pb-32">
-        <div className="container text-center my-5">
-          <h1 className="font-medium text-black text-sm leading-none mb-1 font-poppins">
-            {bookData?.title}
-          </h1>
-          <div className="flex items-center justify-center flex-wrap">
-            {bookData?.genres?.map((favItem: string[], index: number) => (
-              <div key={index} className="flex items-center">
-                <p className="text-black font-light text-xs font-poppins">{favItem}</p>
-                <span
-                  className={`${
-                    bookData?.genres.length - 1 === index ? 'hidden' : 'block'
-                  } inline-block mx-2 font-poppins font-light text-sm`}
-                >
-                  |
-                </span>
-              </div>
-            ))}
+      <div className="before:w-full before:h-[340px] before:bg-[#f2f4f8] before:absolute">
+        <div className="lg:hidden mx-auto w-[160px] h-[190px] -mt-32 mb-16">
+          <BookImageSlider images={bookData?.coverPhotoUrls || []} />
+        </div>
+        <div className="container flex items-start gap-5 pt-6">
+          <div className="max-w-[45%]">
+            <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
           </div>
-          <div className="flex flex-col items-center mt-9 mb-3">
-            <Image src={exchangeIcon} alt="exchangeIcon" />
-            <h3 className="font-poppins font-normal text-sm text-[#404040]">Exchange Condition</h3>
-            <p className="text-[10px] text-[#404040]">Either one of these</p>
+          <div className="max-w-[55%] z-40">
+            <div className="text-center lg:text-left">
+              <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-[40px] leading-none lg:leading-[48px] mb-2 font-poppins">
+                {bookData?.title}
+              </h1>
+              {bookData.author && (
+                <p className="text-[#404040] text-sm font-poppins font-normal">
+                  {' '}
+                  by {bookData.author}
+                </p>
+              )}
+
+              <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
+                {bookData?.genres?.map((favItem: string[], index: number) => (
+                  <div key={index} className="flex items-center">
+                    <div className="border border-[#BADBFD] px-2 py-1.5 rounded-md bg-[#DBEDFF] text-primary">
+                      <p className="font-light text-xs font-poppins">{favItem}</p>
+                    </div>
+                    <span
+                      className={`${
+                        bookData?.genres.length - 1 === index ? 'hidden' : 'block'
+                      } inline-block mx-2 font-poppins font-light text-sm lg:hidden`}
+                    >
+                      |
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
+                Book Description
+              </h3>
+              <p className="text-xs font-light font-poppins text-grayDark">
+                {bookData?.description}
+              </p>
+              <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-9 mb-3">
+                <div className="flex items-center justify-center bg-primary w-10 h-10 rounded-full">
+                  <Image src={exchangeIcon} alt="exchangeIcon" className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-poppins font-normal text-sm text-[#404040]">
+                    Exchange Condition
+                  </h3>
+                  <p className="text-[10px] text-[#404040]">Either one of these</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div></div>
         {/* ================== START Exchanges Condition ==================  */}
         <div className="pl-4">
           <Exchanges swapCondition={bookData?.swapCondition} />
@@ -178,14 +208,13 @@ export default function BookDetails() {
             </Button>
           </div>
         </div>
-
         <div className="container grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
           {Array.from({ length: 4 }, (_, index) => (
             <BookSkeleton key={index} />
           ))}
         </div>
       </div>
-      {/* ==================SWAP REQUEST BUTTON CONTAINER ON THE FOOTER [SCREEN SIZE: MOBILE]================== */}
+      {/* ================== SWAP REQUEST BUTTON CONTAINER ON THE FOOTER [SCREEN SIZE: MOBILE] ================== */}
       {!isProfile && (
         <SwapRequestButton
           ownerName={bookData?.owner?.name}

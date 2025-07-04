@@ -1,2 +1,0 @@
-1. Footer Bottom navbar (Books, Map, Message, Profile)
-> It will show on mobile. Its target on maximum px is 767px

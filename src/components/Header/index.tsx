@@ -26,6 +26,7 @@ export default function Header() {
     '/',
     `/book-details/${pathname?.split('/').reverse()[0]}`,
     '/profile/add-book',
+    `/profile/update-book/${pathname?.split('/').reverse()[0]}`,
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname);
   const methods = useForm({
@@ -45,7 +46,7 @@ export default function Header() {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-24' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
+      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
     >
       <FormProvider {...methods}>
         <SideDrawer left open={isFilterOpen}>
