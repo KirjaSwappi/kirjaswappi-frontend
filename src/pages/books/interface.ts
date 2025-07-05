@@ -7,4 +7,6 @@ export interface IBook {
   description: string;
   condition: string;
   coverPhotoUrl: string;
+  ownerName: string;
+  ownerProfilePhoto: string;
 }

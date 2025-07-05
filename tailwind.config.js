@@ -43,9 +43,6 @@ export default {
       fontSize: {
         sx: '10px',
       },
-      // fontSize: {
-      //   xxs: "10px"
-      // },
       borderRadius: {
         '5px': '5px',
       },
