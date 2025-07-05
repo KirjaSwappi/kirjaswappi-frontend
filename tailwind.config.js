@@ -14,7 +14,7 @@ export default {
           tab: '100%',
           lg: '100%',
           xl: '100%',
-          '2xl': '1440px',
+          '2xl': '1392px',
         },
         padding: {
           DEFAULT: '1rem',
@@ -25,6 +25,7 @@ export default {
         primary: '#3879E9',
         'primary-light': '#DBEDFF',
         secondary: '#B90E25',
+        red: '#EA244E',
         yellow: '#FFCC4D',
         'yellow-light': '#F4EFE3',
         white: '#FFFFFF',
@@ -37,13 +38,11 @@ export default {
         platinumDark: '#E4E4E4',
         arsenic: '#414141',
         smokyBlack: '#0D0D0D',
+        AntiFlashWhite: '#F2F2F2',
       },
       fontSize: {
         sx: '10px',
       },
-      // fontSize: {
-      //   xxs: "10px"
-      // },
       borderRadius: {
         '5px': '5px',
       },
@@ -59,6 +58,7 @@ export default {
         tab: '992px',
         lg: '1024px',
         xl: '1224px',
+        '2xl': '1392px',
       },
       spacing: {
         '1px': '1px',
