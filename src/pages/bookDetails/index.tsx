@@ -94,67 +94,76 @@ export default function BookDetails() {
       <div className="lg:hidden w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
       </div>
+      {/* <Breadcrumb /> */}
       <div className="before:w-full before:h-[340px] before:bg-[#f2f4f8] before:absolute">
         <div className="lg:hidden mx-auto w-[160px] h-[190px] -mt-32 mb-16">
           <BookImageSlider images={bookData?.coverPhotoUrls || []} />
         </div>
-        <div className="container flex items-start gap-5 pt-6">
-          <div className="max-w-[45%]">
-            <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
-          </div>
-          <div className="max-w-[55%] z-40">
-            <div className="text-center lg:text-left">
-              <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-[40px] leading-none lg:leading-[48px] mb-2 font-poppins">
-                {bookData?.title}
-              </h1>
-              {bookData.author && (
-                <p className="text-[#404040] text-sm font-poppins font-normal">
-                  {' '}
-                  by {bookData.author}
-                </p>
-              )}
-
-              <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
-                {bookData?.genres?.map((favItem: string[], index: number) => (
-                  <div key={index} className="flex items-center">
-                    <div className="border border-[#BADBFD] px-2 py-1.5 rounded-md bg-[#DBEDFF] text-primary">
-                      <p className="font-light text-xs font-poppins">{favItem}</p>
-                    </div>
-                    <span
-                      className={`${
-                        bookData?.genres.length - 1 === index ? 'hidden' : 'block'
-                      } inline-block mx-2 font-poppins font-light text-sm lg:hidden`}
-                    >
-                      |
-                    </span>
-                  </div>
-                ))}
+        <div className="container">
+          <div className=" flex items-start gap-5 lg:gap-10 pt-6">
+            <div className="w-[45%]">
+              <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
+              {/* ================== START BOOK CONDITION TYPE [BOOK -> CONDITION, LANGUAGE, & LENGTH]================== */}
+              <div className="w-[497px] ml-auto mt-5">
+                {bookData?.condition && <BookType condition={bookData?.condition} />}
               </div>
-              <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
-                Book Description
-              </h3>
-              <p className="text-xs font-light font-poppins text-grayDark">
-                {bookData?.description}
-              </p>
-              <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-9 mb-3">
-                <div className="flex items-center justify-center bg-primary w-10 h-10 rounded-full">
-                  <Image src={exchangeIcon} alt="exchangeIcon" className="w-6 h-6" />
+            </div>
+            <div className="max-w-[55%] z-10">
+              <div className="text-center lg:text-left">
+                <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-[40px] leading-none lg:leading-[48px] mb-2 font-poppins">
+                  {bookData?.title}
+                </h1>
+                {bookData.author && (
+                  <p className="text-[#404040] text-sm font-poppins font-normal">
+                    {' '}
+                    by {bookData.author}
+                  </p>
+                )}
+
+                <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
+                  {bookData?.genres?.map((favItem: string[], index: number) => (
+                    <div key={index} className="flex items-center">
+                      <div className="border border-[#BADBFD] px-2 py-1.5 rounded-md bg-[#DBEDFF] text-primary">
+                        <p className="font-light text-xs font-poppins">{favItem}</p>
+                      </div>
+                      <span
+                        className={`${
+                          bookData?.genres.length - 1 === index ? 'hidden' : 'block'
+                        } inline-block mx-2 font-poppins font-light text-sm lg:hidden`}
+                      >
+                        |
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <h3 className="font-poppins font-normal text-sm text-[#404040]">
-                    Exchange Condition
-                  </h3>
-                  <p className="text-[10px] text-[#404040]">Either one of these</p>
+                <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
+                  Book Description
+                </h3>
+                <p className="text-xs font-light font-poppins text-grayDark">
+                  {bookData?.description}
+                </p>
+                <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-9 mb-3">
+                  <div className="flex items-center justify-center bg-primary w-10 h-10 rounded-full">
+                    <Image src={exchangeIcon} alt="exchangeIcon" className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-poppins font-normal text-sm text-[#404040]">
+                      Exchange Condition
+                    </h3>
+                    <p className="text-[10px] text-[#404040]">Either one of these</p>
+                  </div>
                 </div>
+              </div>
+              <div className="mt-5">
+                <Exchanges swapCondition={bookData?.swapCondition} />
               </div>
             </div>
           </div>
         </div>
-        <div></div>
         {/* ================== START Exchanges Condition ==================  */}
-        <div className="pl-4">
+        {/* <div className="pl-4">
           <Exchanges swapCondition={bookData?.swapCondition} />
-        </div>
+        </div> */}
         {/* ================== END Exchanges Condition ==================  */}
         <div className="container text-left mb-5">
           <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">

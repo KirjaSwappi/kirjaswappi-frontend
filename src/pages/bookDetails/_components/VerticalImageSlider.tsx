@@ -24,7 +24,7 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
     changeImage((selected + 1) % images.length);
   };
   return (
-    <div className="flex items-start gap-5">
+    <div className="flex items-start lg:gap-3 xl:gap-5">
       <Carousel
         opts={{
           align: 'end',
@@ -34,10 +34,10 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
         orientation="vertical"
       >
         <CarouselContent
-          className={`flex gap-4 flex-col py-2 px-1.5 w-[86px] basis-[94px] h-[400px]`}
+          className={`flex xl:gap-4 flex-col py-2 px-1.5 w-[76px] xl:w-[86px] basis-[84px] xl:basis-[94px] h-[450px]`}
         >
           {images.map((src, idx) => (
-            <CarouselItem key={idx} className="pt-0">
+            <CarouselItem key={idx} className="pt-0 ">
               <Button
                 onClick={() => setSelected(idx)}
                 className={`block w-full rounded-md ${
@@ -47,7 +47,7 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
                 <Image
                   src={src}
                   alt={`Slide ${idx}`}
-                  className="rounded-md object-cover h-20 w-full"
+                  className="rounded-md object-cover lg:h-16 xl:h-20 w-full"
                 />
               </Button>
             </CarouselItem>

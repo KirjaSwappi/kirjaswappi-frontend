@@ -61,7 +61,7 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
           return (
             <CarouselItem
               key={`${item.swapType}-${item.title}`}
-              className={` ${condition.length <= 1 ? 'pr-4 basis-full' : 'basis-[70%]'}`}
+              className={` ${condition.length <= 1 ? 'pr-4 basis-full' : 'basis-[70%] lg:basis-[33%]'}`}
             >
               <div className="relative w-full overflow-hidden h-[110px] rounded-lg bg-[#DEE7F5] flex items-center gap-3 px-[18px]">
                 <Image
