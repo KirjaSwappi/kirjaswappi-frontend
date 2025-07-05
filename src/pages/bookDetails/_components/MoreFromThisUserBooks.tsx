@@ -10,12 +10,14 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
   const isInitialLoading = isFetching || isLoading;
   return (
     <div>
-      <div className="bg-[#E4E4E4] w-full h-[1px] my-5"></div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-base text-black font-medium font-poppins">More from this user</h1>
-        <Button className="text-primary underline font-poppins font-normal text-sm">See all</Button>
+      <span className="bg-[#E4E4E4] w-full h-[1px] my-5 block lg:hidden"></span>
+      <div className="flex items-center justify-between mt-5 lg:mt-14 mb-4 lg:mb-6">
+        <h1 className="text-base text-blackOlive font-medium font-poppins">More from this user</h1>
+        <Button className="text-primary underline font-poppins font-normal text-sm lg:hidden">
+          See all
+        </Button>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 gap-2 pt-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6">
         {moreBooks &&
           moreBooks.map((book: IBook, idx: number) => {
             if (idx === moreBooks.length - 1) {

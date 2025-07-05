@@ -67,7 +67,7 @@ export default function BookDetails() {
   if (bookLoading) return <Loader />;
   goToTop();
   return (
-    <div className="bg-light lg:bg-white min-h-screen">
+    <div className="bg-light lg:bg-white min-h-screen pb-20">
       <div className="lg:hidden left-0 top-0 w-full flex justify-between px-4 bg-white h-14 z-50 fixed">
         <div className="flex items-center gap-4">
           <Image
@@ -113,7 +113,7 @@ export default function BookDetails() {
                   {bookData?.title}
                 </h1>
                 {bookData.author && (
-                  <p className="text-[#404040] text-sm font-poppins font-normal">
+                  <p className="text-blackOlive text-sm font-poppins font-normal">
                     {' '}
                     by {bookData.author}
                   </p>
@@ -147,10 +147,10 @@ export default function BookDetails() {
                         <Image src={exchangeIcon} alt="exchangeIcon" className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="font-poppins font-normal text-sm text-[#404040]">
+                        <h3 className="font-poppins font-normal text-sm text-blackOlive">
                           Exchange Condition
                         </h3>
-                        <p className="text-[10px] text-[#404040]">Either one of these</p>
+                        <p className="text-[10px] text-blackOlive">Either one of these</p>
                       </div>
                     </div>
                     <div className="lg:mt-5">
@@ -159,7 +159,9 @@ export default function BookDetails() {
                   </div>
                 </div>
               </div>
-              <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+              <div className="hidden lg:block">
+                <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+              </div>
               <div className="mt-5 hidden lg:block">
                 <BookActionButton
                   btnValue={isProfile ? 'Edit Book' : 'Request Swap'}

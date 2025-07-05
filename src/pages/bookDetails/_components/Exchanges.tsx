@@ -7,7 +7,6 @@ import { IExchange, ISwapConditionData } from '../types/interface';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
   if (!swapCondition) return null;
-  console.log(swapCondition);
   const swapConditionExchange = (swapConditionData: ISwapConditionData): Array<IExchange> => {
     switch (swapConditionData.swapType) {
       case SwapType.BYBOOKS:

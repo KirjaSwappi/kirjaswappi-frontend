@@ -1,15 +1,16 @@
 import { FaRegClock } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
-import exchangeIcon from '../../assets/exchangeicon.png';
 import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
+import exchangeIcon from '../../assets/swapIcon.png';
 import { IBook } from '../../pages/books/interface';
 import Button from './Button';
 import Image from './Image';
 export default function BookCard({ book }: { book: IBook }) {
   if (!book) return null;
   const navigate = useNavigate();
-  const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto } = book;
+  const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
+  const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
       <div className="h-full flex flex-col">
@@ -17,7 +18,7 @@ export default function BookCard({ book }: { book: IBook }) {
           <div className="h-[156px] lg:h-[214px]">
             <Image
               className="w-full h-full object-cover"
-              src={coverPhotoUrl}
+              src={imageUrl}
               alt={`${title} || 'Your favorite book'`}
             />
           </div>
