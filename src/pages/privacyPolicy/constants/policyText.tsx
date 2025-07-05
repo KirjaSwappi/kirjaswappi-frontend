@@ -7,7 +7,7 @@ export const Paragraph: React.FC<{ children: React.ReactNode }> = ({ children })
 );
 
 export const List: React.FC<{ items: string[] }> = ({ items }) => (
-  <ul className={`${commonTextStyles} space-y-2 sm:pl-4 lg:pl-0`}>
+  <ul className={`${commonTextStyles} space-y-2 lg:pl-0`}>
     {items.map((item, i) => (
       <li key={i}>{item}</li>
     ))}

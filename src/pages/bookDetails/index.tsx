@@ -14,6 +14,7 @@ import Button from '../../components/shared/Button';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
+import { useTranslation } from 'react-i18next';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
@@ -39,6 +40,8 @@ export default function BookDetails() {
       skip: !bookData?.owner?.id,
     },
   );
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (userInformation?.id === bookData?.owner?.id) {
       setProfile(true);
@@ -56,8 +59,6 @@ export default function BookDetails() {
   };
 
   const loginModalOrSwapRequestModal = (): void => {
-    // =========== If user has in state show the swap request modal ===========
-    // console.log('test', bookData);
     if (userInformation.email) {
       dispatch(setSwapModal(true));
       dispatch(setSwapBook(bookData));
@@ -79,7 +80,9 @@ export default function BookDetails() {
             className="cursor-pointer"
             onClick={() => navigate(-1)}
           />
-          <h2 className="text-black text-base font-medium leading-none mt-[3px]">Book Details</h2>
+          <h2 className="text-black text-base font-medium leading-none mt-[3px]">
+            {t('bookDetails.title')}
+          </h2>
         </div>
         <div className="flex items-center gap-4">
           <Image src={shareIcon} alt="icon" />
@@ -117,8 +120,10 @@ export default function BookDetails() {
           </div>
           <div className="flex flex-col items-center mt-9 mb-3">
             <Image src={exchangeIcon} alt="exchangeIcon" />
-            <h3 className="font-poppins font-normal text-sm text-[#404040]">Exchange Condition</h3>
-            <p className="text-[10px] text-[#404040]">Either one of these</p>
+            <h3 className="font-poppins font-normal text-sm text-[#404040]">
+              {t('bookDetails.exchangeCondition')}
+            </h3>
+            <p className="text-[10px] text-[#404040]">{t('bookDetails.eitherOneOfThese')}</p>
           </div>
         </div>
         {/* ================== START Exchanges Condition ==================  */}
@@ -128,7 +133,7 @@ export default function BookDetails() {
         {/* ================== END Exchanges Condition ==================  */}
         <div className="container text-left mb-5">
           <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
-            Book Description
+            {t('bookDetails.bookDescription')}
           </h3>
           <p className="text-xs font-light font-poppins text-grayDark">
             {isExpanded || bookData?.description?.length <= MAX_LENGTH
@@ -139,7 +144,7 @@ export default function BookDetails() {
                 onClick={toggleReadMore}
                 className="text-primary ml-1 text-sm font-normal font-poppins"
               >
-                {isExpanded ? ' More Less' : ' More'}
+                {isExpanded ? t('moreLess') : t('more')}
               </button>
             )}
           </p>
@@ -152,7 +157,9 @@ export default function BookDetails() {
             <p className="text-xs font-poppins font-normal">Senate Square, Helsinki</p>
           </div>
           <div>
-            <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">Offered by</h3>
+            <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">
+              {t('bookDetails.offeredBy')}
+            </h3>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <Image
@@ -166,15 +173,19 @@ export default function BookDetails() {
               </div>
               <div className="flex items-center gap-1">
                 <Image src={upArrowIcon} alt="profile" />
-                <p className="text-xs font-normal font-poppins text-black">95% Positive Swaps</p>
+                <p className="text-xs font-normal font-poppins text-black">
+                  {t('bookDetails.positiveSwaps')}
+                </p>
               </div>
             </div>
           </div>
           <div className="bg-[#E4E4E4] w-full h-[1px] my-5"></div>
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-base text-black font-medium font-poppins">More from this user</h1>
+            <h1 className="text-base text-black font-medium font-poppins">
+              {t('bookDetails.moreFromThisUser')}
+            </h1>
             <Button className="text-primary underline font-poppins font-normal text-sm">
-              See all
+              {t('bookDetails.seeAll')}
             </Button>
           </div>
         </div>

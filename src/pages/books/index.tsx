@@ -66,7 +66,7 @@ export default function Books() {
   return (
     <section>
       <div className="container min-h-[80vh]">
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6">
           {books.map((book: IBook, idx: number) => {
             if (idx === books.length - 1) {
               return (

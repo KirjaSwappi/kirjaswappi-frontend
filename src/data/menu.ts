@@ -1,14 +1,14 @@
 import home from '../assets/bookIcon.svg';
 import message from '../assets/message.svg';
-import notification from '../assets/notification.svg';
 import map from '../assets/uiw_map.svg';
+import notification from '../assets/notification.svg';
 
 export const menu = [
   {
     id: 1,
     icon: home,
-    // selected: home,
-    value: 'Books',
+    //selected: home,
+    value: 'books',
     route: '/',
     isRoute: true,
     isShow: true,
@@ -17,7 +17,7 @@ export const menu = [
     id: 2,
     icon: map,
     // selected: store,
-    value: 'Map',
+    value: 'map',
     route: '/map',
     isRoute: true,
     isShow: true,
@@ -25,8 +25,8 @@ export const menu = [
   {
     id: 3,
     icon: message,
-    // selected: category,
-    value: 'Messages',
+    //selected: category,
+    value: 'messages',
     route: '/user/inbox',
     isRoute: true,
     isShow: true,

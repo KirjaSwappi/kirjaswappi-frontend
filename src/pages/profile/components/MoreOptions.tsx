@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Language from '../../../assets/language.png';
 import logoutIcon from '../../../assets/logout.png';
 import privacy from '../../../assets/privacy.png';
@@ -12,32 +13,38 @@ import SideDrawer from './SideDrawer';
 
 const profileSetting = [
   {
-    name: 'Settings',
+    name: 'settings',
     icon: setting,
     location: '',
+    actionId: 'settings',
   },
   {
-    name: 'Language',
+    name: 'language',
     icon: Language,
     location: '',
+    actionId: 'language',
   },
   {
     name: 'privacy',
     icon: privacy,
     location: '/privacy-policy',
+    actionId: 'privacy',
   },
   {
-    name: 'Contact Us',
+    name: 'contactUs',
     icon: contact,
     location: '/contact',
+    actionId: 'contactUs',
   },
   {
     name: 'logout',
     icon: logoutIcon,
     location: '',
+    actionId: 'logout',
   },
 ];
 export default function MoreOptions() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
@@ -45,10 +52,10 @@ export default function MoreOptions() {
       <div className="mt-4 flex flex-col gap-2">
         {profileSetting.map((item) => (
           <button
-            key={item.name}
+            key={item.actionId}
             className="flex items-center px-4 py-4 bg-white border border-[#E6E6E6] rounded-2xl gap-2"
             onClick={() => {
-              if (item.name.toLocaleLowerCase() === 'logout') dispatch(logout());
+              if (item.actionId === 'logout') dispatch(logout());
               else if (item.location) {
                 navigate(item.location);
               }
@@ -57,7 +64,7 @@ export default function MoreOptions() {
             type="button"
           >
             <Image src={item.icon} alt="close" className="h-auto" />
-            <h3 className="font-poppins text-sm font-normal capitalize">{item.name}</h3>
+            <h3 className="font-poppins text-sm font-normal capitalize">{t(item.name)}</h3>
           </button>
         ))}
       </div>

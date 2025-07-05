@@ -1,22 +1,24 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../components/shared/Button';
 import About from './About';
 import MyLibrary from './MyLibrary';
 import RatingAndReview from './RatingAndReview';
 
 export default function UserTabs() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(1);
   const tabs = [
     {
-      label: 'About',
+      label: t('about'),
       content: <About />,
     },
     {
-      label: 'Books Listed',
+      label: t('profile.booksListed'),
       content: <MyLibrary />,
     },
     {
-      label: 'Rating & Reviews',
+      label: t('profile.ratingAndReviews'),
       content: <RatingAndReview />,
     },
   ];
