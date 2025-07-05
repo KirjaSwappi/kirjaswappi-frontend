@@ -12,7 +12,7 @@ export default function BookList() {
   } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 sm:gap-[8px] lg:gap-[24px]">
       {loading || showSkeleton
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)
         : books && books?.map((book: IBook, index: number) => <BookCard key={index} book={book} />)}
