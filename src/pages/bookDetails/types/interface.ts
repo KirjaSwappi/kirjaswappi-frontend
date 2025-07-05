@@ -21,6 +21,7 @@ export interface IExchange {
   swapType: string;
   title: string;
   value: string;
+  coverPhotoUrl?: string;
 }
 
 export interface BookImageSliderProps {

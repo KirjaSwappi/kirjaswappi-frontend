@@ -7,7 +7,7 @@ import { IExchange, ISwapConditionData } from '../types/interface';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
   if (!swapCondition) return null;
-
+  console.log(swapCondition);
   const swapConditionExchange = (swapConditionData: ISwapConditionData): Array<IExchange> => {
     switch (swapConditionData.swapType) {
       case SwapType.BYBOOKS:
@@ -15,6 +15,7 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
           swapType: swapConditionData.swapType,
           title: swappableBook.title,
           value: swappableBook.author,
+          coverPhotoUrl: swappableBook.coverPhotoUrl,
         }));
 
       case SwapType.BYGENRES:
@@ -63,16 +64,20 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
               key={`${item.swapType}-${item.title}`}
               className={` ${condition.length <= 1 ? 'pr-4 basis-full' : 'basis-[70%] lg:basis-[33%]'}`}
             >
-              <div className="relative w-full overflow-hidden h-[110px] rounded-lg bg-[#DEE7F5] flex items-center gap-3 px-[18px]">
+              <div className="relative w-full overflow-hidden h-[110px] rounded-lg bg-[#DEE7F5] flex items-center gap-3 px-[18px] lg:px-2">
                 <Image
                   src={item.swapType === SwapType.BYBOOKS ? BookIconBlue : BookIcon}
-                  className="w-5"
+                  className="lg:hidden w-5"
+                />
+                <Image
+                  src={item.swapType === SwapType.BYBOOKS ? item?.coverPhotoUrl : BookIcon}
+                  className={`hidden lg:block ${item.swapType === SwapType.BYBOOKS ? 'w-12 h-14' : 'w-6 h-6'}  rounded-[4px]`}
                 />
                 <div className="w-[120px] text-left">
                   <h3 className="text-sm font-poppins leading-[18px] font-normal text-smokyBlack capitalize line-clamp-2">
                     {item?.title}
                   </h3>
-                  <p className="text-xs font-poppins font-light mt-1 text-smokyBlack">
+                  <p className="text-xs font-poppins font-light mt-1 text-smokyBlack lg:text-grayDark">
                     {item?.swapType === SwapType.BYBOOKS && 'by'} {item?.value}
                   </p>
                 </div>

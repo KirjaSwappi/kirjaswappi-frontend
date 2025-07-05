@@ -14,7 +14,7 @@ export default {
           tab: '100%',
           lg: '100%',
           xl: '100%',
-          '2xl': '1440px',
+          '2xl': '1392px',
         },
         padding: {
           DEFAULT: '1rem',
@@ -61,6 +61,7 @@ export default {
         tab: '992px',
         lg: '1024px',
         xl: '1224px',
+        '2xl': '1392px',
       },
       spacing: {
         '1px': '1px',

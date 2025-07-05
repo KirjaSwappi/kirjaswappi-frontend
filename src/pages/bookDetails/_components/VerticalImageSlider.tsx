@@ -30,14 +30,13 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
           align: 'end',
           loop: true,
         }}
-        className="w-[90px]"
         orientation="vertical"
       >
         <CarouselContent
-          className={`flex xl:gap-4 flex-col py-2 px-1.5 w-[76px] xl:w-[86px] basis-[84px] xl:basis-[94px] h-[450px]`}
+          className={`flex xl:gap-4 flex-col py-2 px-1.5 w-[76px] xl:w-[86px] basis-[86px] xl:basis-[94px] h-[450px]`}
         >
           {images.map((src, idx) => (
-            <CarouselItem key={idx} className="pt-0 ">
+            <CarouselItem key={idx} className="pt-0">
               <Button
                 onClick={() => setSelected(idx)}
                 className={`block w-full rounded-md ${
@@ -54,7 +53,7 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
           ))}
         </CarouselContent>
       </Carousel>
-      <div className="flex flex-col items-center gap-4 relative w-[497px] h-[480px]">
+      <div className="flex flex-col items-center gap-4 relative w-[397px] xl:w-full h-[380px] xl:h-[480px]">
         <div
           className={`absolute w-full h-full transition-all duration-300 ease-in-out ${
             transitioning ? 'opacity-0 translate-x-5' : 'opacity-100 translate-x-0'

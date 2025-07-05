@@ -1,37 +1,30 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import bookDetailsBg from '../../assets/bookdetailsbg.jpg';
-import editIcon from '../../assets/editBlack.png';
 import exchangeIcon from '../../assets/exchangeIcon.png';
-import BookMarkIcon from '../../assets/icon_bookmark.png';
 import leftArrowIcon from '../../assets/leftArrow.png';
 import locationIcon from '../../assets/location-icon.png';
 import profileIcon from '../../assets/profileIcon.png';
-import shareIcon from '../../assets/share-icon.png';
-import upArrowIcon from '../../assets/upArrow.png';
-import Button from '../../components/shared/Button';
+import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
-import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
+import BookActionButton from './_components/BookActionButton';
+import BookDescription from './_components/BookDescription';
 import BookImageSlider from './_components/BookImageSlider';
 import BookType from './_components/BookType';
 import Exchanges from './_components/Exchanges';
 import SwapRequestButton from './_components/SwapRequestButton';
 import VerticalImageSlider from './_components/VerticalImageSlider';
-
 export default function BookDetails() {
-  const MAX_LENGTH = 95;
+  // const MAX_LENGTH = 95;
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [isProfile, setProfile] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const { userInformation } = useAppSelector((state) => state.auth);
   const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
   const { data: userProfile } = useGetUserProfileImageQuery(
@@ -46,15 +39,15 @@ export default function BookDetails() {
     }
   }, [bookData?.owner?.id]);
 
-  const navigateToEditBook = () => {
-    if (isProfile) {
-      navigate(`/profile/update-book/${id}`);
-    }
-  };
+  // const navigateToEditBook = () => {
+  //   if (isProfile) {
+  //     navigate(`/profile/update-book/${id}`);
+  //   }
+  // };
 
-  const toggleReadMore = () => {
-    setIsExpanded(!isExpanded);
-  };
+  // const toggleReadMore = () => {
+  //   setIsExpanded(!isExpanded);
+  // };
 
   const loginModalOrSwapRequestModal = (): void => {
     // =========== If user has in state show the swap request modal ===========
@@ -71,8 +64,8 @@ export default function BookDetails() {
   if (bookLoading) return <Loader />;
   goToTop();
   return (
-    <div className="bg-white ">
-      <div className="lg:hidden absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14">
+    <div className="bg-light lg:bg-white min-h-screen">
+      <div className="lg:hidden absolute left-0 top-0 w-full flex justify-between px-4 bg-white h-14 z-50">
         <div className="flex items-center gap-4">
           <Image
             src={leftArrowIcon}
@@ -82,35 +75,41 @@ export default function BookDetails() {
           />
           <h2 className="text-black text-base font-medium leading-none mt-[3px]">Book Details</h2>
         </div>
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4">
           <Image src={shareIcon} alt="icon" />
           <Image
             src={isProfile ? editIcon : BookMarkIcon}
             alt="icon"
             onClick={navigateToEditBook}
           />
-        </div>
+        </div> */}
       </div>
-      <div className="lg:hidden w-full h-[172px] mt-14 lg:mt-0">
+      {/* <div className="lg:hidden w-full h-[172px] mt-14 lg:mt-0">
         <Image src={bookDetailsBg} className="w-full h-full" />
-      </div>
-      {/* <Breadcrumb /> */}
-      <div className="before:w-full before:h-[340px] before:bg-[#f2f4f8] before:absolute">
-        <div className="lg:hidden mx-auto w-[160px] h-[190px] -mt-32 mb-16">
-          <BookImageSlider images={bookData?.coverPhotoUrls || []} />
-        </div>
+      </div> */}
+
+      <div className="bg-light pt-6 hidden lg:block">
         <div className="container">
-          <div className=" flex items-start gap-5 lg:gap-10 pt-6">
-            <div className="w-[45%]">
-              <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
-              {/* ================== START BOOK CONDITION TYPE [BOOK -> CONDITION, LANGUAGE, & LENGTH]================== */}
-              <div className="w-[497px] ml-auto mt-5">
+          <Breadcrumb />
+        </div>
+      </div>
+      <div className="lg:before:w-full lg:before:h-[340px] lg:before:bg-light lg:before:absolute mt-12 lg:mt-0">
+        <div className="container">
+          <div className=" flex flex-col lg:flex-row items-start gap-5 xl:gap-10 pt-6">
+            <div className="w-full lg:w-[45%]">
+              <div className="lg:hidden mx-auto w-[160px] h-[190px] mb-9 lg:mb-16">
+                <BookImageSlider images={bookData?.coverPhotoUrls || []} />
+              </div>
+              <div className="hidden lg:block">
+                <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
+              </div>
+              <div className="ml-auto -mt-8 xl:mt-5 w-10/12 hidden lg:block">
                 {bookData?.condition && <BookType condition={bookData?.condition} />}
               </div>
             </div>
-            <div className="max-w-[55%] z-10">
+            <div className="w-full lg:w-[53%] z-10">
               <div className="text-center lg:text-left">
-                <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-[40px] leading-none lg:leading-[48px] mb-2 font-poppins">
+                <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-3xl xl:text-[40px] leading-none xl:leading-[48px] mb-2 font-poppins">
                   {bookData?.title}
                 </h1>
                 {bookData.author && (
@@ -139,9 +138,7 @@ export default function BookDetails() {
                 <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
                   Book Description
                 </h3>
-                <p className="text-xs font-light font-poppins text-grayDark">
-                  {bookData?.description}
-                </p>
+                <BookDescription description={bookData.description} />
                 <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-9 mb-3">
                   <div className="flex items-center justify-center bg-primary w-10 h-10 rounded-full">
                     <Image src={exchangeIcon} alt="exchangeIcon" className="w-6 h-6" />
@@ -157,15 +154,52 @@ export default function BookDetails() {
               <div className="mt-5">
                 <Exchanges swapCondition={bookData?.swapCondition} />
               </div>
+              <div className="flex flex-row-reverse justify-end gap-8 mt-14">
+                <div className="flex  gap-1 my-5">
+                  <span className="block w-[1px] h-4 bg-[#B2B2B2] mr-8"></span>
+                  <Image src={locationIcon} alt="location" />
+                  <p className="text-xs font-poppins font-normal">Senate Square, Helsinki</p>
+                </div>
+                <div>
+                  <div className="flex gap-8 items-end">
+                    <div>
+                      <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">
+                        Offered by
+                      </h3>
+                      <div className="flex items-center gap-1">
+                        <Image
+                          className="w-4 h-4 rounded-full"
+                          src={(userProfile?.imageUrl && userProfile?.imageUrl) || profileIcon}
+                          alt="profile"
+                        />
+                        <p className="text-xs font-normal font-poppins text-black">
+                          {bookData?.owner?.name}
+                        </p>
+                      </div>
+                    </div>
+                    {/* <span className="block w-[1px] h-4 bg-[#B2B2B2]"></span>
+                    <div className="flex items-center gap-1">
+                      <Image src={upArrowIcon} alt="profile" />
+                      <p className="text-xs font-normal font-poppins text-black">
+                        95% Positive Swaps
+                      </p>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+              <div className="mt-8 hidden lg:block">
+                <BookActionButton btnValue="Request Swap" onClick={() => console.log('o')} />
+              </div>
             </div>
           </div>
         </div>
-        {/* ================== START Exchanges Condition ==================  */}
-        {/* <div className="pl-4">
+      </div>
+      {/* ================== START Exchanges Condition ==================  */}
+      {/* <div className="pl-4">
           <Exchanges swapCondition={bookData?.swapCondition} />
         </div> */}
-        {/* ================== END Exchanges Condition ==================  */}
-        <div className="container text-left mb-5">
+      {/* ================== END Exchanges Condition ==================  */}
+      {/* <div className="container text-left mb-5">
           <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-5 mb-2 ">
             Book Description
           </h3>
@@ -182,10 +216,9 @@ export default function BookDetails() {
               </button>
             )}
           </p>
-        </div>
-        {/* ================== START BOOK CONDITION TYPE [BOOK -> CONDITION, LANGUAGE, & LENGTH]================== */}
-        {bookData?.condition && <BookType condition={bookData?.condition} />}
-        <div className="container">
+        </div> */}
+      {/* {bookData?.condition && <BookType condition={bookData?.condition} />} */}
+      {/* <div className="container">
           <div className=" flex items-center gap-1 my-5">
             <Image src={locationIcon} alt="location" />
             <p className="text-xs font-poppins font-normal">Senate Square, Helsinki</p>
@@ -216,13 +249,13 @@ export default function BookDetails() {
               See all
             </Button>
           </div>
-        </div>
-        <div className="container grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+        </div> */}
+      {/* <div className="container grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
           {Array.from({ length: 4 }, (_, index) => (
             <BookSkeleton key={index} />
           ))}
-        </div>
-      </div>
+        </div> */}
+      {/* </div> */}
       {/* ================== SWAP REQUEST BUTTON CONTAINER ON THE FOOTER [SCREEN SIZE: MOBILE] ================== */}
       {!isProfile && (
         <SwapRequestButton

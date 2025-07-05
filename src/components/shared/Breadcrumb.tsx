@@ -25,11 +25,11 @@ const Breadcrumb = () => {
 
           return (
             <li key={routeTo} className="flex items-center space-x-2">
-              <span>/</span>
+              <span>{'>'}</span>
               {isLast ? (
                 <span className="text-[#999999]">{label}</span>
               ) : (
-                <Link to={routeTo} className="hover:underline text-primary">
+                <Link to={location} className="hover:underline text-primary">
                   {label}
                 </Link>
               )}
