@@ -33,10 +33,10 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
         orientation="vertical"
       >
         <CarouselContent
-          className={`flex xl:gap-4 flex-col py-2 px-1.5 w-[76px] xl:w-[86px] basis-[86px] xl:basis-[94px] h-[450px]`}
+          className={`flex xl:gap-4 flex-col py-2 px-1.5 w-[76px] xl:w-[86px] basis-[86px] xl:basis-[94px] h-[450px] !gap-0`}
         >
           {images.map((src, idx) => (
-            <CarouselItem key={idx} className="pt-0">
+            <CarouselItem key={idx} className="!pt-4">
               <Button
                 onClick={() => setSelected(idx)}
                 className={`block w-full rounded-md ${

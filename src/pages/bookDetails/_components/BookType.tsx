@@ -7,7 +7,7 @@ export default function BookType({ condition }: { condition: string }) {
   if (!condition) return null;
 
   return (
-    <div className="bg-white lg:bg-[#F2F4F8] py-6 grid grid-cols-3 rounded-2xl">
+    <div className="bg-white lg:bg-[#F2F4F8] py-6 grid grid-cols-3 lg:rounded-2xl ">
       <div className="flex flex-col items-center border-r border-platinumDark px-1">
         <p className="text-grayDark text-xs font-poppins font-light">Book Condition</p>
         <Image src={bookIcon2} alt="book" className="mt-2 mb-1" />

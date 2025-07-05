@@ -56,6 +56,14 @@ export const bookApi = api.injectEndpoints({
       },
     }),
 
+    getMoreBooksByBookId: builder.query({
+      query: ({ id }: { id: string }) => {
+        return {
+          url: `/books/${id}/more-books`,
+          method: 'GET',
+        };
+      },
+    }),
     getAllBooks: builder.query({
       query: (filter: IFilterData) => {
         const queryParameter: {
@@ -93,4 +101,5 @@ export const {
   useGetSupportLanguageQuery,
   useGetSupportConditionQuery,
   useGetAllBooksQuery,
+  useGetMoreBooksByBookIdQuery,
 } = bookApi;
