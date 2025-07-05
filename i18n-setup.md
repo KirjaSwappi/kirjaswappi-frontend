@@ -1,6 +1,6 @@
 # 🌐 i18n Setup in React using `.properties` Files (No JSON)
 
-This project demonstrates how to implement internationalization (i18n) in a React + Vite application using `i18next` and `react-i18next` — without using JSON translation files. Instead, it uses `.properties` files (`key=value` format), a widely adopted format in Java/Spring environments. This approach offers a backend-friendly, flat structure that’s easy to maintain and read.
+This guide demonstrates how to implement internationalization (i18n) in a React + Vite application using `i18next` and `react-i18next` — without using JSON translation files. Instead, it uses `.properties` files (`key=value` format), a widely adopted format in Java/Spring environments. This approach offers a backend-friendly, flat structure that’s easy to maintain and read.
 
 To implement this:
 
