@@ -1,6 +1,7 @@
 import { FaRegUser } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import bookDetailsBg from '../../../assets/bookdetailsbg.jpg';
 import editIcon from '../../../assets/editBlue.png';
 import rightMenu from '../../../assets/rightmenu.png';
@@ -15,6 +16,7 @@ import Settings from './MoreOptions';
 import UserTabs from './UserTabs';
 
 export default function UserProfile() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { open } = useAppSelector((state) => state.open);
@@ -28,7 +30,7 @@ export default function UserProfile() {
     <div>
       <div className="absolute left-0 top-0 w-full flex justify-between px-4 h-14 bg-white">
         <div className="flex items-center gap-4">
-          <h2>My profile</h2>
+          <h2>{t('profile.myProfile')}</h2>
         </div>
         <div className="flex items-center gap-4">
           <Image src={rightMenu} alt="icon" onClick={() => dispatch(setOpen(!open))} />
