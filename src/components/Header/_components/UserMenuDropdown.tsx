@@ -4,6 +4,7 @@ import { MdContactPage, MdFeedback, MdLock } from 'react-icons/md';
 import { TbUserCircle } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
 import Button from '../../shared/Button';
 import DropdownItem from './DropdownItem';
@@ -49,7 +50,10 @@ export default function UserMenuDropdown() {
         return menu.location === '/logout' ? (
           <Button
             key={`${menu.label}-${index}`}
-            onClick={() => dispatch(logout())}
+            onClick={() => {
+              dispatch(logout());
+              dispatch(api.util.invalidateTags(['AddProfileImage']));
+            }}
             className="w-full"
           >
             <DropdownItem

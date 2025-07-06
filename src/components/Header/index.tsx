@@ -26,6 +26,7 @@ export default function Header() {
     '/',
     `/book-details/${pathname?.split('/').reverse()[0]}`,
     '/profile/add-book',
+    '/profile/user-profile',
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname);
   const methods = useForm({
