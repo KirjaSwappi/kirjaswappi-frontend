@@ -1,6 +1,18 @@
 import { IFilterData } from '../../../interface';
 import { api } from '../../api/apiSlice';
 
+function buildBookQueryParams(filter: IFilterData) {
+  const params: Record<string, string> = {};
+
+  if (filter.search) params['search'] = filter.search;
+  if (filter.genre && filter.genre.length > 0) params['genres'] = filter.genre.join(',');
+  if (filter.condition && filter.condition.length > 0)
+    params['conditions'] = filter.condition.join(',');
+  if (filter.language && filter.language.length > 0)
+    params['languages'] = filter.language.join(',');
+
+  return new URLSearchParams(params).toString();
+}
 export const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
     addBook: builder.mutation<{ success: boolean; message: string }, FormData>({
@@ -56,28 +68,20 @@ export const bookApi = api.injectEndpoints({
       },
     }),
 
+    getMoreBooksByBookId: builder.query({
+      query: ({ id }: { id: string }) => {
+        return {
+          url: `/books/${id}/more-books`,
+          method: 'GET',
+        };
+      },
+    }),
     getAllBooks: builder.query({
       query: (filter: IFilterData) => {
-        const queryParameter: {
-          genres?: string[];
-          conditions?: string[];
-          languages?: string[];
-          search?: string;
-        } = {};
-
-        if ((filter.search ?? '').length > 0) queryParameter['search'] = filter.search;
-        if (filter.genre?.length > 0) queryParameter['genres'] = filter.genre;
-        if (filter.condition?.length > 0) queryParameter['conditions'] = filter.condition;
-        if (filter.language?.length > 0) queryParameter['languages'] = filter.language;
-
-        const queryParams = new URLSearchParams(
-          queryParameter as Record<string, string>,
-        ).toString();
-
+        const queryParams = buildBookQueryParams(filter);
         const url = `/books${queryParams ? `?${queryParams}&` : '?'}page=${filter.pageNumber}&size=6`;
-
         return {
-          url: url,
+          url,
           method: 'GET',
         };
       },
@@ -93,4 +97,5 @@ export const {
   useGetSupportLanguageQuery,
   useGetSupportConditionQuery,
   useGetAllBooksQuery,
+  useGetMoreBooksByBookIdQuery,
 } = bookApi;

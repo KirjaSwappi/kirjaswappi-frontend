@@ -44,7 +44,7 @@ export default function UserMenuDropdown() {
   ];
 
   return (
-    <div className="absolute top-12 py-2 right-0 w-56 bg-white rounded-lg shadow-custom-box-shadow z-50 text-[#404040] ">
+    <div className="absolute top-12 py-2 right-0 w-56 bg-white rounded-lg shadow-custom-box-shadow z-50 text-blackOlive">
       {UserMenu.map((menu, index) => {
         return menu.location === '/logout' ? (
           <Button

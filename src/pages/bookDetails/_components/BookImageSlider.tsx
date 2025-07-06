@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import { BookImageSliderProps } from '../types/interface';
 
@@ -63,30 +64,30 @@ const BookImageSlider: React.FC<BookImageSliderProps> = ({ images, className }) 
         ))}
 
         {total > 2 && (
-          <button
+          <Button
             onClick={() => goTo(current - 1)}
             aria-label="Previous image"
             className="absolute -left-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-6 h-[23px] rounded-full bg-white border-none shadow-[0_2px_8px_#0002] shadow-md hover:shadow-lg transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105"
           >
             <MdChevronLeft size={20} color="#222" />
-          </button>
+          </Button>
         )}
 
         {total > 1 && (
-          <button
+          <Button
             onClick={() => goTo(current + 1)}
             aria-label="Next image"
             className="absolute -right-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-6 h-[23px] rounded-full bg-white border-none shadow-[0_2px_8px_#0002] shadow-md hover:shadow-lg transition-all duration-250 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-105"
           >
             <MdChevronRight size={20} color="#222" />
-          </button>
+          </Button>
         )}
       </div>
 
       {total > 1 && (
         <div className="flex justify-center gap-2 mt-6">
           {images.map((_: string, i: number) => (
-            <button
+            <Button
               key={i}
               onClick={() => setCurrent(i)}
               aria-label={`Go to slide ${i + 1}`}

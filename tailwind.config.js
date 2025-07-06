@@ -38,6 +38,7 @@ export default {
         platinumDark: '#E4E4E4',
         arsenic: '#414141',
         smokyBlack: '#0D0D0D',
+        blackOlive: '#404040',
         AntiFlashWhite: '#F2F2F2',
       },
       fontSize: {

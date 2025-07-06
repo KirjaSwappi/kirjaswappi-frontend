@@ -32,6 +32,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
     '/',
     `/book-details/${pathname?.split('/').reverse()[0]}`,
     '/profile/add-book',
+    `/profile/update-book/${pathname?.split('/').reverse()[0]}`,
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({
@@ -51,7 +52,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-24' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
+      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
     >
       <FormProvider {...methods}>
         <SideDrawer left open={isFilterOpen}>
