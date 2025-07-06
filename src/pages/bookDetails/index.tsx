@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import editIcon from '../../assets/editBlack.png';
 import exchangeIcon from '../../assets/exchangeIcon.png';
@@ -8,8 +9,6 @@ import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
-import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
-import { useTranslation } from 'react-i18next';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
@@ -185,12 +184,6 @@ export default function BookDetails() {
       <div className="container">
         <MoreFromThisUserBooks bookId={id} />
       </div>
-      {/* <div className="container grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-          {Array.from({ length: 4 }, (_, index) => (
-            <BookSkeleton key={index} />
-          ))}
-        </div> */}
-      {/* </div> */}
       {!isProfile && (
         <SwapRequestButton
           ownerName={bookData?.owner?.name}

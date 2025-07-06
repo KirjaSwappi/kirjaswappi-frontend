@@ -1,15 +1,28 @@
+import { useTranslation } from 'react-i18next';
 import { SwapType } from '../../../../types/enum';
 import BookIcon from '../../../assets/bookIcon.svg';
 import BookIconBlue from '../../../assets/bookIconBlue.png';
 import { Carousel, CarouselContent, CarouselItem } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 import { IExchange, ISwapConditionData } from '../types/interface';
-import { useTranslation } from 'react-i18next';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
-  const { t } = useTranslation();
-
   if (!swapCondition) return null;
+  const { t } = useTranslation();
+  const getSwapTypeTitle = (swapType: SwapType): string => {
+    switch (swapType) {
+      case SwapType.BYBOOKS:
+        return t('byBooks');
+      case SwapType.BYGENRES:
+        return t('byGenres');
+      case SwapType.OPENTOOFFERS:
+        return t('openForOffers');
+      case SwapType.GIVEAWAY:
+        return t('giveAway');
+      default:
+        return swapType;
+    }
+  };
   const swapConditionExchange = (swapConditionData: ISwapConditionData): Array<IExchange> => {
     switch (swapConditionData.swapType) {
       case SwapType.BYBOOKS:
