@@ -4,8 +4,11 @@ import BookIconBlue from '../../../assets/bookIconBlue.png';
 import { Carousel, CarouselContent, CarouselItem } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 import { IExchange, ISwapConditionData } from '../types/interface';
+import { useTranslation } from 'react-i18next';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
+  const { t } = useTranslation();
+
   if (!swapCondition) return null;
   const swapConditionExchange = (swapConditionData: ISwapConditionData): Array<IExchange> => {
     switch (swapConditionData.swapType) {
@@ -21,15 +24,15 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
         return swapConditionData.swappableGenres.map((swappableGenre) => ({
           swapType: swapConditionData.swapType,
           title: swappableGenre.name,
-          value: 'Any of this genre',
+          value: t('exchange.anyOfThisGenre'),
         }));
 
       case SwapType.OPENTOOFFERS:
         return [
           {
             swapType: swapConditionData.swapType,
-            title: SwapType.OPENTOOFFERS,
-            value: 'Flexible exchange',
+            title: getSwapTypeTitle(swapConditionData.swapType),
+            value: t('exchange.flexibleExchange'),
           },
         ];
 
@@ -37,8 +40,8 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
         return [
           {
             swapType: swapConditionData.swapType,
-            title: SwapType.GIVEAWAY,
-            value: 'You will receive offers for Give Away',
+            title: getSwapTypeTitle(swapConditionData.swapType),
+            value: t('exchange.giveAwayOffers'),
           },
         ];
 
@@ -77,7 +80,7 @@ export default function Exchanges({ swapCondition }: { swapCondition: ISwapCondi
                     {item?.title}
                   </h3>
                   <p className="text-xs font-poppins font-light mt-1 text-smokyBlack lg:text-grayDark">
-                    {item?.swapType === SwapType.BYBOOKS && 'by'} {item?.value}
+                    {item?.swapType === SwapType.BYBOOKS && t('by')} {item?.value}
                   </p>
                 </div>
               </div>

@@ -8,6 +8,8 @@ import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
+import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
+import { useTranslation } from 'react-i18next';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
@@ -35,6 +37,8 @@ export default function BookDetails() {
       skip: !bookData?.owner?.id,
     },
   );
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (userInformation?.id === bookData?.owner?.id) {
       setProfile(true);
@@ -48,8 +52,6 @@ export default function BookDetails() {
   };
 
   const loginModalOrSwapRequestModal = (): void => {
-    // =========== If user has in state show the swap request modal ===========
-    // console.log('test', bookData);
     if (userInformation.email) {
       dispatch(setSwapModal(true));
       dispatch(setSwapBook(bookData));
@@ -76,7 +78,9 @@ export default function BookDetails() {
             className="cursor-pointer"
             onClick={() => navigate(-1)}
           />
-          <h2 className="text-black text-base font-medium leading-none mt-[3px]">Book Details</h2>
+          <h2 className="text-black text-base font-medium leading-none mt-[3px]">
+            {t('bookDetails.title')}
+          </h2>
         </div>
         <div className="flex items-center gap-3">
           <Image src={shareIcon} alt="icon" className="h-5" />

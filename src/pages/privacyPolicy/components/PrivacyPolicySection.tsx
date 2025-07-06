@@ -1,15 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-interface SectionItem {
-  key: string;
-  title: string;
-  content: React.ReactNode;
-}
+import { PrivacyPolicyTranslationItem } from '../interface/types';
 
 interface PrivacyPolicySectionProps {
   category: string;
-  items: SectionItem[];
+  items: PrivacyPolicyTranslationItem[];
 }
 
 const PrivacyPolicySection: React.FC<PrivacyPolicySectionProps> = ({ category, items }) => {
@@ -19,8 +14,8 @@ const PrivacyPolicySection: React.FC<PrivacyPolicySectionProps> = ({ category, i
         {category}
       </p>
       <div className="block lg:hidden bg-white">
-        {items.map((item) => (
-          <Link key={item.key} to={item.key} className="block px-4 py-3 text-[15px] text-gray-700">
+        {items.map((item, idx) => (
+          <Link key={idx} to={item.title} className="block px-4 py-3 text-[15px] text-gray-700">
             {item.title}
           </Link>
         ))}

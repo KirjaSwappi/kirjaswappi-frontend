@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import yup from 'yup';
 import NextArrowIcon from '../../assets/arrow1.png';
 import PrevArrowIcon from '../../assets/arrow2.png';
@@ -28,6 +29,7 @@ import { buildFormData, getDefaultValues } from './helper';
 import { IAddUpdateBookData } from './types/interface';
 
 export default function AddUpdateBook() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [active, setActive] = useState<number>(0);
@@ -147,7 +149,7 @@ export default function AddUpdateBook() {
       <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-7 xl:pr-[47px] 2xl:pr-48 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
         <div className="w-full">
           <BookAddUpdateHeader
-            title={id ? 'Update Book' : 'Add Book'}
+            title={`${id ? t('update') : t('add')} Book`}
             onBack={() => navigate('/profile/user-profile')}
           />
           <div className="pt-7 lg:pt-0">
@@ -163,7 +165,7 @@ export default function AddUpdateBook() {
                   <Image src={prevArrowIcon_3} alt="left" className="w-4 h-4" />
                 </Button>
                 <h3 className="font-poppins text-base font-bold text-[#19191C] ml-2 lg:text-2xl">
-                  {id ? 'Update' : 'Add'} Book
+                  {id ? t('update') : t('add')} Book
                 </h3>
               </div>
               <div className="lg:flex xl:gap-28 pt-8 lg:pt-4 pb-3">

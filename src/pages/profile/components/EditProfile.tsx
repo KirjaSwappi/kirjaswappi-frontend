@@ -3,6 +3,7 @@ import { FaRegUser } from 'react-icons/fa';
 import { IoCamera } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import bg from '../../../assets/bookdetailsbg.jpg';
 import closeIcon from '../../../assets/close.svg';
 import leftArrowIcon from '../../../assets/leftArrow.png';
@@ -31,6 +32,7 @@ import { useAppSelector } from '../../../redux/hooks';
 import { IEditInfo } from '../interface/interface';
 
 export default function EditProfile() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const profileRef = useRef<HTMLInputElement | null>(null);
@@ -184,7 +186,7 @@ export default function EditProfile() {
     dispatch(
       setAlert({
         showAlert: true,
-        message: `Do you want to delete ${isProfileOrCover} picture?`,
+        message: t('editProfile.deleteConfirmation', { type: isProfileOrCover }),
         alertType: isProfileOrCover,
       }),
     );
@@ -249,8 +251,8 @@ export default function EditProfile() {
       {isLoading() && <Spinner />}
       <AlertModal
         yes={handleDeleteFn}
-        yesBtnValue="Yes"
-        noBtnValue="No"
+        yesBtnValue={t('yes')}
+        noBtnValue={t('no')}
         no={() => dispatch(setAlert({ showAlert: false, message: '' }))}
         loading={deleteLoading}
       />
@@ -278,7 +280,7 @@ export default function EditProfile() {
           >
             <Image src={leftArrowIcon} alt="left" />
           </button>
-          <h3 className="font-poppins text-base font-medium ">Edit Profile</h3>
+          <h3 className="font-poppins text-base font-medium ">{t('editProfile.title')}</h3>
         </div>
         <div>
           <Button
@@ -288,14 +290,16 @@ export default function EditProfile() {
             } font-poppins font-medium text-base`}
             onClick={handleEditSaveFn}
           >
-            Save
+            {t('save')}
           </Button>
         </div>
       </div>
 
       <div className="container pt-16">
         <div className="border-b border-[#E4E4E4]">
-          <h1 className="font-medium font-poppins text-sm leading-none">Profile Picture</h1>
+          <h1 className="font-medium font-poppins text-sm leading-none">
+            {t('editProfile.profilePicture')}
+          </h1>
           <div className="mx-auto w-[120px] h-[120px] rounded-full  bg-white my-4 relative">
             <div className="w-full h-full flex items-center justify-center overflow-hidden">
               {editImage === '' ? (
@@ -332,7 +336,7 @@ export default function EditProfile() {
                 className="border-b border-platinum py-2 font-poppins text-black flex items-center justify-center w-full "
                 onClick={handleClick}
               >
-                Upload profile
+                {t('editProfile.uploadProfile')}
                 <input
                   type="file"
                   ref={profileRef}
@@ -345,7 +349,7 @@ export default function EditProfile() {
                 className="border-b border-platinum py-2 font-poppins text-black flex items-center justify-center w-full "
                 onClick={() => handleShowDeleteModalProfilePicture('profile')}
               >
-                Remove profile
+                {t('editProfile.removeProfile')}
               </button>
             </div>
           </div>
@@ -353,7 +357,9 @@ export default function EditProfile() {
         </div>
         <div className="border-b border-[#E4E4E4] pb-4">
           <div className="flex items-center justify-between py-4 relative">
-            <h1 className="font-poppins text-sm font-medium leading-none">Cover Picture</h1>
+            <h1 className="font-poppins text-sm font-medium leading-none">
+              {t('editProfile.coverPicture')}
+            </h1>
             <Button
               onClick={() => {
                 handleCoverToggle();
@@ -361,7 +367,7 @@ export default function EditProfile() {
               }}
               className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline relative"
             >
-              Change
+              {t('change')}
             </Button>
             <div
               className={`${
@@ -372,7 +378,7 @@ export default function EditProfile() {
                 className="border-b border-platinum py-2 font-poppins text-black flex items-center justify-center w-full "
                 onClick={handleCoverClick}
               >
-                Upload profile
+                {t('editProfile.uploadProfile')}
                 <input
                   type="file"
                   accept="image/*"
@@ -385,7 +391,7 @@ export default function EditProfile() {
                 className="border-b border-platinum py-2 font-poppins text-black flex items-center justify-center w-full "
                 onClick={() => handleShowDeleteModalProfilePicture('cover')}
               >
-                Remove profile
+                {t('editProfile.removeProfile')}
               </button>
             </div>
           </div>
@@ -401,44 +407,46 @@ export default function EditProfile() {
           )}
         </div>
         <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
-          <InputLabel label="First Name" />
+          <InputLabel label={t('editProfile.firstName')} />
           <Input
             type="text"
             name="firstName"
-            placeholder="First name"
+            placeholder={t('editProfile.firstNamePlaceholder')}
             className="rounded-md"
             value={editInfo.firstName}
             onChange={handleChange}
           />
         </div>
         <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
-          <InputLabel label="Last Name" />
+          <InputLabel label={t('editProfile.lastName')} />
           <Input
             type="text"
             name="lastName"
-            placeholder="Last Name"
+            placeholder={t('editProfile.lastNamePlaceholder')}
             className="rounded-md"
             value={editInfo.lastName}
             onChange={handleChange}
           />
         </div>
         <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
-          <InputLabel label="Bio" />
+          <InputLabel label={t('editProfile.bio')} />
           <TextArea
             name="aboutMe"
-            placeholder="Write here..."
+            placeholder={t('editProfile.bioPlaceholder')}
             value={editInfo.aboutMe}
             onChange={handleChange}
           />
         </div>
         <div>
           <div className="flex items-center justify-between py-4">
-            <h1 className="font-poppins text-sm font-medium leading-none">Genre</h1>
+            <h1 className="font-poppins text-sm font-medium leading-none">
+              {t('editProfile.genre')}
+            </h1>
             <Button
               onClick={() => dispatch(setOpen(!open))}
               className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
             >
-              Add
+              {t('add')}
             </Button>
           </div>
           {editInfo.favGenres && editInfo.favGenres.length > 0 && (
@@ -459,9 +467,11 @@ export default function EditProfile() {
         </div>
         <div className="pb-8">
           <div className="flex items-center justify-between py-4">
-            <h1 className="font-poppins text-sm font-medium leading-none">Location</h1>
+            <h1 className="font-poppins text-sm font-medium leading-none">
+              {t('editProfile.location')}
+            </h1>
             <Button className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline">
-              Change
+              {t('change')}
             </Button>
           </div>
           <div>
