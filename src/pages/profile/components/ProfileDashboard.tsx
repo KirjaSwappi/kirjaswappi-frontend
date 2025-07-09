@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '../../../components/shared/Button';
 import About from './About';
-import MyLibrary from './MyLibrary';
+import BooksListed from './BooksListed';
 import RatingAndReview from './RatingAndReview';
 
-export default function UserTabs() {
+export default function ProfileDashboard() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(1);
   const tabs = [
@@ -15,7 +15,7 @@ export default function UserTabs() {
     },
     {
       label: t('profile.booksListed'),
-      content: <MyLibrary />,
+      content: <BooksListed />,
     },
     {
       label: t('profile.ratingAndReviews'),

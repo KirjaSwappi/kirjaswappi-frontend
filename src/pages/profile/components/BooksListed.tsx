@@ -3,9 +3,9 @@ import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
 import { useSkeleton } from '../../../hooks/useSkeleton';
 import { useAppSelector } from '../../../redux/hooks';
 import { IBook } from '../../books/interface';
-import AddBookComponent from './AddBookComponent';
+import AddBookComponent from './AddBookAction';
 
-export default function MyLibrary() {
+export default function BooksListed() {
   const { showSkeleton } = useSkeleton();
   const {
     loading,

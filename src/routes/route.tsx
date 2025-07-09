@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
+import AppErrorBoundary from '../components/error/AppErrorBoundary';
+import GlobalError from '../components/error/GlobalError';
 import AddUpdateBook from '../pages/addUpdateBook';
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
@@ -11,15 +13,13 @@ import EditProfile from '../pages/profile/components/EditProfile';
 import UserProfile from '../pages/profile/components/UserProfile';
 import Inbox from '../pages/user/inbox/Inbox';
 import { Index } from '../pages/user/inboxChat';
-import GlobalError from '../components/error/GlobalError';
-import AppErrorBoundary from '../components/error/AppErrorBoundary';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
+import NotFound from '../components/error/NotFound';
 import ContactUs from '../pages/contactUs/ContactUs';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
-import NotFound from '../components/error/NotFound';
 
 const routes = createBrowserRouter([
   {
