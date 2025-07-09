@@ -1,4 +1,5 @@
 import bookIcon2 from '../../../assets/bookIcon2.png';
+import edition from '../../../assets/edition.png';
 import lng from '../../../assets/EN.png';
 import Image from '../../../components/shared/Image';
 
@@ -6,7 +7,7 @@ export default function BookType({ condition }: { condition: string }) {
   if (!condition) return null;
 
   return (
-    <div className="bg-white py-6 grid grid-cols-3">
+    <div className="bg-white lg:bg-[#F2F4F8] py-6 grid grid-cols-3 lg:rounded-2xl ">
       <div className="flex flex-col items-center border-r border-platinumDark px-1">
         <p className="text-grayDark text-xs font-poppins font-light">Book Condition</p>
         <Image src={bookIcon2} alt="book" className="mt-2 mb-1" />
@@ -18,10 +19,10 @@ export default function BookType({ condition }: { condition: string }) {
         <h3 className="text-black text-xs font-normal font-poppins">English</h3>
       </div>
       <div className="flex flex-col items-center border-r border-platinumDark px-1">
-        <p className="text-grayDark text-xs font-poppins font-normal">Length</p>
-        <p className="text-xl font-semibold text-smokyBlack">-</p>
+        <p className="text-grayDark text-xs font-poppins font-normal">Edition</p>
+        <Image src={edition} alt="book" className="mt-2 mb-1 h-[18px]" />
         <h3 className="text-black text-xs font-normal font-poppins flex items-center gap-1">
-          Pages
+          2003
         </h3>
       </div>
     </div>

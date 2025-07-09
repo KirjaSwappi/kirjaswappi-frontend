@@ -11,24 +11,25 @@ import EditProfile from '../pages/profile/components/EditProfile';
 import UserProfile from '../pages/profile/components/UserProfile';
 import Inbox from '../pages/user/inbox/Inbox';
 import { Index } from '../pages/user/inboxChat';
+import GlobalError from '../components/error/GlobalError';
+import AppErrorBoundary from '../components/error/AppErrorBoundary';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
 import ContactUs from '../pages/contactUs/ContactUs';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
+import NotFound from '../components/error/NotFound';
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: (
-      // <NoInternetConnection>
-      // <ErrorBoundary FallbackComponent={ErrorReturn} onReset={() => (location.href = "/")}>
-      <App />
-      // </ErrorBoundary>
-      // </NoInternetConnection>
+      <AppErrorBoundary>
+        <App />
+      </AppErrorBoundary>
     ),
-    // errorElement: <ErrorBoundary />,
+    errorElement: <GlobalError />,
     children: [
       {
         index: true,
@@ -148,13 +149,13 @@ const routes = createBrowserRouter([
 
       //   ],
       // },
+      {
+        path: '*',
+        element: <NotFound />,
+      },
     ],
   },
 
-  // {
-  //   path: "*",
-  //   element: <NotFound />,
-  // },
   // {
   //   path: "/notFound",
   //   element: <NotFound />,

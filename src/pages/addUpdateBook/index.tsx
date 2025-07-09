@@ -145,7 +145,7 @@ export default function AddUpdateBook() {
   if (loading()) return <Loader />;
 
   return (
-    <div className="lg:px-6 pb-6">
+    <div className="lg:px-6 pb-6 lg:pt-6">
       <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-7 xl:pr-[47px] 2xl:pr-48 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
         <div className="w-full">
           <BookAddUpdateHeader
