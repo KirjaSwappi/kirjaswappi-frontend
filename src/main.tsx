@@ -6,9 +6,11 @@ import Authenticate from './Authenticate.tsx';
 import './index.css';
 import store from './redux/store';
 import './utility/i18n.ts';
+const clientID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="43921547457-06chtojpprgds80g1gq5tprmn5qg0hmq.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={clientID}>
       <Provider store={store}>
         <Authenticate />
       </Provider>

@@ -37,7 +37,7 @@ export const authApi = api.injectEndpoints({
     loginWithGoogle: builder.mutation({
       query: ({ idToken }) => {
         return {
-          url: '/login-with-google',
+          url: '/users/login-with-google',
           method: 'POST',
           body: JSON.stringify({ idToken }),
         };
