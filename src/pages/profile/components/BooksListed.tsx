@@ -17,7 +17,10 @@ export default function BooksListed() {
       <AddBookComponent />
       {loading || showSkeleton
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)
-        : books && books?.map((book: IBook, index: number) => <BookCard key={index} book={book} />)}
+        : books &&
+          books?.map((book: IBook, index: number) => (
+            <BookCard isProfile key={index} book={book} />
+          ))}
     </div>
   );
 }

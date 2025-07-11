@@ -10,7 +10,6 @@ import BookDetails from '../pages/bookDetails';
 import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
-import UserProfile from '../pages/profile/components/UserProfile';
 import Inbox from '../pages/user/inbox/Inbox';
 import { Index } from '../pages/user/inboxChat';
 import Authenticate from './Authenticate';
@@ -20,6 +19,7 @@ import NotFound from '../components/error/NotFound';
 import ContactUs from '../pages/contactUs/ContactUs';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
+import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
 
 const routes = createBrowserRouter([
   {
@@ -63,7 +63,7 @@ const routes = createBrowserRouter([
             loader: () => <p>Loading...</p>,
             index: true,
             path: 'user-profile',
-            element: <UserProfile />,
+            element: <ProfileDashboard />,
           },
           {
             path: 'edit-user',
