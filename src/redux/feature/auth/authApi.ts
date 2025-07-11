@@ -39,7 +39,7 @@ export const authApi = api.injectEndpoints({
         return {
           url: '/users/login-with-google',
           method: 'POST',
-          body: JSON.stringify({ idToken }),
+          body: JSON.stringify({ idToken: idToken }),
         };
       },
     }),
