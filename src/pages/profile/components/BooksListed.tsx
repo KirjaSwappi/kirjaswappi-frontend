@@ -13,7 +13,7 @@ export default function BooksListed() {
   } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-6 gap-2">
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 xl:gap-4">
       <AddBookComponent />
       {loading || showSkeleton
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)

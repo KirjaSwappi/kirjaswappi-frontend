@@ -17,7 +17,7 @@ export default function UserProfile() {
   return (
     <div>
       <div>
-        <div className="w-full h-[108px] z-0 overflow-hidden rounded-t-xl">
+        <div className="w-full h-[108px] z-0 overflow-hidden lg:rounded-t-xl">
           {coverImage?.imageUrl === undefined ? (
             <Image src={profileCover} className="w-full h-full " />
           ) : (
@@ -44,10 +44,13 @@ export default function UserProfile() {
           <h1 className="font-medium text-black text-sm leading-none mb-3 font-poppins">
             {firstName + ' ' + lastName}
           </h1>
-          <div className="flex items-center justify-center gap-1.5 flex-wrap">
+          <div className="flex items-center justify-center gap-1 lg:gap-1.5 flex-wrap">
             {favGenres?.map((favItem, index) => (
-              <div key={index} className="flex items-center bg-primary-light px-2 py-1 rounded">
-                <p className="text-black lg:text-primary font-light text-xs font-poppins">
+              <div
+                key={index}
+                className="flex items-center lg:bg-primary-light lg:px-2 lg:py-1 lg:rounded"
+              >
+                <p className="text-smokyBlack lg:text-primary font-light text-xs font-poppins">
                   {favItem}
                 </p>
                 <span
@@ -60,11 +63,11 @@ export default function UserProfile() {
               </div>
             ))}
           </div>
-          <p className="text-grayDark font-poppins text-xs font-normal mt-3 text-center">
+          <p className="text-grayDark font-poppins text-xs font-normal mt-3 text-center hidden lg:block">
             {aboutMe}
           </p>
         </div>
-        <div className="border-y border-AntiFlashWhite mt-5 text-center">
+        <div className="hidden lg:block border-y border-AntiFlashWhite mt-5 text-center">
           <div className="flex items-center py-2 px-4 justify-evenly">
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
@@ -77,7 +80,7 @@ export default function UserProfile() {
             </div>
           </div>
         </div>
-        <div className="border-b border-AntiFlashWhite px-4 py-5">
+        <div className="hidden lg:block border-b border-AntiFlashWhite px-4 py-5">
           <div className="flex flex-row gap-1 items-center">
             <Image src={locationIcon} alt="edit" className="w-4" />
             <p className="font-poppins text-xs font-light text-[#404040]">
