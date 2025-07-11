@@ -7,6 +7,7 @@ import bookDetailsBg from '../../../assets/bookdetailsbg.jpg';
 import profileIcon from '../../../assets/profileIcon.png';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import ControlledPasswordField from '../../../components/shared/ControllerFieldPassword';
+import GoogleLoginButton from '../../../components/shared/GoogleLoginButton';
 import Image from '../../../components/shared/Image';
 import MessageToastify from '../../../components/shared/MessageToastify';
 import { useLoginMutation } from '../../../redux/feature/auth/authApi';
@@ -125,6 +126,7 @@ export default function Login() {
             </form>
           </FormProvider>
         </div>
+        <GoogleLoginButton />
       </div>
     </div>
   );

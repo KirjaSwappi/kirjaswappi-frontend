@@ -34,6 +34,15 @@ export const authApi = api.injectEndpoints({
         }
       },
     }),
+    loginWithGoogle: builder.mutation({
+      query: ({ idToken }) => {
+        return {
+          url: '/users/login-with-google',
+          method: 'POST',
+          body: { idToken: idToken },
+        };
+      },
+    }),
     sentOTP: builder.query({
       query: ({ email }) => {
         return {
@@ -177,4 +186,5 @@ export const {
   useGetUserCoverImageQuery,
   useUploadCoverImageMutation,
   useDeleteCoverImageMutation,
+  useLoginWithGoogleMutation,
 } = authApi;
