@@ -126,6 +126,14 @@ export default function Login() {
             </form>
           </FormProvider>
         </div>
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-platinum"></div>
+          </div>
+          <div className="relative flex justify-center text-xs font-poppins">
+            <span className="bg-light px-2 text-grayDark">Or</span>
+          </div>
+        </div>
         <GoogleLoginButton />
       </div>
     </div>
