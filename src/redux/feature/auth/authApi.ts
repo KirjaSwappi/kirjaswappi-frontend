@@ -1,6 +1,23 @@
+import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { setCookie } from '../../../utility/cookies';
 
 import { api } from '../../api/apiSlice';
+
+type LoginResponse = { id: string; email: string };
+const handleLoginCookie = async (
+  queryFulfilled: Promise<{ data: LoginResponse; meta: FetchBaseQueryMeta | undefined }>,
+) => {
+  try {
+    const {
+      data: { id, email },
+    } = await queryFulfilled;
+    if (id && email) {
+      setCookie('user', { id, email }, 240);
+    }
+  } catch (error) {
+    console.error("Can't set data in cookie. failed:", error);
+  }
+};
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,16 +39,7 @@ export const authApi = api.injectEndpoints({
         };
       },
       onQueryStarted: async (_args, { queryFulfilled }) => {
-        try {
-          const {
-            data: { id, email },
-          } = await queryFulfilled;
-          if (id && email) {
-            setCookie('user', { id, email }, 240);
-          }
-        } catch (error) {
-          console.error("Can't set data in cookie. failed:", error);
-        }
+        await handleLoginCookie(queryFulfilled);
       },
     }),
     loginWithGoogle: builder.mutation({
@@ -41,6 +49,9 @@ export const authApi = api.injectEndpoints({
           method: 'POST',
           body: { idToken: idToken },
         };
+      },
+      onQueryStarted: async (_args, { queryFulfilled }) => {
+        await handleLoginCookie(queryFulfilled);
       },
     }),
     sentOTP: builder.query({
