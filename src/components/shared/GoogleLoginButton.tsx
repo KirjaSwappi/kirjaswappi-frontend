@@ -1,23 +1,26 @@
 import type { CredentialResponse } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { useLoginWithGoogleMutation } from '../../redux/feature/auth/authApi';
+import { showToast } from './toast';
 
 export default function GoogleLoginButton() {
   const [loginWithGoogle] = useLoginWithGoogleMutation();
   const handleGoogleLogin = (credentialResponse: CredentialResponse): void => {
     const idToken = credentialResponse.credential;
     if (idToken) {
-      loginWithGoogle({ idToken });
+      loginWithGoogle({ idToken }).then((res) => {
+        if (res.data) showToast('success', 'Login successful');
+      });
     } else {
-      console.error('No credential returned from Google');
+      showToast('error', 'Something went wrong! Please try again.');
     }
   };
 
   return (
-    <div className="mt-3">
+    <div>
       <GoogleLogin
         onSuccess={handleGoogleLogin}
-        onError={() => console.error('Google Login Failed')}
+        onError={() => showToast('error', 'Something went wrong! Please try again.')}
       />
     </div>
   );

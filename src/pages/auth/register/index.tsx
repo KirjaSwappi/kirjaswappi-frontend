@@ -2,13 +2,14 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import leftArrowIcon from '../../../assets/leftArrow.png';
+import GoogleLoginButton from '../../../components/shared/GoogleLoginButton';
 import Image from '../../../components/shared/Image';
+import { setError } from '../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
 import { setStep } from '../../../redux/feature/step/stepSlice';
 import { useAppSelector } from '../../../redux/hooks';
 import ConfirmOTP from './_components/ConfirmOTP';
 import RegisterForm from './_components/RegisterForm';
-import { setError } from '../../../redux/feature/auth/authSlice';
 
 export default function Register() {
   const { step } = useAppSelector((state) => state.step);
@@ -57,6 +58,15 @@ export default function Register() {
           <h3 className="font-poppins text-base font-medium ">log in or Signup</h3>
         </div>
         {renderStepsContent()}
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-platinum"></div>
+          </div>
+          <div className="relative flex justify-center text-xs font-poppins">
+            <span className="bg-light px-2 text-grayDark">Or</span>
+          </div>
+        </div>
+        <GoogleLoginButton />
       </div>
     </div>
   );
