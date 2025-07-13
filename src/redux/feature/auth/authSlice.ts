@@ -118,6 +118,14 @@ const authSlice = createSlice({
       state.userInformation = { ...initialState.userInformation, id, email };
       state.message = 'Login Successfully Done.';
     });
+    builder.addMatcher(authApi.endpoints.loginWithGoogle.matchFulfilled, (state, action) => {
+      const { id, email } = action.payload;
+      state.loading = false;
+      state.error = null;
+      state.success = true;
+      state.userInformation = { ...initialState.userInformation, id, email };
+      state.message = 'Login Successfully Done.';
+    });
     builder.addMatcher(
       authApi.endpoints.login.matchRejected,
       (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
