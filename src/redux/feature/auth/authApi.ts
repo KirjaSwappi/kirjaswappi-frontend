@@ -104,9 +104,9 @@ export const authApi = api.injectEndpoints({
       },
     }),
     getUserById: builder.query({
-      query: (id) => {
+      query: ({ userId }: { userId: string }) => {
         return {
-          url: `/users/${id}`,
+          url: `/users/${userId}`,
           method: 'GET',
         };
       },

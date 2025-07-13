@@ -1,30 +1,55 @@
 import { FaRegUser } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
 import locationIcon from '../../../assets/location-icon.png';
 import profileCover from '../../../assets/profileCover.jpg';
 import Image from '../../../components/shared/Image';
 import {
+  useGetUserByIdQuery,
   useGetUserCoverImageQuery,
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
 export default function UserProfile() {
+  const params = useParams();
   const {
-    userInformation: { id, firstName, lastName, favGenres, aboutMe },
+    userInformation: { id },
   } = useAppSelector((state) => state.auth);
-  const { data: imageData, isLoading } = useGetUserProfileImageQuery({ userId: id }, { skip: !id });
-  const { data: coverImage } = useGetUserCoverImageQuery({ userId: id }, { skip: !id });
+  const userId = params.id || id;
+  const { data: imageData, isLoading } = useGetUserProfileImageQuery(
+    { userId: userId },
+    { skip: !userId },
+  );
+  const { data: coverImage, isLoading: isCoverLoading } = useGetUserCoverImageQuery(
+    { userId: userId },
+    { skip: !userId },
+  );
+  const { data, isLoading: isUserLoading } = useGetUserByIdQuery(
+    { userId: userId as string },
+    {
+      skip: !userId,
+    },
+  );
 
   return (
     <div>
       <div>
         <div className="w-full h-[108px] z-0 overflow-hidden lg:rounded-t-xl">
-          {coverImage?.imageUrl === undefined ? (
-            <Image src={profileCover} className="w-full h-full " />
+          {isCoverLoading ? (
+            <div className="w-full h-full bg-platinum animate-pulse shadow-sm"></div>
           ) : (
-            <Image src={coverImage?.imageUrl as string} className="w-full h-full object-cover" />
+            <div className=" h-[108px]">
+              {coverImage?.imageUrl === undefined ? (
+                <Image src={profileCover} className="w-full h-full " />
+              ) : (
+                <Image
+                  src={coverImage?.imageUrl as string}
+                  className="w-full h-full object-cover bg-top"
+                />
+              )}
+            </div>
           )}
         </div>
-        <div className="absolute top-4/12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px] rounded-full bg-white">
+        <div className="absolute top-4/12 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[80px] h-[80px] rounded-full bg-white border-2 border-white">
           {isLoading ? (
             <div className="w-full h-full bg-platinum animate-pulse rounded-full shadow-sm"></div>
           ) : (
@@ -40,33 +65,41 @@ export default function UserProfile() {
             </div>
           )}
         </div>
-        <div className="text-center mt-16 px-3">
-          <h1 className="font-medium text-black text-sm leading-none mb-3 font-poppins">
-            {firstName + ' ' + lastName}
-          </h1>
-          <div className="flex items-center justify-center gap-1 lg:gap-1.5 flex-wrap">
-            {favGenres?.map((favItem, index) => (
-              <div
-                key={index}
-                className="flex items-center lg:bg-primary-light lg:px-2 lg:py-1 lg:rounded"
-              >
-                <p className="text-smokyBlack lg:text-primary font-light text-xs font-poppins">
-                  {favItem}
-                </p>
-                <span
-                  className={`lg:hidden bg- ${
-                    favGenres.length - 1 === index ? 'hidden' : 'block'
-                  } inline-block mx-2 font-poppins font-light text-sm`}
-                >
-                  |
-                </span>
-              </div>
-            ))}
+        {isUserLoading ? (
+          <div className=" mt-16 px-3 flex flex-col gap-2">
+            <div className="w-full h-4 bg-platinum animate-pulse shadow-sm rounded-md"></div>
+            <div className="w-8/12 h-3 bg-platinum animate-pulse shadow-sm rounded-md"></div>
+            <div className="w-5/12 h-3 bg-platinum animate-pulse shadow-sm rounded-md"></div>
           </div>
-          <p className="text-grayDark font-poppins text-xs font-normal mt-3 text-center hidden lg:block">
-            {aboutMe}
-          </p>
-        </div>
+        ) : (
+          <div className="text-center mt-16 px-3">
+            <h1 className="font-medium text-black text-sm leading-none mb-3 font-poppins">
+              {data?.firstName + ' ' + data?.lastName}
+            </h1>
+            <div className="flex items-center justify-center gap-1 lg:gap-1.5 flex-wrap">
+              {data?.favGenres?.map((favItem: string, index: number) => (
+                <div
+                  key={index}
+                  className="flex items-center lg:bg-primary-light lg:px-2 lg:py-1 lg:rounded"
+                >
+                  <p className="text-smokyBlack lg:text-primary font-light text-xs font-poppins">
+                    {favItem}
+                  </p>
+                  <span
+                    className={`lg:hidden bg- ${
+                      data?.favGenres.length - 1 === index ? 'hidden' : 'block'
+                    } inline-block mx-2 font-poppins font-light text-sm`}
+                  >
+                    |
+                  </span>
+                </div>
+              ))}
+            </div>
+            <p className="text-grayDark font-poppins text-xs font-normal mt-3 text-center hidden lg:block">
+              {data?.aboutMe}
+            </p>
+          </div>
+        )}
         <div className="hidden lg:block border-y border-AntiFlashWhite mt-5 text-center">
           <div className="flex items-center py-2 px-4 justify-evenly">
             <div className="flex flex-col gap-1 items-center">

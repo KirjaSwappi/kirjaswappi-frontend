@@ -27,13 +27,14 @@ export default function Header({ showOn404 = false }: HeaderProps) {
     }
   });
   const pathname = location.pathname;
-
+  const params = pathname?.split('/').reverse()[0];
   const showTopHeaderPath = [
     '/',
-    `/book-details/${pathname?.split('/').reverse()[0]}`,
+    `/book-details/${params}`,
     '/profile/add-book',
     '/profile/user-profile',
-    `/profile/update-book/${pathname?.split('/').reverse()[0]}`,
+    `/profile/update-book/${params}`,
+    `/profile/user-profile/${params}`,
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({

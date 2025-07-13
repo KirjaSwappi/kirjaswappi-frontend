@@ -21,7 +21,7 @@ export default function BookCard({
     <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
       <div className="h-full flex flex-col">
         <div className="relative">
-          <div className={`${isProfile ? 'h-[126px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
+          <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
             <Image
               className="w-full h-full object-cover"
               src={imageUrl}

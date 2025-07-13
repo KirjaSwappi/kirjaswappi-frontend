@@ -49,6 +49,7 @@ export default function BookDetails() {
       navigate(`/profile/update-book/${id}`);
     }
   };
+  console.log(bookData);
 
   const loginModalOrSwapRequestModal = (): void => {
     if (userInformation.email) {
@@ -163,7 +164,11 @@ export default function BookDetails() {
                 </div>
               </div>
               <div className="hidden lg:block">
-                <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+                <OfferedBy
+                  imageUrl={userProfile?.imageUrl}
+                  ownerName={bookData?.owner?.name}
+                  ownerId={bookData?.owner?.id}
+                />
               </div>
               <div className="mt-5 hidden lg:block">
                 <BookActionButton
@@ -178,7 +183,11 @@ export default function BookDetails() {
           {bookData?.condition && <BookType condition={bookData?.condition} />}
         </div>
         <div className="container lg:hidden">
-          <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+          <OfferedBy
+            imageUrl={userProfile?.imageUrl}
+            ownerName={bookData?.owner?.name}
+            ownerId={bookData?.owner?.id}
+          />
         </div>
       </div>
       <div className="container">

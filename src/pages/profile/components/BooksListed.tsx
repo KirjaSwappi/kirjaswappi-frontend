@@ -9,12 +9,16 @@ export default function BooksListed() {
   const { showSkeleton } = useSkeleton();
   const {
     loading,
-    userInformation: { books },
+    userInformation: { books, email },
   } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 xl:gap-4">
-      <AddBookComponent />
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
+      {!loading && (
+        <div className={`${!email && 'hidden'}`}>
+          <AddBookComponent />
+        </div>
+      )}
       {loading || showSkeleton
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)
         : books &&

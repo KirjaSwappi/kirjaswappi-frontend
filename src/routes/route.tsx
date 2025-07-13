@@ -54,9 +54,9 @@ const routes = createBrowserRouter([
       {
         path: '/profile',
         element: (
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
+          // <PrivateRoute>
+          <Profile />
+          // </PrivateRoute>
         ),
         children: [
           {
@@ -66,16 +66,34 @@ const routes = createBrowserRouter([
             element: <ProfileDashboard />,
           },
           {
+            loader: () => <p>Loading...</p>,
+            index: true,
+            path: 'user-profile/:id',
+            element: <ProfileDashboard />,
+          },
+          {
             path: 'edit-user',
-            element: <EditProfile />,
+            element: (
+              <PrivateRoute>
+                <EditProfile />
+              </PrivateRoute>
+            ),
           },
           {
             path: 'add-book',
-            element: <AddUpdateBook />,
+            element: (
+              <PrivateRoute>
+                <AddUpdateBook />
+              </PrivateRoute>
+            ),
           },
           {
             path: 'update-book/:id',
-            element: <AddUpdateBook />,
+            element: (
+              <PrivateRoute>
+                <AddUpdateBook />
+              </PrivateRoute>
+            ),
           },
         ],
       },
