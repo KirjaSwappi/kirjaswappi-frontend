@@ -10,6 +10,7 @@ import ControlledPasswordField from '../../../components/shared/ControllerFieldP
 import GoogleLoginButton from '../../../components/shared/GoogleLoginButton';
 import Image from '../../../components/shared/Image';
 import MessageToastify from '../../../components/shared/MessageToastify';
+import { showToast } from '../../../components/shared/toast';
 import { useLoginMutation } from '../../../redux/feature/auth/authApi';
 import { setAuthMessage, setAuthSuccess, setError } from '../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
@@ -43,6 +44,7 @@ export default function Login() {
         dispatch(setMessages({ type: '', isShow: false, message: '' }));
         dispatch(setAuthMessage(''));
         dispatch(setAuthSuccess(false));
+        showToast('success', 'Login Successfully Done.');
       }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {

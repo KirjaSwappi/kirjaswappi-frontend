@@ -62,12 +62,6 @@ const routes = createBrowserRouter([
           {
             loader: () => <p>Loading...</p>,
             index: true,
-            path: 'user-profile',
-            element: <ProfileDashboard />,
-          },
-          {
-            loader: () => <p>Loading...</p>,
-            index: true,
             path: 'user-profile/:id',
             element: <ProfileDashboard />,
           },

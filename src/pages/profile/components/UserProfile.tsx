@@ -116,7 +116,7 @@ export default function UserProfile() {
         <div className="hidden lg:block border-b border-AntiFlashWhite px-4 py-5">
           <div className="flex flex-row gap-1 items-center">
             <Image src={locationIcon} alt="edit" className="w-4" />
-            <p className="font-poppins text-xs font-light text-[#404040]">
+            <p className="font-poppins text-xs font-light text-blackOlive">
               Senate Square, Helsinki
             </p>
           </div>

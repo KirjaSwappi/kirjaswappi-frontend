@@ -1,50 +1,114 @@
+import { useState } from 'react';
 import { FaRegClock } from 'react-icons/fa6';
+import { PiDotsThreeBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
+import deleteIcon from '../../assets/deleteIconRed.png';
+import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
+import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
+import { useDeleteBookByIdMutation } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
 import BookCardSwapButton from './BookCardSwapButton';
+import Button from './Button';
+import DeleteConfirmModal from './DeleteConfirmModal';
 import Image from './Image';
+import { showToast } from './toast';
+
 export default function BookCard({
   book,
   isProfile = false,
+  isShowSwapBtn = true,
 }: {
   book: IBook;
   isProfile?: boolean;
+  isShowSwapBtn?: boolean;
 }) {
   if (!book) return null;
   const navigate = useNavigate();
+  // =========== EDIT/DELETE POPUP CONTROL ===========
+  const [open, setOpen] = useState<boolean>(false);
+  const { clicked, setClicked, reference } = useMouseClick();
+  const { userInformation } = useAppSelector((state) => state.auth);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
-
-  // =========== GET USER ID FROM STORE ===========
-  const {
-    userInformation: { email },
-  } = useAppSelector((state) => state.auth);
-
+  const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
       state: 'book-details',
     });
   };
+
+  // =========== DELETE BOOK HANDLER ===========
+  const handleBookDeleteById = async () => {
+    try {
+      await deleteBookById({ id }).unwrap();
+      showToast('success', 'Book deleted successfully!');
+      setOpen(false);
+    } catch (error) {
+      showToast('error', 'Failed to delete book.');
+    }
+  };
+
   return (
     <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
-      <div className="h-full flex flex-col">
-        <div className="relative">
-          <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
-            <Image
-              className="w-full h-full object-cover"
-              src={imageUrl}
-              alt={`${title} || 'Your favorite book'`}
+      <div className="h-full flex flex-col relative">
+        <div id="deleteEditPopup" className="relative">
+          <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
+          <div className="absolute right-2 top-2 cursor-pointer z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm">
+            <PiDotsThreeBold
+              size={24}
+              className="text-blackOlive"
+              onClick={() => setClicked((prev) => !prev)}
             />
           </div>
-          {isProfile && email && (
-            <div className="absolute bottom-2 left-2">
-              <BookCardSwapButton />
+          {userInformation.id && clicked && (
+            <div
+              ref={reference}
+              className="absolute right-2 top-10 w-[138px] bg-white shadow-lg rounded-md z-10"
+            >
+              <Button
+                onClick={() => navigate(`/profile/update-book/${id}`)}
+                className="flex items-center gap-2 p-2 border-b border-[#D3D3D3] w-full cursor-pointer"
+                type="button"
+              >
+                <Image src={editIcon} alt="edit" className="h-[18px]" />
+                <p className="font-poppins font-normal text-sm">Edit</p>
+              </Button>
+              <Button
+                onClick={() => setOpen(true)}
+                className="flex items-center gap-2 p-2 w-full"
+                type="button"
+              >
+                <Image src={deleteIcon} alt="delete" className="h-[18px]" />
+                <p className="font-poppins font-normal text-sm text-[#EA244E] cursor-pointer">
+                  Delete
+                </p>
+              </Button>
             </div>
           )}
+          <DeleteConfirmModal
+            open={open}
+            onClose={() => setOpen(false)}
+            onDelete={handleBookDeleteById}
+            isLoading={isLoading}
+          />
+          <div className="relative">
+            <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
+              <Image
+                className="w-full h-full object-cover"
+                src={imageUrl}
+                alt={`${title} || 'Your favorite book'`}
+              />
+            </div>
+            {isShowSwapBtn && (
+              <div className="absolute bottom-2 left-2">
+                <BookCardSwapButton />
+              </div>
+            )}
+          </div>
         </div>
         <div
           role="button"

@@ -110,7 +110,7 @@ export const authApi = api.injectEndpoints({
           method: 'GET',
         };
       },
-      providesTags: ['UpdateUser', 'AddBook', 'UpdateBook'],
+      providesTags: ['UpdateUser', 'AddBook', 'UpdateBook', 'DeleteBook'],
     }),
     updateUserById: builder.mutation({
       query: ({ id, data }) => {

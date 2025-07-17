@@ -1,5 +1,5 @@
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { menu } from '../../../data/menu';
 import BottomNavItem from './BottomNavItem';
 

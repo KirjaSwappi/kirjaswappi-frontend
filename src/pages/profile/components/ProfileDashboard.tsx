@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import Button from '../../../components/shared/Button';
 import { useAppSelector } from '../../../redux/hooks';
 import About from './About';
@@ -9,10 +10,10 @@ import UserActionNavigation from './UserActionNavigation';
 import UserProfile from './UserProfile';
 
 export default function ProfileDashboard() {
+  const { id } = useParams();
   const { t } = useTranslation();
   const { userInformation, loading } = useAppSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState(1);
-  // const { id } = useParams();
   const tabs = [
     {
       label: t('about'),
@@ -26,20 +27,24 @@ export default function ProfileDashboard() {
     {
       label: 'Pending Swaps',
       content: <BooksListed />,
-      authRequired: true,
+      permission: false,
     },
     {
       label: 'Bookmarked',
       content: <BooksListed />,
-      authRequired: true,
       hideOnMobile: true,
+      permission: false,
     },
   ];
-
+  // IF ID AND USER ID DON'T MATCH, HIDE THE TABS THAT USER RELATED TAB
   const filteredTabs = tabs.filter((tab) => {
-    if (tab.authRequired && !userInformation?.id) {
+    if (String(userInformation?.id) === String(id)) {
+      return true;
+    }
+    if (tab.permission === false) {
       return false;
     }
+
     return true;
   });
 
@@ -65,8 +70,8 @@ export default function ProfileDashboard() {
                           ? 'bg-primary text-white'
                           : 'text-grayDark border border-grayDark'
                       } 
-    ${tab.hideOnLg ? 'lg:hidden' : ''} 
-    ${tab.hideOnMobile ? 'lg:flex hidden' : ''}`}
+                      ${tab.hideOnLg ? 'lg:hidden' : ''} 
+                      ${tab.hideOnMobile ? 'lg:flex hidden' : ''}`}
                     >
                       {tab.label}
                       <div
@@ -82,9 +87,11 @@ export default function ProfileDashboard() {
                   ))
                 )}
               </div>
-              <div className={`${!userInformation.email && 'hidden'}`}>
-                <UserActionNavigation />
-              </div>
+              {userInformation.id === id && (
+                <div className={`${!userInformation.email && 'hidden'}`}>
+                  <UserActionNavigation />
+                </div>
+              )}
             </div>
             <div className="mt-5">
               {tabs.map((tab, index) => (

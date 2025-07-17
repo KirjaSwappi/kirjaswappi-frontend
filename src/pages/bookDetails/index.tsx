@@ -39,9 +39,7 @@ export default function BookDetails() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (userInformation?.id === bookData?.owner?.id) {
-      setProfile(true);
-    }
+    if (userInformation?.id === bookData?.owner?.id) setProfile(true);
   }, [bookData?.owner?.id]);
 
   const navigateToEditBook = () => {
@@ -49,7 +47,6 @@ export default function BookDetails() {
       navigate(`/profile/update-book/${id}`);
     }
   };
-  console.log(bookData);
 
   const loginModalOrSwapRequestModal = (): void => {
     if (userInformation.email) {
@@ -116,10 +113,10 @@ export default function BookDetails() {
                 <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-3xl xl:text-[40px] xl:leading-[48px] mb-2 font-poppins">
                   {bookData?.title}
                 </h1>
-                {bookData.author && (
+                {bookData?.author && (
                   <p className="text-blackOlive text-sm font-poppins font-normal">
                     {' '}
-                    by {bookData.author}
+                    by {bookData?.author}
                   </p>
                 )}
                 <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
