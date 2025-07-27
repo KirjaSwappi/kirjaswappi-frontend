@@ -23,6 +23,7 @@ import MoreFromThisUserBooks from './_components/MoreFromThisUserBooks';
 import OfferedBy from './_components/OfferedBy';
 import SwapRequestButton from './_components/SwapRequestButton';
 import VerticalImageSlider from './_components/VerticalImageSlider';
+
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -140,7 +141,7 @@ export default function BookDetails() {
                     <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-8 lg:mt-5 mb-2 text-left ">
                       Book Description
                     </h3>
-                    <BookDescription description={bookData.description} />
+                    <BookDescription description={bookData?.description} />
                   </div>
                   <div>
                     <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-8 mb-2">

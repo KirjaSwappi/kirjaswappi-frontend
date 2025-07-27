@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 export default function BookDescription({ description }: { description: string }) {
+  if (!description) return null;
   const MAX_LENGTH = 135;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const toggleReadMore = () => {

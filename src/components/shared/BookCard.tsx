@@ -9,7 +9,6 @@ import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
 import { useDeleteBookByIdMutation } from '../../redux/feature/book/bookApi';
-import { useAppSelector } from '../../redux/hooks';
 import BookCardSwapButton from './BookCardSwapButton';
 import Button from './Button';
 import DeleteConfirmModal from './DeleteConfirmModal';
@@ -19,18 +18,18 @@ import { showToast } from './toast';
 export default function BookCard({
   book,
   isProfile = false,
-  isShowSwapBtn = true,
+  hasPermission = false,
 }: {
   book: IBook;
   isProfile?: boolean;
-  isShowSwapBtn?: boolean;
+  hasPermission?: boolean;
 }) {
   if (!book) return null;
   const navigate = useNavigate();
   // =========== EDIT/DELETE POPUP CONTROL ===========
   const [open, setOpen] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
-  const { userInformation } = useAppSelector((state) => state.auth);
+  // const { userInformation } = useAppSelector((state) => state.auth);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
@@ -51,20 +50,22 @@ export default function BookCard({
       showToast('error', 'Failed to delete book.');
     }
   };
-
+  console.log(hasPermission);
   return (
     <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
-          <div className="absolute right-2 top-2 cursor-pointer z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm">
-            <PiDotsThreeBold
-              size={24}
-              className="text-blackOlive"
-              onClick={() => setClicked((prev) => !prev)}
-            />
-          </div>
-          {userInformation.id && clicked && (
+          {hasPermission && (
+            <div className="absolute right-2 top-2 cursor-pointer z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm">
+              <PiDotsThreeBold
+                size={24}
+                className="text-blackOlive"
+                onClick={() => setClicked((prev) => !prev)}
+              />
+            </div>
+          )}
+          {hasPermission && clicked && (
             <div
               ref={reference}
               className="absolute right-2 top-10 w-[138px] bg-white shadow-lg rounded-md z-10"
@@ -103,7 +104,7 @@ export default function BookCard({
                 alt={`${title} || 'Your favorite book'`}
               />
             </div>
-            {isShowSwapBtn && (
+            {!hasPermission && (
               <div className="absolute bottom-2 left-2">
                 <BookCardSwapButton />
               </div>
