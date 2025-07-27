@@ -1,17 +1,17 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import OTPInput from 'react-otp-input';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import OTPInput from 'react-otp-input';
 import Button from '../../../../components/shared/Button';
 import MessageToastify from '../../../../components/shared/MessageToastify';
+import { ERROR, SUCCESS } from '../../../../constant/MESSAGETYPE';
 import { useVerifyEmailMutation } from '../../../../redux/feature/auth/authApi';
 import { setOtp } from '../../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../../redux/feature/notification/notificationSlice';
 import { setStep } from '../../../../redux/feature/step/stepSlice';
 import { useAppSelector } from '../../../../redux/hooks';
-import { ERROR, SUCCESS } from '../../../../constant/MESSAGETYPE';
 import { otpSchema } from '../Schema';
 import { OTPSchemaType } from '../interface';
 
@@ -74,7 +74,7 @@ export default function ConfirmOTP() {
   };
 
   return (
-    <div className="bg-white absolute bottom-0 left-0 w-full rounded-t-3xl transition-all duration-500 ease-in-out transform translate-y-0 h-[80vh]">
+    <div className="bg-white absolute lg:static bottom-0 left-0 w-full rounded-t-3xl transition-all duration-500 ease-in-out transform translate-y-0 h-[80vh] lg:h-auto">
       <div className="text-center py-6 border-b border-[#E6E6E6]">
         <h1>Confirm your Email</h1>
       </div>
