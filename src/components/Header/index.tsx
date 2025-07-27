@@ -35,6 +35,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
     '/profile/user-profile',
     `/profile/update-book/${params}`,
     `/profile/user-profile/${params}`,
+    '/auth/login',
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({
