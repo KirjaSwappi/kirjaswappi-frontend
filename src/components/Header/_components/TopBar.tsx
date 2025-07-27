@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import country from '../../../assets/flag.png';
 import logo from '../../../assets/logo.png';
-import Button from '../../shared/Button';
+import { useMouseClick } from '../../../hooks/useMouse';
 import Image from '../../shared/Image';
 import ScrollSearch from '../../shared/ScrollSearch';
 import HeaderUserProfile from './HeaderUserProfile';
+import LanguageFlagButton from './LanguageFlagButton';
+import LanguageMenuDropdown from './LanguageMenuDropdown';
 import MobileHeader from './MobileHeader';
 
 export default function TopBar() {
   const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
-
+  const { clicked, setClicked, reference } = useMouseClick();
   useEffect(() => {
     const handleScroll = () => {
       const searchBar = document.querySelector('#hero-search');
@@ -30,7 +31,9 @@ export default function TopBar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+  useEffect(() => {
+    setClicked(false);
+  }, []);
   return (
     <div>
       <div className="lg:hidden">
@@ -60,10 +63,12 @@ export default function TopBar() {
               )}
             </div>
 
-            <div className={`w-[220px] flex items-center justify-end gap-4`}>
-              <Button className="flex items-center justify-center w-10 h-10 border border-primary rounded-full overflow-hidden">
-                <Image src={country} alt="Swedish Flag" className="w-10 h-10 object-cover " />
-              </Button>
+            <div
+              ref={reference}
+              className={`w-[220px] flex items-center justify-end gap-4 relative`}
+            >
+              <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
+              {clicked && <LanguageMenuDropdown />}
               <HeaderUserProfile />
             </div>
           </div>
