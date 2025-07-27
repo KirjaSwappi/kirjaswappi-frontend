@@ -10,4 +10,8 @@ export interface IBook {
   ownerName: string;
   ownerProfilePhoto: string;
   coverPhotoUrls?: string[];
+  owner: {
+    id: string;
+    name: string;
+  };
 }

@@ -47,7 +47,7 @@ export default function SwapModal() {
     <div
       className={`${
         swapModalOpen ? 'block' : 'hidden'
-      } bg-black bg-opacity-50 inset-0 w-full h-screen fixed top-0 left-0 z-50 flex items-center justify-center`}
+      } bg-black bg-opacity-50 inset-0 w-full h-screen fixed top-0 left-0 z-[999999999] flex items-center justify-center`}
     >
       <div className="w-11/12 max-h-[90vh] bg-white rounded-md overflow-y-auto">
         <div className="py-4 border-b border-platinum relative">

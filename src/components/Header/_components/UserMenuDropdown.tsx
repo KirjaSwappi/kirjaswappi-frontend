@@ -4,17 +4,24 @@ import { MdContactPage, MdFeedback, MdLock } from 'react-icons/md';
 import { TbUserCircle } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
+import { useAppSelector } from '../../../redux/hooks';
 import Button from '../../shared/Button';
+import { showToast } from '../../shared/toast';
 import DropdownItem from './DropdownItem';
 
 export default function UserMenuDropdown() {
   const dispatch = useDispatch();
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
   const UserMenu = [
     {
       label: 'View Profile',
       icon: TbUserCircle,
       location: '/profile/user-profile',
+      isProfile: true,
     },
     {
       label: 'Privacy Center',
@@ -43,13 +50,21 @@ export default function UserMenuDropdown() {
     },
   ];
 
+  function getMenuLocation(menu: (typeof UserMenu)[number]) {
+    return menu.isProfile ? `${menu.location}/${id}` : menu.location;
+  }
+
   return (
     <div className="absolute top-12 py-2 right-0 w-56 bg-white rounded-lg shadow-custom-box-shadow z-50 text-blackOlive">
       {UserMenu.map((menu, index) => {
         return menu.location === '/logout' ? (
           <Button
             key={`${menu.label}-${index}`}
-            onClick={() => dispatch(logout())}
+            onClick={() => {
+              dispatch(logout());
+              dispatch(api.util.invalidateTags(['AddProfileImage']));
+              showToast('success', 'Logout successfully');
+            }}
             className="w-full"
           >
             <DropdownItem
@@ -59,7 +74,7 @@ export default function UserMenuDropdown() {
             />
           </Button>
         ) : (
-          <Link to={menu.location} key={`${menu.label}-${index}`}>
+          <Link to={getMenuLocation(menu)} key={`${menu.label}-${index}`}>
             <DropdownItem
               className="group hover:bg-primary hover:text-white"
               icon={<menu.icon className="text-primary group-hover:text-white" />}

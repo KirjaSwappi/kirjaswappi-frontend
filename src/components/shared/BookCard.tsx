@@ -1,68 +1,124 @@
+import { useState } from 'react';
 import { FaRegClock } from 'react-icons/fa6';
+import { PiDotsThreeBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
+import deleteIcon from '../../assets/deleteIconRed.png';
+import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
-import exchangeIcon from '../../assets/swapIcon.png';
+import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
+import { useDeleteBookByIdMutation } from '../../redux/feature/book/bookApi';
+import BookCardSwapButton from './BookCardSwapButton';
 import Button from './Button';
+import DeleteConfirmModal from './DeleteConfirmModal';
 import Image from './Image';
-export default function BookCard({ book }: { book: IBook }) {
+import { showToast } from './toast';
+
+export default function BookCard({
+  book,
+  isProfile = false,
+  hasPermission = false,
+}: {
+  book: IBook;
+  isProfile?: boolean;
+  hasPermission?: boolean;
+}) {
   if (!book) return null;
   const navigate = useNavigate();
+  // =========== EDIT/DELETE POPUP CONTROL ===========
+  const [open, setOpen] = useState<boolean>(false);
+  const { clicked, setClicked, reference } = useMouseClick();
+  // const { userInformation } = useAppSelector((state) => state.auth);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
+  const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
+  // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
+  const handleNavigate = (): void => {
+    navigate(`/book-details/${id}`, {
+      state: 'book-details',
+    });
+  };
+
+  // =========== DELETE BOOK HANDLER ===========
+  const handleBookDeleteById = async () => {
+    try {
+      await deleteBookById({ id }).unwrap();
+      showToast('success', 'Book deleted successfully!');
+      setOpen(false);
+    } catch (error) {
+      showToast('error', 'Failed to delete book.');
+    }
+  };
+  console.log(hasPermission);
   return (
-    <div className="shadow-lg rounded-lg overflow-hidden">
-      <div className="h-full flex flex-col">
-        <div className="relative">
-          <div className="h-[156px] lg:h-[214px]">
-            <Image
-              className="w-full h-full object-cover"
-              src={imageUrl}
-              alt={`${title} || 'Your favorite book'`}
-            />
-          </div>
-          <div className="absolute bottom-2 left-2">
-            <Button
-              type="button"
-              className="relative group flex items-center bg-blue-500 rounded-full p-2 gap-2.5 
-                transition-all duration-300 w-7 h-7 hover:w-[100px] hover:h-[28px] hover:rounded-[20px] 
-                focus:w-[97px] focus:h-[28px] focus:rounded-[20px] overflow-hidden shadow-md"
-              tabIndex={0}
-              aria-label="Swap Book"
-            >
-              <Image
-                src={exchangeIcon}
-                alt="Exchange"
-                className="w-[10px] h-[8.33px] flex-shrink-0"
+    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
+      <div className="h-full flex flex-col relative">
+        <div id="deleteEditPopup" className="relative">
+          <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
+          {hasPermission && (
+            <div className="absolute right-2 top-2 cursor-pointer z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm">
+              <PiDotsThreeBold
+                size={24}
+                className="text-blackOlive"
+                onClick={() => setClicked((prev) => !prev)}
               />
-              <span
-                className="absolute opacity-0 group-hover:opacity-100 group-focus:opacity-100 
-                  transition-opacity duration-300 pointer-events-none select-none text-white font-poppins 
-                  font-normal text-[12px] leading-[100%] whitespace-nowrap w-[66px] h-[18px] top-[9px] 
-                  left-[23.33px] [letter-spacing:0]"
+            </div>
+          )}
+          {hasPermission && clicked && (
+            <div
+              ref={reference}
+              className="absolute right-2 top-10 w-[138px] bg-white shadow-lg rounded-md z-10"
+            >
+              <Button
+                onClick={() => navigate(`/profile/update-book/${id}`)}
+                className="flex items-center gap-2 p-2 border-b border-[#D3D3D3] w-full cursor-pointer"
+                type="button"
               >
-                Swap Book
-              </span>
-            </Button>
+                <Image src={editIcon} alt="edit" className="h-[18px]" />
+                <p className="font-poppins font-normal text-sm">Edit</p>
+              </Button>
+              <Button
+                onClick={() => setOpen(true)}
+                className="flex items-center gap-2 p-2 w-full"
+                type="button"
+              >
+                <Image src={deleteIcon} alt="delete" className="h-[18px]" />
+                <p className="font-poppins font-normal text-sm text-[#EA244E] cursor-pointer">
+                  Delete
+                </p>
+              </Button>
+            </div>
+          )}
+          <DeleteConfirmModal
+            open={open}
+            onClose={() => setOpen(false)}
+            onDelete={handleBookDeleteById}
+            isLoading={isLoading}
+          />
+          <div className="relative">
+            <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
+              <Image
+                className="w-full h-full object-cover"
+                src={imageUrl}
+                alt={`${title} || 'Your favorite book'`}
+              />
+            </div>
+            {!hasPermission && (
+              <div className="absolute bottom-2 left-2">
+                <BookCardSwapButton />
+              </div>
+            )}
           </div>
         </div>
         <div
           role="button"
           tabIndex={0}
-          onClick={() =>
-            navigate(`/book-details/${id}`, {
-              state: 'book-details',
-            })
-          }
+          onClick={handleNavigate}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              navigate(`/book-details/${id}`, {
-                state: 'book-details',
-              });
-            }
+            if (e.key === 'Enter' || e.key === ' ') handleNavigate();
           }}
-          className="p-3 cursor-pointer"
+          className={`${isProfile ? 'p-0 mt-2' : 'p-3 '} cursor-pointer`}
         >
           <h1
             className="font-poppins font-medium text-xs mt-1 leading-[100%] text-gray-900 mb-0.5 
@@ -71,38 +127,40 @@ export default function BookCard({ book }: { book: IBook }) {
             {title}
           </h1>
           <p
-            className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600 
-              mb-2"
+            className={`font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600 
+              ${isProfile ? '' : 'mb-2'} `}
           >
             {' '}
             by {author}
           </p>
-          <div className="flex items-center mb-1.5 lg:mb-2">
-            <Image src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
-            <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-              Helsinki
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              {ownerProfilePhoto && (
-                <div className="w-3.5 h-3.5 rounded-full">
-                  <Image
-                    src={ownerProfilePhoto || profile}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              {ownerName && (
-                <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                  {ownerName}
-                </span>
-              )}
+          <div className={`${isProfile ? 'hidden' : 'block'}`}>
+            <div className="flex items-center mb-1.5 lg:mb-2">
+              <Image src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
+              <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
+                Helsinki
+              </span>
             </div>
-            <div className="flex items-center gap-1">
-              <FaRegClock className="text-sx text-grayDark" />
-              <p className="font-poppins font-normal text-sx text-grayDark">29 mins. ago</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                {ownerProfilePhoto && (
+                  <div className="w-3.5 h-3.5 rounded-full">
+                    <Image
+                      src={ownerProfilePhoto || profile}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                {ownerName && (
+                  <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
+                    {ownerName}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-1">
+                <FaRegClock className="text-sx text-grayDark" />
+                <p className="font-poppins font-normal text-sx text-grayDark">29 mins. ago</p>
+              </div>
             </div>
           </div>
         </div>

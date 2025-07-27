@@ -23,6 +23,7 @@ import MoreFromThisUserBooks from './_components/MoreFromThisUserBooks';
 import OfferedBy from './_components/OfferedBy';
 import SwapRequestButton from './_components/SwapRequestButton';
 import VerticalImageSlider from './_components/VerticalImageSlider';
+
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -39,9 +40,7 @@ export default function BookDetails() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (userInformation?.id === bookData?.owner?.id) {
-      setProfile(true);
-    }
+    if (userInformation?.id === bookData?.owner?.id) setProfile(true);
   }, [bookData?.owner?.id]);
 
   const navigateToEditBook = () => {
@@ -115,10 +114,10 @@ export default function BookDetails() {
                 <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-3xl xl:text-[40px] xl:leading-[48px] mb-2 font-poppins">
                   {bookData?.title}
                 </h1>
-                {bookData.author && (
+                {bookData?.author && (
                   <p className="text-blackOlive text-sm font-poppins font-normal">
                     {' '}
-                    by {bookData.author}
+                    by {bookData?.author}
                   </p>
                 )}
                 <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
@@ -142,7 +141,7 @@ export default function BookDetails() {
                     <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-8 lg:mt-5 mb-2 text-left ">
                       Book Description
                     </h3>
-                    <BookDescription description={bookData.description} />
+                    <BookDescription description={bookData?.description} />
                   </div>
                   <div>
                     <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-8 mb-2">
@@ -163,7 +162,11 @@ export default function BookDetails() {
                 </div>
               </div>
               <div className="hidden lg:block">
-                <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+                <OfferedBy
+                  imageUrl={userProfile?.imageUrl}
+                  ownerName={bookData?.owner?.name}
+                  ownerId={bookData?.owner?.id}
+                />
               </div>
               <div className="mt-5 hidden lg:block">
                 <BookActionButton
@@ -178,7 +181,11 @@ export default function BookDetails() {
           {bookData?.condition && <BookType condition={bookData?.condition} />}
         </div>
         <div className="container lg:hidden">
-          <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+          <OfferedBy
+            imageUrl={userProfile?.imageUrl}
+            ownerName={bookData?.owner?.name}
+            ownerId={bookData?.owner?.id}
+          />
         </div>
       </div>
       <div className="container">

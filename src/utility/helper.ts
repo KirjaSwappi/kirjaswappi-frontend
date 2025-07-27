@@ -63,3 +63,9 @@ export const options = (options: string[]) => {
 export function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
+
+export function isUserProfile(userId: string, id: string) {
+  if (String(userId) === String(id)) {
+    return true;
+  }
+}

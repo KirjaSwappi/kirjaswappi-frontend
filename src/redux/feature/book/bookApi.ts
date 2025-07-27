@@ -87,6 +87,24 @@ export const bookApi = api.injectEndpoints({
       },
       providesTags: ['AddBook', 'UpdateBook'],
     }),
+    deleteBookById: builder.mutation({
+      query: ({ id }) => {
+        return {
+          url: `/books/${id}`,
+          method: 'DELETE',
+        };
+      },
+      invalidatesTags: ['DeleteBook'],
+    }),
+    getBooksListedById: builder.query({
+      query: ({ id }) => {
+        return {
+          url: `/users/${id}/books`,
+          method: 'GET',
+        };
+      },
+      providesTags: ['DeleteBook'],
+    }),
   }),
 });
 
@@ -98,4 +116,6 @@ export const {
   useGetSupportConditionQuery,
   useGetAllBooksQuery,
   useGetMoreBooksByBookIdQuery,
+  useDeleteBookByIdMutation,
+  useGetBooksListedByIdQuery,
 } = bookApi;

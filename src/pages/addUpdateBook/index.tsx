@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
 import yup from 'yup';
 import NextArrowIcon from '../../assets/arrow1.png';
 import PrevArrowIcon from '../../assets/arrow2.png';
@@ -157,8 +157,8 @@ export default function AddUpdateBook() {
               <div className="hidden lg:flex items-center pl-12 pb-6 xl:pb-14">
                 <Button
                   className="cursor-pointer w-[42px] h-10 flex items-center justify-center rounded-lg bg-[#F5F6F7] border-none mr-2"
-                  onClick={() => navigate('/profile/user-profile')}
-                  onKeyDown={(e) => e.key === 'Enter' && navigate('/profile/user-profile')}
+                  onClick={() => navigate(-1)}
+                  onKeyDown={(e) => e.key === 'Enter' && navigate(-1)}
                   aria-label="Go back"
                   type="button"
                 >

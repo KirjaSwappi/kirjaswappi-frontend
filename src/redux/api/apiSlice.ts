@@ -80,6 +80,7 @@ export const api = createApi({
     'DeleteProfileImage',
     'AddBook',
     'UpdateBook',
+    'DeleteBook',
   ],
   endpoints: () => ({}),
 });
