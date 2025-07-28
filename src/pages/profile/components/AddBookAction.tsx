@@ -10,7 +10,7 @@ export default function AddBookAction() {
     <button
       onClick={() => navigate('/profile/add-book')}
       onKeyDown={(e) => e.key === 'Enter' && navigate('/profile/add-book')}
-      className="w-full h-full flex flex-col items-center justify-center gap-2 border border-primary border-dashed bg-white rounded-lg"
+      className="w-full h-full max-h-[253px] flex flex-col items-center justify-center gap-2 border border-primary border-dashed bg-white rounded-lg "
     >
       <Image src={plus} alt="Plus" />
       <p className="font-poppins text-sm font-medium text-primary">{t('profile.addABook')}</p>

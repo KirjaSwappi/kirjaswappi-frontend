@@ -77,9 +77,27 @@ export const bookApi = api.injectEndpoints({
       },
     }),
     getAllBooks: builder.query({
-      query: (filter: IFilterData) => {
+      query: ({
+        filter = { pageNumber: 1 } as IFilterData,
+        userId,
+      }: {
+        filter?: IFilterData;
+        userId?: string;
+      }) => {
         const queryParams = buildBookQueryParams(filter);
-        const url = `/books${queryParams ? `?${queryParams}&` : '?'}page=${filter.pageNumber}&size=6`;
+
+        // const url = `/books${queryParams ? `?${queryParams} : ''}&` : '?'}page=${filter.pageNumber}&size=6`;
+        // Start building the base query string
+        let url = `/books${queryParams ? `?${queryParams}` : '?'}`;
+
+        // Append userId if available
+        if (userId) {
+          url += `${url.includes('?') && !url.endsWith('?') ? '&' : ''}userId=${userId}`;
+        }
+
+        // Append pagination
+        url += `${url.includes('?') && !url.endsWith('?') ? '&' : ''}page=${filter.pageNumber}&size=6`;
+
         return {
           url,
           method: 'GET',

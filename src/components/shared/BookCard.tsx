@@ -50,9 +50,9 @@ export default function BookCard({
       showToast('error', 'Failed to delete book.');
     }
   };
-  console.log(hasPermission);
+  // console.log(hasPermission);
   return (
-    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
+    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}>
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
@@ -99,7 +99,7 @@ export default function BookCard({
           <div className="relative">
             <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
               <Image
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-t-md"
                 src={imageUrl}
                 alt={`${title} || 'Your favorite book'`}
               />

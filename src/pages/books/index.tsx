@@ -4,17 +4,22 @@ import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { goToTop } from '../../utility/helper';
 import { IBook } from './interface';
 
 export default function Books() {
   const observer = useRef<IntersectionObserver>();
   const [books, setBooks] = useState<IBook[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(filter, {
-    refetchOnMountOrArgChange: false,
-  });
+  const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
+    { filter },
+    {
+      refetchOnMountOrArgChange: false,
+    },
+  );
 
   // <=======Fetch data store in state=======>
   useEffect(() => {
@@ -32,7 +37,7 @@ export default function Books() {
 
   // <======= Reset page number =======>
   useEffect(() => {
-    goToTop();
+    // goToTop();
     dispatch(setPageNumber(0));
   }, [
     filter.search,
@@ -68,14 +73,15 @@ export default function Books() {
       <div className="container min-h-[80vh] pb-24 lg:py-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 ">
           {books.map((book: IBook, idx: number) => {
+            console.log(book);
             if (idx === books.length - 1) {
               return (
                 <div ref={lastBookRef} key={idx}>
-                  <BookCard book={book} />
+                  <BookCard book={book} hasPermission={id === book.ownerId} />
                 </div>
               );
             }
-            return <BookCard book={book} key={idx} />;
+            return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
           })}
           {isInitialLoading &&
             Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
