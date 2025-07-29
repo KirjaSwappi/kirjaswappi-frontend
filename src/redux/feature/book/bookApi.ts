@@ -78,26 +78,34 @@ export const bookApi = api.injectEndpoints({
     }),
     getAllBooks: builder.query({
       query: ({
-        filter = { pageNumber: 1 } as IFilterData,
-        userId,
+        filter = { pageNumber: 0 } as IFilterData,
+        ownerId,
+        notOwnerId,
       }: {
         filter?: IFilterData;
-        userId?: string;
+        ownerId?: string;
+        notOwnerId?: string;
       }) => {
-        const queryParams = buildBookQueryParams(filter);
+        const queryParams = new URLSearchParams();
 
-        // const url = `/books${queryParams ? `?${queryParams} : ''}&` : '?'}page=${filter.pageNumber}&size=6`;
-        // Start building the base query string
-        let url = `/books${queryParams ? `?${queryParams}` : '?'}`;
-
-        // Append userId if available
-        if (userId) {
-          url += `${url.includes('?') && !url.endsWith('?') ? '&' : ''}userId=${userId}`;
+        // Add filter query parameters
+        const filterQuery = buildBookQueryParams(filter);
+        if (filterQuery) {
+          filterQuery.split('&').forEach((pair) => {
+            const [key, value] = pair.split('=');
+            if (key && value) queryParams.append(key, value);
+          });
         }
 
-        // Append pagination
-        url += `${url.includes('?') && !url.endsWith('?') ? '&' : ''}page=${filter.pageNumber}&size=6`;
+        // Add owner and notOwnerId
+        if (ownerId) queryParams.append('ownerId', ownerId);
+        if (notOwnerId) queryParams.append('notOwnerId', notOwnerId);
 
+        // Add pagination
+        queryParams.append('page', String(filter.pageNumber));
+        queryParams.append('size', '6');
+
+        const url = `/books?${queryParams.toString()}`;
         return {
           url,
           method: 'GET',

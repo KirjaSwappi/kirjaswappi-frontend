@@ -15,7 +15,8 @@ export default function Books() {
   } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
-    { filter },
+    { filter, notOwnerId: id },
+
     {
       refetchOnMountOrArgChange: false,
     },
@@ -70,7 +71,7 @@ export default function Books() {
   if (isError) return <p>Something went wrong</p>;
   return (
     <section>
-      <div className="container min-h-[80vh] pb-24 lg:py-6">
+      <div className="container min-h-[80vh] pb-32 lg:py-6">
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 ">
           {books.map((book: IBook, idx: number) => {
             console.log(book);

@@ -13,9 +13,8 @@ export default function BooksListed() {
   const {
     userInformation: { email, id },
   } = useAppSelector((state) => state.auth);
-  const userId = params.id || id;
-  const { data, isLoading } = useGetAllBooksQuery({ userId: userId }, { skip: !userId });
-  // const { data, isLoading } = useGetBooksListedByIdQuery({ id: userId });
+  const userId = params.id;
+  const { data, isLoading } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
