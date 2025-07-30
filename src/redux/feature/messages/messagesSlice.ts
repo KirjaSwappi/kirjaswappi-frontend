@@ -40,6 +40,24 @@ const initialState: ChatState = {
         { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
       ],
     },
+    {
+      id: '2',
+      name: 'Marr’s Search for Meaning',
+      unread: false,
+      messages: [
+        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
+        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
+      ],
+    },
+    {
+      id: '2',
+      name: 'Marr’s Search for Meaning ',
+      unread: false,
+      messages: [
+        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
+        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
+      ],
+    },
   ],
   selectedChatId: '2',
 };
