@@ -38,6 +38,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
     '/auth/login',
     '/auth/register',
     '/password/reset',
+    '/user/messages',
   ];
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({

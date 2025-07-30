@@ -10,13 +10,13 @@ import BookDetails from '../pages/bookDetails';
 import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
-import Inbox from '../pages/user/inbox/Inbox';
 import { Index } from '../pages/user/inboxChat';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
 import NotFound from '../components/error/NotFound';
 import ContactUs from '../pages/contactUs/ContactUs';
+import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
@@ -100,8 +100,8 @@ const routes = createBrowserRouter([
         ),
         children: [
           {
-            path: 'inbox',
-            element: <Inbox />,
+            path: 'messages',
+            element: <Messages />,
           },
           {
             path: 'inbox/chat/:id',
