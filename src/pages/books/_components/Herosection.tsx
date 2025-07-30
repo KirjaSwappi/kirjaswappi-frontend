@@ -1,78 +1,102 @@
-import { useState } from 'react';
-import Image from '../../../components/shared/Image';
+import { useEffect, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import heroImg from '../../../assets/heroSectionImage.png';
+import Button from '../../../components/shared/Button';
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from '../../../components/shared/Carousel';
+import Image from '../../../components/shared/Image';
+import { cn } from '../../../utility/cn';
 
+const SLIDES = [
+  {
+    id: 1,
+    title: 'Your Next Read Is Waiting',
+    desc: 'A simple, sustainable way to find your next read—one swap at a time.',
+    image: heroImg,
+  },
+  {
+    id: 2,
+    title: 'Discover New Stories',
+    desc: 'Explore books handpicked just for you.',
+    image: heroImg,
+  },
+  {
+    id: 3,
+    title: 'Discover New Stories',
+    desc: 'Explore books handpicked just for you.',
+    image: heroImg,
+  },
+];
 export default function HeroSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === 2 ? 0 : prev + 1));
-  };
+  useEffect(() => {
+    if (!api) return;
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? 2 : prev - 1));
-  };
+    const onSelect = () => {
+      setSelectedIndex(api.selectedScrollSnap());
+    };
 
+    api.on('select', onSelect);
+    onSelect();
+
+    return () => {
+      api.off('select', onSelect);
+    };
+  }, [api]);
   return (
-    <section className="relative w-full bg-[#C5CCD6] rounded-lg overflow-hidden mt-20">
-      <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          {/* Left side content */}
-          <div className="md:w-1/2 space-y-4 md:space-y-6 z-10">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800">
-              Your Next Read Is Waiting
-            </h1>
-            <p className="text-gray-700 md:text-lg">
-              A simple, sustainable way to find your next read—one swap at a time.
-            </p>
-          </div>
+    <section className="rounded-lg overflow-hidden ">
+      <Carousel opts={{ loop: true }} setApi={setApi}>
+        <CarouselContent>
+          {SLIDES.map((slide) => (
+            <CarouselItem
+              key={slide.id}
+              className="w-full flex bg-[#BEC6D2] h-[140px] md:h-[210px] lg:h-[312px]"
+            >
+              <div className="w-7/12 pl-10 md:pl-16 lg:pl-32 pt-4 md:pt-10 lg:pt-20">
+                <h2 className="text-base md:text-2xl lg:text-[40px] font-semibold text-[#262626] font-poppins lg:leading-10">
+                  {slide.title}
+                </h2>
+                <p className="text-xs md:text-sm lg:text-base text-[#262626] font-poppins lg:mt-2">
+                  {slide.desc}
+                </p>
+              </div>
+              <div className="w-5/12">
+                <Image src={slide.image} alt="image" className="w-11/12 lg:-mb-16" />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <Button
+          onClick={() => api?.scrollPrev()}
+          className="absolute left-2 md:left-3 lg:left-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-1 lg:p-2"
+        >
+          <MdKeyboardArrowLeft className="h-4 lg:h-5 w-4 lg:w-5 text-smokyBlack" />
+        </Button>
+        <Button
+          onClick={() => api?.scrollNext()}
+          className="absolute right-2 md:right-3 lg:right-4 top-1/2 -translate-y-1/2 z-10 bg-white shadow rounded-full p-1 lg:p-2"
+        >
+          <MdKeyboardArrowRight className="h-4 lg:h-5 w-4 lg:w-5 text-smokyBlack" />
+        </Button>
 
-          {/* Right side astronaut image */}
-          <div className="md:w-1/2 flex justify-center mt-8 md:mt-0">
-            <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <Image
-                src="/astronaut-reading.png"
-                alt="Astronaut reading a book"
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Centered search bar */}
-        <div className="flex justify-center mt-8 md:mt-12">
-          <div id="hero-search" className="w-full max-w-2xl"></div>
-        </div>
-
-        {/* Navigation dots */}
-        <div className="flex justify-center space-x-2 mt-8">
-          {[0, 1, 2].map((index) => (
-            <button
+        <div className="absolute bottom-3 md:bottom-10 lg:bottom-16 left-10 md:left-16 lg:left-32 flex space-x-2 items-center">
+          {SLIDES.map((_, index) => (
+            <div
               key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-8 h-2 rounded-full ${currentSlide === index ? 'bg-blue-500' : 'bg-gray-300'}`}
-              aria-label={`Go to slide ${index + 1}`}
+              className={cn(
+                'h-2 rounded-full transition-all duration-300 bg-[#3B82F6]',
+                selectedIndex === index ? 'w-4 lg:w-6' : 'w-2 opacity-50',
+              )}
             />
           ))}
         </div>
-      </div>
-
-      {/* Navigation arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
-        aria-label="Previous slide"
-      >
-        <MdKeyboardArrowLeft className="h-6 w-6 text-gray-700" />
-      </button>
-
-      <button
-        onClick={nextSlide}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2 shadow-md"
-        aria-label="Next slide"
-      >
-        <MdKeyboardArrowRight className="h-6 w-6 text-gray-700" />
-      </button>
+      </Carousel>
     </section>
   );
 }
