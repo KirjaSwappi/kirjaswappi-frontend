@@ -38,7 +38,7 @@ export default function UserProfile() {
       skip: !userId,
     },
   );
-  console.log(error);
+
   return (
     <div>
       <div>

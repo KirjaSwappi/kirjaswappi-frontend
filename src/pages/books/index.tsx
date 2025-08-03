@@ -4,6 +4,8 @@ import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { goToTop } from '../../utility/helper';
+import HeroSection from './_components/Herosection';
 import { IBook } from './interface';
 
 export default function Books() {
@@ -38,7 +40,7 @@ export default function Books() {
 
   // <======= Reset page number =======>
   useEffect(() => {
-    // goToTop();
+    goToTop();
     dispatch(setPageNumber(0));
   }, [
     filter.search,
@@ -71,10 +73,12 @@ export default function Books() {
   if (isError) return <p>Something went wrong</p>;
   return (
     <section>
-      <div className="container min-h-[80vh] pb-32 lg:py-6">
+      <div className="container min-h-[80vh] pb-24 lg:py-6">
+        <div className="mb-5">
+          <HeroSection />
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 ">
           {books.map((book: IBook, idx: number) => {
-            console.log(book);
             if (idx === books.length - 1) {
               return (
                 <div ref={lastBookRef} key={idx}>
