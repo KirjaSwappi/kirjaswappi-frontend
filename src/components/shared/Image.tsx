@@ -1,5 +1,6 @@
-import React, { CSSProperties, RefObject } from 'react';
+import React, { CSSProperties, RefObject, useState } from 'react';
 import NotFoundImg from '../../assets/notFoundIcon.png';
+import { cn } from '../../utility/cn';
 
 interface IImageProps {
   src: string | undefined;
@@ -13,7 +14,8 @@ interface IImageProps {
 }
 
 const Image: React.FC<IImageProps> = (props) => {
-  const { src, style } = props;
+  const { src, style, className } = props;
+  const [isLoaded, setIsLoaded] = useState(false);
   // Image Error Handling Function
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.target as HTMLImageElement;
@@ -25,10 +27,15 @@ const Image: React.FC<IImageProps> = (props) => {
         {...props}
         src={!src ? NotFoundImg : src}
         onError={handleImageError}
+        onLoad={() => setIsLoaded(true)}
         loading="lazy"
         decoding="async"
         alt={props?.alt ? props?.alt : 'kirja'}
         style={style}
+        className={cn(
+          `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`,
+          className,
+        )}
       />
     </picture>
   );
