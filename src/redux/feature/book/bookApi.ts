@@ -111,7 +111,7 @@ export const bookApi = api.injectEndpoints({
           method: 'GET',
         };
       },
-      providesTags: ['AddBook', 'UpdateBook'],
+      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
     }),
     deleteBookById: builder.mutation({
       query: ({ id }) => {

@@ -27,7 +27,6 @@ export default function BooksListed() {
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)
         : data?._embedded?.books &&
           data?._embedded?.books?.map((book: IBook, index: number) => {
-            // console.log(book);
             return (
               <BookCard isProfile key={index} book={book} hasPermission={id === book.ownerId} />
             );
