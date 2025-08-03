@@ -3,7 +3,9 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import authShape from '../../../assets/authShape.png';
 import bookDetailsBg from '../../../assets/bookdetailsbg.jpg';
+import logo from '../../../assets/logo.png';
 import profileIcon from '../../../assets/profileIcon.png';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import ControlledPasswordField from '../../../components/shared/ControllerFieldPassword';
@@ -17,7 +19,6 @@ import { setMessages } from '../../../redux/feature/notification/notificationSli
 import { useAppSelector } from '../../../redux/hooks';
 import { ILoginForm } from './interface';
 import { loginSchema } from './Schema';
-
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -65,78 +66,95 @@ export default function Login() {
   const messageType = firstFieldError || authError ? 'ERROR' : 'SUCCESS';
 
   return (
-    <div className="relative font-poppins">
-      <div className="absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center">
+    <div className=" relative font-poppins">
+      <div className="lg:hidden absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center">
         <Image src={profileIcon || '/placeholder.svg'} />
       </div>
-      <div className="w-full h-[124px] z-0">
+      <div className="lg:hidden w-full h-[124px] z-0">
         <Image src={bookDetailsBg || '/placeholder.svg'} className="w-full h-full" />
       </div>
-      <div className="container h-[calc(80vh-128px)]">
-        <div>
-          <h2 className="text-black text-base font-normal text-center mt-24 mb-4">Sign In</h2>
-          <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col">
-              <ControlledInputField name="email" placeholder="E-mail" className="rounded-t-lg" />
-              <ControlledPasswordField
-                name="password"
-                placeholder="Password"
-                className="rounded-b-lg border-t-0"
-              />
+      <div className="lg:bg-white container h-[calc(80vh-128px)] lg:min-h-[calc(100vh-128px)] lg:rounded-lg lg:grid lg:grid-cols-2 lg:mt-5 overflow-hidden">
+        <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
+          <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
+          <Image src={logo} alt="logo" className="max-w-[310px]" />
+          <p className="text-center text-grayDark text-xs px-20 mt-5">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
+        </div>
+        <div className="flex flex-col justify-center lg:px-20">
+          <div>
+            <h2 className="text-black text-base font-normal text-center mt-24 lg:mt-0 mb-4">
+              Sign In
+            </h2>
+            <FormProvider {...methods}>
+              <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col">
+                <ControlledInputField name="email" placeholder="E-mail" className="rounded-t-lg" />
+                <ControlledPasswordField
+                  name="password"
+                  placeholder="Password"
+                  className="rounded-b-lg border-t-0"
+                />
 
-              {displayMessage && (
-                <div className="mt-2">
-                  <MessageToastify isShow={true} type={messageType} value={displayMessage} />
+                {displayMessage && (
+                  <div className="mt-2">
+                    <MessageToastify isShow={true} type={messageType} value={displayMessage} />
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between my-4">
+                  <div className="flex items-center gap-2 text-grayDark">
+                    <input
+                      type="checkbox"
+                      name="remember"
+                      id="remember"
+                      className="cursor-pointer"
+                    />
+                    <label
+                      htmlFor="remember"
+                      className="cursor-pointer text-sm font-light text-grayDark"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <Link to="/password/reset" className="text-black font-light text-sm underline">
+                    Forgot Password?
+                  </Link>
                 </div>
-              )}
 
-              <div className="flex items-center justify-between my-4">
-                <div className="flex items-center gap-2 text-grayDark">
-                  <input type="checkbox" name="remember" id="remember" className="cursor-pointer" />
-                  <label
-                    htmlFor="remember"
-                    className="cursor-pointer text-sm font-light text-grayDark"
-                  >
-                    Remember me
-                  </label>
-                </div>
-                <Link to="/password/reset" className="text-black font-light text-sm underline">
-                  Forgot Password?
-                </Link>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm"
-              >
-                {isLoading ? 'Loading...' : 'Continue'}
-              </button>
-
-              <div className="flex items-center justify-center gap-1 mt-4">
-                <p className="text-black text-sm font-light">Don&apos;t have an account?</p>
                 <button
-                  className="text-black text-sm font-light underline"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/auth/register');
-                  }}
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm"
                 >
-                  Create an account
+                  {isLoading ? 'Loading...' : 'Continue'}
                 </button>
-              </div>
-            </form>
-          </FormProvider>
-        </div>
-        <div className="relative my-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-platinum"></div>
+
+                <div className="flex items-center justify-center gap-1 mt-4">
+                  <p className="text-black text-sm font-light">Don&apos;t have an account?</p>
+                  <button
+                    className="text-black text-sm font-light underline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/auth/register');
+                    }}
+                  >
+                    Create an account
+                  </button>
+                </div>
+              </form>
+            </FormProvider>
           </div>
-          <div className="relative flex justify-center text-xs font-poppins">
-            <span className="bg-light px-2 text-grayDark">Or</span>
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-platinum"></div>
+            </div>
+            <div className="relative flex justify-center text-xs font-poppins">
+              <span className="bg-light lg:bg-white px-2 text-grayDark">Or</span>
+            </div>
           </div>
+          <GoogleLoginButton />
         </div>
-        <GoogleLoginButton />
       </div>
     </div>
   );

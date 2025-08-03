@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import authShape from '../../../assets/authShape.png';
 import leftArrowIcon from '../../../assets/leftArrow.png';
+import logo from '../../../assets/logo.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import MessageToastify from '../../../components/shared/MessageToastify';
@@ -18,7 +20,6 @@ import { setStep } from '../../../redux/feature/step/stepSlice';
 import { useAppSelector } from '../../../redux/hooks';
 import GetOTPByEmail from './_component/GetOTPByEmail';
 import NewPassword from './_component/NewPassword';
-
 interface INewPassForm {
   email: string;
   password: string;
@@ -285,58 +286,70 @@ export default function ResetPassword() {
 
   return (
     <div>
-      <div className="container h-svh relative">
-        <div className="pt-4 pb-6 flex items-center gap-2">
-          <button
-            className="cursor-pointer w-5 border-0 bg-transparent p-0"
-            onClick={() => {
-              if (step === 0) {
-                navigate('/auth/login');
-              } else {
-                dispatch(setStep(step - 1));
-                dispatch(setError(''));
-              }
-            }}
-            aria-label="Go back"
-          >
-            <Image src={leftArrowIcon} alt="left" />
-          </button>
-          <h3 className="font-poppins text-base font-medium ">Forget Password</h3>
+      <div className="container lg:bg-white min-h-svh lg:min-h-[calc(100vh-128px)] relative lg:rounded-lg lg:grid lg:grid-cols-2 lg:mt-5 overflow-hidden">
+        <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
+          <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
+          <Image src={logo} alt="logo" className="max-w-[310px]" />
+          <p className="text-center text-grayDark text-xs px-20 mt-5">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+          </p>
         </div>
-        {
-          <form
-            onSubmit={(e) => handleSubmit(e)}
-            className={`${
-              step === 1 ? 'bg-white absolute bottom-0 left-0 w-full h-[80vh] rounded-t-3xl' : ''
-            }`}
-          >
-            {step === 1 && (
-              <div className="text-center py-6 border-b border-[#E6E6E6]">
-                <h1>Confirm you Email</h1>
-              </div>
-            )}
-            <div className={`${step === 1 && 'px-6'}`}>
+        <div className="flex flex-col justify-center lg:px-20">
+          <div className="lg:hidden pt-4 pb-6 flex items-center gap-2">
+            <button
+              className="cursor-pointer w-5 border-0 bg-transparent p-0"
+              onClick={() => {
+                if (step === 0) {
+                  navigate('/auth/login');
+                } else {
+                  dispatch(setStep(step - 1));
+                  dispatch(setError(''));
+                }
+              }}
+              aria-label="Go back"
+            >
+              <Image src={leftArrowIcon} alt="left" />
+            </button>
+            <h3 className="font-poppins text-base font-medium ">Forget Password</h3>
+          </div>
+          {
+            <form
+              onSubmit={(e) => handleSubmit(e)}
+              className={`${
+                step === 1
+                  ? 'bg-white absolute lg:static bottom-0 left-0 w-full h-[80vh] lg:h-auto rounded-t-3xl'
+                  : ''
+              }`}
+            >
               {step === 1 && (
-                <p className="text-sm font-light font-poppins text-center pt-8 pb-10">
-                  Enter the code we’ve sent to your Email
-                </p>
-              )}
-              {renderStepContent()}
-
-              {isShow && (
-                <div className="mb-2 mt-2">
-                  <MessageToastify isShow={isShow} type={messageType} value={msg} />
+                <div className="text-center py-6 border-b border-[#E6E6E6] lg:hidden">
+                  <h1>Confirm you Email</h1>
                 </div>
               )}
-              <Button
-                type="submit"
-                className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-4"
-              >
-                {loading ? 'Loading...' : 'Continue'}
-              </Button>
-            </div>
-          </form>
-        }
+              <div className={`${step === 1 && 'px-6'}`}>
+                {step === 1 && (
+                  <p className="text-sm font-light font-poppins text-center pt-8 pb-10">
+                    Enter the code we’ve sent to your Email
+                  </p>
+                )}
+                {renderStepContent()}
+
+                {isShow && (
+                  <div className="mb-2 mt-2">
+                    <MessageToastify isShow={isShow} type={messageType} value={msg} />
+                  </div>
+                )}
+                <Button
+                  type="submit"
+                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-4"
+                >
+                  {loading ? 'Loading...' : 'Continue'}
+                </Button>
+              </div>
+            </form>
+          }
+        </div>
       </div>
     </div>
   );
