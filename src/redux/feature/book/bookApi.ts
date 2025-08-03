@@ -77,15 +77,41 @@ export const bookApi = api.injectEndpoints({
       },
     }),
     getAllBooks: builder.query({
-      query: (filter: IFilterData) => {
-        const queryParams = buildBookQueryParams(filter);
-        const url = `/books${queryParams ? `?${queryParams}&` : '?'}page=${filter.pageNumber}&size=6`;
+      query: ({
+        filter = { pageNumber: 0 } as IFilterData,
+        ownerId,
+        notOwnerId,
+      }: {
+        filter?: IFilterData;
+        ownerId?: string;
+        notOwnerId?: string;
+      }) => {
+        const queryParams = new URLSearchParams();
+
+        // Add filter query parameters
+        const filterQuery = buildBookQueryParams(filter);
+        if (filterQuery) {
+          filterQuery.split('&').forEach((pair) => {
+            const [key, value] = pair.split('=');
+            if (key && value) queryParams.append(key, value);
+          });
+        }
+
+        // Add owner and notOwnerId
+        if (ownerId) queryParams.append('ownerId', ownerId);
+        if (notOwnerId) queryParams.append('notOwnerId', notOwnerId);
+
+        // Add pagination
+        queryParams.append('page', String(filter.pageNumber));
+        queryParams.append('size', '6');
+
+        const url = `/books?${queryParams.toString()}`;
         return {
           url,
           method: 'GET',
         };
       },
-      providesTags: ['AddBook', 'UpdateBook'],
+      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
     }),
     deleteBookById: builder.mutation({
       query: ({ id }) => {

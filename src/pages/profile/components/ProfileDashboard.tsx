@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Button from '../../../components/shared/Button';
@@ -48,6 +48,26 @@ export default function ProfileDashboard() {
     return true;
   });
 
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth < 1024) {
+        setActiveTab(0);
+      } else {
+        setActiveTab(1);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  if (activeTab === null) return null;
+
   return (
     <div className="lg:pt-6">
       <div className="lg:container">
@@ -57,7 +77,7 @@ export default function ProfileDashboard() {
           </div>
           <div className="w-full lg:w-8/12 xl:w-9/12 px-4 lg:px-0">
             <div className="flex items-center justify-between">
-              <div className="flex flex-wrap gap-1 sm:gap-2">
+              <div className="flex flex-wrap gap-1 sm:gap-2 ">
                 {loading ? (
                   <TabsSkeleton />
                 ) : (
@@ -93,7 +113,7 @@ export default function ProfileDashboard() {
                 </div>
               )}
             </div>
-            <div className="mt-5">
+            <div className="mt-5 pb-32">
               {tabs.map((tab, index) => (
                 <div
                   key={index}
