@@ -41,7 +41,7 @@ const initialState: ChatState = {
       ],
     },
     {
-      id: '2',
+      id: '3',
       name: 'Marr’s Search for Meaning',
       unread: false,
       messages: [
@@ -50,7 +50,7 @@ const initialState: ChatState = {
       ],
     },
     {
-      id: '2',
+      id: '4',
       name: 'Marr’s Search for Meaning ',
       unread: false,
       messages: [
