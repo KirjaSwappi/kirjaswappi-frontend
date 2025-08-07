@@ -106,7 +106,7 @@ export default function UserProfile() {
               <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
             </div>
-            <span className="h-12 w-[1px] block bg-[#E5E5E5]"></span>
+            <span className="h-12 w-[1px] block bg-platinumMix"></span>
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>

@@ -170,7 +170,7 @@ export default function AddUpdateBook() {
               </div>
               <div className="lg:flex xl:gap-28 pt-8 lg:pt-4 pb-3">
                 <div className="w-full lg:w-[32%] xl:w-[30%] lg:pr-9">
-                  <div className="relative flex justify-between gap-4 md:gap-6 lg:flex-col lg:border-r border-[#E5E5E5] h-full">
+                  <div className="relative flex justify-between gap-4 md:gap-6 lg:flex-col lg:border-r border-platinumMix h-full">
                     <Stepper steps={steps} />
                   </div>
                 </div>

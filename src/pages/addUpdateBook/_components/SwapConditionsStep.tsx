@@ -99,7 +99,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
               name="swapType"
               control={control}
               render={({ field }) => (
-                <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border border-platinum lg:border-[#E5E5E5] rounded-lg">
+                <div className="px-4 py-4 bg-white lg:bg-AntiFlashWhite border border-platinum lg:border-platinumMix rounded-lg">
                   <label className="flex items-center gap-2 w-full cursor-pointer">
                     <Input
                       type="radio"

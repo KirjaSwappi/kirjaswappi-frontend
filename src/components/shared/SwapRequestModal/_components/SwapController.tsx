@@ -37,7 +37,7 @@ export default function SwapController({
             <label
               htmlFor={radioId}
               aria-label={swapTitle}
-              className={` ${swapType === SwapType.GIVEAWAY ? 'bg-[#F2F2F2] border-[#E5E5E5]' : 'bg-[#DBEDFF] border-primary'} border  w-full h-[80px] flex items-center rounded-xl px-[18px] gap-2 mb-1`}
+              className={` ${swapType === SwapType.GIVEAWAY ? 'bg-[#F2F2F2] border-platinumMix' : 'bg-[#DBEDFF] border-primary'} border  w-full h-[80px] flex items-center rounded-xl px-[18px] gap-2 mb-1`}
             >
               <div className="w-2/12">
                 <div
