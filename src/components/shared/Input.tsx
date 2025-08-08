@@ -18,6 +18,7 @@ const Input = forwardRef<HTMLInputElement, IInputFieldProps>(function Input(
     className,
     error,
     showErrorMessage = false,
+    autoComplete,
     ...props
   },
   ref,
@@ -30,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, IInputFieldProps>(function Input(
         id={id}
         value={value}
         name={name}
+        autoComplete={autoComplete}
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}

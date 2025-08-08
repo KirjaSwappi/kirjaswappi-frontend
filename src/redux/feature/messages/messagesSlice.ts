@@ -7,6 +7,7 @@ export interface Message {
   text: string;
   time: string;
   unread?: boolean;
+  images?: string[];
 }
 
 export interface Chat {
@@ -119,14 +120,18 @@ const chatSlice = createSlice({
         chat.messages = chat.messages.map((m) => ({ ...m, unread: false }));
       }
     },
-    sendMessage: (state, action: PayloadAction<{ chatId: string; text: string }>) => {
-      const { chatId, text } = action.payload;
+    sendMessage: (
+      state,
+      action: PayloadAction<{ chatId: string; text: string; images?: string[] }>,
+    ) => {
+      const { chatId, text, images } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         const message = {
           id: Date.now(),
           sender: 'me' as const,
           text,
+          images,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
         chat.messages.push(message);
