@@ -50,7 +50,7 @@ export default function BookCard({
       showToast('error', 'Failed to delete book.');
     }
   };
-  console.log(hasPermission);
+
   return (
     <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
       <div className="h-full flex flex-col relative">

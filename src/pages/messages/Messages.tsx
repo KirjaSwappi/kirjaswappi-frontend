@@ -1,5 +1,6 @@
 import ChatList from './components/ChatList';
 import ChatWindow from './components/ChatWindow';
+import UserProfile from './components/UserProfile';
 
 export default function Messages() {
   return (
@@ -7,10 +8,12 @@ export default function Messages() {
       <aside className="w-[25%] max-w-[25%]  bg-white rounded-xl py-[30px]">
         <ChatList />
       </aside>
-      <main className="w-[50%] bg-white rounded-xl">
+      <main className="w-[50%] bg-white rounded-xl overflow-hidden">
         <ChatWindow />
       </main>
-      <aside className="w-[25%] bg-gray-50">{/* <UserProfile /> */}</aside>
+      <aside className="w-[25%] rounded-xl overflow-hidden">
+        <UserProfile />
+      </aside>
     </div>
   );
 }
