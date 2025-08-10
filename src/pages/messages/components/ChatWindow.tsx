@@ -9,7 +9,11 @@ import sendIcon from '../../../assets/sendIcon.png';
 import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
-import { receiveMessage, sendMessage } from '../../../redux/feature/messages/messagesSlice';
+import {
+  receiveMessage,
+  resetChat,
+  sendMessage,
+} from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { messagesSchema, MessagesType } from '../Schema';
 import ChatInfoDropdown from './ChatInfoDropdown';
@@ -86,12 +90,12 @@ export default function ChatWindow() {
 
   return (
     <div className="w-full relative">
-      <div className="absolute top-0 left-0 w-full z-40 bg-white border-b border-platinumMix">
-        {/* Top Chat Header */}
-        <div id="topChatHeader" className="px-4 py-4 flex items-center justify-between">
-          <Button>
+      <div className="absolute top-0 left-0 w-full z-10 bg-white border-b border-platinumMix">
+        <div id="topChatHeader" className="lg:px-4 py-4 flex items-center justify-between">
+          <Button className="block xl:hidden" onClick={() => dispatch(resetChat())}>
             <IoIosArrowBack size={20} className="text-black" />
           </Button>
+          <h1 className="font-poppins text-sm">Minhazur Rahman</h1>
           <ChatInfoDropdown
             onViewProfile={() => alert('View Profile')}
             onMute={() => setMuteOpen(true)}
@@ -149,7 +153,7 @@ export default function ChatWindow() {
         </div>
       </div>
       <div
-        className={`h-[79vh] overflow-y-auto custom-scrollbar space-y-2 pb-10  px-6 ${bookOpen ? 'pt-56' : 'pt-32'} `}
+        className={`h-screen xl:h-[79vh] overflow-y-auto custom-scrollbar space-y-2 pb-10 lg:px-6 ${bookOpen ? 'pt-56' : 'pt-32'} `}
         style={{ scrollbarWidth: 'none' }}
       >
         {findChat?.messages.map((msg) => {
@@ -195,7 +199,7 @@ export default function ChatWindow() {
         })}
         <div ref={bottomRef} />
       </div>
-      <div className="px-6 py-3 bg-white absolute -bottom-14 left-0 w-full">
+      <div className="lg:px-6 py-3 lg:bg-white absolute -bottom-14 left-0 w-full">
         <FormProvider {...methods}>
           <form
             onSubmit={handleSubmit(onSubmit)}

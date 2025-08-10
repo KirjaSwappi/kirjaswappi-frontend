@@ -105,7 +105,7 @@ const initialState: ChatState = {
       ],
     },
   ],
-  selectedChatId: '1',
+  selectedChatId: '',
 };
 
 const chatSlice = createSlice({
@@ -119,6 +119,9 @@ const chatSlice = createSlice({
         chat.unread = false;
         chat.messages = chat.messages.map((m) => ({ ...m, unread: false }));
       }
+    },
+    resetChat: (state) => {
+      state.selectedChatId = '';
     },
     sendMessage: (
       state,
@@ -157,5 +160,5 @@ const chatSlice = createSlice({
   },
 });
 
-export const { selectChat, sendMessage, receiveMessage } = chatSlice.actions;
+export const { selectChat, resetChat, sendMessage, receiveMessage } = chatSlice.actions;
 export default chatSlice.reducer;

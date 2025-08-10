@@ -17,7 +17,7 @@ export default function ChatList() {
   });
   return (
     <div>
-      <div className="px-6 bg-white">
+      <div className="xl:px-6 xl:bg-white">
         <div className="relative h-[40px]">
           <IoIosSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-grayDark text-xl" />
           <Input
@@ -25,22 +25,22 @@ export default function ChatList() {
             placeholder="Search messages..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-2 mb-3 border rounded-full border-gray !bg-white h-[40px]  pl-[52px]"
+            className="w-full p-2 mb-3 border rounded-full border-gray !bg-white h-[40px] pl-10  xl:pl-[52px]"
           />
         </div>
-        <div className="flex flex-wrap items-center gap-2 my-5">
-          <Button className="bg-primary text-white font-poppins text-xs font-medium py-2 px-3 rounded-full">
+        <div className="flex flex-wrap items-center gap-2 mt-2 xl:my-5">
+          <Button className="bg-primary text-white font-poppins text-sx xl:text-xs font-medium py-2 px-2 xl:px-3 rounded-full">
             Inbox
           </Button>
-          <Button className=" font-poppins text-xs font-medium py-2 px-3 rounded-full border border-gray">
+          <Button className="font-poppins text-sx xl:text-xs font-medium py-2 px-2 xl:px-3 rounded-full border border-gray">
             Archive
           </Button>
-          <Button className=" font-poppins text-xs font-medium py-2 px-3 rounded-full border border-gray">
+          <Button className="font-poppins text-sx xl:text-xs font-medium py-2 px-2 xl:px-3 rounded-full border border-gray">
             Message Request
           </Button>
         </div>
       </div>
-      <div className="h-[68vh] overflow-y-auto relative custom-scrollbar">
+      <div className="xl:h-[68vh] overflow-y-auto relative custom-scrollbar">
         {filteredChats.length === 0 ? (
           <div className="flex items-center justify-center h-[50vh]">
             <p className="text-gray-500 text-sm font-poppins">No chats found.</p>
@@ -56,7 +56,7 @@ export default function ChatList() {
                 <Button
                   type="button"
                   onClick={() => dispatch(selectChat(chat.id))}
-                  className={`w-full text-left px-3 py-4 cursor-pointer focus:outline-none items-center gap-4 flex group-hover:bg-AntiFlashWhite`}
+                  className={`w-full text-left xl:px-3 py-4 cursor-pointer focus:outline-none items-center gap-4 flex group-hover:bg-AntiFlashWhite`}
                   tabIndex={0}
                   aria-pressed={selectedChatId === chat.id}
                 >
