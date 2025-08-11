@@ -10,7 +10,6 @@ import BookDetails from '../pages/bookDetails';
 import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
-import { Index } from '../pages/user/inboxChat';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
@@ -104,8 +103,8 @@ const routes = createBrowserRouter([
             element: <Messages />,
           },
           {
-            path: 'inbox/chat/:id',
-            element: <Index />,
+            path: 'messages/:id',
+            element: <Messages />,
           },
         ],
       },

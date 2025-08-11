@@ -29,7 +29,16 @@ const initialState: ChatState = {
       name: 'Harry Porter',
       unread: true,
       messages: [
-        { id: 1, sender: 'them', text: 'Hi! How are you?', time: '9:00 AM', unread: true },
+        {
+          id: 1,
+          sender: 'them',
+          text: 'Hi! How are you?',
+          time: '9:00 AM',
+          unread: true,
+          images: [
+            'https://img.drz.lazcdn.com/collect/sg/p/0a89447e673f3eac01af2a172099bf4b.jpg_400x400q80.jpg_.webp',
+          ],
+        },
       ],
     },
     {

@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { useNavigate } from 'react-router-dom';
 import book3 from '../../../assets/book3.png';
 import cameraIcon from '../../../assets/cameraIcon.svg';
 import locationIcon from '../../../assets/location-icon.png';
@@ -21,13 +22,13 @@ import ConfirmModal from './ConfirmModal';
 import FilesUpload from './FilesUpload';
 export default function ChatWindow() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { chats, selectedChatId } = useAppSelector((state) => state.chat);
-  // State for modals
   const [muteOpen, setMuteOpen] = useState<boolean>(false);
   const [blockOpen, setBlockOpen] = useState<boolean>(false);
   const [bookOpen, setBookOpen] = useState<boolean>(true);
+  const { chats, selectedChatId } = useAppSelector((state) => state.chat);
 
   const methods = useForm({
     resolver: yupResolver(messagesSchema),
@@ -90,9 +91,16 @@ export default function ChatWindow() {
 
   return (
     <div className="w-full relative">
-      <div className="absolute top-0 left-0 w-full z-10 bg-white border-b border-platinumMix">
-        <div id="topChatHeader" className="lg:px-4 py-4 flex items-center justify-between">
-          <Button className="block xl:hidden" onClick={() => dispatch(resetChat())}>
+      <div className="fixed lg:absolute top-0 left-0 w-full z-10 bg-white border-b border-platinumMix">
+        <div id="topChatHeader" className="px-4 py-4 flex items-center justify-between">
+          <Button
+            className="block xl:hidden"
+            onClick={() => {
+              dispatch(resetChat());
+              navigate('/user/messages');
+              setBookOpen(true);
+            }}
+          >
             <IoIosArrowBack size={20} className="text-black" />
           </Button>
           <h1 className="font-poppins text-sm">Minhazur Rahman</h1>
@@ -103,7 +111,22 @@ export default function ChatWindow() {
             onReport={() => alert('Report')}
           />
         </div>
-        <div className="bg-[#DEE7F5] px-4 py-3 ">
+        <div className="border-t border-platinumMix">
+          <div className="flex gap-4 py-[11px] px-4">
+            <Image src={book3} alt="Books" className="w-[37px]" />
+            <div className="flex flex-col gap-1">
+              <h3 className="font-poppins text-xs text-smokyBlack font-medium">
+                Man’s search for meaning
+              </h3>
+              <p
+                className={`font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600`}
+              >
+                by Rahat
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[#DEE7F5] px-4 py-3">
           <div className="flex items-center justify-between">
             <h3 className="font-poppins text-xs text-grayDark font-normal">
               Rahat Hasan wants to swap with this book
@@ -153,7 +176,7 @@ export default function ChatWindow() {
         </div>
       </div>
       <div
-        className={`h-screen xl:h-[79vh] overflow-y-auto custom-scrollbar space-y-2 pb-10 lg:px-6 ${bookOpen ? 'pt-56' : 'pt-32'} `}
+        className={`h-[100vh] xl:h-[79vh] overflow-y-auto custom-scrollbar space-y-2 pb-16 lg:px-6 ${bookOpen ? 'pt-72' : 'pt-48'} `}
         style={{ scrollbarWidth: 'none' }}
       >
         {findChat?.messages.map((msg) => {
@@ -172,7 +195,7 @@ export default function ChatWindow() {
                         key={index}
                         src={img}
                         alt={msg.text}
-                        className="rounded-xl max-w-[200px] mb-0.5"
+                        className="rounded-xl max-w-[140px] xl:max-w-[200px] mb-0.5"
                       />
                     ))}
                   </div>
@@ -199,7 +222,7 @@ export default function ChatWindow() {
         })}
         <div ref={bottomRef} />
       </div>
-      <div className="lg:px-6 py-3 lg:bg-white absolute -bottom-14 left-0 w-full">
+      <div className="px-4 py-3 bg-light lg:bg-white fixed bottom-0 xl:absolute xl:-bottom-14 left-0 w-full">
         <FormProvider {...methods}>
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -240,7 +263,6 @@ export default function ChatWindow() {
           </form>
         </FormProvider>
       </div>
-      {/* Mute Modal */}
       <ConfirmModal
         open={muteOpen}
         onConfirm={() => {
@@ -252,7 +274,6 @@ export default function ChatWindow() {
         description="Are you sure you want to mute this person"
         btnValue={'Mute'}
       />
-      {/* Block Modal */}
       <ConfirmModal
         open={blockOpen}
         onConfirm={() => {

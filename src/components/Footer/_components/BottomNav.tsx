@@ -7,12 +7,13 @@ export default function BottomNav() {
   const { t } = useTranslation();
   const location = useLocation();
   const ignorePath: string[] = [];
-  const isFooterBarShow = ignorePath.includes(location.pathname);
+  const pathname = location.pathname;
+  const isFooterBarShow = ignorePath.includes(pathname);
   return (
     <div
       className={`${
         isFooterBarShow && 'hidden'
-      } h-20 flex items-center lg:hidden justify-between text-xs font-normal`}
+      } h-[70px] flex items-center lg:hidden justify-between text-xs font-normal`}
     >
       <div className="grid grid-cols-2 gap-9">
         {menu.slice(0, 2).map((menuItem, index) => {
@@ -28,7 +29,7 @@ export default function BottomNav() {
           );
         })}
       </div>
-      <div className="grid grid-cols-2">
+      <div className={`grid grid-cols-2 ${pathname !== '/' && 'gap-9'}`}>
         {menu.slice(2, 4).map((menuItem, index) => {
           const isActive = location.pathname === menuItem?.route;
           return (
