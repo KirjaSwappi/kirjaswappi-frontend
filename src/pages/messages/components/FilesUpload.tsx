@@ -129,7 +129,7 @@ const FilesUpload = ({ name, errors }: IFilesProps) => {
                   return (
                     <div
                       key={index}
-                      className={`w-[63px] h-[63px] border lg:border-none  ${
+                      className={`w-[63px] h-[63px]  ${
                         errorIndex.includes(index) ? 'border-2 border-rose-600' : ''
                       } rounded-lg relative group`}
                     >

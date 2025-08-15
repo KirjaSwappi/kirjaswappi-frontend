@@ -28,7 +28,9 @@ export default function Footer() {
       >
         <FaPlus className="text-white text-2xl" />
       </Button>
-      <div className="fixed bottom-0 left-0 w-full z-50 drop-shadow-[0_-2px_3.5px_rgba(0,0,0,0.15)]">
+      <div
+        className={`fixed bottom-0 left-0 w-full z-50 ${pathname === '/' ? 'drop-shadow-[0_-2px_3.5px_rgba(0,0,0,0.15)]' : 'drop-shadow-md'} `}
+      >
         <div
           className={`container fixed bottom-0 left-0 w-full items-center justify-center bg-white ${pathname === '/' ? 'inner-curve' : ''}`}
         >

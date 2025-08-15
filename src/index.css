@@ -71,7 +71,6 @@
     );
 }
 
-
 /* Scrollbar styles */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
@@ -88,6 +87,6 @@
 
 /* Firefox */
 .custom-scrollbar {
-  scrollbar-width: thin;      /* Options: auto, thin, none */
+  scrollbar-width: thin; /* Options: auto, thin, none */
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }

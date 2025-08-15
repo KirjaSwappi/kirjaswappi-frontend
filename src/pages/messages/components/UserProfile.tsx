@@ -27,7 +27,7 @@ export default function UserProfile() {
   );
 
   return (
-    <div className="bg-white min-h-[87vh] relative pt-14">
+    <div className="bg-white relative pt-6 2xl:pt-10 w-full h-full">
       <div className="mx-auto w-[80px] h-[80px] rounded-full bg-white border-2 border-white mb-3">
         {isLoading ? (
           <div className="w-full h-full bg-platinum animate-pulse rounded-full shadow-sm"></div>
@@ -79,7 +79,7 @@ export default function UserProfile() {
           </p>
         </div>
       )}
-      <div className="hidden lg:block border-y border-AntiFlashWhite mt-5 text-center">
+      <div className="hidden lg:block border-y border-AntiFlashWhite 2xl:mt-5 text-center">
         <div className="flex items-center py-2 px-4 justify-evenly">
           <div className="flex flex-col gap-1 items-center">
             <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
@@ -99,7 +99,11 @@ export default function UserProfile() {
         </div>
       </div>
       <div>
-        <Image src={campaign} alt="campaign" className="max-h-[329px] mx-auto mt-4" />
+        <Image
+          src={campaign}
+          alt="campaign"
+          className="max-h-[220px] 2xl:max-h-[300px] mx-auto mt-4"
+        />
       </div>
     </div>
   );

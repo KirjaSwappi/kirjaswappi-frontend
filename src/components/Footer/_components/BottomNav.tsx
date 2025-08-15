@@ -15,31 +15,18 @@ export default function BottomNav() {
         isFooterBarShow && 'hidden'
       } h-[70px] flex items-center lg:hidden justify-between text-xs font-normal`}
     >
-      <div className="grid grid-cols-2 gap-9">
-        {menu.slice(0, 2).map((menuItem, index) => {
+      <div className="w-full flex items-center justify-between">
+        {menu.slice(0, 4).map((menuItem, index) => {
           const isActive = location.pathname === menuItem?.route;
           return (
-            <BottomNavItem
-              key={index}
-              isActive={isActive}
-              route={menuItem.route}
-              icon={menuItem.icon}
-              value={t(menuItem.value)}
-            />
-          );
-        })}
-      </div>
-      <div className={`grid grid-cols-2 ${pathname !== '/' && 'gap-9'}`}>
-        {menu.slice(2, 4).map((menuItem, index) => {
-          const isActive = location.pathname === menuItem?.route;
-          return (
-            <BottomNavItem
-              key={index}
-              isActive={isActive}
-              route={menuItem.route}
-              icon={menuItem.icon}
-              value={t(menuItem.value)}
-            />
+            <div key={index} className={`${index == 2 && pathname == '/' ? 'pl-24' : ''}`}>
+              <BottomNavItem
+                isActive={isActive}
+                route={menuItem.route}
+                icon={menuItem.icon}
+                value={t(menuItem.value)}
+              />
+            </div>
           );
         })}
       </div>

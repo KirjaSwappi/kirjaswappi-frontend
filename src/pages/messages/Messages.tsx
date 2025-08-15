@@ -1,27 +1,45 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppSelector } from '../../redux/hooks';
+import ChatInboxInput from './components/ChatInboxInput';
 import ChatList from './components/ChatList';
 import ChatWindow from './components/ChatWindow';
+import ChatWindowTopBar from './components/ChatWindowTopBar';
 import UserProfile from './components/UserProfile';
 
 export default function Messages() {
+  const [bookOpen, setBookOpen] = useState(true);
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get('messageId');
-  console.log(messageId);
+
   return (
-    <div className="container flex gap-3 lg:gap-5 xl:mt-6">
+    <div className="lg:container flex gap-3 lg:gap-5 lg:mt-3 xl:mt-6">
       <aside
-        className={`w-full lg:w-[40%] xl:w-[25%] lg:bg-white rounded-xl py-5 xl:py-[30px] ${selectedChatId || messageId ? 'hidden' : 'block'} lg:block`}
+        className={`h-screen lg:h-[85vh] xl:h-[82vh] custom-scrollbar overflow-hidden w-full lg:w-[40%] xl:w-[25%] lg:bg-white rounded-xl py-5 xl:py-[30px] ${selectedChatId || messageId ? 'hidden' : 'block'} lg:block`}
+        style={{ scrollbarWidth: 'none' }}
       >
         <ChatList />
       </aside>
       <main
-        className={`w-full lg:w-[60%] xl:w-[50%] lg:bg-white rounded-xl overflow-hidden ${selectedChatId || messageId ? 'block' : 'hidden'} lg:block`}
+        className={`h-screen lg:h-[85vh] xl:h-[82vh] w-full lg:w-[60%] xl:w-[50%] lg:bg-white lg:rounded-xl overflow-hidden  ${selectedChatId || messageId ? 'block' : 'hidden'} lg:block relative`}
       >
-        <ChatWindow />
+        <div className="absolute w-full z-20 left-0 top-0">
+          <ChatWindowTopBar bookOpen={bookOpen} setBookOpen={setBookOpen} />
+        </div>
+        <div
+          className={`overflow-y-auto custom-scrollbar h-[86%] px-4 ${!bookOpen ? 'pt-[170px] xl:pt-[186px]' : 'pt-[270px] xl:pt-[286px]'}  pb-40`}
+        >
+          <ChatWindow />
+        </div>
+        <div className="absolute w-full bottom-0">
+          <ChatInboxInput />
+        </div>
       </main>
-      <aside className="hidden xl:block xl:w-[25%] rounded-xl overflow-hidden">
+      <aside
+        className="h-screen lg:h-[85vh] xl:h-[82vh] hidden xl:block xl:w-[25%] rounded-xl overflow-hidden overflow-y-auto custom-scrollbar"
+        style={{ scrollbarWidth: 'none' }}
+      >
         <UserProfile />
       </aside>
     </div>
