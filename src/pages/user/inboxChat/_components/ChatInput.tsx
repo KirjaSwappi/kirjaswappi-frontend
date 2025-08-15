@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import cameraIcon from '../../../../assets/solar_camera-bold.png';
 import sendIcon from '../../../../assets/sendIcon.png';
+import cameraIcon from '../../../../assets/solar_camera-bold.png';
 import { ChatInputProps } from '../interface';
 
 const ChatInput = ({ onSendMessage }: ChatInputProps) => {
@@ -15,7 +15,7 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
 
   return (
     <div className="sticky bottom-0 w-full px-4 py-3 z-40 lg:pr-5 lg:pl-5">
-      <div className="flex items-center gap-2 px-3 py-2 border border-[#E5E5E5] bg-[#FFFFFF] rounded-[29px] shadow-sm">
+      <div className="flex items-center gap-2 px-3 py-2 border border-platinumMix bg-[#FFFFFF] rounded-[29px] shadow-sm">
         {/* Camera Icon */}
         <button className="flex items-center justify-center min-w-[36px] min-h-[36px] bg-black rounded-full">
           <img src={cameraIcon} alt="Camera" className="h-5 w-5" />

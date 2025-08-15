@@ -12,6 +12,7 @@ import { getCookie } from '../utility/cookies';
 import { api } from './api/apiSlice';
 import authSlice, { IInitialState, initialState } from './feature/auth/authSlice';
 import filterSlice, { IFilterInitialState } from './feature/filter/filterSlice';
+import messagesSlice, { ChatState } from './feature/messages/messagesSlice';
 import notificationSlice, {
   INotificationInitialState,
 } from './feature/notification/notificationSlice';
@@ -42,6 +43,7 @@ const store: EnhancedStore<
     notification: INotificationInitialState;
     filter: IFilterInitialState;
     swapBook: ISwapBookInitialInformation;
+    chat: ChatState;
   },
   UnknownAction,
   Tuple<
@@ -68,6 +70,7 @@ const store: EnhancedStore<
     notification: notificationSlice,
     filter: filterSlice,
     swapBook: swapSlice,
+    chat: messagesSlice,
   },
   preloadedState,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),

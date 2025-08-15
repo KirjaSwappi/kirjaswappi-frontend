@@ -15,7 +15,7 @@ export default function ScrollSearch() {
     <div className="relative w-full max-w-xl">
       <div
         ref={reference}
-        className="flex items-center bg-white rounded-full p-1 gap-2 border border-[#E5E5E5] shadow-sm w-full h-[48px]"
+        className="flex items-center bg-white rounded-full p-1 gap-2 border border-platinumMix shadow-sm w-full h-[48px]"
       >
         <div
           className={`flex items-center gap-1 menu-text-fade ${
@@ -27,7 +27,7 @@ export default function ScrollSearch() {
             const isActive = pathname === route;
             return (
               <React.Fragment key={id}>
-                {index > 0 && <span className="h-5 w-px bg-[#E5E5E5]" />}
+                {index > 0 && <span className="h-5 w-px bg-platinumMix" />}
                 <Link
                   to={route || '#'}
                   className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 ease-in-out ${
