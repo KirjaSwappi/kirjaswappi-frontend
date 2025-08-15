@@ -27,7 +27,7 @@ export default function UserProfile() {
   );
 
   return (
-    <div className="bg-white relative pt-6 2xl:pt-10 w-full h-full">
+    <div className="relative pt-6 2xl:pt-10 w-full h-full">
       <div className="mx-auto w-[80px] h-[80px] rounded-full bg-white border-2 border-white mb-3">
         {isLoading ? (
           <div className="w-full h-full bg-platinum animate-pulse rounded-full shadow-sm"></div>

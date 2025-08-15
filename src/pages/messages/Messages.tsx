@@ -37,7 +37,7 @@ export default function Messages() {
         </div>
       </main>
       <aside
-        className="h-screen lg:h-[85vh] xl:h-[82vh] hidden xl:block xl:w-[25%] rounded-xl overflow-hidden overflow-y-auto custom-scrollbar"
+        className="h-screen lg:h-[85vh] xl:h-[82vh] hidden xl:block xl:w-[25%] rounded-xl overflow-hidden overflow-y-auto custom-scrollbar lg:bg-white"
         style={{ scrollbarWidth: 'none' }}
       >
         <UserProfile />
