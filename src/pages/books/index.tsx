@@ -12,10 +12,17 @@ export default function Books() {
   const observer = useRef<IntersectionObserver>();
   const [books, setBooks] = useState<IBook[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(filter, {
-    refetchOnMountOrArgChange: false,
-  });
+  const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
+    { filter, notOwnerId: id },
+
+    {
+      refetchOnMountOrArgChange: false,
+    },
+  );
 
   // <=======Fetch data store in state=======>
   useEffect(() => {
@@ -75,11 +82,11 @@ export default function Books() {
             if (idx === books.length - 1) {
               return (
                 <div ref={lastBookRef} key={idx}>
-                  <BookCard book={book} />
+                  <BookCard book={book} hasPermission={id === book.ownerId} />
                 </div>
               );
             }
-            return <BookCard book={book} key={idx} />;
+            return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
           })}
           {isInitialLoading &&
             Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}

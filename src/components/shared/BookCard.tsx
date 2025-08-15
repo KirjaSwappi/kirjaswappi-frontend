@@ -29,7 +29,6 @@ export default function BookCard({
   // =========== EDIT/DELETE POPUP CONTROL ===========
   const [open, setOpen] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
-  // const { userInformation } = useAppSelector((state) => state.auth);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
@@ -44,6 +43,7 @@ export default function BookCard({
   const handleBookDeleteById = async () => {
     try {
       await deleteBookById({ id }).unwrap();
+      setClicked(false);
       showToast('success', 'Book deleted successfully!');
       setOpen(false);
     } catch (error) {
@@ -52,7 +52,7 @@ export default function BookCard({
   };
 
   return (
-    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg overflow-hidden`}>
+    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}>
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
@@ -99,7 +99,7 @@ export default function BookCard({
           <div className="relative">
             <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
               <Image
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-t-md"
                 src={imageUrl}
                 alt={`${title} || 'Your favorite book'`}
               />
