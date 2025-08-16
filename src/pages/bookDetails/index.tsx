@@ -11,6 +11,7 @@ import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
+import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
@@ -56,6 +57,7 @@ export default function BookDetails() {
     } else {
       // =========== If user state is empty show the login modal for login user ===========
       console.log('ok');
+      dispatch(setLoginModalOpen(true));
     }
   };
 

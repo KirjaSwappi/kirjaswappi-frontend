@@ -1,10 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SwapType } from '../../../../types/enum';
-import { ISwapBookInformation, ISwapBookInitialInformation } from './types/interface';
+import {
+  ISwapBookInformation,
+  ISwapBookInitialInformation,
+  ISwapSenderInformation,
+} from './types/interface';
 
 const initialState: ISwapBookInitialInformation = {
   swapModalOpen: false,
   isSwapBookDetailsOrBookHomePage: false,
+  senderInformation: {
+    id: '',
+  },
   swapBookInformation: {
     id: '',
     title: '',
@@ -34,6 +41,12 @@ const swapSlice = createSlice({
   reducers: {
     setSwapBook: (state, action: PayloadAction<ISwapBookInformation>) => {
       state.swapBookInformation = { ...initialState.swapBookInformation, ...action.payload };
+    },
+    setSenderInformation: (state, action: PayloadAction<ISwapSenderInformation>) => {
+      state.senderInformation = {
+        ...initialState.senderInformation,
+        ...action.payload,
+      };
     },
     setResetSwapBook: (state) => {
       state.swapBookInformation = { ...initialState.swapBookInformation };

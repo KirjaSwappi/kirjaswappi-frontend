@@ -26,8 +26,11 @@ export interface ISwapBookInformation {
     }[];
   };
 }
-
+export interface ISwapSenderInformation {
+  id: string;
+}
 export interface ISwapBookInitialInformation {
+  senderInformation: ISwapSenderInformation;
   swapModalOpen: boolean;
   isSwapBookDetailsOrBookHomePage: boolean;
   swapBookInformation: ISwapBookInformation;

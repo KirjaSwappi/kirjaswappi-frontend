@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import locationIcon from '../../../assets/location-icon.png';
 import profileIcon from '../../../assets/profileIcon.png';
+import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 export default function OfferedBy({
   imageUrl,
@@ -23,7 +24,7 @@ export default function OfferedBy({
         <div className="flex gap-8 items-end">
           <div>
             <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">Offered by</h3>
-            <button
+            <Button
               type="button"
               onClick={() => navigate(`/profile/user-profile/${ownerId}`)}
               className="flex items-center gap-1 bg-transparent border-none p-0 cursor-pointer"
@@ -35,7 +36,7 @@ export default function OfferedBy({
                 alt="profile"
               />
               <p className="text-xs font-normal font-poppins text-black">{ownerName}</p>
-            </button>
+            </Button>
           </div>
         </div>
       </div>
