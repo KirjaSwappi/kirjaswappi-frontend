@@ -8,11 +8,15 @@ import { setAuthMessage, setAuthSuccess } from '../../../redux/feature/auth/auth
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
 import { setLoginModalOpen, setOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import Button from '../Button';
 import ControlledInputField from '../ControllerField';
 import ControlledPasswordField from '../ControllerFieldPassword';
+import GoogleLoginButton from '../GoogleLoginButton';
 import Image from '../Image';
+import InputLabel from '../InputLabel';
 import MessageToastify from '../MessageToastify';
 import { showToast } from '../toast';
+
 export default function LoginModal() {
   const dispatch = useAppDispatch();
   const { error: authError, message: authMessage } = useAppSelector((state) => state.auth);
@@ -39,6 +43,7 @@ export default function LoginModal() {
         dispatch(setAuthMessage(''));
         dispatch(setAuthSuccess(false));
         showToast('success', 'Login Successfully Done.');
+        dispatch(setLoginModalOpen(false));
       }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {
@@ -53,50 +58,80 @@ export default function LoginModal() {
 
   if (!loginModalOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-[400px] p-8 relative">
-        <button
-          className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black"
-          onClick={() => dispatch(setLoginModalOpen(false))}
-          aria-label="Close"
-        >
-          &times;
-        </button>
-        <div className="flex flex-col items-center mb-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+      <div className="bg-white rounded-xl shadow-lg w-10/12 lg:max-w-[486px] relative">
+        <div className="flex flex-row items-center justify-between p-6 border-b border-platinum">
           <Image src={logo} alt="KirjaSwappi" className="h-8 mb-2" />
-        </div>
-        <h2 className="text-black text-lg font-semibold text-center mb-4">Log In your account</h2>
-        <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-            <ControlledInputField name="email" placeholder="Email" />
-            <ControlledPasswordField name="password" placeholder="Write Here" />
-
-            {displayMessage && (
-              <div className="mt-2">
-                <MessageToastify isShow={true} type={messageType} value={displayMessage} />
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-2"
-            >
-              {isLoading ? 'Loading...' : 'Log In'}
-            </button>
-          </form>
-        </FormProvider>
-        <div className="flex items-center justify-center gap-1 mt-4">
-          <p className="text-black text-sm font-light">Don’t have an account yet ?</p>
-          <button
-            className="text-primary text-sm font-light underline"
-            onClick={() => {
-              dispatch(setOpen(false));
-              // You can navigate to register page here if needed
-            }}
+          <Button
+            className="absolute right-6 top-5 text-2xl w-8 h-8 border border-platinum rounded-full text-[#1A1A1A]"
+            onClick={() => dispatch(setLoginModalOpen(false))}
+            aria-label="Close"
           >
-            Sign up
-          </button>
+            &times;
+          </Button>
+        </div>
+
+        <div className="p-6 mt-4">
+          <h2 className="text-[#1A1A1A] text-base font-medium text-left mb-4 font-poppins">
+            Log In your account
+          </h2>
+          <FormProvider {...methods}>
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+              <div>
+                <InputLabel label="Email" className="mb-1 text-arsenic" />
+                <ControlledInputField
+                  name="email"
+                  placeholder="Email"
+                  showErrorMessage
+                  className="!bg-transparent rounded-xl"
+                />
+              </div>
+              <div>
+                <InputLabel label="Password" className="mb-1 text-arsenic" />
+                <ControlledPasswordField
+                  name="password"
+                  placeholder="Enter your password"
+                  showErrorMessage
+                  className="!bg-transparent rounded-xl"
+                />
+              </div>
+
+              {displayMessage && (
+                <div className="mt-2">
+                  <MessageToastify isShow={true} type={messageType} value={displayMessage} />
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-2"
+              >
+                {isLoading ? 'Loading...' : 'Log In'}
+              </button>
+            </form>
+          </FormProvider>
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-platinum"></div>
+            </div>
+            <div className="relative flex justify-center text-xs font-poppins">
+              <span className="bg-light lg:bg-white px-2 text-grayDark">Or</span>
+            </div>
+          </div>
+          <GoogleLoginButton />
+          <div className="flex items-center justify-center gap-1 mt-4">
+            <p className="text-black text-sm font-light">Don’t have an account yet ?</p>
+            <button
+              className="text-primary text-sm font-light underline"
+              onClick={() => {
+                dispatch(setOpen(false));
+                // You can navigate to register page here if needed
+              }}
+            >
+              Sign up
+            </button>
+          </div>
         </div>
       </div>
     </div>

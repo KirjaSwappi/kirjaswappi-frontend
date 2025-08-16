@@ -1,8 +1,8 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import Input from './Input';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { cn } from '../../utility/cn';
+import Input from './Input';
 
 interface ControlledPasswordFieldProps {
   name: string;
@@ -30,7 +30,7 @@ const ControlledPasswordField: React.FC<ControlledPasswordFieldProps> = ({
             {...field}
             type={showPassword ? 'text' : 'password'}
             placeholder={placeholder}
-            className={cn(className, error && 'border-red-500')}
+            className={cn(className, error && 'border-red')}
             error={error?.message}
             showErrorMessage={showErrorMessage}
           />
