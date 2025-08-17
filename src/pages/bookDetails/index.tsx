@@ -12,7 +12,7 @@ import Loader from '../../components/shared/Loader';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
-import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
+import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import BookActionButton from './_components/BookActionButton';
@@ -55,9 +55,9 @@ export default function BookDetails() {
     if (userInformation.email) {
       dispatch(setSwapModal(true));
       dispatch(setSwapBook(bookData));
+      if (id) dispatch(setBookIdToSwapWith(id));
     } else {
       // =========== If user state is empty show the login modal for login user ===========
-      console.log('ok');
       dispatch(setLoginModalOpen(true));
     }
   };

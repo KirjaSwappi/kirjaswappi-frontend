@@ -1,17 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SwapType } from '../../../../types/enum';
-import {
-  ISwapBookInformation,
-  ISwapBookInitialInformation,
-  ISwapSenderInformation,
-} from './types/interface';
+import { ISwapBookInformation, ISwapBookInitialInformation } from './types/interface';
 
 const initialState: ISwapBookInitialInformation = {
   swapModalOpen: false,
   isSwapBookDetailsOrBookHomePage: false,
-  senderInformation: {
-    id: '',
-  },
+  bookIdToSwapWith: '',
   swapBookInformation: {
     id: '',
     title: '',
@@ -42,12 +36,6 @@ const swapSlice = createSlice({
     setSwapBook: (state, action: PayloadAction<ISwapBookInformation>) => {
       state.swapBookInformation = { ...initialState.swapBookInformation, ...action.payload };
     },
-    setSenderInformation: (state, action: PayloadAction<ISwapSenderInformation>) => {
-      state.senderInformation = {
-        ...initialState.senderInformation,
-        ...action.payload,
-      };
-    },
     setResetSwapBook: (state) => {
       state.swapBookInformation = { ...initialState.swapBookInformation };
     },
@@ -57,9 +45,17 @@ const swapSlice = createSlice({
     setSwapModal: (state, action: PayloadAction<boolean>) => {
       state.swapModalOpen = action.payload;
     },
+    setBookIdToSwapWith: (state, action: PayloadAction<string>) => {
+      state.bookIdToSwapWith = action.payload;
+    },
   },
 });
 
-export const { setSwapModal, setSwapBook, setResetSwapBook, setSwapBookDetailsOrBookHomePage } =
-  swapSlice.actions;
+export const {
+  setSwapModal,
+  setSwapBook,
+  setResetSwapBook,
+  setSwapBookDetailsOrBookHomePage,
+  setBookIdToSwapWith,
+} = swapSlice.actions;
 export default swapSlice.reducer;

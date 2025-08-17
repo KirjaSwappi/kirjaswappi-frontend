@@ -26,12 +26,10 @@ export interface ISwapBookInformation {
     }[];
   };
 }
-export interface ISwapSenderInformation {
-  id: string;
-}
+
 export interface ISwapBookInitialInformation {
-  senderInformation: ISwapSenderInformation;
   swapModalOpen: boolean;
+  bookIdToSwapWith: string;
   isSwapBookDetailsOrBookHomePage: boolean;
   swapBookInformation: ISwapBookInformation;
 }

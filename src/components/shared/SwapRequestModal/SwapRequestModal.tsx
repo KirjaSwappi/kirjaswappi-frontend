@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { SwapType } from '../../../../types/enum';
 import close from '../../../assets/close.svg';
 import sendMessageIcon from '../../../assets/sendMessageIcon.png';
+import { useSwapRequestMutation } from '../../../redux/feature/swap/swapApi';
 import { setSwapModal } from '../../../redux/feature/swap/swapSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import Button from '../Button';
@@ -15,24 +17,29 @@ import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';
 import SwapController from './_components/SwapController';
 import { swapRequestDefaultValues } from './helper';
-import { ISwapRequestForm } from './types/interface';
+import { ISwapRequestForm, TOrganizedData } from './types/interface';
 
 export default function SwapModal() {
   const dispatch = useAppDispatch();
-  const { swapModalOpen, swapBookInformation } = useAppSelector((state) => state.swapBook);
+  const { swapModalOpen, swapBookInformation, bookIdToSwapWith } = useAppSelector(
+    (state) => state.swapBook,
+  );
   const {
-    userInformation: { books },
+    userInformation: { books, id },
   } = useAppSelector((state) => state.auth);
   const {
     swapCondition: { swapType, swappableBooks },
+    owner,
   } = swapBookInformation;
 
+  const [swapRequest] = useSwapRequestMutation();
   const methods = useForm<ISwapRequestForm>({
     mode: 'onChange',
     defaultValues: swapRequestDefaultValues(),
   });
   const { control, watch, setValue, handleSubmit } = methods;
   const selectedBook = watch('selectedBook');
+  const userNote = watch('note');
   const currentSwapType = watch('swapType');
 
   const conditionItem = SwapConditionList[swapType];
@@ -43,6 +50,32 @@ export default function SwapModal() {
     }
   }, [currentSwapType]);
 
+  const handleSubmitData = async (data: ISwapRequestForm) => {
+    const organizedData: TOrganizedData = {
+      senderId: id,
+      receiverId: owner.id,
+      swapType: data.swapType,
+      note: data.note,
+      bookIdToSwapWith: bookIdToSwapWith,
+      askForGiveaway: false,
+    };
+
+    switch (data.swapType) {
+      case SwapType.BYBOOKS:
+        organizedData.swapOffer = {
+          offeredBookId: data.selectedBook?.id,
+        };
+        break;
+    }
+
+    swapRequest(organizedData).then((res) => {
+      console.log('organizedData req to res', res);
+      toast.success('Requested send');
+    });
+  };
+
+  const disableSentRequest = !!selectedBook || !!userNote;
+  // console.log(disableSentRequest);
   return (
     <div
       className={`${
@@ -68,7 +101,7 @@ export default function SwapModal() {
             <h3>{conditionItem.label}</h3>
           </div>
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit((data) => console.log(data))}>
+            <form onSubmit={handleSubmit((data) => handleSubmitData(data))}>
               <div>
                 <Controller
                   name="swapType"
@@ -128,8 +161,9 @@ export default function SwapModal() {
               </div>
               <div className="flex justify-center pt-2 mt-5">
                 <Button
+                  // disabled={!!disableSentRequest}
                   type="submit"
-                  className="bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 "
+                  className={`bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
                 >
                   <Image src={sendMessageIcon} alt="Book" /> Send Request
                 </Button>
