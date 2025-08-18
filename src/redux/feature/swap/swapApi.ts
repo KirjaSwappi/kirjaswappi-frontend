@@ -8,7 +8,7 @@ export const swapApi = api.injectEndpoints({
         return {
           url: '/swap-requests',
           method: 'POST',
-          body: JSON.stringify(data),
+          body: data,
         };
       },
       invalidatesTags: ['SwapRequest'],

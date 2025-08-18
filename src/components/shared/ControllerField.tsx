@@ -18,56 +18,6 @@ interface ControlledInputFieldProps {
   autoComplete?: 'on' | 'off';
 }
 
-// const ControlledInputField: React.FC<ControlledInputFieldProps> = ({
-//   name,
-//   type = 'input',
-//   placeholder,
-//   className,
-//   options,
-//   showErrorMessage = false,
-//   autoComplete = 'on',
-// }) => {
-//   const { control } = useFormContext();
-
-//   return (
-//     <Controller
-//       name={name}
-//       control={control}
-//       render={({ field, fieldState: { error } }) => {
-//         return type === 'input' ? (
-//           <Input
-//             {...field}
-//             placeholder={placeholder}
-//             error={error?.message}
-//             className={className}
-//             showErrorMessage={showErrorMessage}
-//             autoComplete={autoComplete}
-//           />
-//         ) : type === 'select' ? (
-//           <Select
-//             {...field}
-//             placeholder={placeholder}
-//             options={options || []}
-//             error={error?.message}
-//             className={className}
-//             showErrorMessage={showErrorMessage}
-//           />
-//         ) : (
-//           <TextArea
-//             {...field}
-//             placeholder={placeholder}
-//             error={error?.message}
-//             className={className}
-//             showErrorMessage={showErrorMessage}
-//           />
-//         );
-//       }}
-//     />
-//   );
-// };
-
-// export default ControlledInputField;
-
 const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldProps>(
   (
     {

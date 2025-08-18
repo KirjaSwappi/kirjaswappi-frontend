@@ -126,7 +126,6 @@ export default function LoginModal() {
               className="text-primary text-sm font-light underline"
               onClick={() => {
                 dispatch(setOpen(false));
-                // You can navigate to register page here if needed
               }}
             >
               Sign up
