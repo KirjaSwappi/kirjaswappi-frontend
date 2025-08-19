@@ -28,10 +28,15 @@ export default function BookCard({
   const navigate = useNavigate();
   // =========== EDIT/DELETE POPUP CONTROL ===========
   const [open, setOpen] = useState<boolean>(false);
+  const [bookApiCallForSwapRequest, setBookApiCallForSwapRequest] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
+  // const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery(
+  //   { id: id },
+  //   { skip: !id && !bookApiCallForSwapRequest },
+  // );
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -50,9 +55,21 @@ export default function BookCard({
       showToast('error', 'Failed to delete book.');
     }
   };
-
+  console.log(bookApiCallForSwapRequest);
+  // console.log(bookData, bookLoading);
+  const isSwapModalOpen = () => {
+    setBookApiCallForSwapRequest(true);
+  };
   return (
-    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleNavigate}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleNavigate();
+      }}
+      className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}
+    >
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
@@ -105,21 +122,28 @@ export default function BookCard({
               />
             </div>
             {!hasPermission && (
-              <div className="absolute bottom-2 left-2">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  isSwapModalOpen();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.stopPropagation();
+                    console.log('clicked with keyboard');
+                    // setOpen(true);
+                  }
+                }}
+                className="w-full absolute left-1 bottom-2 p-2"
+              >
                 <BookCardSwapButton />
               </div>
             )}
           </div>
         </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleNavigate}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') handleNavigate();
-          }}
-          className={`${isProfile ? 'p-0 mt-2' : 'p-3 '} cursor-pointer`}
-        >
+        <div className={`${isProfile ? 'p-0 mt-2' : 'p-3 '} cursor-pointer`}>
           <h1
             className="font-poppins font-medium text-xs mt-1 leading-[100%] text-gray-900 mb-0.5 
             truncate"

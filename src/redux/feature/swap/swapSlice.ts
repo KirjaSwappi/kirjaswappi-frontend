@@ -5,6 +5,7 @@ import { swapApi } from './swapApi';
 import { ISwapBookInformation, ISwapBookInitialInformation } from './types/interface';
 
 const initialState: ISwapBookInitialInformation = {
+  loading: false,
   errorMessage: '',
   swapModalOpen: false,
   isSwapBookDetailsOrBookHomePage: false,
@@ -43,6 +44,9 @@ const swapSlice = createSlice({
   name: 'swap',
   initialState,
   reducers: {
+    setSwapLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
     setSwapBook: (state, action: PayloadAction<ISwapBookInformation>) => {
       state.swapBookInformation = { ...initialState.swapBookInformation, ...action.payload };
     },
@@ -86,5 +90,6 @@ export const {
   setSwapBookDetailsOrBookHomePage,
   setBookIdToSwapWith,
   setClearErrorMessage,
+  setSwapLoading,
 } = swapSlice.actions;
 export default swapSlice.reducer;

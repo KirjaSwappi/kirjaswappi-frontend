@@ -28,6 +28,7 @@ export interface ISwapBookInformation {
 }
 
 export interface ISwapBookInitialInformation {
+  loading: boolean;
   errorMessage: string | undefined;
   swapModalOpen: boolean;
   bookIdToSwapWith: string;

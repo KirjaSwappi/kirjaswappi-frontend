@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-
 import { SwapType } from '../../../../types/enum';
 import close from '../../../assets/close.svg';
 import sendMessageIcon from '../../../assets/sendMessageIcon.png';
@@ -21,13 +20,13 @@ import SwapBookCarousels from './_components/SwapBookCarousels';
 import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';
 import SwapController from './_components/SwapController';
+import SwapRequestSkeleton from './_components/SwapRequestSkeleton';
 import { swapRequestDefaultValues } from './helper';
 import { ISwapRequestForm, TOrganizedData } from './types/interface';
 export default function SwapModal() {
   const dispatch = useAppDispatch();
-  const { swapModalOpen, swapBookInformation, bookIdToSwapWith, errorMessage } = useAppSelector(
-    (state) => state.swapBook,
-  );
+  const { swapModalOpen, swapBookInformation, bookIdToSwapWith, errorMessage, loading } =
+    useAppSelector((state) => state.swapBook);
   const {
     userInformation: { books, id },
   } = useAppSelector((state) => state.auth);
@@ -36,7 +35,7 @@ export default function SwapModal() {
     owner,
   } = swapBookInformation;
 
-  const [swapRequest, { isLoading, isSuccess }] = useSwapRequestMutation();
+  const [swapRequest, { isLoading, isSuccess, reset: SwapRequestReset }] = useSwapRequestMutation();
   const methods = useForm<ISwapRequestForm>({
     mode: 'onChange',
     defaultValues: swapRequestDefaultValues(),
@@ -53,6 +52,14 @@ export default function SwapModal() {
     }
   }, [currentSwapType]);
 
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        SwapRequestReset();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
   const handleSubmitData = async (data: ISwapRequestForm) => {
     const organizedData: TOrganizedData = {
       senderId: id,
@@ -91,12 +98,13 @@ export default function SwapModal() {
     <>
       <RequestProcessingAnimation isLoading={isLoading} />
       <RequestSuccessAnimation isSuccess={isSuccess} />
+      {loading && <SwapRequestSkeleton />}
       <div
         className={`${
           swapModalOpen ? 'block' : 'hidden'
-        } bg-black bg-opacity-50 inset-0 w-full h-screen fixed top-0 left-0 z-[999999999] flex items-center justify-center`}
+        } bg-black bg-opacity-50 inset-0 w-full h-screen fixed -top-0 left-0 z-[999999999] flex items-center justify-center`}
       >
-        <div className="w-11/12 max-h-[90vh] bg-white rounded-md overflow-y-auto">
+        <div className="w-11/12 max-h-[80vh] bg-white rounded-md overflow-y-auto">
           <div className="py-4 border-b border-platinum relative">
             <h3 className="font-poppins font-normal text-base text-center leading-none">
               Swap Request
@@ -186,7 +194,7 @@ export default function SwapModal() {
                   <Button
                     disabled={!disableSentRequest}
                     type="submit"
-                    className={`bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
+                    className={`bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 mb-4 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
                   >
                     <Image src={sendMessageIcon} alt="Book" /> Send Request
                   </Button>

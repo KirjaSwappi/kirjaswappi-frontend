@@ -60,10 +60,10 @@ export default function LoginModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="bg-white rounded-xl shadow-lg w-10/12 lg:max-w-[486px] relative">
-        <div className="flex flex-row items-center justify-between p-6 border-b border-platinum">
-          <Image src={logo} alt="KirjaSwappi" className="h-8 mb-2" />
+        <div className="flex flex-row items-center justify-between p-4 lg:p-6 border-b border-platinum">
+          <Image src={logo} alt="KirjaSwappi" className="h-6 lg:h-8 lg:mb-2" />
           <Button
-            className="absolute right-6 top-5 text-2xl w-8 h-8 border border-platinum rounded-full text-[#1A1A1A]"
+            className="absolute right-6 lg:top-5 text-2xl w-8 h-8 border border-platinum rounded-full text-[#1A1A1A]"
             onClick={() => dispatch(setLoginModalOpen(false))}
             aria-label="Close"
           >
@@ -71,8 +71,8 @@ export default function LoginModal() {
           </Button>
         </div>
 
-        <div className="p-6 mt-4">
-          <h2 className="text-[#1A1A1A] text-base font-medium text-left mb-4 font-poppins">
+        <div className="p-4 lg:p-6 lg:mt-4">
+          <h2 className="text-[#1A1A1A] text-base font-medium text-left mb-2 lg:mb-4 font-poppins">
             Log In your account
           </h2>
           <FormProvider {...methods}>

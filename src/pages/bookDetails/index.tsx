@@ -9,11 +9,10 @@ import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
+import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
-import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
-import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import BookActionButton from './_components/BookActionButton';
 import BookDescription from './_components/BookDescription';
@@ -28,8 +27,9 @@ import VerticalImageSlider from './_components/VerticalImageSlider';
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const [isProfile, setProfile] = useState(false);
+  const { handleLoginOrSwap } = useLoginModalOrSwapRequest();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { loginModalOpen } = useAppSelector((state) => state.open);
   const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
@@ -43,7 +43,8 @@ export default function BookDetails() {
 
   useEffect(() => {
     if (userInformation?.id === bookData?.owner?.id) setProfile(true);
-  }, [bookData?.owner?.id]);
+    else setProfile(false);
+  }, [bookData?.owner?.id, userInformation.id]);
 
   const navigateToEditBook = () => {
     if (isProfile) {
@@ -51,20 +52,20 @@ export default function BookDetails() {
     }
   };
 
-  const loginModalOrSwapRequestModal = (): void => {
-    if (userInformation.email) {
-      dispatch(setSwapModal(true));
-      dispatch(setSwapBook(bookData));
-      if (id) dispatch(setBookIdToSwapWith(id));
-    } else {
-      // =========== If user state is empty show the login modal for login user ===========
-      dispatch(setLoginModalOpen(true));
-    }
-  };
+  // const loginModalOrSwapRequestModal = (): void => {
+  //   if (userInformation.email) {
+  //     dispatch(setSwapModal(true));
+  //     dispatch(setSwapBook(bookData));
+  //     if (id) dispatch(setBookIdToSwapWith(id));
+  //   } else {
+  //     // =========== If user state is empty show the login modal for login user ===========
+  //     dispatch(setLoginModalOpen(true));
+  //   }
+  // };
 
   const isEditBookOrSwapRequestFn = () => {
     if (isProfile) navigateToEditBook();
-    else loginModalOrSwapRequestModal();
+    else handleLoginOrSwap(bookData, id);
   };
 
   if (bookLoading) return <Loader />;
@@ -197,10 +198,7 @@ export default function BookDetails() {
         <MoreFromThisUserBooks bookId={id} />
       </div>
       {!loginModalOpen && !isProfile && (
-        <SwapRequestButton
-          ownerName={bookData?.owner?.name}
-          onClick={loginModalOrSwapRequestModal}
-        />
+        <SwapRequestButton ownerName={bookData?.owner?.name} onClick={isEditBookOrSwapRequestFn} />
       )}
     </div>
   );
