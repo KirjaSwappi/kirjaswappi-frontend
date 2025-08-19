@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AnimatePresence, motion } from 'framer-motion';
-import Lottie from 'lottie-react';
 import { useEffect } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import CompleteSuccessfully from '../../../../public/CompleteSuccessfully.json';
 
 import { SwapType } from '../../../../types/enum';
 import close from '../../../assets/close.svg';
@@ -19,6 +16,7 @@ import InputLabel from '../InputLabel';
 import MessageToastify from '../MessageToastify';
 import { showToast } from '../toast';
 import RequestProcessingAnimation from './_components/RequestProcesingAnimation';
+import RequestSuccessAnimation from './_components/RequestSuccessAnimation';
 import SwapBookCarousels from './_components/SwapBookCarousels';
 import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';
@@ -45,7 +43,6 @@ export default function SwapModal() {
   });
   const { control, watch, setValue, handleSubmit, reset } = methods;
   const selectedBook = watch('selectedBook');
-  const userNote = watch('note');
   const currentSwapType = watch('swapType');
 
   const conditionItem = SwapConditionList[swapType];
@@ -88,37 +85,12 @@ export default function SwapModal() {
       reset();
     }
   }, [errorMessage]);
-  const disableSentRequest = !!selectedBook || !!userNote;
+  const disableSentRequest = !!selectedBook || currentSwapType === SwapType.GIVEAWAY;
 
   return (
     <>
       <RequestProcessingAnimation isLoading={isLoading} />
-      <AnimatePresence>
-        {isSuccess && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            className="fixed inset-0 w-full h-full bg-black/50 flex flex-col items-center justify-center z-[9999999999]"
-          >
-            <Lottie
-              animationData={CompleteSuccessfully}
-              loop={true}
-              style={{ width: 460, height: 300 }}
-            />
-            <motion.h3
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.3 }}
-              className="font-poppins text-sm text-white"
-            >
-              Request has been send to book owner...
-            </motion.h3>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      <RequestSuccessAnimation isSuccess={isSuccess} />
       <div
         className={`${
           swapModalOpen ? 'block' : 'hidden'
@@ -212,7 +184,7 @@ export default function SwapModal() {
                 )}
                 <div className="flex justify-center pt-2 mt-5">
                   <Button
-                    // disabled={!!disableSentRequest}
+                    disabled={!disableSentRequest}
                     type="submit"
                     className={`bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
                   >
