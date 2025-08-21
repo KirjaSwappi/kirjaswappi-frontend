@@ -1,7 +1,7 @@
 export default function SwapRequestSkeleton() {
   return (
     <div className="bg-black bg-opacity-50 inset-0 w-full h-screen fixed top-0 left-0 z-[999999999] flex items-center justify-center">
-      <div className="w-11/12 max-h-[80vh] bg-white rounded-md overflow-y-auto animate-pulse">
+      <div className="w-11/12 lg:w-8/12 xl:w-1/2 min-h-[80vh] bg-white rounded-md animate-pulse">
         {/* Header */}
         <div className="py-4 border-b border-platinum relative">
           <div className="h-5 w-28 bg-platinum rounded mx-auto" />

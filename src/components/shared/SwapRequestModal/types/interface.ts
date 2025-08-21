@@ -24,3 +24,9 @@ export type TOrganizedData = {
     offeredGenreId?: string;
   };
 };
+
+export interface IGenre {
+  id: string;
+  name: string;
+  parent: IGenre | null;
+}

@@ -8,6 +8,7 @@ export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedChatId } = useAppSelector((state) => state.chat);
+  const { loginModalOpen } = useAppSelector((state) => state.open);
   const pathname = location.pathname;
   const ignorePath: string[] = [
     '/profile/add-book',
@@ -18,7 +19,7 @@ export default function Footer() {
   const isFooterBarShow = ignorePath.includes(pathname);
   return (
     <footer
-      className={`${isFooterBarShow || (selectedChatId && 'hidden')} bg-white lg:hidden relative`}
+      className={`${isFooterBarShow || (selectedChatId && 'hidden') || (loginModalOpen && 'hidden')} bg-white lg:hidden relative`}
     >
       <Button
         type="button"

@@ -1,19 +1,11 @@
 import { useAppSelector } from '../../../../redux/hooks';
-import Image from '../../Image';
 
 export default function SwapBookInformation() {
   const { swapBookInformation } = useAppSelector((state) => state.swapBook);
-  const { coverPhotoUrls, title, genres, condition, author } = swapBookInformation;
+  const { title, genres, condition, author } = swapBookInformation;
   return (
     <div>
-      <div className="flex gap-4">
-        <div className="max-w-[108px] max-h-[142px] flex items-center justify-center ">
-          <Image
-            src={coverPhotoUrls?.[0] ?? ''}
-            alt={title}
-            className="max-w-[108px] h-[142px] object-cover  rounded-lg"
-          />
-        </div>
+      <div className=" flex gap-4">
         <div>
           <h1 className="font-medium text-smokyBlack text-sm leading-none mb-1 font-poppins">
             {title}

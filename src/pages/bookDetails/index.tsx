@@ -27,7 +27,6 @@ import VerticalImageSlider from './_components/VerticalImageSlider';
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
   const [isProfile, setProfile] = useState(false);
   const { handleLoginOrSwap } = useLoginModalOrSwapRequest();
   const { userInformation } = useAppSelector((state) => state.auth);

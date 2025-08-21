@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaRegClock } from 'react-icons/fa6';
 import { PiDotsThreeBold } from 'react-icons/pi';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/deleteIconRed.png';
 import editIcon from '../../assets/editBlack.png';
@@ -8,7 +9,10 @@ import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
-import { useDeleteBookByIdMutation } from '../../redux/feature/book/bookApi';
+import { useDeleteBookByIdMutation, useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
+import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
+import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
+import { useAppSelector } from '../../redux/hooks';
 import BookCardSwapButton from './BookCardSwapButton';
 import Button from './Button';
 import DeleteConfirmModal from './DeleteConfirmModal';
@@ -26,17 +30,18 @@ export default function BookCard({
 }) {
   if (!book) return null;
   const navigate = useNavigate();
-  // =========== EDIT/DELETE POPUP CONTROL ===========
+  const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [bookApiCallForSwapRequest, setBookApiCallForSwapRequest] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+  // =========== EDIT/DELETE POPUP CONTROL ===========
+  const userId = useAppSelector((state) => state.auth.userInformation.id);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
-  const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
+
+  // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
-  // const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery(
-  //   { id: id },
-  //   { skip: !id && !bookApiCallForSwapRequest },
-  // );
+  const { data: bookData } = useGetBookByIdQuery({ id: id }, { skip: !bookApiCallForSwapRequest });
+
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -55,11 +60,24 @@ export default function BookCard({
       showToast('error', 'Failed to delete book.');
     }
   };
-  console.log(bookApiCallForSwapRequest);
-  // console.log(bookData, bookLoading);
-  const isSwapModalOpen = () => {
-    setBookApiCallForSwapRequest(true);
+
+  // =========== IS LOGIN OR SWAP MODAL ===========
+  const isLoginOrSwap = () => {
+    if (!userId) dispatch(setLoginModalOpen(true));
+    else {
+      setBookApiCallForSwapRequest(true);
+    }
   };
+
+  useEffect(() => {
+    if (bookData) {
+      dispatch(setSwapModal(true));
+      if (bookData) dispatch(setSwapBook(bookData));
+      if (id) dispatch(setBookIdToSwapWith(id));
+    }
+  }, [bookData]);
+
+  const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   return (
     <div
       role="button"
@@ -127,13 +145,12 @@ export default function BookCard({
                 tabIndex={0}
                 onClick={(e) => {
                   e.stopPropagation();
-                  isSwapModalOpen();
+                  isLoginOrSwap();
                 }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.stopPropagation();
-                    console.log('clicked with keyboard');
-                    // setOpen(true);
+                    isLoginOrSwap();
                   }
                 }}
                 className="w-full absolute left-1 bottom-2 p-2"
