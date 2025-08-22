@@ -28,6 +28,7 @@ export interface ISwapBookInformation {
 }
 
 export interface ISwapBookInitialInformation {
+  clearStateOfSwapRequest: boolean;
   swapFilterGenre: string[];
   errorMessage: string | undefined;
   swapModalOpen: boolean;

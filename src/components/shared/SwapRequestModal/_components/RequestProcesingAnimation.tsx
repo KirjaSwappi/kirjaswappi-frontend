@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Lottie from 'lottie-react';
-import LoadingPaperplane from '../../../../../public/LoadingPaperplane.json';
+import LoadingPaperplane from '../../../../assets/LoadingPaperplane.json';
 export default function RequestProcessingAnimation({ isLoading }: { isLoading: boolean }) {
   return (
     <AnimatePresence>

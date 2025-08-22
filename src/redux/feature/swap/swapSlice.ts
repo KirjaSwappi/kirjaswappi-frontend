@@ -4,9 +4,16 @@ import { SwapType } from '../../../../types/enum';
 import { swapApi } from './swapApi';
 import { ISwapBookInformation, ISwapBookInitialInformation } from './types/interface';
 
+interface IErrorPayload {
+  error?: {
+    code?: string;
+    message?: string;
+  };
+}
 const initialState: ISwapBookInitialInformation = {
   errorMessage: '',
   swapModalOpen: false,
+  clearStateOfSwapRequest: false,
   isSwapBookDetailsOrBookHomePage: false,
   bookIdToSwapWith: '',
   swapFilterGenre: [],
@@ -32,13 +39,6 @@ const initialState: ISwapBookInitialInformation = {
     },
   },
 };
-
-interface IErrorPayload {
-  error?: {
-    code?: string;
-    message?: string;
-  };
-}
 
 const swapSlice = createSlice({
   name: 'swap',
@@ -67,6 +67,12 @@ const swapSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addMatcher(swapApi.endpoints.swapRequest.matchPending, (state) => {
+      state.clearStateOfSwapRequest = false;
+    });
+    builder.addMatcher(swapApi.endpoints.swapRequest.matchFulfilled, (state) => {
+      state.clearStateOfSwapRequest = true;
+    });
     builder.addMatcher(
       swapApi.endpoints.swapRequest.matchRejected,
       (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
@@ -78,6 +84,7 @@ const swapSlice = createSlice({
           errorMessage = error.error.message;
         }
         state.errorMessage = errorMessage;
+        state.clearStateOfSwapRequest = true;
       },
     );
   },

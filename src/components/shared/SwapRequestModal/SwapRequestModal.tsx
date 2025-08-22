@@ -18,7 +18,7 @@ import ControlledInputField from '../ControllerField';
 import Image from '../Image';
 import InputLabel from '../InputLabel';
 import MessageToastify from '../MessageToastify';
-import { showToast } from '../toast';
+import RequestFailedAnimation from './_components/RequestErrorAnimation';
 import RequestProcessingAnimation from './_components/RequestProcesingAnimation';
 import RequestSuccessAnimation from './_components/RequestSuccessAnimation';
 import SwapBookCarousels from './_components/SwapBookCarousels';
@@ -117,17 +117,21 @@ export default function SwapModal() {
   useEffect(() => {
     if (errorMessage) {
       dispatch(setSwapModal(false));
-      showToast('error', errorMessage);
-      dispatch(setClearErrorMessage());
-      reset();
+      const timer = setTimeout(() => {
+        dispatch(setClearErrorMessage());
+        reset();
+      }, 2500);
+
+      return () => clearTimeout(timer);
     }
-  }, [errorMessage]);
+  }, [errorMessage, dispatch, reset]);
   const disableSentRequest = !!selectedBook || currentSwapType === SwapType.GIVEAWAY;
-  console.log(loading);
+
   return (
     <>
       <RequestProcessingAnimation isLoading={isLoading} />
       <RequestSuccessAnimation isSuccess={isSuccess} />
+      <RequestFailedAnimation isFailed={!!errorMessage} />
       {loading ? (
         <SwapRequestSkeleton />
       ) : (

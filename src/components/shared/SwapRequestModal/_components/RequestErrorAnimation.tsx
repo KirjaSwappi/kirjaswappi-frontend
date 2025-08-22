@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Lottie from 'lottie-react';
-import CompleteSuccessfully from '../../../../assets/CompleteSuccessfully.json';
-export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: boolean }) {
+import CompleteSuccessfully from '../../../../assets/FailedAnimation.json';
+
+export default function RequestFailedAnimation({ isFailed }: { isFailed: boolean }) {
   return (
     <div
-      className={`${isSuccess ? 'block' : 'hidden'} bg-black bg-opacity-50 inset-0 w-full h-screen fixed -top-0 left-0 z-[999999999] flex items-center justify-center`}
+      className={`${isFailed ? 'block' : 'hidden'} bg-black bg-opacity-50 inset-0 w-full h-screen fixed -top-0 left-0 z-[999999999] flex items-center justify-center`}
     >
       <AnimatePresence>
         (
@@ -26,7 +27,7 @@ export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: bool
             transition={{ delay: 0.2, duration: 0.3 }}
             className="font-poppins text-base text-[#2B2B2B] font-semibold"
           >
-            Successfully Swap Sent
+            Swap Failed
           </motion.h3>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -34,7 +35,7 @@ export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: bool
             transition={{ delay: 0.2, duration: 0.3 }}
             className="font-poppins text-sx text-[#6F6E77] font-light"
           >
-            Thank you for your swap
+            Please try again
           </motion.p>
         </motion.div>
         )

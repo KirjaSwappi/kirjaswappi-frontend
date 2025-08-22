@@ -31,15 +31,15 @@ export default function BookCard({
   if (!book) return null;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState<boolean>(false);
-  const [bookApiCallForSwapRequest, setBookApiCallForSwapRequest] = useState<boolean>(false);
-  const { clicked, setClicked, reference } = useMouseClick();
   // =========== EDIT/DELETE POPUP CONTROL ===========
+  const [open, setOpen] = useState<boolean>(false);
+  const { clicked, setClicked, reference } = useMouseClick();
   const userId = useAppSelector((state) => state.auth.userInformation.id);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
 
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
+  const [bookApiCallForSwapRequest, setBookApiCallForSwapRequest] = useState<boolean>(false);
   const { data: bookData } = useGetBookByIdQuery({ id: id }, { skip: !bookApiCallForSwapRequest });
 
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
@@ -74,8 +74,9 @@ export default function BookCard({
       dispatch(setSwapModal(true));
       if (bookData) dispatch(setSwapBook(bookData));
       if (id) dispatch(setBookIdToSwapWith(id));
+      setBookApiCallForSwapRequest(false);
     }
-  }, [bookData]);
+  }, [bookData, dispatch, id]);
 
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   return (
