@@ -9,7 +9,10 @@ import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
-import { useDeleteBookByIdMutation, useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
+import {
+  useDeleteBookByIdMutation,
+  useLazyGetBookByIdQuery,
+} from '../../redux/feature/book/bookApi';
 import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
 import { useAppSelector } from '../../redux/hooks';
@@ -36,11 +39,9 @@ export default function BookCard({
   const { clicked, setClicked, reference } = useMouseClick();
   const userId = useAppSelector((state) => state.auth.userInformation.id);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
-
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
-  const [bookApiCallForSwapRequest, setBookApiCallForSwapRequest] = useState<boolean>(false);
-  const { data: bookData } = useGetBookByIdQuery({ id: id }, { skip: !bookApiCallForSwapRequest });
+  const [trigger, { data: bookData }] = useLazyGetBookByIdQuery();
 
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
@@ -65,16 +66,15 @@ export default function BookCard({
   const isLoginOrSwap = () => {
     if (!userId) dispatch(setLoginModalOpen(true));
     else {
-      setBookApiCallForSwapRequest(true);
+      dispatch(setSwapModal(true));
+      trigger({ id });
     }
   };
 
   useEffect(() => {
     if (bookData) {
-      dispatch(setSwapModal(true));
-      if (bookData) dispatch(setSwapBook(bookData));
-      if (id) dispatch(setBookIdToSwapWith(id));
-      setBookApiCallForSwapRequest(false);
+      dispatch(setSwapBook(bookData));
+      dispatch(setBookIdToSwapWith(id));
     }
   }, [bookData, dispatch, id]);
 

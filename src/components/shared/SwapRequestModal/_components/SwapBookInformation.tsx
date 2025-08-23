@@ -7,16 +7,21 @@ export default function SwapBookInformation() {
     <div>
       <div className=" flex gap-4">
         <div>
-          <h1 className="font-medium text-smokyBlack text-sm leading-none mb-1 font-poppins">
+          <h1 className="font-medium text-smokyBlack text-sm lg:text-xl leading-none mb-1 font-poppins">
             {title}
           </h1>
-          <p className="text-smokyBlack font-normal text-xs font-poppins">by {author}</p>
-          <div className="flex items-center flex-wrap mt-4">
-            {genres?.map((genre, index: number) => (
-              <div key={index} className="flex items-center">
-                <p className="text-black font-light text-xs font-poppins">{genre}</p>
+          <p className="text-smokyBlack font-normal text-xs lg:text-sm font-poppins">by {author}</p>
+          <div className="flex gap-1 items-center flex-wrap mt-4">
+            {genres?.map((genre: string, index: number) => (
+              <div
+                key={index}
+                className="flex items-center lg:border border-[#BADBFD] lg:bg-primary-light lg:px-2 lg:py-1 lg:rounded-md"
+              >
+                <p className="text-smokyBlack lg:text-primary font-light text-xs font-poppins">
+                  {genre}
+                </p>
                 <span
-                  className={`${
+                  className={`lg:hidden bg- ${
                     genres.length - 1 === index ? 'hidden' : 'block'
                   } inline-block mx-2 font-poppins font-light text-sm`}
                 >

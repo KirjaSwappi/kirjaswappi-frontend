@@ -147,6 +147,7 @@ export const {
   useAddBookMutation,
   useUpdateBookMutation,
   useGetBookByIdQuery,
+  useLazyGetBookByIdQuery,
   useGetSupportLanguageQuery,
   useGetSupportConditionQuery,
   useGetAllBooksQuery,

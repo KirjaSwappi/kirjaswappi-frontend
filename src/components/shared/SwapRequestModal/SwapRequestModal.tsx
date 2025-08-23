@@ -17,6 +17,7 @@ import Button from '../Button';
 import ControlledInputField from '../ControllerField';
 import Image from '../Image';
 import InputLabel from '../InputLabel';
+import Line from '../Line';
 import MessageToastify from '../MessageToastify';
 import RequestFailedAnimation from './_components/RequestErrorAnimation';
 import RequestProcessingAnimation from './_components/RequestProcesingAnimation';
@@ -106,11 +107,25 @@ export default function SwapModal() {
           offeredBookId: data.selectedBook?.id,
         };
         break;
+      case SwapType.OPENTOOFFERS:
+        organizedData.swapOffer = {
+          offeredBookId: data.selectedBook?.id,
+        };
+        break;
+      case SwapType.BYGENRES:
+        organizedData.swapOffer = {
+          offeredBookId: data.selectedBook?.id,
+        };
+        break;
+      case SwapType.GIVEAWAY:
+        organizedData.askForGiveaway = true;
+        break;
     }
 
     swapRequest(organizedData).then((res) => {
       if (res.data) {
         dispatch(setSwapModal(false));
+        reset();
       }
     });
   };
@@ -169,7 +184,7 @@ export default function SwapModal() {
                   <SwapBookInformation />
                 </div>
               </div>
-              <div className="w-full lg:max-w-[65%] xl:w-8/12">
+              <div className="w-full lg:max-w-[65%] xl:w-7/12">
                 <div className="hidden lg:block ">
                   <SwapBookInformation />
                 </div>
@@ -193,7 +208,7 @@ export default function SwapModal() {
 
                 <FormProvider {...methods}>
                   <form onSubmit={handleSubmit((data) => handleSubmitData(data))}>
-                    <div>
+                    <div className="-mt-3">
                       <Controller
                         name="swapType"
                         control={control}
@@ -235,14 +250,16 @@ export default function SwapModal() {
                           swapDescription="You can offer from your library or, ask for open to offer"
                         />
                       )}
+
                       <SwapController
                         swapTitle="Ask for giveaway"
                         swapType={SwapType.GIVEAWAY}
                         swapDescription="You can offer from your library or, ask for giveaway"
                       />
                     </div>
+                    <Line className="mt-2 bg-AntiFlashWhite" />
                     <div>
-                      <InputLabel label="Short Note" className="mt-5" />
+                      <InputLabel label="Short Note" className="mt-3 lg:mt-0 lg:mb-2" />
                       <ControlledInputField
                         type="textarea"
                         name="note"
@@ -255,11 +272,11 @@ export default function SwapModal() {
                         <MessageToastify isShow={true} type={ERROR} value={errorMessage} />
                       </div>
                     )}
-                    <div className="flex justify-center pt-2 mt-5">
+                    <div className="flex justify-center lg:justify-end pt-2 mt-5">
                       <Button
                         disabled={!disableSentRequest}
                         type="submit"
-                        className={`bg-primary text-white font-medium text-xs py-2 w-full h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 mb-4 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
+                        className={`bg-primary text-white font-medium text-xs py-2 w-full lg:w-5/12 h-[48px] rounded-[8px] font-poppins flex justify-center items-center gap-2 mb-4 ${!disableSentRequest ? 'opacity-40' : 'opacity-100'}`}
                       >
                         <Image src={sendMessageIcon} alt="Book" /> Send Request
                       </Button>
