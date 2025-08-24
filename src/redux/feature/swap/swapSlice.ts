@@ -49,6 +49,8 @@ const swapSlice = createSlice({
     },
     setResetSwapBook: (state) => {
       state.swapBookInformation = { ...initialState.swapBookInformation };
+      state.bookIdToSwapWith = '';
+      state.swapFilterGenre = [];
     },
     setSwapBookDetailsOrBookHomePage: (state, action: PayloadAction<boolean>) => {
       state.isSwapBookDetailsOrBookHomePage = action.payload;

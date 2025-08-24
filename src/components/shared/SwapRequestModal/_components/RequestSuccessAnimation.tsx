@@ -13,12 +13,12 @@ export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: bool
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className="fixed inset-0 w-11/12 lg:w-[28%] h-1/2 bg-white flex flex-col items-center justify-center z-[9999999999] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-3"
+          className="fixed inset-0 w-11/12 lg:w-[20%] h-[40%] bg-white flex flex-col items-center justify-center z-[9999999999] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg p-3"
         >
           <Lottie
             animationData={CompleteSuccessfully}
             loop={true}
-            className="w-[360px] lg:w-[460px] h-[260px] lg:h-[360px]"
+            className="w-[360px] h-[260px]"
           />
           <motion.h3
             initial={{ opacity: 0, y: 10 }}

@@ -51,17 +51,6 @@ export default function BookDetails() {
     }
   };
 
-  // const loginModalOrSwapRequestModal = (): void => {
-  //   if (userInformation.email) {
-  //     dispatch(setSwapModal(true));
-  //     dispatch(setSwapBook(bookData));
-  //     if (id) dispatch(setBookIdToSwapWith(id));
-  //   } else {
-  //     // =========== If user state is empty show the login modal for login user ===========
-  //     dispatch(setLoginModalOpen(true));
-  //   }
-  // };
-
   const isEditBookOrSwapRequestFn = () => {
     if (isProfile) navigateToEditBook();
     else handleLoginOrSwap(bookData, id);

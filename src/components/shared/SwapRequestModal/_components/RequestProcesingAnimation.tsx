@@ -10,7 +10,7 @@ export default function RequestProcessingAnimation({ isLoading }: { isLoading: b
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className="fixed inset-0 w-full h-full bg-white flex flex-col items-center justify-center z-[9999999999]"
+          className="fixed inset-0 w-full h-full bg-white/90 flex flex-col items-center justify-center z-[9999999999]"
         >
           <Lottie
             animationData={LoadingPaperplane}

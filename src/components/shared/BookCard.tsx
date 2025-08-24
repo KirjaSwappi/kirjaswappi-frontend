@@ -13,6 +13,7 @@ import {
   useDeleteBookByIdMutation,
   useLazyGetBookByIdQuery,
 } from '../../redux/feature/book/bookApi';
+import { setBookLoading } from '../../redux/feature/book/bookSlice';
 import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
 import { useAppSelector } from '../../redux/hooks';
@@ -41,8 +42,7 @@ export default function BookCard({
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
-  const [trigger, { data: bookData }] = useLazyGetBookByIdQuery();
-
+  const [trigger, { data: bookData, isLoading: bookLoading }] = useLazyGetBookByIdQuery();
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -77,6 +77,10 @@ export default function BookCard({
       dispatch(setBookIdToSwapWith(id));
     }
   }, [bookData, dispatch, id]);
+
+  useEffect(() => {
+    dispatch(setBookLoading(bookLoading));
+  }, [bookLoading, dispatch]);
 
   const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   return (
