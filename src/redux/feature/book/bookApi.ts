@@ -2,16 +2,23 @@ import { IFilterData } from '../../../interface';
 import { api } from '../../api/apiSlice';
 
 function buildBookQueryParams(filter: IFilterData) {
-  const params: Record<string, string> = {};
+  const params = new URLSearchParams();
 
-  if (filter.search) params['search'] = filter.search;
-  if (filter.genre && filter.genre.length > 0) params['genres'] = filter.genre.join(',');
-  if (filter.condition && filter.condition.length > 0)
-    params['conditions'] = filter.condition.join(',');
-  if (filter.language && filter.language.length > 0)
-    params['languages'] = filter.language.join(',');
+  if (filter.search) params.append('search', filter.search);
 
-  return new URLSearchParams(params).toString();
+  if (filter.genre?.length) {
+    filter.genre.forEach((g) => params.append('genres', g));
+  }
+
+  if (filter.condition?.length) {
+    filter.condition.forEach((c) => params.append('conditions', c));
+  }
+
+  if (filter.language?.length) {
+    filter.language.forEach((l) => params.append('languages', l));
+  }
+
+  return params.toString();
 }
 export const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -81,13 +88,15 @@ export const bookApi = api.injectEndpoints({
         filter = { pageNumber: 0 } as IFilterData,
         ownerId,
         notOwnerId,
+        pageSize = 10,
       }: {
         filter?: IFilterData;
         ownerId?: string;
         notOwnerId?: string;
+        pageNumber?: number;
+        pageSize?: number;
       }) => {
         const queryParams = new URLSearchParams();
-
         // Add filter query parameters
         const filterQuery = buildBookQueryParams(filter);
         if (filterQuery) {
@@ -100,10 +109,9 @@ export const bookApi = api.injectEndpoints({
         // Add owner and notOwnerId
         if (ownerId) queryParams.append('ownerId', ownerId);
         if (notOwnerId) queryParams.append('notOwnerId', notOwnerId);
-
         // Add pagination
         queryParams.append('page', String(filter.pageNumber));
-        queryParams.append('size', '6');
+        queryParams.append('size', String(pageSize));
 
         const url = `/books?${queryParams.toString()}`;
         return {
@@ -138,6 +146,7 @@ export const {
   useAddBookMutation,
   useUpdateBookMutation,
   useGetBookByIdQuery,
+  useLazyGetBookByIdQuery,
   useGetSupportLanguageQuery,
   useGetSupportConditionQuery,
   useGetAllBooksQuery,

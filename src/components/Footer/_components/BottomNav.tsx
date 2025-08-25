@@ -6,8 +6,8 @@ import BottomNavItem from './BottomNavItem';
 export default function BottomNav() {
   const { t } = useTranslation();
   const location = useLocation();
-  const ignorePath: string[] = [];
   const pathname = location.pathname;
+  const ignorePath: string[] = [`/book-details/${pathname?.split('/').reverse()[0]}`];
   const isFooterBarShow = ignorePath.includes(pathname);
   return (
     <div

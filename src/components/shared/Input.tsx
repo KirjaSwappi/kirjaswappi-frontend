@@ -37,8 +37,10 @@ const Input = forwardRef<HTMLInputElement, IInputFieldProps>(function Input(
         onFocus={onFocus}
         placeholder={placeholder}
         className={cn(
-          `w-full h-[48px] px-[14px] py-2 bg-white lg:bg-AntiFlashWhite border lg:border-grayDark border-gray ${
-            error ? 'border border-rose-500' : 'focus:ring-primary focus:border-primary'
+          `w-full h-[48px] px-[14px] py-2 bg-white ${
+            error
+              ? 'border border-red'
+              : 'focus:ring-primary focus:border-primary  lg:bg-AntiFlashWhite border lg:border-grayDark border-gray'
           } focus:outline-none placeholder:text-sm placeholder:text-grayDark`,
           className,
         )}

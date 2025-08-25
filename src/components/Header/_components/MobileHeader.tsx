@@ -3,17 +3,20 @@ import { Link, useLocation } from 'react-router-dom';
 import leftArrowGray from '../../../assets/leftArrowGray.png';
 import logo from '../../../assets/logo.png';
 import logoIcon from '../../../assets/logoIcon.png';
+import { useMouseClick } from '../../../hooks/useMouse';
 import useScroll from '../../../hooks/useScroll';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
 import SearchBar from '../../shared/SearchBar';
 import HeaderUserProfile from './HeaderUserProfile';
-import Language from './Language';
+import LanguageFlagButton from './LanguageFlagButton';
+import LanguageMenuDropdown from './LanguageMenuDropdown';
 export default function MobileHeader() {
   const location = useLocation();
   const { scrolled } = useScroll();
   const [query, setQuery] = useState<string>('');
   const [searchToggle, setSearchToggle] = useState<boolean>(false);
+  const { clicked, setClicked, reference } = useMouseClick();
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
   const isHomePage = pathname === '/';
@@ -68,8 +71,16 @@ export default function MobileHeader() {
               )}
             </div>
             <div className={`${searchToggle && 'hidden sm:flex'} flex items-center gap-2`}>
-              <Language />
-              <HeaderUserProfile />
+              <div
+                ref={reference}
+                className={`w-[120px] flex items-center justify-end gap-4 relative`}
+              >
+                <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
+                {clicked && <LanguageMenuDropdown />}
+                <HeaderUserProfile />
+              </div>
+              {/* <Language />
+              <HeaderUserProfile /> */}
             </div>
           </div>
           {!scrolled && isHomePage && (

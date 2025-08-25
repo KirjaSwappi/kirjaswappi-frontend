@@ -81,6 +81,7 @@ export const api = createApi({
     'AddBook',
     'UpdateBook',
     'DeleteBook',
+    'SwapRequest',
   ],
   endpoints: () => ({}),
 });

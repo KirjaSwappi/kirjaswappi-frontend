@@ -11,6 +11,7 @@ import { CombinedState } from '@reduxjs/toolkit/query';
 import { getCookie } from '../utility/cookies';
 import { api } from './api/apiSlice';
 import authSlice, { IInitialState, initialState } from './feature/auth/authSlice';
+import bookSlice, { IBookInitialState } from './feature/book/bookSlice';
 import filterSlice, { IFilterInitialState } from './feature/filter/filterSlice';
 import messagesSlice, { ChatState } from './feature/messages/messagesSlice';
 import notificationSlice, {
@@ -20,7 +21,6 @@ import openSlice, { IOpenInitialState } from './feature/open/openSlice';
 import stepSlice, { IStepInitialState } from './feature/step/stepSlice';
 import swapSlice from './feature/swap/swapSlice';
 import { ISwapBookInitialInformation } from './feature/swap/types/interface';
-
 const cookieUser = getCookie('user');
 const user = cookieUser ? cookieUser : {};
 
@@ -44,6 +44,7 @@ const store: EnhancedStore<
     filter: IFilterInitialState;
     swapBook: ISwapBookInitialInformation;
     chat: ChatState;
+    book: IBookInitialState;
   },
   UnknownAction,
   Tuple<
@@ -71,6 +72,7 @@ const store: EnhancedStore<
     filter: filterSlice,
     swapBook: swapSlice,
     chat: messagesSlice,
+    book: bookSlice,
   },
   preloadedState,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),

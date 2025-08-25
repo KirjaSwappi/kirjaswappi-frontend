@@ -14,7 +14,7 @@ export default function SwapBookCarousels({ swapBook }: { swapBook: ISwapBook[] 
         align: 'start',
         loop: true,
       }}
-      className="relative pt-3"
+      className="relative"
     >
       <CarouselContent>
         {swapBook.map((item: ISwapBook) => {

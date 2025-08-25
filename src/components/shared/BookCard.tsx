@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaRegClock } from 'react-icons/fa6';
 import { PiDotsThreeBold } from 'react-icons/pi';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/deleteIconRed.png';
 import editIcon from '../../assets/editBlack.png';
@@ -8,7 +9,14 @@ import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/interface';
-import { useDeleteBookByIdMutation } from '../../redux/feature/book/bookApi';
+import {
+  useDeleteBookByIdMutation,
+  useLazyGetBookByIdQuery,
+} from '../../redux/feature/book/bookApi';
+import { setBookLoading } from '../../redux/feature/book/bookSlice';
+import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
+import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
+import { useAppSelector } from '../../redux/hooks';
 import BookCardSwapButton from './BookCardSwapButton';
 import Button from './Button';
 import DeleteConfirmModal from './DeleteConfirmModal';
@@ -26,12 +34,15 @@ export default function BookCard({
 }) {
   if (!book) return null;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   // =========== EDIT/DELETE POPUP CONTROL ===========
   const [open, setOpen] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+  const userId = useAppSelector((state) => state.auth.userInformation.id);
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
-  const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
+  // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
+  const [trigger, { isLoading: bookLoading }] = useLazyGetBookByIdQuery();
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -40,7 +51,8 @@ export default function BookCard({
   };
 
   // =========== DELETE BOOK HANDLER ===========
-  const handleBookDeleteById = async () => {
+  const handleBookDeleteById = async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     try {
       await deleteBookById({ id }).unwrap();
       setClicked(false);
@@ -51,8 +63,35 @@ export default function BookCard({
     }
   };
 
+  const handleSwap = async () => {
+    const response = await trigger({ id }).unwrap();
+    dispatch(setSwapBook(response));
+    dispatch(setBookIdToSwapWith(id));
+    dispatch(setSwapModal(true));
+  };
+  // =========== IS LOGIN OR SWAP MODAL ===========
+  const isLoginOrSwap = () => {
+    if (!userId) dispatch(setLoginModalOpen(true));
+    else {
+      handleSwap();
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setBookLoading(bookLoading));
+  }, [bookLoading, dispatch]);
+
+  const imageUrl = Array.isArray(coverPhotoUrls) ? coverPhotoUrls[0] : coverPhotoUrl;
   return (
-    <div className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleNavigate}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleNavigate();
+      }}
+      className={`${isProfile ? '' : 'shadow-lg '} rounded-lg`}
+    >
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
@@ -61,7 +100,10 @@ export default function BookCard({
               <PiDotsThreeBold
                 size={24}
                 className="text-blackOlive"
-                onClick={() => setClicked((prev) => !prev)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setClicked((prev) => !prev);
+                }}
               />
             </div>
           )}
@@ -71,7 +113,10 @@ export default function BookCard({
               className="absolute right-2 top-10 w-[138px] bg-white shadow-lg rounded-md z-10"
             >
               <Button
-                onClick={() => navigate(`/profile/update-book/${id}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/profile/update-book/${id}`);
+                }}
                 className="flex items-center gap-2 p-2 border-b border-[#D3D3D3] w-full cursor-pointer"
                 type="button"
               >
@@ -79,7 +124,10 @@ export default function BookCard({
                 <p className="font-poppins font-normal text-sm">Edit</p>
               </Button>
               <Button
-                onClick={() => setOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(true);
+                }}
                 className="flex items-center gap-2 p-2 w-full"
                 type="button"
               >
@@ -92,8 +140,11 @@ export default function BookCard({
           )}
           <DeleteConfirmModal
             open={open}
-            onClose={() => setOpen(false)}
-            onDelete={handleBookDeleteById}
+            onClose={(e) => {
+              e?.stopPropagation();
+              setOpen(false);
+            }}
+            onDelete={(e) => handleBookDeleteById(e)}
             isLoading={isLoading}
           />
           <div className="relative">
@@ -105,21 +156,27 @@ export default function BookCard({
               />
             </div>
             {!hasPermission && (
-              <div className="absolute bottom-2 left-2">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  isLoginOrSwap();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.stopPropagation();
+                    isLoginOrSwap();
+                  }
+                }}
+                className="w-full absolute left-1 bottom-2 p-2"
+              >
                 <BookCardSwapButton />
               </div>
             )}
           </div>
         </div>
-        <div
-          role="button"
-          tabIndex={0}
-          onClick={handleNavigate}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') handleNavigate();
-          }}
-          className={`${isProfile ? 'p-0 mt-2' : 'p-3 '} cursor-pointer`}
-        >
+        <div className={`${isProfile ? 'p-0 mt-2' : 'p-3 '} cursor-pointer`}>
           <h1
             className="font-poppins font-medium text-xs mt-1 leading-[100%] text-gray-900 mb-0.5 
             truncate"

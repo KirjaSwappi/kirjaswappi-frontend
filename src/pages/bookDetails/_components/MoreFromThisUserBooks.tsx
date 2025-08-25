@@ -25,7 +25,6 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6">
         {moreBooks &&
           moreBooks.map((book: IBook, idx: number) => {
-            console.log(book.owner);
             if (idx === moreBooks.length - 1) {
               return (
                 <div key={idx}>
