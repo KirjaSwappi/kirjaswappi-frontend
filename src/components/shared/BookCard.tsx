@@ -42,7 +42,7 @@ export default function BookCard({
   const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
-  const [trigger, { data: bookData, isLoading: bookLoading }] = useLazyGetBookByIdQuery();
+  const [trigger, { isLoading: bookLoading }] = useLazyGetBookByIdQuery();
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -51,7 +51,8 @@ export default function BookCard({
   };
 
   // =========== DELETE BOOK HANDLER ===========
-  const handleBookDeleteById = async () => {
+  const handleBookDeleteById = async (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     try {
       await deleteBookById({ id }).unwrap();
       setClicked(false);
@@ -62,21 +63,19 @@ export default function BookCard({
     }
   };
 
+  const handleSwap = async () => {
+    const response = await trigger({ id }).unwrap();
+    dispatch(setSwapBook(response));
+    dispatch(setBookIdToSwapWith(id));
+    dispatch(setSwapModal(true));
+  };
   // =========== IS LOGIN OR SWAP MODAL ===========
   const isLoginOrSwap = () => {
     if (!userId) dispatch(setLoginModalOpen(true));
     else {
-      dispatch(setSwapModal(true));
-      trigger({ id });
+      handleSwap();
     }
   };
-
-  useEffect(() => {
-    if (bookData) {
-      dispatch(setSwapBook(bookData));
-      dispatch(setBookIdToSwapWith(id));
-    }
-  }, [bookData, dispatch, id]);
 
   useEffect(() => {
     dispatch(setBookLoading(bookLoading));
@@ -101,7 +100,10 @@ export default function BookCard({
               <PiDotsThreeBold
                 size={24}
                 className="text-blackOlive"
-                onClick={() => setClicked((prev) => !prev)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setClicked((prev) => !prev);
+                }}
               />
             </div>
           )}
@@ -111,7 +113,10 @@ export default function BookCard({
               className="absolute right-2 top-10 w-[138px] bg-white shadow-lg rounded-md z-10"
             >
               <Button
-                onClick={() => navigate(`/profile/update-book/${id}`)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/profile/update-book/${id}`);
+                }}
                 className="flex items-center gap-2 p-2 border-b border-[#D3D3D3] w-full cursor-pointer"
                 type="button"
               >
@@ -119,7 +124,10 @@ export default function BookCard({
                 <p className="font-poppins font-normal text-sm">Edit</p>
               </Button>
               <Button
-                onClick={() => setOpen(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpen(true);
+                }}
                 className="flex items-center gap-2 p-2 w-full"
                 type="button"
               >
@@ -132,8 +140,11 @@ export default function BookCard({
           )}
           <DeleteConfirmModal
             open={open}
-            onClose={() => setOpen(false)}
-            onDelete={handleBookDeleteById}
+            onClose={(e) => {
+              e?.stopPropagation();
+              setOpen(false);
+            }}
+            onDelete={(e) => handleBookDeleteById(e)}
             isLoading={isLoading}
           />
           <div className="relative">
