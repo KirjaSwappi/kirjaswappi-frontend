@@ -81,7 +81,7 @@ const swapSlice = createSlice({
         const error = (action.payload as FetchBaseQueryError)?.data as IErrorPayload;
 
         let errorMessage: string | undefined;
-
+        // console.log(error?.error?.message);
         if (error && typeof error.error === 'object' && error.error !== null) {
           errorMessage = error.error.message;
         }

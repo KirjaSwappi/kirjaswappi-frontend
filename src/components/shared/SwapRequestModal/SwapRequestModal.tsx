@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { SwapType } from '../../../../types/enum';
 import { ERROR } from '../../../constant/MESSAGETYPE';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
@@ -12,7 +12,6 @@ import {
   setSwapModal,
 } from '../../../redux/feature/swap/swapSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import Button from '../Button';
 import ControlledInputField from '../ControllerField';
 import InputLabel from '../InputLabel';
 import Line from '../Line';
@@ -20,10 +19,9 @@ import MessageToastify from '../MessageToastify';
 import RequestFailedAnimation from './_components/RequestErrorAnimation';
 import RequestProcessingAnimation from './_components/RequestProcesingAnimation';
 import RequestSuccessAnimation from './_components/RequestSuccessAnimation';
-import SwapBookCarousels from './_components/SwapBookCarousels';
 import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';
-import SwapController from './_components/SwapController';
+import SwapFormControllers from './_components/SwapFormControllers';
 import BookImage from './_components/SwapModalBookImage';
 import ConditionDisplay from './_components/SwapModalConditionDisplay';
 import GenreTags from './_components/SwapModalGenreTags';
@@ -58,9 +56,9 @@ export default function SwapModal() {
         condition: [],
         language: [],
         search: '',
+        pageNumber: 0,
       },
       ownerId: id,
-      pageSize: 10,
     },
     { skip: !swappableGenresLength },
   );
@@ -70,7 +68,7 @@ export default function SwapModal() {
     mode: 'onChange',
     defaultValues: swapRequestDefaultValues(),
   });
-  const { control, watch, setValue, handleSubmit, reset } = methods;
+  const { watch, setValue, handleSubmit, reset } = methods;
   const selectedBook = watch('selectedBook');
   const currentSwapType = watch('swapType');
   const conditionItem = SwapConditionList[swapType];
@@ -183,55 +181,11 @@ export default function SwapModal() {
               <FormProvider {...methods}>
                 <form onSubmit={handleSubmit((data) => handleSwapRequest(data))}>
                   <div className="-mt-3">
-                    <Controller
-                      name="swapType"
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <>
-                            <Button
-                              type="button"
-                              onClick={() => field.onChange(SwapType.BYBOOKS)}
-                              aria-pressed={field.value === SwapType.BYBOOKS}
-                              className="w-full"
-                            >
-                              <input
-                                id={SwapType.BYBOOKS}
-                                type="radio"
-                                value={SwapType.BYBOOKS}
-                                readOnly
-                                hidden
-                              />
-                              <div
-                                className={`${currentSwapType === SwapType.BYBOOKS ? 'pb-2.5' : ''}`}
-                              ></div>
-                              <SwapBookCarousels swapBook={swappableBooks} />
-                            </Button>
-                          </>
-                        );
-                      }}
-                    />
-                    {swapType === SwapType.BYGENRES && (
-                      <SwapController
-                        swapTitle="Select from your library"
-                        swapType={SwapType.BYGENRES}
-                        books={data?._embedded?.books}
-                        swapDescription="You can offer from your library or, ask for genres"
-                      />
-                    )}
-                    {swapType === SwapType.OPENTOOFFERS && (
-                      <SwapController
-                        swapTitle="Select from your library"
-                        swapType={SwapType.OPENTOOFFERS}
-                        books={books}
-                        swapDescription="You can offer from your library or, ask for open to offer"
-                      />
-                    )}
-
-                    <SwapController
-                      swapTitle="Ask for giveaway"
-                      swapType={SwapType.GIVEAWAY}
-                      swapDescription="You can offer from your library or, ask for giveaway"
+                    <SwapFormControllers
+                      swapType={swapType}
+                      swappableBooks={swappableBooks}
+                      books={books}
+                      data={data?._embedded?.books}
                     />
                   </div>
                   <Line className="mt-2 bg-AntiFlashWhite" />

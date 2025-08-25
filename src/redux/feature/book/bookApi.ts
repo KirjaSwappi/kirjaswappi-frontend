@@ -93,10 +93,10 @@ export const bookApi = api.injectEndpoints({
         filter?: IFilterData;
         ownerId?: string;
         notOwnerId?: string;
+        pageNumber?: number;
         pageSize?: number;
       }) => {
         const queryParams = new URLSearchParams();
-
         // Add filter query parameters
         const filterQuery = buildBookQueryParams(filter);
         if (filterQuery) {
@@ -109,7 +109,6 @@ export const bookApi = api.injectEndpoints({
         // Add owner and notOwnerId
         if (ownerId) queryParams.append('ownerId', ownerId);
         if (notOwnerId) queryParams.append('notOwnerId', notOwnerId);
-
         // Add pagination
         queryParams.append('page', String(filter.pageNumber));
         queryParams.append('size', String(pageSize));
