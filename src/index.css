@@ -70,3 +70,23 @@
       #000 0
     );
 }
+
+/* Scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2); /* Change to match your theme */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin; /* Options: auto, thin, none */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}

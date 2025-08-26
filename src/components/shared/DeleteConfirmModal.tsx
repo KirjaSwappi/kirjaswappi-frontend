@@ -3,8 +3,8 @@ import Button from './Button';
 
 interface DeleteConfirmModalProps {
   open: boolean;
-  onClose?: () => void;
-  onDelete?: () => void;
+  onClose?: (e?: React.MouseEvent) => void;
+  onDelete?: (e?: React.MouseEvent) => void;
   isLoading?: boolean;
   title?: string;
   message?: string;

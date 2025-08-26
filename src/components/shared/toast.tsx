@@ -7,7 +7,8 @@ type ToastType = 'success' | 'error';
 export const showToast = (type: ToastType, message: string) => {
   const baseOptions: ToastOptions = {
     position: 'bottom-left',
-    closeButton: <IoClose className="text-white absolute right-0" />,
+    style: { width: '360px' },
+    closeButton: <IoClose className="text-white absolute right-1" />,
     className:
       type === 'success'
         ? 'bg-[#3FBA49] text-white rounded-md px-4 py-3'

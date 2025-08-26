@@ -22,7 +22,7 @@ export default function Search({ onClose }: { onClose?: () => void }) {
 
   return (
     <div ref={reference} className="relative w-full">
-      <div className="w-full h-[48px] rounded-3xl bg-white border border-[#E5E5E5] shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2">
+      <div className="w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2">
         <Input
           ref={inputRef}
           value={query}

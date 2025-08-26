@@ -9,19 +9,28 @@ import {
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
+import { isFetchBaseQueryError } from '../../../utility/rtkError';
 export default function UserProfile() {
   const params = useParams();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
   const userId = params.id || id;
-  const { data: imageData, isLoading } = useGetUserProfileImageQuery(
+  const {
+    data: imageData,
+    isLoading,
+    error,
+  } = useGetUserProfileImageQuery(
     { userId: userId },
-    { skip: !userId },
+    { skip: !userId, refetchOnMountOrArgChange: true },
   );
-  const { data: coverImage, isLoading: isCoverLoading } = useGetUserCoverImageQuery(
+  const {
+    data: coverImage,
+    isLoading: isCoverLoading,
+    error: coverError,
+  } = useGetUserCoverImageQuery(
     { userId: userId },
-    { skip: !userId },
+    { skip: !userId, refetchOnMountOrArgChange: true },
   );
   const { data, isLoading: isUserLoading } = useGetUserByIdQuery(
     { userId: userId as string },
@@ -38,7 +47,8 @@ export default function UserProfile() {
             <div className="w-full h-full bg-platinum animate-pulse shadow-sm"></div>
           ) : (
             <div className=" h-[108px]">
-              {coverImage?.imageUrl === undefined ? (
+              {coverImage?.imageUrl === undefined ||
+              (isFetchBaseQueryError(coverError) && coverError.status === 403) ? (
                 <Image src={profileCover} className="w-full h-full " />
               ) : (
                 <Image
@@ -54,7 +64,8 @@ export default function UserProfile() {
             <div className="w-full h-full bg-platinum animate-pulse rounded-full shadow-sm"></div>
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              {imageData?.imageUrl === undefined ? (
+              {imageData?.imageUrl === undefined ||
+              (isFetchBaseQueryError(error) && error?.status === 403) ? (
                 <FaRegUser size={48} className="text-night" />
               ) : (
                 <Image
@@ -106,7 +117,7 @@ export default function UserProfile() {
               <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
             </div>
-            <span className="h-12 w-[1px] block bg-[#E5E5E5]"></span>
+            <span className="h-12 w-[1px] block bg-platinumMix"></span>
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>

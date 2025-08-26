@@ -12,7 +12,7 @@ export default function BottomNavItem({ route, icon, isActive, value }: IBottomN
   return (
     <Link
       to={route || '#'}
-      className={`flex flex-col items-center gap-1 p-1`}
+      className={`flex flex-col items-center gap-1 p-1 `}
       style={{
         transition: 'background-color 0.2s ease-in-out',
       }}
