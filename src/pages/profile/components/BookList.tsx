@@ -1,21 +1,30 @@
+import { useParams } from 'react-router-dom';
 import BookCard from '../../../components/shared/BookCard';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
 import { useSkeleton } from '../../../hooks/useSkeleton';
+import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { IBook } from '../../books/interface';
 
 export default function BookList() {
   const { showSkeleton } = useSkeleton();
+  const params = useParams();
   const {
-    loading,
-    userInformation: { books },
+    userInformation: { id },
   } = useAppSelector((state) => state.auth);
+  const userId = params.id;
+  const { data, isLoading } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 sm:gap-[8px] lg:gap-[24px]">
-      {loading || showSkeleton
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
+      {isLoading || showSkeleton
         ? Array.from({ length: 10 }, (_, index) => <BookSkeleton key={index} />)
-        : books && books?.map((book: IBook, index: number) => <BookCard key={index} book={book} />)}
+        : data?._embedded?.books &&
+          data?._embedded?.books?.map((book: IBook, index: number) => {
+            return (
+              <BookCard isProfile key={index} book={book} hasPermission={id === book.ownerId} />
+            );
+          })}
     </div>
   );
 }

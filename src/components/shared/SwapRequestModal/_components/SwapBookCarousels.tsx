@@ -14,7 +14,7 @@ export default function SwapBookCarousels({ swapBook }: { swapBook: ISwapBook[] 
         align: 'start',
         loop: true,
       }}
-      className="relative pt-3"
+      className="relative"
     >
       <CarouselContent>
         {swapBook.map((item: ISwapBook) => {
@@ -32,7 +32,7 @@ export default function SwapBookCarousels({ swapBook }: { swapBook: ISwapBook[] 
                     <Image src={TicMark} alt="ticmark" className="w-[18px]" />
                   </div>
                 )}
-                <div className="w-[104px] h-[120px] object-cover bg-center bg-cover border border-[#E5E5E5] rounded-lg">
+                <div className="w-[104px] h-[120px] object-cover bg-center bg-cover border border-platinumMix rounded-lg">
                   <Image
                     className="mx-auto w-full h-full object-cover rounded-lg"
                     src={item.coverPhotoUrl}

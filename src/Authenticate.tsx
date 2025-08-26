@@ -9,9 +9,12 @@ import routes from './routes/route';
 export default function Authenticate() {
   const dispatch = useDispatch();
   const { userInformation } = useAppSelector((state) => state.auth);
-  const { data } = useGetUserByIdQuery(userInformation.id, {
-    skip: !userInformation.id,
-  });
+  const { data } = useGetUserByIdQuery(
+    { userId: userInformation.id as string },
+    {
+      skip: !userInformation.id,
+    },
+  );
 
   useEffect(() => {
     if (data) {

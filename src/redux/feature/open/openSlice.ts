@@ -5,6 +5,7 @@ export interface IOpenInitialState {
   swapModal: boolean;
   showAlert: boolean;
   message: string;
+  loginModalOpen: boolean;
 }
 
 const initialState: IOpenInitialState = {
@@ -12,6 +13,7 @@ const initialState: IOpenInitialState = {
   swapModal: false,
   showAlert: false,
   message: '',
+  loginModalOpen: false,
 };
 const openSlice = createSlice({
   name: 'open',
@@ -20,8 +22,11 @@ const openSlice = createSlice({
     setOpen: (state, action: PayloadAction<boolean>) => {
       state.open = action.payload;
     },
+    setLoginModalOpen: (state, action: PayloadAction<boolean>) => {
+      state.loginModalOpen = action.payload;
+    },
   },
 });
 
-export const { setOpen } = openSlice.actions;
+export const { setOpen, setLoginModalOpen } = openSlice.actions;
 export default openSlice.reducer;

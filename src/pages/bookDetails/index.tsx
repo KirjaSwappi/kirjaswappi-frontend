@@ -9,10 +9,10 @@ import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
+import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
-import { setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import BookActionButton from './_components/BookActionButton';
 import BookDescription from './_components/BookDescription';
@@ -23,12 +23,14 @@ import MoreFromThisUserBooks from './_components/MoreFromThisUserBooks';
 import OfferedBy from './_components/OfferedBy';
 import SwapRequestButton from './_components/SwapRequestButton';
 import VerticalImageSlider from './_components/VerticalImageSlider';
+
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const [isProfile, setProfile] = useState(false);
+  const { handleLoginOrSwap } = useLoginModalOrSwapRequest();
   const { userInformation } = useAppSelector((state) => state.auth);
+  const { loginModalOpen } = useAppSelector((state) => state.open);
   const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
   const { data: userProfile } = useGetUserProfileImageQuery(
     { userId: bookData?.owner?.id },
@@ -39,10 +41,9 @@ export default function BookDetails() {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (userInformation?.id === bookData?.owner?.id) {
-      setProfile(true);
-    }
-  }, [bookData?.owner?.id]);
+    if (userInformation?.id === bookData?.owner?.id) setProfile(true);
+    else setProfile(false);
+  }, [bookData?.owner?.id, userInformation.id]);
 
   const navigateToEditBook = () => {
     if (isProfile) {
@@ -50,47 +51,39 @@ export default function BookDetails() {
     }
   };
 
-  const loginModalOrSwapRequestModal = (): void => {
-    if (userInformation.email) {
-      dispatch(setSwapModal(true));
-      dispatch(setSwapBook(bookData));
-    } else {
-      // =========== If user state is empty show the login modal for login user ===========
-      console.log('ok');
-    }
-  };
-
   const isEditBookOrSwapRequestFn = () => {
     if (isProfile) navigateToEditBook();
-    else loginModalOrSwapRequestModal();
+    else handleLoginOrSwap(bookData, id);
   };
 
   if (bookLoading) return <Loader />;
   goToTop();
   return (
     <div className="bg-light lg:bg-white min-h-screen pb-20">
-      <div className="lg:hidden left-0 top-0 w-full flex justify-between px-4 bg-white h-14 z-50 fixed">
-        <div className="flex items-center gap-4">
-          <Image
-            src={leftArrowIcon}
-            alt="icon"
-            className="cursor-pointer"
-            onClick={() => navigate(-1)}
-          />
-          <h2 className="text-black text-base font-medium leading-none mt-[3px]">
-            {t('bookDetails.title')}
-          </h2>
+      {!loginModalOpen && (
+        <div className="lg:hidden left-0 top-0 w-full flex justify-between px-4 bg-white h-14 z-50 fixed">
+          <div className="flex items-center gap-4">
+            <Image
+              src={leftArrowIcon}
+              alt="icon"
+              className="cursor-pointer"
+              onClick={() => navigate(-1)}
+            />
+            <h2 className="text-black text-base font-medium leading-none mt-[3px]">
+              {t('bookDetails.title')}
+            </h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <Image src={shareIcon} alt="icon" className="h-5" />
+            <Image
+              src={isProfile ? editIcon : bookmarkIcon}
+              alt="icon"
+              onClick={navigateToEditBook}
+              className="w-6 h-6"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Image src={shareIcon} alt="icon" className="h-5" />
-          <Image
-            src={isProfile ? editIcon : bookmarkIcon}
-            alt="icon"
-            onClick={navigateToEditBook}
-            className="w-6 h-6"
-          />
-        </div>
-      </div>
+      )}
       <div className="bg-light pt-6 hidden lg:block">
         <div className="container">
           <Breadcrumb />
@@ -115,10 +108,10 @@ export default function BookDetails() {
                 <h1 className="font-medium lg:font-semibold text-black lg:text-[#262626] text-sm lg:text-3xl xl:text-[40px] xl:leading-[48px] mb-2 font-poppins">
                   {bookData?.title}
                 </h1>
-                {bookData.author && (
+                {bookData?.author && (
                   <p className="text-blackOlive text-sm font-poppins font-normal">
                     {' '}
-                    by {bookData.author}
+                    by {bookData?.author}
                   </p>
                 )}
                 <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
@@ -142,7 +135,7 @@ export default function BookDetails() {
                     <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-8 lg:mt-5 mb-2 text-left ">
                       Book Description
                     </h3>
-                    <BookDescription description={bookData.description} />
+                    <BookDescription description={bookData?.description} />
                   </div>
                   <div>
                     <div className="flex flex-col lg:items-center lg:flex-row gap-3 items-center mt-8 mb-2">
@@ -163,7 +156,11 @@ export default function BookDetails() {
                 </div>
               </div>
               <div className="hidden lg:block">
-                <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+                <OfferedBy
+                  imageUrl={userProfile?.imageUrl}
+                  ownerName={bookData?.owner?.name}
+                  ownerId={bookData?.owner?.id}
+                />
               </div>
               <div className="mt-5 hidden lg:block">
                 <BookActionButton
@@ -178,17 +175,18 @@ export default function BookDetails() {
           {bookData?.condition && <BookType condition={bookData?.condition} />}
         </div>
         <div className="container lg:hidden">
-          <OfferedBy imageUrl={userProfile?.imageUrl} ownerName={bookData?.owner?.name} />
+          <OfferedBy
+            imageUrl={userProfile?.imageUrl}
+            ownerName={bookData?.owner?.name}
+            ownerId={bookData?.owner?.id}
+          />
         </div>
       </div>
       <div className="container">
         <MoreFromThisUserBooks bookId={id} />
       </div>
-      {!isProfile && (
-        <SwapRequestButton
-          ownerName={bookData?.owner?.name}
-          onClick={loginModalOrSwapRequestModal}
-        />
+      {!loginModalOpen && !isProfile && (
+        <SwapRequestButton ownerName={bookData?.owner?.name} onClick={isEditBookOrSwapRequestFn} />
       )}
     </div>
   );

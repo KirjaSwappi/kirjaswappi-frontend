@@ -1,4 +1,4 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Input from './Input';
 import Select from './Select';
@@ -15,52 +15,62 @@ interface ControlledInputFieldProps {
   }[];
   radioOptions?: { label: string; value: string }[];
   showErrorMessage?: boolean;
+  autoComplete?: 'on' | 'off';
 }
 
-const ControlledInputField: React.FC<ControlledInputFieldProps> = ({
-  name,
-  type = 'input',
-  placeholder,
-  className,
-  options,
-  showErrorMessage = false,
-}) => {
-  const { control } = useFormContext();
+const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldProps>(
+  (
+    {
+      name,
+      type = 'input',
+      placeholder,
+      className,
+      options,
+      showErrorMessage = false,
+      autoComplete = 'on',
+    },
+    ref,
+  ) => {
+    const { control } = useFormContext();
 
-  return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field, fieldState: { error } }) => {
-        return type === 'input' ? (
-          <Input
-            {...field}
-            placeholder={placeholder}
-            error={error?.message}
-            className={className}
-            showErrorMessage={showErrorMessage}
-          />
-        ) : type === 'select' ? (
-          <Select
-            {...field}
-            placeholder={placeholder}
-            options={options || []}
-            error={error?.message}
-            className={className}
-            showErrorMessage={showErrorMessage}
-          />
-        ) : (
-          <TextArea
-            {...field}
-            placeholder={placeholder}
-            error={error?.message}
-            className={className}
-            showErrorMessage={showErrorMessage}
-          />
-        );
-      }}
-    />
-  );
-};
+    return (
+      <Controller
+        name={name}
+        control={control}
+        render={({ field, fieldState: { error } }) => {
+          return type === 'input' ? (
+            <Input
+              {...field}
+              ref={ref}
+              placeholder={placeholder}
+              error={error?.message}
+              className={className}
+              showErrorMessage={showErrorMessage}
+              autoComplete={autoComplete}
+            />
+          ) : type === 'select' ? (
+            <Select
+              {...field}
+              placeholder={placeholder}
+              options={options || []}
+              error={error?.message}
+              className={className}
+              showErrorMessage={showErrorMessage}
+            />
+          ) : (
+            <TextArea
+              {...field}
+              placeholder={placeholder}
+              error={error?.message}
+              className={className}
+              showErrorMessage={showErrorMessage}
+            />
+          );
+        }}
+      />
+    );
+  },
+);
 
+ControlledInputField.displayName = 'ControlledInputField';
 export default ControlledInputField;

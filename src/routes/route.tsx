@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
+import AppErrorBoundary from '../components/error/AppErrorBoundary';
+import GlobalError from '../components/error/GlobalError';
 import AddUpdateBook from '../pages/addUpdateBook';
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
@@ -8,18 +10,15 @@ import BookDetails from '../pages/bookDetails';
 import Books from '../pages/books';
 import Profile from '../pages/profile';
 import EditProfile from '../pages/profile/components/EditProfile';
-import UserProfile from '../pages/profile/components/UserProfile';
-import Inbox from '../pages/user/inbox/Inbox';
-import { Index } from '../pages/user/inboxChat';
-import GlobalError from '../components/error/GlobalError';
-import AppErrorBoundary from '../components/error/AppErrorBoundary';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
+import NotFound from '../components/error/NotFound';
 import ContactUs from '../pages/contactUs/ContactUs';
+import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
-import NotFound from '../components/error/NotFound';
+import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
 
 const routes = createBrowserRouter([
   {
@@ -54,28 +53,40 @@ const routes = createBrowserRouter([
       {
         path: '/profile',
         element: (
-          <PrivateRoute>
-            <Profile />
-          </PrivateRoute>
+          // <PrivateRoute>
+          <Profile />
+          // </PrivateRoute>
         ),
         children: [
           {
             loader: () => <p>Loading...</p>,
             index: true,
-            path: 'user-profile',
-            element: <UserProfile />,
+            path: 'user-profile/:id',
+            element: <ProfileDashboard />,
           },
           {
             path: 'edit-user',
-            element: <EditProfile />,
+            element: (
+              <PrivateRoute>
+                <EditProfile />
+              </PrivateRoute>
+            ),
           },
           {
             path: 'add-book',
-            element: <AddUpdateBook />,
+            element: (
+              <PrivateRoute>
+                <AddUpdateBook />
+              </PrivateRoute>
+            ),
           },
           {
             path: 'update-book/:id',
-            element: <AddUpdateBook />,
+            element: (
+              <PrivateRoute>
+                <AddUpdateBook />
+              </PrivateRoute>
+            ),
           },
         ],
       },
@@ -88,12 +99,12 @@ const routes = createBrowserRouter([
         ),
         children: [
           {
-            path: 'inbox',
-            element: <Inbox />,
+            path: 'messages',
+            element: <Messages />,
           },
           {
-            path: 'inbox/chat/:id',
-            element: <Index />,
+            path: 'messages/:id',
+            element: <Messages />,
           },
         ],
       },

@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import locationIcon from '../../../assets/location-icon.png';
-import rating from '../../../assets/rating.png';
 import upArrowIcon from '../../../assets/upArrow.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
@@ -14,23 +13,13 @@ export default function About() {
   return (
     <div>
       {aboutMe && <p className="text-xs font-light font-poppins text-grayDark">{aboutMe}</p>}
-      <div className="bg-white py-2 px-5 grid grid-cols-3 my-5 rounded-2xl">
+      <div className="bg-white py-2 px-5 grid grid-cols-2 my-5 rounded-lg">
         <div className="relative">
           <div className="text-center after:absolute after:right-0 after:top-0 after:h-[30px] after:w-[1px] after:bg-[#E4E4E4]">
             <p className="text-grayDark text-xs font-poppins font-normal">
               {t('profile.totalSwaps')}
             </p>
             <h3 className="text-black text-xs font-normal font-poppins">3</h3>
-          </div>
-        </div>
-        <div className="relative">
-          <div className="text-center flex flex-col items-center after:absolute after:right-0 after:top-0 after:h-[30px] after:w-[1px] after:bg-[#E4E4E4]">
-            <p className="text-grayDark text-xs font-poppins font-normal ">
-              {t('profile.usersReviews')}
-            </p>
-            <h3 className="text-black text-xs font-normal font-poppins flex items-center gap-1">
-              <Image src={rating} alt="rating" /> <span className="inline-block mt-[2px]">4.3</span>
-            </h3>
           </div>
         </div>
 

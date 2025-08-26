@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaRegUser } from 'react-icons/fa';
 import { IoCamera } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import bg from '../../../assets/bookdetailsbg.jpg';
 import closeIcon from '../../../assets/close.svg';
 import leftArrowIcon from '../../../assets/leftArrow.png';
@@ -270,10 +270,10 @@ export default function EditProfile() {
         <div className="flex items-center gap-2">
           <button
             className="w-5"
-            onClick={() => navigate('/profile/user-profile')}
+            onClick={() => navigate(-1)}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
-                navigate('/profile/user-profile');
+                navigate(-1);
               }
             }}
             aria-label="Go back to profile"

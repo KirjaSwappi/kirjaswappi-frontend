@@ -2,6 +2,7 @@ import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { setCookie } from '../../../utility/cookies';
 
 import { api } from '../../api/apiSlice';
+import { bookApi } from '../book/bookApi';
 
 type LoginResponse = { id: string; email: string };
 const handleLoginCookie = async (
@@ -50,8 +51,9 @@ export const authApi = api.injectEndpoints({
           body: { idToken: idToken },
         };
       },
-      onQueryStarted: async (_args, { queryFulfilled }) => {
+      onQueryStarted: async (_args, { dispatch, queryFulfilled }) => {
         await handleLoginCookie(queryFulfilled);
+        dispatch(bookApi.endpoints.getAllBooks.initiate({}));
       },
     }),
     sentOTP: builder.query({
@@ -104,13 +106,13 @@ export const authApi = api.injectEndpoints({
       },
     }),
     getUserById: builder.query({
-      query: (id) => {
+      query: ({ userId }: { userId: string }) => {
         return {
-          url: `/users/${id}`,
+          url: `/users/${userId}`,
           method: 'GET',
         };
       },
-      providesTags: ['UpdateUser', 'AddBook', 'UpdateBook'],
+      providesTags: ['UpdateUser', 'AddBook', 'UpdateBook', 'DeleteBook'],
     }),
     updateUserById: builder.mutation({
       query: ({ id, data }) => {
