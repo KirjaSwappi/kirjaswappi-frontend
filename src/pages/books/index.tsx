@@ -5,6 +5,7 @@ import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
+import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
 import { IBook } from './interface';
 
@@ -74,8 +75,11 @@ export default function Books() {
   return (
     <section>
       <div className="container min-h-[80vh] pb-24 lg:py-6">
-        <div className="mb-5">
+        <div>
           <HeroSection />
+        </div>
+        <div className="relative">
+          <Filter />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 ">
           {books.map((book: IBook, idx: number) => {
