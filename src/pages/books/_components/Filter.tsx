@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { MdKeyboardArrowDown } from 'react-icons/md';
+import { useDispatch } from 'react-redux';
 import CategoryIcon from '../../../assets/categoryIcon.svg';
 import filtergrayIcon from '../../../assets/filtergray.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
+import { setFilterOpen } from '../../../redux/feature/filter/filterSlice';
 export default function Filter() {
+  const dispatch = useDispatch();
   const [isFixed, setIsFixed] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -52,7 +55,10 @@ export default function Filter() {
             </Button>
           </div>
           <div className="flex items-center gap-2">
-            <Button className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium">
+            <Button
+              onClick={() => dispatch(setFilterOpen(true))}
+              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+            >
               <Image src={filtergrayIcon} alt="category" /> Filter
             </Button>
             <Button className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium">
