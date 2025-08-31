@@ -1,22 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import book from '../../../assets/book3.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
-import { selectChat } from '../../../redux/feature/messages/messagesSlice';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { truncateText } from '../../../utility/helper';
+import { useGetAllMessagesByUserIdQuery } from '../../../redux/feature/messages/messagesApi';
+import { useAppSelector } from '../../../redux/hooks';
 export default function ChatList() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  // const navigate = useNavigate();
+  // const dispatch = useAppDispatch();
   const [search, setSearch] = useState<string>('');
-  const { chats, selectedChatId } = useAppSelector((state) => state.chat);
-
-  const filteredChats = chats.filter((chat) => {
-    return chat.name.toLowerCase().includes(search.toLowerCase());
-  });
+  // const { chats, selectedChatId } = useAppSelector((state) => state.chat);
+  const {
+    userInformation: { id },
+  } = useAppSelector((state) => state.auth);
+  const { data: messages } = useGetAllMessagesByUserIdQuery({ userId: id }, { skip: !id });
+  console.log(messages);
+  // const filteredChats = chats.filter((chat) => {
+  //   return chat.name.toLowerCase().includes(search.toLowerCase());
+  // });
   return (
     <div className="flex flex-col h-full">
       <div className="shrink-0">
@@ -49,31 +52,31 @@ export default function ChatList() {
       </div>
 
       <div className="flex-1 overflow-y-auto custom-scrollbar pb-16 lg:pb-0 lg:px-0">
-        {filteredChats.length === 0 ? (
+        {messages?.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-gray-500 text-sm font-poppins">No chats found.</p>
           </div>
         ) : (
           <div>
-            {filteredChats.map((chat, index) => {
-              const lastMsg = chat.messages[chat.messages.length - 1];
+            {messages?.map((chat: any, index: number) => {
+              // const lastMsg = chat.messages[chat.messages.length - 1];
               return (
                 <div
                   key={chat.id}
-                  className={`group border-b border-platinumMix ${filteredChats.length - 1 > index ? '' : 'mb-6'}`}
+                  className={`group border-b border-platinumMix ${messages.length - 1 > index ? '' : 'mb-6'}`}
                 >
                   <Button
                     type="button"
-                    onClick={() => {
-                      dispatch(selectChat(chat.id));
-                      navigate({
-                        pathname: '/user/messages',
-                        search: `?${createSearchParams({ messageId: chat.id })}`,
-                      });
-                    }}
+                    // onClick={() => {
+                    //   dispatch(selectChat(chat.id));
+                    //   navigate({
+                    //     pathname: '/user/messages',
+                    //     search: `?${createSearchParams({ messageId: chat.id })}`,
+                    //   });
+                    // }}
                     className="w-full py-3 text-left px-3 cursor-pointer focus:outline-none items-center gap-4 flex group-hover:bg-AntiFlashWhite"
                     tabIndex={0}
-                    aria-pressed={selectedChatId === chat.id}
+                    // aria-pressed={selectedChatId === chat.id}
                   >
                     <div className="w-14 min-w-14 h-14 max-h-14">
                       <Image src={book} alt="book cover" className="rounded-full w-full h-full" />
@@ -82,7 +85,7 @@ export default function ChatList() {
                       <div className="flex items-center justify-between">
                         <div className="w-full flex items-center gap-1">
                           <p className="font-medium text-smokyBlack text-sm font-poppins">
-                            {truncateText(chat.name, 12)}
+                            {/* {truncateText(chat.name, 12)} */}
                           </p>
                           <span className="text-grayDark font-poppins text-sx">[by Rahat]</span>
                         </div>
@@ -94,7 +97,7 @@ export default function ChatList() {
                             chat.unread ? 'text-smokyBlack' : 'text-grayDark'
                           }`}
                         >
-                          {truncateText(lastMsg?.text, 25)}
+                          {/* {truncateText(lastMsg?.text, 25)} */}
                         </p>
                         {chat.unread && (
                           <div className="w-6 h-6 text-white bg-primary rounded-full flex items-center justify-center">
