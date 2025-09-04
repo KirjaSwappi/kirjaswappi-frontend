@@ -11,9 +11,9 @@ export const messagesApi = api.injectEndpoints({
       },
     }),
     getSwapRequestMessagesByUserId: builder.query({
-      query: ({ userId }: { userId: string }) => {
+      query: ({ id, userId }: { id: string; userId: string }) => {
         return {
-          url: `/swap-requests/${userId}/chat`,
+          url: `/swap-requests/${id}/chat?userId=${userId}`,
           method: 'GET',
         };
       },

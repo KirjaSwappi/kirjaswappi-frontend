@@ -1,14 +1,23 @@
 import { useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Image from '../../../components/shared/Image';
+import { useGetSwapRequestMessagesByUserIdQuery } from '../../../redux/feature/messages/messagesApi';
 import { receiveMessage } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 export default function ChatWindow() {
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
+  const messageId = searchParams.get('messageId');
+  const userId = searchParams.get('userId');
   const bottomRef = useRef<HTMLDivElement>(null);
   const { chats, selectedChatId } = useAppSelector((state) => state.chat);
-
+  const { data: messages } = useGetSwapRequestMessagesByUserIdQuery(
+    { id: messageId || '', userId: userId || '' },
+    { skip: !messageId },
+  );
   const findChat = chats.find((chat) => chat.id === selectedChatId);
-
+  console.log(searchParams);
+  console.log(messages);
   useEffect(() => {
     const timer = setTimeout(() => {
       dispatch(receiveMessage({ chatId: selectedChatId, text: 'Hello, this is a reply!' }));

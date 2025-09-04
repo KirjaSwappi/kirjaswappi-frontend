@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import book from '../../../assets/book3.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
 import { useGetAllMessagesByUserIdQuery } from '../../../redux/feature/messages/messagesApi';
 import { useAppSelector } from '../../../redux/hooks';
+import { truncateText } from '../../../utility/helper';
 export default function ChatList() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const dispatch = useAppDispatch();
   const [search, setSearch] = useState<string>('');
   // const { chats, selectedChatId } = useAppSelector((state) => state.chat);
@@ -60,6 +62,7 @@ export default function ChatList() {
           <div>
             {messages?.map((chat: any, index: number) => {
               // const lastMsg = chat.messages[chat.messages.length - 1];
+              console.log(chat);
               return (
                 <div
                   key={chat.id}
@@ -67,13 +70,16 @@ export default function ChatList() {
                 >
                   <Button
                     type="button"
-                    // onClick={() => {
-                    //   dispatch(selectChat(chat.id));
-                    //   navigate({
-                    //     pathname: '/user/messages',
-                    //     search: `?${createSearchParams({ messageId: chat.id })}`,
-                    //   });
-                    // }}
+                    onClick={() => {
+                      // dispatch(selectChat(chat.id));
+                      navigate({
+                        pathname: '/user/messages',
+                        search: `?${createSearchParams({
+                          messageId: String(chat.id ?? ''),
+                          userId: id ?? '',
+                        })}`,
+                      });
+                    }}
                     className="w-full py-3 text-left px-3 cursor-pointer focus:outline-none items-center gap-4 flex group-hover:bg-AntiFlashWhite"
                     tabIndex={0}
                     // aria-pressed={selectedChatId === chat.id}
@@ -85,9 +91,11 @@ export default function ChatList() {
                       <div className="flex items-center justify-between">
                         <div className="w-full flex items-center gap-1">
                           <p className="font-medium text-smokyBlack text-sm font-poppins">
-                            {/* {truncateText(chat.name, 12)} */}
+                            {truncateText(chat?.bookToSwapWith?.title, 12)}
                           </p>
-                          <span className="text-grayDark font-poppins text-sx">[by Rahat]</span>
+                          <span className="text-grayDark font-poppins text-sx">
+                            [{chat?.sender?.name}]
+                          </span>
                         </div>
                         <p className="font-poppins text-blackOlive text-xs w-7">5 m</p>
                       </div>
