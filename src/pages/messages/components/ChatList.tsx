@@ -18,7 +18,7 @@ export default function ChatList() {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
   const { data: messages } = useGetAllMessagesByUserIdQuery({ userId: id }, { skip: !id });
-  console.log(messages);
+
   // const filteredChats = chats.filter((chat) => {
   //   return chat.name.toLowerCase().includes(search.toLowerCase());
   // });
@@ -62,7 +62,7 @@ export default function ChatList() {
           <div>
             {messages?.map((chat: any, index: number) => {
               // const lastMsg = chat.messages[chat.messages.length - 1];
-              console.log(chat);
+              // console.log(chat);
               return (
                 <div
                   key={chat.id}
@@ -94,7 +94,7 @@ export default function ChatList() {
                             {truncateText(chat?.bookToSwapWith?.title, 12)}
                           </p>
                           <span className="text-grayDark font-poppins text-sx">
-                            [{chat?.sender?.name}]
+                            [{truncateText(chat?.sender?.name, 14)}]
                           </span>
                         </div>
                         <p className="font-poppins text-blackOlive text-xs w-7">5 m</p>

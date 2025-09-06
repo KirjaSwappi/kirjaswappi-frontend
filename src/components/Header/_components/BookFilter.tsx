@@ -19,7 +19,7 @@ import { genreIcons } from './genreIcons';
 
 export default function BookFilter() {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const { data: genreData = [], isLoading: genreLoading } = useGetGenreQuery(undefined);
+  const { data: genreData = [] } = useGetGenreQuery(undefined);
   const { data: languageDataOptions, isLoading: languageLoading } =
     useGetSupportLanguageQuery(undefined);
   const { data: conditionDataOptions, isLoading: conditionLoading } =
@@ -30,7 +30,7 @@ export default function BookFilter() {
     ...g,
     icon: genreIcons[g.name],
   }));
-  console.log(genreLoading);
+  // console.log(genreLoading);
   const toggleExpand = (id: string) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
