@@ -12,6 +12,7 @@ import MobileHeader from './MobileHeader';
 export default function TopBar() {
   const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+
   useEffect(() => {
     const handleScroll = () => {
       const searchBar = document.querySelector('#hero-search');

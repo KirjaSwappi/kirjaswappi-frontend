@@ -36,7 +36,7 @@ export default function Filter() {
     <div ref={placeholderRef} className="w-full">
       <div
         ref={filterRef}
-        className={`z-50  ${
+        className={`z-10 ${
           isFixed
             ? 'fixed top-[80px] left-0 right-0 bg-white shadow-md border-t border-platinumMix'
             : 'relative bg-transparent border-none'
