@@ -30,6 +30,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
   const params = pathname?.split('/').reverse()[0];
   const showTopHeaderPath = [
     '/',
+    '/map',
     `/book-details/${params}`,
     '/profile/add-book',
     '/profile/user-profile',
@@ -59,7 +60,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
+      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
     >
       <FormProvider {...methods}>
         <SideDrawer left open={isFilterOpen}>

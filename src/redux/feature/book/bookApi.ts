@@ -88,7 +88,7 @@ export const bookApi = api.injectEndpoints({
         filter = { pageNumber: 0 } as IFilterData,
         ownerId,
         notOwnerId,
-        pageSize = 10,
+        pageSize = 20,
       }: {
         filter?: IFilterData;
         ownerId?: string;

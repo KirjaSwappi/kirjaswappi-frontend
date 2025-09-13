@@ -11,6 +11,7 @@
   box-sizing: border-box;
 }
 
+
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
     width: 11px;
@@ -89,4 +90,9 @@
 .custom-scrollbar {
   scrollbar-width: thin; /* Options: auto, thin, none */
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.leaflet-div-icon{
+  background-color: transparent !important;
+  border:none
 }

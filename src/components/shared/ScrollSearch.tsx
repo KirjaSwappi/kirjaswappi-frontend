@@ -52,10 +52,9 @@ export default function ScrollSearch() {
               </React.Fragment>
             );
           })}
-          {/* Search icon as part of menu group */}
           <Button
             onClick={() => setClicked((prev) => !prev)}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 ml-2"
+            className={`${pathname === '/map' ? 'hidden' : 'flex'}  items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 ml-2`}
             style={{ position: 'relative' }}
             aria-label="Search"
           >
@@ -63,7 +62,6 @@ export default function ScrollSearch() {
           </Button>
         </div>
 
-        {/* Search bar fades in over menu texts */}
         <div
           className={`flex-1 absolute left-0 top-0 w-full h-full flex items-center transition-opacity duration-300 ease-in-out ${
             clicked ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'

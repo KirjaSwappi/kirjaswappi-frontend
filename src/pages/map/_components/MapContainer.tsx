@@ -1,8 +1,8 @@
+import 'leaflet/dist/leaflet.css';
 import { MapContainer as LeafletMapContainer, TileLayer } from 'react-leaflet';
 import { useAppSelector } from '../../../redux/hooks';
-import BookMarker from './BookMarker';
 import { IBookWithLocation } from '../interface';
-import 'leaflet/dist/leaflet.css';
+import BookMarker from './BookMarker';
 
 interface MapContainerProps {
   books: IBookWithLocation[];
@@ -30,7 +30,6 @@ export default function MapContainer({ books, onMarkerClick }: MapContainerProps
   );
 
   const markers = Object.values(groupedBooks);
-
   return (
     <div className="h-full w-full">
       <LeafletMapContainer
