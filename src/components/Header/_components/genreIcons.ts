@@ -6,7 +6,5 @@ export const genreIcons: Record<string, string> = {
   Adventure: FictionIcon,
   Productivity: FictionIcon,
   Thriller: FictionIcon,
-  'Crime-Thriller': FictionIcon,
-  'Horror-Thriller': FictionIcon,
   Fantasy: FictionIcon,
 };

@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { IoIosArrowDown, IoIosArrowUp, IoIosCheckmark } from 'react-icons/io';
+
 import deleteIcon from '../../../assets/deleteIcon.png';
+import plusIcon from '../../../assets/plus.png';
+import {
+  useGetSupportConditionQuery,
+  useGetSupportLanguageQuery,
+} from '../../../redux/feature/book/bookApi';
 import { useGetGenreQuery } from '../../../redux/feature/genre/genreApi';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
@@ -7,33 +16,45 @@ import InputLabel from '../../shared/InputLabel';
 import Line from '../../shared/Line';
 import CheckboxControllerField from './CheckboxInputControllerField';
 import GenreSkelton from './GenreSkelton';
-
-import { useState } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
-import { BiCheck, BiChevronDown } from 'react-icons/bi';
-import {
-  useGetSupportConditionQuery,
-  useGetSupportLanguageQuery,
-} from '../../../redux/feature/book/bookApi';
 import { genreIcons } from './genreIcons';
 
+type TChildGenre = {
+  id: string;
+  name: string;
+};
+interface IGenreWithIcon {
+  id: string;
+  name: string;
+  icon?: string;
+  childGenres: TChildGenre[];
+}
+
 export default function BookFilter() {
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const { data: genreData = [], isLoading: genreLoading } = useGetGenreQuery(undefined);
+  const { data: genreData = [] } = useGetGenreQuery(undefined);
   const { data: languageDataOptions, isLoading: languageLoading } =
     useGetSupportLanguageQuery(undefined);
   const { data: conditionDataOptions, isLoading: conditionLoading } =
     useGetSupportConditionQuery(undefined);
-  const { reset, control } = useFormContext();
+  const { reset, control, watch } = useFormContext();
 
-  const genres = genreData.map((g: { name: string }) => ({
-    ...g,
-    icon: genreIcons[g.name],
-  }));
-  console.log(genreLoading);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+
   const toggleExpand = (id: string) => {
-    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+    setExpanded((prev: any) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
   };
+  console.log(watch('genre'));
+  function mergeGenresWithIcons(genres: IGenreWithIcon[]): IGenreWithIcon[] {
+    if (!genres) return [];
+    return Object.values(genres)?.map((parent) => ({
+      ...parent,
+      icon: genreIcons[parent.name] ?? undefined,
+    }));
+  }
+  const genres = mergeGenresWithIcons(genreData?.parentGenres);
+
   return (
     <div className="overflow-y-scroll h-screen custom-scrollbar px-2">
       <div className="flex items-center justify-between">
@@ -52,84 +73,58 @@ export default function BookFilter() {
       <Line className="my-4" />
       <InputLabel label="Genre" className="mb-4" />
       <Controller
-        name={'genre'}
+        name="genre"
         control={control}
         render={({ field }) => (
-          <div>
-            {genres.map((genre: any) => (
-              <div key={genre.id}>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className="flex items-center justify-between cursor-pointer p-2 rounded hover:bg-gray-50"
-                  onClick={() => field.onChange(genre.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') field.onChange(genre.id);
-                  }}
+          <>
+            {genres.map((parent) => (
+              <div key={parent.id} className="pb-2">
+                <Button
+                  type="button"
+                  onClick={() => toggleExpand(parent.id)}
+                  className="flex items-center justify-between w-full"
                 >
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleExpand(genre.id);
-                    }}
-                    className="flex items-center gap-2 justify-between w-full h-[28px]  "
-                    onKeyDown={(e) => {
-                      e.stopPropagation();
-                      if (e.key === 'Enter' || e.key === ' ') toggleExpand(genre.id);
-                    }}
-                  >
-                    <div className="flex items-center gap-2 ">
-                      <Image src={genre.icon} alt={genre.name} />
-                      <span>{genre.name}</span>
-                    </div>
-                    <BiChevronDown size={16} />
+                  <div className="flex items-center gap-2">
+                    <Image src={parent.icon} alt={parent.name} className="w-5 h-5" />
+                    <span className="font-medium">{parent.name}</span>
                   </div>
-                </div>
+                  <span>{expanded[parent.id] ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+                </Button>
 
-                {expanded[genre.id] &&
-                  genres
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    .filter((sub: any) => sub.parentGenre?.id === genre.id)
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    .map((sub: any) => (
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        key={sub.id}
-                        className="pl-10 flex items-center justify-between cursor-pointer py-1 hover:bg-gray-50"
-                        onClick={() => field.onChange(sub.id)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') field.onChange(sub.id);
-                        }}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Image src={sub.icon} alt={sub.name} />
-                          <span>{sub.name}</span>
-                        </div>
-                        {field.value === sub.id && <BiCheck className="text-green-500" />}
-                      </div>
-                    ))}
+                {expanded[parent.id] && parent?.childGenres?.length > 0 && (
+                  <div className="ml-3 mt-2 space-y-2 border-l pl-4">
+                    {parent.childGenres.map((child) => {
+                      const isChecked = field.value.includes(child.id);
+                      return (
+                        <button
+                          type="button"
+                          key={child.id}
+                          onClick={() => {
+                            if (isChecked) {
+                              field.onChange(field.value.filter((v: string) => v !== child.id));
+                            } else {
+                              field.onChange([...field.value, child.id]);
+                            }
+                          }}
+                          className="flex items-center justify-between gap-2 cursor-pointer w-full"
+                        >
+                          <span className="text-sm">{child.name}</span>
+                          {isChecked ? (
+                            <IoIosCheckmark className="text-green-600 w-5 h-5" />
+                          ) : (
+                            <Image src={plusIcon} alt="plus icon" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ))}
-          </div>
+          </>
         )}
       />
 
-      {/* <div className="pl-3">
-        {genreLoading ? (
-          <div className="flex flex-col gap-2">
-            {Array.from({ length: 6 }, (_, index) => (
-              <GenreSkelton key={index} />
-            ))}
-          </div>
-        ) : (
-          genreData?.map((genre: { id: string; name: string }, index: number) => (
-            <CheckboxControllerField key={index} name="genre" value={genre.name} />
-          ))
-        )}
-      </div> */}
       <Line className="my-4" />
       <InputLabel label="Language" className="mb-4" />
       <div className="pl-3">
