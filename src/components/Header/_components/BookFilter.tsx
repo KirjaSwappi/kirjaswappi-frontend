@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { IoIosArrowDown, IoIosArrowUp, IoIosCheckmark } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
 import deleteIcon from '../../../assets/deleteIcon.png';
 import plusIcon from '../../../assets/plus.png';
+import tickmarkIcon from '../../../assets/tickmark.png';
+
 import {
   useGetSupportConditionQuery,
   useGetSupportLanguageQuery,
@@ -110,9 +112,13 @@ export default function BookFilter() {
                         >
                           <span className="text-sm">{child.name}</span>
                           {isChecked ? (
-                            <IoIosCheckmark className="text-green-600 w-5 h-5" />
+                            <Image
+                              src={tickmarkIcon}
+                              alt="tickmarkIcon icon"
+                              className="h-5 w-full"
+                            />
                           ) : (
-                            <Image src={plusIcon} alt="plus icon" />
+                            <Image src={plusIcon} alt="plus icon" className="h-5 w-full" />
                           )}
                         </button>
                       );
