@@ -16,7 +16,6 @@ import Button from '../../shared/Button';
 import Image from '../../shared/Image';
 import InputLabel from '../../shared/InputLabel';
 import Line from '../../shared/Line';
-import CheckboxControllerField from './CheckboxInputControllerField';
 import GenreSkelton from './GenreSkelton';
 import { genreIcons } from './genreIcons';
 
@@ -32,14 +31,15 @@ interface IGenreWithIcon {
 }
 
 export default function BookFilter() {
-  const { data: genreData = [] } = useGetGenreQuery(undefined);
+  const { data: genreData = [], isLoading: isGenreLoading } = useGetGenreQuery(undefined);
   const { data: languageDataOptions, isLoading: languageLoading } =
     useGetSupportLanguageQuery(undefined);
   const { data: conditionDataOptions, isLoading: conditionLoading } =
     useGetSupportConditionQuery(undefined);
-  const { reset, control, watch } = useFormContext();
-
+  const { reset, control } = useFormContext();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [languageExpanded, setLanguageExpanded] = useState(true);
+  const [conditionExpanded, setConditionExpanded] = useState(true);
 
   const toggleExpand = (id: string) => {
     setExpanded((prev: any) => ({
@@ -47,7 +47,13 @@ export default function BookFilter() {
       [id]: !prev[id],
     }));
   };
-  console.log(watch('genre'));
+
+  const toggleLanguageExpand = () => {
+    setLanguageExpanded((prev) => !prev);
+  };
+  const toggleConditionExpand = () => {
+    setConditionExpanded((prev) => !prev);
+  };
   function mergeGenresWithIcons(genres: IGenreWithIcon[]): IGenreWithIcon[] {
     if (!genres) return [];
     return Object.values(genres)?.map((parent) => ({
@@ -73,67 +79,87 @@ export default function BookFilter() {
         </Button>
       </div>
       <Line className="my-4" />
-      <InputLabel label="Genre" className="mb-4" />
-      <Controller
-        name="genre"
-        control={control}
-        render={({ field }) => (
-          <>
-            {genres.map((parent) => (
-              <div key={parent.id} className="pb-2">
-                <Button
-                  type="button"
-                  onClick={() => toggleExpand(parent.id)}
-                  className="flex items-center justify-between w-full"
-                >
-                  <div className="flex items-center gap-2">
-                    <Image src={parent.icon} alt={parent.name} className="w-5 h-5" />
-                    <span className="font-medium">{parent.name}</span>
-                  </div>
-                  <span>{expanded[parent.id] ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
-                </Button>
+      <InputLabel label="Genre" className="mb-2" />
+      {isGenreLoading ? (
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 6 }, (_, index) => (
+            <GenreSkelton key={index} />
+          ))}
+        </div>
+      ) : (
+        <Controller
+          name="genre"
+          control={control}
+          render={({ field }) => (
+            <div className="px-2">
+              {genres.map((parent) => (
+                <div key={parent.id} className="py-2">
+                  <Button
+                    type="button"
+                    onClick={() => toggleExpand(parent.id)}
+                    className="flex items-center justify-between w-full"
+                  >
+                    <div className={`flex items-center gap-2 `}>
+                      <Image
+                        src={parent.icon}
+                        alt={parent.name}
+                        className="w-5 h-5 "
+                        style={{
+                          filter: expanded[parent.id]
+                            ? 'brightness(0) saturate(100%) invert(39%) sepia(99%) saturate(1747%) hue-rotate(194deg) brightness(96%) contrast(101%)'
+                            : 'brightness(0) saturate(100%) invert(74%) sepia(6%) saturate(0%) hue-rotate(180deg) brightness(93%) contrast(88%)',
+                          transition: 'filter 0.2s ease-in-out',
+                        }}
+                      />
+                      <span
+                        className={`${expanded[parent.id] ? 'text-primary' : 'text-blackOlive'}  font-poppins font-normal text-sm `}
+                      >
+                        {parent.name}
+                      </span>
+                    </div>
+                    <span>{expanded[parent.id] ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+                  </Button>
 
-                {expanded[parent.id] && parent?.childGenres?.length > 0 && (
-                  <div className="ml-3 mt-2 space-y-2 border-l pl-4">
-                    {parent.childGenres.map((child) => {
-                      const isChecked = field.value.includes(child.id);
-                      return (
-                        <button
-                          type="button"
-                          key={child.id}
-                          onClick={() => {
-                            if (isChecked) {
-                              field.onChange(field.value.filter((v: string) => v !== child.id));
-                            } else {
-                              field.onChange([...field.value, child.id]);
-                            }
-                          }}
-                          className="flex items-center justify-between gap-2 cursor-pointer w-full"
-                        >
-                          <span className="text-sm">{child.name}</span>
-                          {isChecked ? (
-                            <Image
-                              src={tickmarkIcon}
-                              alt="tickmarkIcon icon"
-                              className="h-5 w-full"
-                            />
-                          ) : (
-                            <Image src={plusIcon} alt="plus icon" className="h-5 w-full" />
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ))}
-          </>
-        )}
-      />
-
+                  {expanded[parent.id] && parent?.childGenres?.length > 0 && (
+                    <div className="ml-3 mt-2 space-y-2 border-l border-platinumMix pl-4">
+                      {parent.childGenres.map((child) => {
+                        const isChecked = field.value.includes(child.id);
+                        return (
+                          <Button
+                            type="button"
+                            key={child.id}
+                            onClick={() => {
+                              if (isChecked) {
+                                field.onChange(field.value.filter((v: string) => v !== child.id));
+                              } else {
+                                field.onChange([...field.value, child.id]);
+                              }
+                            }}
+                            className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
+                          >
+                            <span className="text-sm">{child.name}</span>
+                            {isChecked ? (
+                              <Image
+                                src={tickmarkIcon}
+                                alt="tickmarkIcon icon"
+                                className="h-4 w-full"
+                              />
+                            ) : (
+                              <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
+                            )}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        />
+      )}
       <Line className="my-4" />
-      <InputLabel label="Language" className="mb-4" />
-      <div className="pl-3">
+      <div>
         {languageLoading ? (
           <div className="flex flex-col gap-2">
             {Array.from({ length: 6 }, (_, index) => (
@@ -141,14 +167,59 @@ export default function BookFilter() {
             ))}
           </div>
         ) : (
-          languageDataOptions?.map((language: string, index: number) => (
-            <CheckboxControllerField key={index} name="language" value={language} />
-          ))
+          <Controller
+            name="language"
+            control={control}
+            render={({ field }) => (
+              <div className="py-2">
+                <Button
+                  type="button"
+                  onClick={toggleLanguageExpand}
+                  className="flex items-center justify-between w-full pr-2"
+                >
+                  <span className="font-poppins font-normal text-sm">Language</span>
+                  <span>{languageExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+                </Button>
+
+                {languageExpanded && (
+                  <div className="mt-2 space-y-2">
+                    {languageDataOptions.map((lang: string) => {
+                      const isChecked = field.value.includes(lang);
+                      return (
+                        <Button
+                          key={lang}
+                          type="button"
+                          onClick={() => {
+                            if (isChecked) {
+                              field.onChange(field.value.filter((v: string) => v !== lang));
+                            } else {
+                              field.onChange([...field.value, lang]);
+                            }
+                          }}
+                          className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
+                        >
+                          <span className="text-sm">{lang}</span>
+                          {isChecked ? (
+                            <Image
+                              src={tickmarkIcon}
+                              alt="tickmarkIcon icon"
+                              className="h-4 w-full"
+                            />
+                          ) : (
+                            <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
+                          )}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          />
         )}
       </div>
       <Line className="my-4" />
-      <InputLabel label="Swap Condition" className="mb-4" />
-      <div className="pl-3">
+      <div>
         {conditionLoading ? (
           <div className="flex flex-col gap-2">
             {Array.from({ length: 6 }, (_, index) => (
@@ -156,9 +227,57 @@ export default function BookFilter() {
             ))}
           </div>
         ) : (
-          conditionDataOptions?.map((condition: string, index: number) => (
-            <CheckboxControllerField key={index} name="condition" value={condition} />
-          ))
+          <Controller
+            name="condition"
+            control={control}
+            render={({ field }) => (
+              <div className="py-2">
+                <Button
+                  type="button"
+                  onClick={toggleConditionExpand}
+                  className="flex items-center justify-between w-full pr-2"
+                >
+                  <span className="font-poppins font-normal text-sm">Swap Condition</span>
+                  <span>{conditionExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+                </Button>
+
+                {conditionExpanded && (
+                  <div className="mt-2 space-y-2">
+                    {conditionDataOptions.map((conditionItem: string) => {
+                      const isChecked = field.value.includes(conditionItem);
+                      return (
+                        <Button
+                          key={conditionItem}
+                          type="button"
+                          onClick={() => {
+                            if (isChecked) {
+                              field.onChange(
+                                field.value.filter((v: string) => v !== conditionItem),
+                              );
+                            } else {
+                              field.onChange([...field.value, conditionItem]);
+                            }
+                          }}
+                          className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
+                        >
+                          <span className="text-sm">{conditionItem}</span>
+                          {isChecked ? (
+                            <Image
+                              src={tickmarkIcon}
+                              alt="tickmarkIcon icon"
+                              className="h-4 w-full"
+                            />
+                          ) : (
+                            <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
+                          )}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          />
         )}
       </div>
       <Line className="my-4" />

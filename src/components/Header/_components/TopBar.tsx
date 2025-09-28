@@ -48,7 +48,7 @@ export default function TopBar() {
             <Link to="/" aria-label="Go to homepage">
               <Image
                 src={logo}
-                alt="KirjaSwappi Logo"
+                alt="Kirja Swappi Logo"
                 className="h-7 cursor-pointer hidden lg:block"
               />
             </Link>

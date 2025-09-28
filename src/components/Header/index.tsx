@@ -1,7 +1,7 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import { useMouseClick } from '../../hooks/useMouse';
-import { IFilterData } from '../../interface';
 import {
   setConditionFilter,
   setFilterOpen,
@@ -50,12 +50,18 @@ export default function Header({ showOn404 = false }: HeaderProps) {
       condition: [],
     },
   });
-  const { handleSubmit } = methods;
-  const handleSubmitFn = async <T extends IFilterData>(data: T) => {
-    dispatch(setGenreFilter(data.genre));
-    dispatch(setConditionFilter(data.condition));
-    dispatch(setLanguageFilter(data.language));
-  };
+  const { control } = methods;
+
+  const watchedFields = useWatch({
+    control,
+    name: ['genre', 'language', 'condition'],
+  });
+  useEffect(() => {
+    const [genre, language, condition] = watchedFields;
+    dispatch(setGenreFilter(genre));
+    dispatch(setLanguageFilter(language));
+    dispatch(setConditionFilter(condition));
+  }, [watchedFields, dispatch]);
 
   return (
     <header
@@ -63,7 +69,7 @@ export default function Header({ showOn404 = false }: HeaderProps) {
     >
       <FormProvider {...methods}>
         <SideDrawer left open={isFilterOpen}>
-          <form ref={reference} onSubmit={handleSubmit((data) => handleSubmitFn(data))}>
+          <form ref={reference}>
             <BookFilter />
           </form>
         </SideDrawer>
