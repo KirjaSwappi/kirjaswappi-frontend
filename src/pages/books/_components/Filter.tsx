@@ -6,7 +6,9 @@ import CategoryIcon from '../../../assets/categoryIcon.svg';
 import filtergrayIcon from '../../../assets/filtergray.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
-import { setFilterOpen } from '../../../redux/feature/filter/filterSlice';
+import { setFilterOpen, setIsCategoryOrFilter } from '../../../redux/feature/filter/filterSlice';
+import { FilterItemEnum } from '../../../utility/enum';
+
 export default function Filter() {
   const dispatch = useDispatch();
   const [isFixed, setIsFixed] = useState(false);
@@ -31,6 +33,10 @@ export default function Filter() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  const isFilterOrCategoryFn = (value: FilterItemEnum | null) => {
+    dispatch(setIsCategoryOrFilter(value));
+    dispatch(setFilterOpen(true));
+  };
 
   return (
     <div ref={placeholderRef} className="w-full">
@@ -46,7 +52,10 @@ export default function Filter() {
           className={`${isFixed ? 'container' : ''} pb-6 pt-5 flex items-center justify-between`}
         >
           <div className="flex items-center gap-2">
-            <Button className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium">
+            <Button
+              onClick={() => isFilterOrCategoryFn(FilterItemEnum.CATEGORY)}
+              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+            >
               <Image src={CategoryIcon} alt="category" /> Category
             </Button>
             <Button className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium">
@@ -56,7 +65,7 @@ export default function Filter() {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => dispatch(setFilterOpen(true))}
+              onClick={() => isFilterOrCategoryFn(FilterItemEnum.FILTER)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
               <Image src={filtergrayIcon} alt="category" /> Filter

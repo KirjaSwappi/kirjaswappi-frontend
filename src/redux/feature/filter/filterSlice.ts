@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FilterItemEnum } from '../../../utility/enum';
 
 export interface IFilterInitialState {
   filter: {
@@ -10,6 +11,7 @@ export interface IFilterInitialState {
     hasMore: boolean;
   };
   isFilterOpen: boolean;
+  isCategoryOrFilter: FilterItemEnum | null;
 }
 
 const initialState: IFilterInitialState = {
@@ -22,6 +24,7 @@ const initialState: IFilterInitialState = {
     hasMore: false,
   },
   isFilterOpen: false,
+  isCategoryOrFilter: null,
 };
 const filterSlice = createSlice({
   name: 'book',
@@ -48,6 +51,9 @@ const filterSlice = createSlice({
     setFilterOpen: (state, action: PayloadAction<boolean>) => {
       state.isFilterOpen = action.payload;
     },
+    setIsCategoryOrFilter: (state, action: PayloadAction<FilterItemEnum | null>) => {
+      state.isCategoryOrFilter = action.payload;
+    },
   },
 });
 
@@ -59,5 +65,6 @@ export const {
   setHasMore,
   setPageNumber,
   setFilterOpen,
+  setIsCategoryOrFilter,
 } = filterSlice.actions;
 export default filterSlice.reducer;

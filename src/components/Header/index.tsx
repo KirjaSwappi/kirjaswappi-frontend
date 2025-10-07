@@ -6,26 +6,32 @@ import {
   setConditionFilter,
   setFilterOpen,
   setGenreFilter,
+  setIsCategoryOrFilter,
   setLanguageFilter,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { FilterItemEnum } from '../../utility/enum';
 import BookFilter from './_components/BookFilter';
 import SideDrawer from './_components/SideDrawer';
 import TopBar from './_components/TopBar';
 
-interface HeaderProps {
-  showOn404?: boolean;
-}
-
-export default function Header({ showOn404 = false }: HeaderProps) {
+export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { isFilterOpen } = useAppSelector((state) => state.filter);
+  const { isFilterOpen, isCategoryOrFilter } = useAppSelector((state) => state.filter);
   const { reference } = useMouseClick<HTMLFormElement>(() => {
     if (isFilterOpen) {
       dispatch(setFilterOpen(false));
+      dispatch(setIsCategoryOrFilter(null));
     }
   });
+  const { reference: leftReference } = useMouseClick<HTMLFormElement>(() => {
+    if (isFilterOpen) {
+      dispatch(setFilterOpen(false));
+      dispatch(setIsCategoryOrFilter(null));
+    }
+  });
+
   const pathname = location.pathname;
   const params = pathname?.split('/').reverse()[0];
   const showTopHeaderPath = [
@@ -68,8 +74,13 @@ export default function Header({ showOn404 = false }: HeaderProps) {
       className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
     >
       <FormProvider {...methods}>
-        <SideDrawer left open={isFilterOpen}>
+        <SideDrawer left open={isFilterOpen && isCategoryOrFilter === FilterItemEnum.CATEGORY}>
           <form ref={reference}>
+            <BookFilter />
+          </form>
+        </SideDrawer>
+        <SideDrawer open={isFilterOpen && isCategoryOrFilter === FilterItemEnum.FILTER}>
+          <form ref={leftReference}>
             <BookFilter />
           </form>
         </SideDrawer>
