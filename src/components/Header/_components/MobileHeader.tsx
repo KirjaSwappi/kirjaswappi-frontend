@@ -79,8 +79,6 @@ export default function MobileHeader() {
                 {clicked && <LanguageMenuDropdown />}
                 <HeaderUserProfile />
               </div>
-              {/* <Language />
-              <HeaderUserProfile /> */}
             </div>
           </div>
           {!scrolled && isHomePage && (

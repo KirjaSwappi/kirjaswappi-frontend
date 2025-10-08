@@ -9,7 +9,7 @@ import FilterByLanguage from './FilterByLanguage';
 export default function BookFilter() {
   const { isCategoryOrFilter } = useAppSelector((state) => state.filter);
   return (
-    <div className="overflow-y-scroll h-screen custom-scrollbar px-0">
+    <div className="overflow-y-scroll h-full custom-scrollbar px-4">
       <BookFilterReset />
       <Line className="my-4" />
       <FilterByGenre />

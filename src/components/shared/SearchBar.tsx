@@ -5,9 +5,14 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import filterIcon from '../../assets/filterBlue.png';
 import sortIcon from '../../assets/sorticon.png';
 import useDebounce from '../../hooks/useDebounce';
-import { setFilterOpen, setSearch } from '../../redux/feature/filter/filterSlice';
+import {
+  setFilterOpen,
+  setIsCategoryOrFilter,
+  setSearch,
+} from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch } from '../../redux/hooks';
 import { cn } from '../../utility/cn';
+import { FilterItemEnum } from '../../utility/enum';
 import Button from './Button';
 import Image from './Image';
 import Input from './Input';
@@ -35,7 +40,10 @@ export default function SearchBar({
     <div className="flex items-center justify-between gap-2">
       {isShowFilterIcon && (
         <Button
-          onClick={() => dispatch(setFilterOpen(true))}
+          onClick={() => {
+            dispatch(setFilterOpen(true));
+            dispatch(setIsCategoryOrFilter(FilterItemEnum.FILTER));
+          }}
           className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light"
         >
           <Image src={filterIcon} alt="Filter Icon" className="w-6" />

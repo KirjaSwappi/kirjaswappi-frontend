@@ -81,7 +81,7 @@ export default function Books() {
         <div className="relative hidden lg:block">
           <Filter />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 ">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 mt-4 lg:mt-0">
           {books.map((book: IBook, idx: number) => {
             if (idx === books.length - 1) {
               return (

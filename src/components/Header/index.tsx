@@ -1,52 +1,31 @@
 import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
-import { useMouseClick } from '../../hooks/useMouse';
+import useDrawerOutsideClick from '../../hooks/useDrawerOutsideClick';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import {
   setConditionFilter,
-  setFilterOpen,
   setGenreFilter,
-  setIsCategoryOrFilter,
   setLanguageFilter,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { FilterItemEnum } from '../../utility/enum';
 import BookFilter from './_components/BookFilter';
+import { ShowTopHeaderPath } from './_components/ShowTopHeaderPath';
 import SideDrawer from './_components/SideDrawer';
+import getDrawers from './_components/SideFilterDrawers';
 import TopBar from './_components/TopBar';
 
 export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
+  const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { isFilterOpen, isCategoryOrFilter } = useAppSelector((state) => state.filter);
-  const { reference } = useMouseClick<HTMLFormElement>(() => {
-    if (isFilterOpen) {
-      dispatch(setFilterOpen(false));
-      dispatch(setIsCategoryOrFilter(null));
-    }
-  });
-  const { reference: leftReference } = useMouseClick<HTMLFormElement>(() => {
-    if (isFilterOpen) {
-      dispatch(setFilterOpen(false));
-      dispatch(setIsCategoryOrFilter(null));
-    }
-  });
-
+  const categoryRef = useDrawerOutsideClick(FilterItemEnum.CATEGORY).reference;
+  const filterRef = useDrawerOutsideClick(FilterItemEnum.FILTER).reference;
   const pathname = location.pathname;
   const params = pathname?.split('/').reverse()[0];
-  const showTopHeaderPath = [
-    '/',
-    `/book-details/${params}`,
-    '/profile/add-book',
-    '/profile/user-profile',
-    `/profile/update-book/${params}`,
-    `/profile/user-profile/${params}`,
-    '/auth/login',
-    '/auth/register',
-    '/password/reset',
-    '/user/messages',
-    `/user/messages/${params}/isMessage=True`,
-  ];
+  const showTopHeaderPath = ShowTopHeaderPath(params);
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
   const methods = useForm({
     mode: 'onChange',
@@ -57,7 +36,6 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
     },
   });
   const { control } = methods;
-
   const watchedFields = useWatch({
     control,
     name: ['genre', 'language', 'condition'],
@@ -69,21 +47,25 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
     dispatch(setConditionFilter(condition));
   }, [watchedFields, dispatch]);
 
+  const drawers = getDrawers(categoryRef, filterRef);
+
   return (
     <header
       className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
     >
       <FormProvider {...methods}>
-        <SideDrawer left open={isFilterOpen && isCategoryOrFilter === FilterItemEnum.CATEGORY}>
-          <form ref={reference}>
-            <BookFilter />
-          </form>
-        </SideDrawer>
-        <SideDrawer open={isFilterOpen && isCategoryOrFilter === FilterItemEnum.FILTER}>
-          <form ref={leftReference}>
-            <BookFilter />
-          </form>
-        </SideDrawer>
+        {drawers.map(({ type, ref, left }) => (
+          <SideDrawer
+            key={type}
+            ref={ref}
+            open={isFilterOpen && isCategoryOrFilter === type}
+            left={isMobile ? true : left}
+          >
+            <form>
+              <BookFilter />
+            </form>
+          </SideDrawer>
+        ))}
       </FormProvider>
       <div
         className={`${
