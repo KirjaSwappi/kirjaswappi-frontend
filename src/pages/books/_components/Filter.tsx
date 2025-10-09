@@ -4,9 +4,13 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import CategoryIcon from '../../../assets/categoryIcon.svg';
 import filtergrayIcon from '../../../assets/filtergray.svg';
+import sortByIcon from '../../../assets/sortBy.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
-import { setFilterOpen, setIsCategoryOrFilter } from '../../../redux/feature/filter/filterSlice';
+import {
+  setFilterOpen,
+  setIsCategoryOrFilterOrSortBy,
+} from '../../../redux/feature/filter/filterSlice';
 import { FilterItemEnum } from '../../../utility/enum';
 
 export default function Filter() {
@@ -17,7 +21,6 @@ export default function Filter() {
 
   useEffect(() => {
     const headerHeight = 80;
-
     const handleScroll = () => {
       if (filterRef.current && placeholderRef.current) {
         const rect = placeholderRef.current.getBoundingClientRect();
@@ -29,12 +32,12 @@ export default function Filter() {
         }
       }
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  const isFilterOrCategoryFn = (value: FilterItemEnum | null) => {
-    dispatch(setIsCategoryOrFilter(value));
+
+  const isFilterOrCategoryOrSortByFn = (value: FilterItemEnum | null) => {
+    dispatch(setIsCategoryOrFilterOrSortBy(value));
     dispatch(setFilterOpen(true));
   };
 
@@ -53,7 +56,7 @@ export default function Filter() {
         >
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => isFilterOrCategoryFn(FilterItemEnum.CATEGORY)}
+              onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.CATEGORY)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
               <Image src={CategoryIcon} alt="category" /> Category
@@ -65,13 +68,16 @@ export default function Filter() {
           </div>
           <div className="flex items-center gap-2">
             <Button
-              onClick={() => isFilterOrCategoryFn(FilterItemEnum.FILTER)}
+              onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
               <Image src={filtergrayIcon} alt="category" /> Filter
             </Button>
-            <Button className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium">
-              <Image src={filtergrayIcon} alt="category" /> Sort
+            <Button
+              onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.SORTBY)}
+              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+            >
+              <Image src={sortByIcon} alt="category" /> Sort
               <MdKeyboardArrowDown />
             </Button>
           </div>

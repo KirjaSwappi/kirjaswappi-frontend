@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import plusIcon from '../../../assets/plus.png';
-import tickmarkIcon from '../../../assets/tickmark.png';
-import { useGetSupportConditionQuery } from '../../../redux/feature/book/bookApi';
-import Button from '../../shared/Button';
-import Image from '../../shared/Image';
+import plusIcon from '../../../../assets/plus.png';
+import tickmarkIcon from '../../../../assets/tickmark.png';
+import { useGetSupportConditionQuery } from '../../../../redux/feature/book/bookApi';
+import Button from '../../../shared/Button';
+import Image from '../../../shared/Image';
 import GenreSkelton from './GenreSkelton';
 
 export default function FilterByCondition() {
@@ -17,7 +17,7 @@ export default function FilterByCondition() {
     setConditionExpanded((prev) => !prev);
   };
   return (
-    <div>
+    <div className="px-4">
       {conditionLoading ? (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }, (_, index) => (

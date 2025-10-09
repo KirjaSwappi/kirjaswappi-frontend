@@ -1,22 +1,24 @@
 import { useFormContext } from 'react-hook-form';
-import category_filter from '../../../assets/category_filter.svg';
-import deleteIcon from '../../../assets/deleteIcon.png';
-import { useAppSelector } from '../../../redux/hooks';
-import { FilterItemEnum } from '../../../utility/enum';
-import Button from '../../shared/Button';
-import Image from '../../shared/Image';
+import category_filter from '../../../../assets/category_filter.svg';
+import deleteIcon from '../../../../assets/deleteIcon.png';
+import { useAppSelector } from '../../../../redux/hooks';
+import { FilterItemEnum } from '../../../../utility/enum';
+import Button from '../../../shared/Button';
+import Image from '../../../shared/Image';
 
 export default function BookFilterReset() {
   const { reset } = useFormContext();
-  const { isCategoryOrFilter } = useAppSelector((state) => state.filter);
+  const { isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between px-4">
       <div className="flex items-center gap-2">
-        {isCategoryOrFilter === FilterItemEnum.CATEGORY && (
+        {isCategoryOrFilterOrSortBy === FilterItemEnum.CATEGORY && (
           <Image src={category_filter} alt="Category Filter" className="h-fit" />
         )}
         <h3 className="text-grayDark font-poppins font-medium text-sm">
-          {isCategoryOrFilter === FilterItemEnum.CATEGORY ? 'Category Filter' : 'Book Filter'}
+          {isCategoryOrFilterOrSortBy === FilterItemEnum.CATEGORY
+            ? 'Category Filter'
+            : 'Book Filter'}
         </h3>
       </div>
       <Button

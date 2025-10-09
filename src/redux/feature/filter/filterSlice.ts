@@ -11,7 +11,7 @@ export interface IFilterInitialState {
     hasMore: boolean;
   };
   isFilterOpen: boolean;
-  isCategoryOrFilter: FilterItemEnum | null;
+  isCategoryOrFilterOrSortBy: FilterItemEnum | null;
 }
 
 const initialState: IFilterInitialState = {
@@ -24,7 +24,7 @@ const initialState: IFilterInitialState = {
     hasMore: false,
   },
   isFilterOpen: false,
-  isCategoryOrFilter: null,
+  isCategoryOrFilterOrSortBy: null,
 };
 const filterSlice = createSlice({
   name: 'book',
@@ -51,8 +51,8 @@ const filterSlice = createSlice({
     setFilterOpen: (state, action: PayloadAction<boolean>) => {
       state.isFilterOpen = action.payload;
     },
-    setIsCategoryOrFilter: (state, action: PayloadAction<FilterItemEnum | null>) => {
-      state.isCategoryOrFilter = action.payload;
+    setIsCategoryOrFilterOrSortBy: (state, action: PayloadAction<FilterItemEnum | null>) => {
+      state.isCategoryOrFilterOrSortBy = action.payload;
     },
   },
 });
@@ -65,6 +65,6 @@ export const {
   setHasMore,
   setPageNumber,
   setFilterOpen,
-  setIsCategoryOrFilter,
+  setIsCategoryOrFilterOrSortBy,
 } = filterSlice.actions;
 export default filterSlice.reducer;

@@ -3,7 +3,6 @@ import { menu } from '../../../data/menu';
 import Image from '../../shared/Image';
 export default function TopMiddle() {
   const { pathname } = useLocation();
-  // Filter menu items that should be shown
   const filteredMenu = menu.filter(({ isShow }) => isShow);
 
   return (

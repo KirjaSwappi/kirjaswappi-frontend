@@ -1,6 +1,6 @@
-import AdventureIcon from '../../../assets/Adventure.svg';
-import FictionIcon from '../../../assets/FictionIcon.svg';
-import NonFiction from '../../../assets/Non-Fiction.svg';
+import AdventureIcon from '../../../../assets/Adventure.svg';
+import FictionIcon from '../../../../assets/FictionIcon.svg';
+import NonFiction from '../../../../assets/Non-Fiction.svg';
 export const genreIcons: Record<string, string> = {
   Fiction: FictionIcon,
   Biography: FictionIcon,

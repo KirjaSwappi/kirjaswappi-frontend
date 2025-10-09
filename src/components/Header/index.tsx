@@ -10,7 +10,7 @@ import {
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { FilterItemEnum } from '../../utility/enum';
-import BookFilter from './_components/BookFilter';
+import BookFilter from './_components/BookFilter/BookFilter';
 import { ShowTopHeaderPath } from './_components/ShowTopHeaderPath';
 import SideDrawer from './_components/SideDrawer';
 import getDrawers from './_components/SideFilterDrawers';
@@ -20,9 +20,10 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { isFilterOpen, isCategoryOrFilter } = useAppSelector((state) => state.filter);
+  const { isFilterOpen, isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   const categoryRef = useDrawerOutsideClick(FilterItemEnum.CATEGORY).reference;
   const filterRef = useDrawerOutsideClick(FilterItemEnum.FILTER).reference;
+  const sortByRef = useDrawerOutsideClick(FilterItemEnum.SORTBY).reference;
   const pathname = location.pathname;
   const params = pathname?.split('/').reverse()[0];
   const showTopHeaderPath = ShowTopHeaderPath(params);
@@ -47,7 +48,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
     dispatch(setConditionFilter(condition));
   }, [watchedFields, dispatch]);
 
-  const drawers = getDrawers(categoryRef, filterRef);
+  const drawers = getDrawers(categoryRef, filterRef, sortByRef);
 
   return (
     <header
@@ -58,7 +59,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
           <SideDrawer
             key={type}
             ref={ref}
-            open={isFilterOpen && isCategoryOrFilter === type}
+            open={isFilterOpen && isCategoryOrFilterOrSortBy === type}
             left={isMobile ? true : left}
           >
             <form>

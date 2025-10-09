@@ -7,7 +7,7 @@ import sortIcon from '../../assets/sorticon.png';
 import useDebounce from '../../hooks/useDebounce';
 import {
   setFilterOpen,
-  setIsCategoryOrFilter,
+  setIsCategoryOrFilterOrSortBy,
   setSearch,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch } from '../../redux/hooks';
@@ -42,7 +42,7 @@ export default function SearchBar({
         <Button
           onClick={() => {
             dispatch(setFilterOpen(true));
-            dispatch(setIsCategoryOrFilter(FilterItemEnum.FILTER));
+            dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.FILTER));
           }}
           className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light"
         >
@@ -75,9 +75,15 @@ export default function SearchBar({
         </div>
       </div>
       {isShowSortingIcon && (
-        <div className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light">
+        <Button
+          onClick={() => {
+            dispatch(setFilterOpen(true));
+            dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.SORTBY));
+          }}
+          className="w-11 h-10 rounded-2xl flex items-center justify-center bg-primary-light"
+        >
           <Image src={sortIcon} alt="Sort Icon" className="w-6" />
-        </div>
+        </Button>
       )}
     </div>
   );
