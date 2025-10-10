@@ -12,6 +12,7 @@ import MobileHeader from './MobileHeader';
 export default function TopBar() {
   const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+
   useEffect(() => {
     const handleScroll = () => {
       const searchBar = document.querySelector('#hero-search');
@@ -47,7 +48,7 @@ export default function TopBar() {
             <Link to="/" aria-label="Go to homepage">
               <Image
                 src={logo}
-                alt="KirjaSwappi Logo"
+                alt="Kirja Swappi Logo"
                 className="h-7 cursor-pointer hidden lg:block"
               />
             </Link>

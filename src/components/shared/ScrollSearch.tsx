@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoSearch } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
 import { menu } from '../../data/menu';
@@ -10,6 +11,7 @@ import Search from './Search';
 export default function ScrollSearch() {
   const { pathname } = useLocation();
   const { clicked, setClicked, reference } = useMouseClick();
+  const { t } = useTranslation();
   const filteredMenu = menu.filter(({ isShow }) => isShow);
   return (
     <div className="relative w-full max-w-xl">
@@ -47,7 +49,7 @@ export default function ScrollSearch() {
                       transition: 'filter 0.2s ease-in-out',
                     }}
                   />
-                  <span className="text-sm">{value}</span>
+                  <span className="text-sm">{t(value)}</span>
                 </Link>
               </React.Fragment>
             );

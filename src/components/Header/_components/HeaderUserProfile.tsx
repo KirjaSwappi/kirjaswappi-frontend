@@ -8,6 +8,7 @@ import { useAppSelector } from '../../../redux/hooks';
 import Image from '../../shared/Image';
 import UserMenuDropdown from './UserMenuDropdown';
 import UserProfileSkeleton from './UserProfileSkeleton';
+
 export default function HeaderUserProfile() {
   const location = useLocation();
   const { clicked, setClicked, reference } = useMouseClick();

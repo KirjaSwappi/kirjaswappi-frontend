@@ -15,7 +15,7 @@ export default function LanguageMenuDropdown() {
   const currentLang = i18n.language;
 
   return (
-    <div className="absolute top-12 py-2 -left-20 w-40 bg-white rounded-lg shadow-custom-box-shadow z-50 text-blackOlive">
+    <div className="absolute top-12 py-2 -left-20 w-40 bg-white rounded-lg shadow-custom-box-shadow z-[9999999] text-blackOlive">
       {LANGUAGES.map((lang) => (
         <button
           key={lang.code}

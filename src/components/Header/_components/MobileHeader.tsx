@@ -51,7 +51,7 @@ export default function MobileHeader() {
                 </Button>
               )}
               {shouldCollapse && (
-                <button
+                <Button
                   type="button"
                   onClick={() => setSearchToggle(true)}
                   aria-label="Show search"
@@ -67,7 +67,7 @@ export default function MobileHeader() {
                       className={`h-10 px-0 pl-2 overflow-hidden lg:hidden ${searchToggle ? 'w-full pr-3' : 'w-10'} `}
                     />
                   }
-                </button>
+                </Button>
               )}
             </div>
             <div className={`${searchToggle && 'hidden sm:flex'} flex items-center gap-2`}>
@@ -79,8 +79,6 @@ export default function MobileHeader() {
                 {clicked && <LanguageMenuDropdown />}
                 <HeaderUserProfile />
               </div>
-              {/* <Language />
-              <HeaderUserProfile /> */}
             </div>
           </div>
           {!scrolled && isHomePage && (
