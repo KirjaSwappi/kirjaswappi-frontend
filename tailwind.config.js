@@ -68,13 +68,6 @@ export default {
       gap: {
         '19px': '19px',
       },
-      backgroundImage: {
-        // "footer-background": "url('/src/assets/images/footer-bg.png')",
-        // "campaign-background": "url('/src/assets/images/campaign_bg_cover.jpg')",
-        // "campaign-page-background-sm": "url('/src/assets/images/campaign-bg-sm.jpg')",
-        // "deals-background": "url('https://i.ibb.co/1Rc430n/Group-48695.jpg')",
-        // "deals-background-sm": "url('/src/assets/images/dealOfTheWeekBG.jpg')",
-      },
       boxShadow: {
         'custom-box-shadow': '0px 0px 5px #23232326',
       },
