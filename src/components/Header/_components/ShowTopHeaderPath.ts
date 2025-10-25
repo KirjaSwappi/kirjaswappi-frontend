@@ -11,6 +11,7 @@ function getTopHeaderPaths(params: string | undefined) {
     '/password/reset',
     '/user/messages',
     `/user/messages/${params}/isMessage=True`,
+    '/map',
   ];
 }
 export const ShowTopHeaderPath = getTopHeaderPaths;

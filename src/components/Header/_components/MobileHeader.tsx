@@ -11,6 +11,7 @@ import SearchBar from '../../shared/SearchBar';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
+
 export default function MobileHeader() {
   const location = useLocation();
   const { scrolled } = useScroll();

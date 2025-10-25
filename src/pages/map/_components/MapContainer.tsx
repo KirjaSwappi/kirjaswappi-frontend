@@ -12,7 +12,6 @@ interface MapContainerProps {
 export default function MapContainer({ books, onMarkerClick }: MapContainerProps) {
   const { center, zoom } = useAppSelector((state) => state.map);
 
-  // Group books by location for clustering
   const groupedBooks = books.reduce(
     (acc, book) => {
       const key = `${book.latitude.toFixed(4)}_${book.longitude.toFixed(4)}`;

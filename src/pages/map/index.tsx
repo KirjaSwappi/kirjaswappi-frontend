@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../components/shared/Button';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
 import { IBook } from '../books/interface';
@@ -26,14 +27,14 @@ export const addLocationToBooks = (books: IBook[]): IBookWithLocation[] => {
 };
 
 export default function Map() {
+  useGeolocation();
   const navigate = useNavigate();
-  const { filter } = useAppSelector((state) => state.filter);
   const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
+  const { filter } = useAppSelector((state) => state.filter);
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
 
-  useGeolocation();
   const { data, isLoading, isError } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
     { refetchOnMountOrArgChange: false },
@@ -81,7 +82,7 @@ export default function Map() {
         )}
 
         <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-2">
-          <button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
+          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
             <svg
               className="w-5 h-5 text-gray"
               fill="none"
@@ -95,8 +96,8 @@ export default function Map() {
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
             </svg>
-          </button>
-          <button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
+          </Button>
+          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
             <svg
               className="w-5 h-5 text-gray-600"
               fill="none"
@@ -105,12 +106,12 @@ export default function Map() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
             </svg>
-          </button>
-          <button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
+          </Button>
+          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
             <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06z" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
     </div>
