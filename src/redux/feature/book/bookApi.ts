@@ -1,88 +1,65 @@
 import { IFilterData } from '../../../interface';
 import { api } from '../../api/apiSlice';
+import {
+  appendFilterQueryParams,
+  appendMapBoundsParams,
+  appendOwnerParams,
+  appendPaginationParams,
+  buildBookQueryParams,
+  commonEndpointConfig,
+} from './helper';
 
-function buildBookQueryParams(filter: IFilterData) {
-  const params = new URLSearchParams();
-
-  if (filter.search) params.append('search', filter.search);
-
-  if (filter.genre?.length) {
-    filter.genre.forEach((g) => params.append('genres', g));
-  }
-
-  if (filter.condition?.length) {
-    filter.condition.forEach((c) => params.append('conditions', c));
-  }
-
-  if (filter.language?.length) {
-    filter.language.forEach((l) => params.append('languages', l));
-  }
-
-  return params.toString();
-}
 export const bookApi = api.injectEndpoints({
   endpoints: (builder) => ({
     addBook: builder.mutation<{ success: boolean; message: string }, FormData>({
-      query: (data) => {
-        return {
-          url: '/books',
-          method: 'POST',
-          body: data,
-        };
-      },
-      invalidatesTags: ['AddBook'],
+      query: (data) => ({
+        ...commonEndpointConfig.addBook,
+        body: data,
+      }),
+      invalidatesTags: commonEndpointConfig.addBook.invalidatesTags,
     }),
 
     updateBook: builder.mutation<
       { success: boolean; message: string },
       { id: string; data: FormData }
     >({
-      query: ({ data, id }) => {
-        return {
-          url: `/books/${id}`,
-          method: 'PUT',
-          body: data,
-        };
-      },
-      invalidatesTags: ['UpdateBook'],
+      query: ({ data, id }) => ({
+        ...commonEndpointConfig.updateBook,
+        url: commonEndpointConfig.updateBook.url(id),
+        body: data,
+      }),
+      invalidatesTags: commonEndpointConfig.updateBook.invalidatesTags,
     }),
 
     getBookById: builder.query({
-      query: ({ id }) => {
-        return {
-          url: `/books/${id}`,
-          method: 'GET',
-        };
-      },
-      providesTags: ['AddBook', 'UpdateBook'],
+      query: ({ id }) => ({
+        ...commonEndpointConfig.getBookById,
+        url: commonEndpointConfig.getBookById.url(id),
+      }),
+      providesTags: commonEndpointConfig.getBookById.providesTags,
     }),
 
     getSupportLanguage: builder.query({
-      query: () => {
-        return {
-          url: '/books/supported-languages',
-          method: 'GET',
-        };
-      },
+      query: () => ({
+        url: '/books/supported-languages',
+        method: 'GET',
+      }),
     }),
 
     getSupportCondition: builder.query({
-      query: () => {
-        return {
-          url: '/books/supported-conditions',
-          method: 'GET',
-        };
-      },
+      query: () => ({
+        url: '/books/supported-conditions',
+        method: 'GET',
+      }),
     }),
 
     getMoreBooksByBookId: builder.query({
-      query: ({ id }: { id: string }) => {
-        return {
-          url: `/books/${id}/more-books`,
-          method: 'GET',
-        };
-      },
+      query: ({ id }: { id: string }) => ({
+        url: `/books/${id}/more-books`,
+        method: 'GET',
+      }),
     }),
+
     getAllBooks: builder.query({
       query: ({
         filter = { pageNumber: 0 } as IFilterData,
@@ -97,46 +74,36 @@ export const bookApi = api.injectEndpoints({
         pageSize?: number;
       }) => {
         const queryParams = new URLSearchParams();
-        // Add filter query parameters
+
         const filterQuery = buildBookQueryParams(filter);
         if (filterQuery) {
-          filterQuery.split('&').forEach((pair) => {
-            const [key, value] = pair.split('=');
-            if (key && value) queryParams.append(key, value);
-          });
+          appendFilterQueryParams(queryParams, filterQuery);
         }
 
-        // Add owner and notOwnerId
-        if (ownerId) queryParams.append('ownerId', ownerId);
-        if (notOwnerId) queryParams.append('notOwnerId', notOwnerId);
-        // Add pagination
-        queryParams.append('page', String(filter.pageNumber));
-        queryParams.append('size', String(pageSize));
+        appendOwnerParams(queryParams, ownerId, notOwnerId);
+        appendPaginationParams(queryParams, filter.pageNumber, pageSize);
 
-        const url = `/books?${queryParams.toString()}`;
         return {
-          url,
+          url: `/books?${queryParams.toString()}`,
           method: 'GET',
         };
       },
       providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
     }),
+
     deleteBookById: builder.mutation({
-      query: ({ id }) => {
-        return {
-          url: `/books/${id}`,
-          method: 'DELETE',
-        };
-      },
-      invalidatesTags: ['DeleteBook'],
+      query: ({ id }) => ({
+        ...commonEndpointConfig.deleteBookById,
+        url: commonEndpointConfig.deleteBookById.url(id),
+      }),
+      invalidatesTags: commonEndpointConfig.deleteBookById.invalidatesTags,
     }),
+
     getBooksListedById: builder.query({
-      query: ({ id }) => {
-        return {
-          url: `/users/${id}/books`,
-          method: 'GET',
-        };
-      },
+      query: ({ id }) => ({
+        url: `/users/${id}/books`,
+        method: 'GET',
+      }),
       providesTags: ['DeleteBook'],
     }),
 
@@ -155,22 +122,9 @@ export const bookApi = api.injectEndpoints({
       }) => {
         const params = new URLSearchParams();
 
-        // Add existing filter params
         const filterQuery = buildBookQueryParams(filter);
-        if (filterQuery) {
-          filterQuery.split('&').forEach((pair) => {
-            const [key, value] = pair.split('=');
-            if (key && value) params.append(key, value);
-          });
-        }
-
-        // Add map bounds
-        if (bounds) {
-          params.append('north', bounds.north.toString());
-          params.append('south', bounds.south.toString());
-          params.append('east', bounds.east.toString());
-          params.append('west', bounds.west.toString());
-        }
+        if (filterQuery) appendFilterQueryParams(params, filterQuery);
+        if (bounds) appendMapBoundsParams(params, bounds);
 
         return {
           url: `/books/map?${params.toString()}`,
