@@ -30,6 +30,15 @@ export interface IAddUpdateBookData {
   swapType: SwapType;
   swappableBooks: ISwappableBook[];
   swappableGenres: string[];
+  address?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+    city?: string;
+    country?: string;
+    postalCode?: string;
+    radiusKm?: number;
+  } | null;
 }
 
 // ===================
@@ -81,4 +90,13 @@ export interface IAddUpdateBook {
     coverPhoto: File | string;
   }[];
   swappableGenres: string[];
+  address?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+    city?: string;
+    country?: string;
+    postalCode?: string;
+    radiusKm?: number;
+  } | null;
 }

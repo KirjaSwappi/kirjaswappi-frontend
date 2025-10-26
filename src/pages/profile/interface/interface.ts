@@ -16,3 +16,20 @@ export interface IGenreItemType {
   name: string;
   id: string | undefined;
 }
+
+export interface IChildGenre {
+  id: string;
+  name: string;
+}
+
+export interface IParentGenre {
+  id: string;
+  name: string;
+  childGenres: IChildGenre[];
+}
+
+export interface IGenresResponse {
+  parentGenres: {
+    [key: string]: IParentGenre;
+  };
+}

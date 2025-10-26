@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useGeolocation } from '../map/hooks/useGeolocation';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +31,7 @@ import { IAddUpdateBookData } from './types/interface';
 
 export default function AddUpdateBook() {
   const { t } = useTranslation();
+  useGeolocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [active, setActive] = useState<number>(0);

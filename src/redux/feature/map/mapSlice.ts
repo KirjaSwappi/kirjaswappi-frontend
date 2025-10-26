@@ -3,7 +3,7 @@ import { IMapState } from '../../../pages/map/interface';
 
 const initialState: IMapState = {
   center: {
-    latitude: 60.1699, // Helsinki default
+    latitude: 60.1699,
     longitude: 24.9384,
   },
   zoom: 12,
@@ -13,6 +13,7 @@ const initialState: IMapState = {
     latitude: null,
     longitude: null,
   },
+  address: null,
   mapLoading: false,
 };
 
@@ -35,6 +36,20 @@ const mapSlice = createSlice({
     setUserLocation: (state, action: PayloadAction<{ latitude: number; longitude: number }>) => {
       state.userLocation = action.payload;
     },
+    setAddress: (
+      state,
+      action: PayloadAction<{
+        latitude: number;
+        longitude: number;
+        address: string;
+        city?: string;
+        country?: string;
+        postalCode?: string;
+        radiusKm?: number;
+      } | null>,
+    ) => {
+      state.address = action.payload;
+    },
     setMapLoading: (state, action: PayloadAction<boolean>) => {
       state.mapLoading = action.payload;
     },
@@ -47,6 +62,7 @@ export const {
   setSelectedMarker,
   setShowPopup,
   setUserLocation,
+  setAddress,
   setMapLoading,
 } = mapSlice.actions;
 

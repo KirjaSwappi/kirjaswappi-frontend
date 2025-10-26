@@ -1,8 +1,8 @@
-import React, { SetStateAction } from 'react';
+import React from 'react';
 import plusIcon from '../../assets/plusIcon.png';
 import tickMarkIcon from '../../assets/tickmark.png';
 import SideDrawer from '../../pages/profile/components/SideDrawer';
-import { IGenreItemType } from '../../pages/profile/interface/interface';
+import { IChildGenre, IGenresResponse } from '../../pages/profile/interface/interface';
 import { useGetGenreQuery } from '../../redux/feature/genre/genreApi';
 import Button from './Button';
 import Image from './Image';
@@ -15,34 +15,46 @@ export default function AddGenre({
   trigger,
   addGenreName = 'genres',
 }: {
-  setEditValuesChanged: React.Dispatch<SetStateAction<boolean>>;
+  setEditValuesChanged: React.Dispatch<React.SetStateAction<boolean>>;
   genresValue: string[];
   setValue?: (field: string, value: string[]) => void;
   trigger?: (field: string) => void;
   addGenreName?: string;
 }) {
-  const { data, isLoading } = useGetGenreQuery(undefined);
-  const handleAddGenre = (genreValue: string) => {
-    if (!genresValue?.includes(genreValue)) {
-      const updatedGenres = [...genresValue, genreValue];
-      setValue?.(`${addGenreName}`, updatedGenres);
+  const { data, isLoading } = useGetGenreQuery(undefined) as {
+    data: IGenresResponse | undefined;
+    isLoading: boolean;
+  };
+
+  const handleAddGenre = (genre: string) => {
+    if (!genresValue.includes(genre)) {
+      const updated = [...genresValue, genre];
+      setValue?.(addGenreName, updated);
       setEditValuesChanged(true);
-      trigger?.(`${addGenreName}`);
+      trigger?.(addGenreName);
     }
   };
+
   if (isLoading) return <Loader />;
+
+  const childGenres: IChildGenre[] = Object.values(data?.parentGenres || {}).flatMap(
+    (parent) => parent.childGenres,
+  );
+
   return (
     <SideDrawer title="Genre">
       <div className="flex flex-col gap-2 pb-4 mt-8">
-        {data?.map((genreItem: IGenreItemType, index: string | number) => {
-          const isGenActive = genresValue?.includes(genreItem.name);
+        {childGenres.map((genreItem) => {
+          const isSelected = genresValue.includes(genreItem.name);
+
           return (
             <div
-              key={index}
+              key={genreItem.id}
               className="flex items-center justify-between px-4 py-4 bg-white border border-[#E6E6E6] rounded-lg"
             >
               <h3 className="font-poppins text-sm font-light">{genreItem.name}</h3>
-              {isGenActive ? (
+
+              {isSelected ? (
                 <Button>
                   <Image src={tickMarkIcon} alt="Selected" className="h-4" />
                 </Button>
