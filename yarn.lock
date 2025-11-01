@@ -451,10 +451,10 @@
   resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.12.2.tgz#082086fcfac1309e4e66413e7a30d24f452445e9"
   integrity sha512-d1GVm2uD4E44EJft2RbKtp8Z1fp/gK8Lb6KHgs3pHlM0PxCXGLaq8LLYQYENnN4xPWO1gkL4apBtlPKzpLvZwg==
 
-"@reduxjs/toolkit@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.9.0.tgz#d4b12b90c27716a6a507193f8c3b2880729b97d5"
-  integrity sha512-fSfQlSRu9Z5yBkvsNhYF2rPS8cGXn/TZVrlwN1948QyZ8xMZ0JvP50S2acZNaf+o63u6aEeMjipFyksjIcWrog==
+"@reduxjs/toolkit@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.9.1.tgz#5a917eb5258492a44a0ae21bd28dd5e6a8124dfe"
+  integrity sha512-sETJ3qO72y7L7WiR5K54UFLT3jRzAtqeBPVO15xC3bGA6kDqCH8m/v7BKCPH4czydXzz/1lPEGLvew7GjOO3Qw==
   dependencies:
     "@standard-schema/spec" "^1.0.0"
     "@standard-schema/utils" "^0.3.0"
@@ -1734,10 +1734,10 @@ eslint-plugin-react-hooks@^7.0.0:
     zod "^3.22.4 || ^4.0.0"
     zod-validation-error "^3.0.3 || ^4.0.0"
 
-eslint-plugin-react-refresh@^0.4.20:
-  version "0.4.23"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react-refresh/-/eslint-plugin-react-refresh-0.4.23.tgz#70f363a0a8f6cce5b01b62d5be8b3d45648733f1"
-  integrity sha512-G4j+rv0NmbIR45kni5xJOrYvCtyD3/7LjpVH8MPPcudXDcNu8gv+4ATTDXTtbRR8rTCM5HxECvCSsRmxKnWDsA==
+eslint-plugin-react-refresh@^0.4.24:
+  version "0.4.24"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-refresh/-/eslint-plugin-react-refresh-0.4.24.tgz#6914e8757eb7d7ccc3efb9dbcc8a51feda71d89e"
+  integrity sha512-nLHIW7TEq3aLrEYWpVaJ1dRgFR+wLDPN8e8FpYAql/bMV2oBEfC37K0gLEGgv9fy66juNShSMV8OkTqzltcG/w==
 
 eslint-plugin-react@^7.37.5:
   version "7.37.5"
