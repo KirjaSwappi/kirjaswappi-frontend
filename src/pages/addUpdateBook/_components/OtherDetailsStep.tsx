@@ -11,11 +11,30 @@ import LocationMap from './LocationMap';
 export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   const { open } = useAppSelector((state) => state.open);
   const dispatch = useAppDispatch();
+  const { userInformation } = useAppSelector((state) => state.auth);
   const { getValues, setValue, watch } = useFormContext();
   const genres = getValues('genres');
   const mapState = useAppSelector((state) => state.map);
   const formAddress = watch('address');
 
+  const reverseGeocode = async (latitude: number, longitude: number) => {
+    try {
+      const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`;
+      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!res.ok) return null;
+      const data = await res.json();
+      const displayName: string = data?.display_name || '';
+      const addr = data?.address || {};
+      const city = addr.city || addr.town || addr.village || addr.county || '';
+      const country = addr.country || '';
+      const postalCode = addr.postcode || '';
+      return { displayName, city, country, postalCode };
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.warn('Reverse geocode failed', e);
+      return null;
+    }
+  };
   const handleRemoveGenre = (genreValue: string) => {
     if (!genreValue) return;
     const genres = getValues('genres');
@@ -71,23 +90,140 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
             <InputLabel label="Address" required={false} className="mb-0" />
             <Button
               type="button"
-              onClick={() => {
-                // Prefer redux address. If absent, prefer userLocation (from geolocation permission).
+              onClick={async () => {
+                // Prefer existing redux address
                 const reduxAddress = mapState?.address;
                 if (reduxAddress) {
                   setValue('address', reduxAddress);
                   return;
                 }
 
+                // Next prefer authenticated user's profile address if available
+                const hasProfileAddress =
+                  userInformation &&
+                  (userInformation.streetName ||
+                    userInformation.houseNumber ||
+                    userInformation.city ||
+                    userInformation.country ||
+                    userInformation.zipCode);
+
+                if (hasProfileAddress) {
+                  // Build a readable address string from profile info
+                  const parts: string[] = [];
+                  if (userInformation.houseNumber) parts.push(String(userInformation.houseNumber));
+                  if (userInformation.streetName) parts.push(userInformation.streetName);
+                  if (userInformation.city) parts.push(userInformation.city);
+                  if (userInformation.zipCode) parts.push(String(userInformation.zipCode));
+                  if (userInformation.country) parts.push(userInformation.country);
+                  const addressText = parts.join(', ');
+
+                  // Try geocoding the profile address to get lat/lon (Nominatim)
+                  (async () => {
+                    try {
+                      const encoded = encodeURIComponent(addressText);
+                      const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encoded}&addressdetails=1&limit=1`;
+                      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+                      if (res.ok) {
+                        const results = await res.json();
+                        if (Array.isArray(results) && results.length > 0) {
+                          const best = results[0];
+                          const latitude = parseFloat(best.lat);
+                          const longitude = parseFloat(best.lon);
+                          const addr = best.address || {};
+                          const city =
+                            addr.city ||
+                            addr.town ||
+                            addr.village ||
+                            addr.county ||
+                            userInformation.city ||
+                            '';
+                          const country = addr.country || userInformation.country || '';
+                          const postalCode =
+                            addr.postcode ||
+                            (userInformation.zipCode ? String(userInformation.zipCode) : '');
+
+                          const inferred = {
+                            latitude,
+                            longitude,
+                            address: best.display_name || addressText,
+                            city,
+                            country,
+                            postalCode,
+                            radiusKm: 50,
+                          };
+
+                          setValue('address', inferred);
+                          dispatch(setAddress(inferred));
+                          dispatch(setUserLocation({ latitude, longitude }));
+                          dispatch(setMapCenter({ latitude, longitude }));
+                          return;
+                        }
+                      }
+                    } catch (e) {
+                      // ignore and fallback
+                      // eslint-disable-next-line no-console
+                      console.warn('Profile address geocode failed', e);
+                    }
+
+                    // Fallback if geocoding profile address failed: reverse-geocode map center to get a readable address
+                    const center = mapState?.center || { latitude: 60.1699, longitude: 24.9384 };
+                    try {
+                      const geo = await reverseGeocode(center.latitude, center.longitude);
+                      const fallback = {
+                        latitude: center.latitude,
+                        longitude: center.longitude,
+                        address: geo?.displayName || addressText,
+                        city: geo?.city || userInformation.city || '',
+                        country: geo?.country || userInformation.country || '',
+                        postalCode:
+                          geo?.postalCode ||
+                          (userInformation.zipCode ? String(userInformation.zipCode) : ''),
+                        radiusKm: 50,
+                      };
+                      setValue('address', fallback);
+                      dispatch(setAddress(fallback));
+                      dispatch(
+                        setMapCenter({
+                          latitude: fallback.latitude,
+                          longitude: fallback.longitude,
+                        }),
+                      );
+                    } catch (e) {
+                      const fallback = {
+                        latitude: center.latitude,
+                        longitude: center.longitude,
+                        address: addressText,
+                        city: userInformation.city || '',
+                        country: userInformation.country || '',
+                        postalCode: userInformation.zipCode ? String(userInformation.zipCode) : '',
+                        radiusKm: 50,
+                      };
+                      setValue('address', fallback);
+                      dispatch(setAddress(fallback));
+                      dispatch(
+                        setMapCenter({
+                          latitude: fallback.latitude,
+                          longitude: fallback.longitude,
+                        }),
+                      );
+                    }
+                  })();
+
+                  return;
+                }
+
+                // Next prefer stored userLocation in redux state
                 const userLoc = mapState?.userLocation;
                 if (userLoc && userLoc.latitude !== null && userLoc.longitude !== null) {
+                  const { latitude, longitude } = userLoc;
+                  const geo = await reverseGeocode(latitude, longitude);
                   const inferredFromUser = {
-                    latitude: userLoc.latitude,
-                    longitude: userLoc.longitude,
-                    address: '',
-                    city: '',
-                    country: '',
-                    postalCode: '',
+                    latitude,
+                    longitude,
+                    address: geo?.displayName || '',
+                    city: geo?.city || '',
+                    country: geo?.country || '',
+                    postalCode: geo?.postalCode || '',
                     radiusKm: 50,
                   };
                   setValue('address', inferredFromUser);
@@ -99,47 +235,55 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 if ('geolocation' in navigator) {
                   navigator.geolocation.getCurrentPosition(
                     (position) => {
-                      const { latitude, longitude } = position.coords;
-                      const inferred = {
-                        latitude,
-                        longitude,
-                        address: '',
-                        city: '',
-                        country: '',
-                        postalCode: '',
-                        radiusKm: 50,
-                      };
-                      setValue('address', inferred);
-                      dispatch(setAddress(inferred));
-                      // also update map center and userLocation to keep app consistent
-                      dispatch(setUserLocation({ latitude, longitude }));
-                      dispatch(setMapCenter({ latitude, longitude }));
+                      (async () => {
+                        const { latitude, longitude } = position.coords;
+                        const geo = await reverseGeocode(latitude, longitude);
+                        const inferred = {
+                          latitude,
+                          longitude,
+                          address: geo?.displayName || '',
+                          city: geo?.city || '',
+                          country: geo?.country || '',
+                          postalCode: geo?.postalCode || '',
+                          radiusKm: 50,
+                        };
+                        setValue('address', inferred);
+                        dispatch(setAddress(inferred));
+                        dispatch(setUserLocation({ latitude, longitude }));
+                        dispatch(setMapCenter({ latitude, longitude }));
+                      })();
                     },
                     () => {
-                      // permission denied or other error: fallback to center
-                      const center = mapState?.center || { latitude: 60.1699, longitude: 24.9384 };
-                      const inferred = {
-                        latitude: center.latitude,
-                        longitude: center.longitude,
-                        address: '',
-                        city: '',
-                        country: '',
-                        postalCode: '',
-                        radiusKm: 50,
-                      };
-                      setValue('address', inferred);
-                      dispatch(setAddress(inferred));
+                      (async () => {
+                        const center = mapState?.center || {
+                          latitude: 60.1699,
+                          longitude: 24.9384,
+                        };
+                        const geo = await reverseGeocode(center.latitude, center.longitude);
+                        const inferred = {
+                          latitude: center.latitude,
+                          longitude: center.longitude,
+                          address: geo?.displayName || '',
+                          city: geo?.city || '',
+                          country: geo?.country || '',
+                          postalCode: geo?.postalCode || '',
+                          radiusKm: 50,
+                        };
+                        setValue('address', inferred);
+                        dispatch(setAddress(inferred));
+                      })();
                     },
                   );
                 } else {
                   const center = mapState?.center || { latitude: 60.1699, longitude: 24.9384 };
+                  const geo = await reverseGeocode(center.latitude, center.longitude);
                   const inferred = {
                     latitude: center.latitude,
                     longitude: center.longitude,
-                    address: '',
-                    city: '',
-                    country: '',
-                    postalCode: '',
+                    address: geo?.displayName || '',
+                    city: geo?.city || '',
+                    country: geo?.country || '',
+                    postalCode: geo?.postalCode || '',
                     radiusKm: 50,
                   };
                   setValue('address', inferred);

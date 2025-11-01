@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useGeolocation } from '../map/hooks/useGeolocation';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +17,7 @@ import {
   useUpdateBookMutation,
 } from '../../redux/feature/book/bookApi';
 import { options } from '../../utility/helper';
+import { useGeolocation } from '../map/hooks/useGeolocation';
 import Stepper from './_components/Stepper';
 import { validationSchemas } from './Schema';
 
@@ -34,7 +34,7 @@ export default function AddUpdateBook() {
   useGeolocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [active, setActive] = useState<number>(0);
+  const [active, setActive] = useState<number>(1);
   const { userInformation } = useAppSelector((state) => state.auth);
 
   // LANGUAGE, CONDITION, & BOOK QUERY
