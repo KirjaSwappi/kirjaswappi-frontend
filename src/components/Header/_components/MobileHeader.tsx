@@ -5,18 +5,21 @@ import logo from '../../../assets/logo.png';
 import logoIcon from '../../../assets/logoIcon.png';
 import { useMouseClick } from '../../../hooks/useMouse';
 import useScroll from '../../../hooks/useScroll';
+import { useAppSelector } from '../../../redux/hooks';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
 import SearchBar from '../../shared/SearchBar';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
+import NotificationBell from './NotificationBell';
 export default function MobileHeader() {
   const location = useLocation();
   const { scrolled } = useScroll();
   const [query, setQuery] = useState<string>('');
   const [searchToggle, setSearchToggle] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+  const { userInformation } = useAppSelector((state) => state.auth);
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
   const isHomePage = pathname === '/';
@@ -77,6 +80,7 @@ export default function MobileHeader() {
               >
                 <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
                 {clicked && <LanguageMenuDropdown />}
+                {userInformation.id && <NotificationBell />}
                 <HeaderUserProfile />
               </div>
             </div>
