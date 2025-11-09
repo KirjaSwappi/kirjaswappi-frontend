@@ -10,6 +10,7 @@ import {
   selectWSConnectionStatus,
   toggleNotificationPanel,
 } from '../../../redux/feature/notification/notificationSlice';
+import { setLoginModalOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { cn } from '../../../utility/cn';
 import NotificationItem from './NotificationItem';
@@ -28,6 +29,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
   const unreadCount = useAppSelector(selectUnreadCount);
   const isNotificationPanelOpen = useAppSelector(selectIsNotificationPanelOpen);
   const wsConnectionStatus = useAppSelector(selectWSConnectionStatus);
+  const { userInformation } = useAppSelector((state) => state.auth);
 
   // Outside click detection
   const { reference } = useMouseClick<HTMLDivElement>(() => {
@@ -36,8 +38,18 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
     }
   });
 
-  // Toggle notification panel
+  // Toggle notification panel or show login modal
   const handleBellClick = () => {
+    // Check if user is authenticated
+    const isAuthenticated = Boolean(userInformation?.id && userInformation?.email);
+
+    if (!isAuthenticated) {
+      // Show login modal if not authenticated
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+
+    // Toggle notification panel if authenticated
     dispatch(toggleNotificationPanel(!isNotificationPanelOpen));
   };
 
