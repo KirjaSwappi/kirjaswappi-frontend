@@ -31,7 +31,7 @@
     "crypto-js": "^4.2.0",
     "embla-carousel-react": "^8.5.2",
     "framer-motion": "^12.23.22",
-    "i18next": "^25.5.2",
+    "i18next": "^25.6.1",
     "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.546.0",
