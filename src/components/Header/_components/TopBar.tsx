@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useMouseClick } from '../../../hooks/useMouse';
+import { useAppSelector } from '../../../redux/hooks';
 import Image from '../../shared/Image';
 import ScrollSearch from '../../shared/ScrollSearch';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
 import MobileHeader from './MobileHeader';
+import NotificationBell from './NotificationBell';
 
 export default function TopBar() {
   const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
+  const { userInformation } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -70,6 +73,7 @@ export default function TopBar() {
             >
               <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
               {clicked && <LanguageMenuDropdown />}
+              {userInformation.id && <NotificationBell />}
               <HeaderUserProfile />
             </div>
           </div>
