@@ -34,13 +34,6 @@ export default function Map() {
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
-<<<<<<< HEAD
-const {
-  filter
-  } = useAppSelector((state) => state.filter);
-=======
-
->>>>>>> d33a357 (conflict resolved)
   const { data, isLoading, isError } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
     { refetchOnMountOrArgChange: false },
