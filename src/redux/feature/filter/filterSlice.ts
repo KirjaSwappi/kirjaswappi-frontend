@@ -51,8 +51,17 @@ const filterSlice = createSlice({
     setFilterOpen: (state, action: PayloadAction<boolean>) => {
       state.isFilterOpen = action.payload;
     },
+    setSearchFilter: (state, action: PayloadAction<string>) => {
+      state.filter.search = action.payload;
+    },
     setIsCategoryOrFilterOrSortBy: (state, action: PayloadAction<FilterItemEnum | null>) => {
       state.isCategoryOrFilterOrSortBy = action.payload;
+    },
+    clearAllFilters: (state) => {
+      state.filter.genre = [];
+      state.filter.language = [];
+      state.filter.condition = [];
+      state.filter.search = '';
     },
   },
 });
@@ -65,6 +74,8 @@ export const {
   setHasMore,
   setPageNumber,
   setFilterOpen,
+  setSearchFilter,
+  clearAllFilters,
   setIsCategoryOrFilterOrSortBy,
 } = filterSlice.actions;
 export default filterSlice.reducer;

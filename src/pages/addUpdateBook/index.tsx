@@ -34,7 +34,7 @@ export default function AddUpdateBook() {
   useGeolocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [active, setActive] = useState<number>(1);
+  const [active, setActive] = useState<number>(0);
   const { userInformation } = useAppSelector((state) => state.auth);
 
   // LANGUAGE, CONDITION, & BOOK QUERY
