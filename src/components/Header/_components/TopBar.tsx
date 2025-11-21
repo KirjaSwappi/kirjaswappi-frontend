@@ -47,7 +47,7 @@ export default function TopBar() {
         className={`h-20 px-4 py-2 w-full z-50 fixed top-0 lg:shadow-sm transition-all duration-300 hidden lg:flex items-center justify-center flex-col gap-4 shadow-md bg-white`}
       >
         <div className="container">
-          <div id="top-nav-bar" className={`w-full flex items-center justify-between `}>
+          <div id="top-nav-bar" className={`w-full flex items-center justify-between`}>
             <Link to="/" aria-label="Go to homepage">
               <Image
                 src={logo}

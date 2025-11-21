@@ -90,3 +90,29 @@
   scrollbar-width: thin; /* Options: auto, thin, none */
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
+
+.leaflet-div-icon {
+  background-color: transparent !important;
+  border: none;
+}
+
+/* Lower all leaflet map layers */
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+/* You can fine-tune if needed */
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-overlay-pane,
+.leaflet-shadow-pane,
+.leaflet-marker-pane,
+.leaflet-tooltip-pane,
+.leaflet-popup-pane {
+  z-index: 0 !important;
+}
+
+/* Keep popups above base layers but below your drawer */
+.leaflet-popup {
+  z-index: 500 !important;
+}

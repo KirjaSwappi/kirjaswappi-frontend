@@ -17,6 +17,7 @@ import {
   useUpdateBookMutation,
 } from '../../redux/feature/book/bookApi';
 import { options } from '../../utility/helper';
+import { useGeolocation } from '../map/hooks/useGeolocation';
 import Stepper from './_components/Stepper';
 import { validationSchemas } from './Schema';
 
@@ -30,6 +31,7 @@ import { IAddUpdateBookData } from './types/interface';
 
 export default function AddUpdateBook() {
   const { t } = useTranslation();
+  useGeolocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [active, setActive] = useState<number>(0);

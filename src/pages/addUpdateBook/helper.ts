@@ -14,6 +14,7 @@ export const getDefaultValues = (bookData?: IBookData) => ({
   swapType: parseSwapType(bookData?.swapCondition?.swapType),
   swappableBooks: getDefaultSwappableBooks(bookData),
   swappableGenres: getDefaultSwappableGenres(bookData),
+  address: null,
 });
 
 // SET DEFAULT SWAP TYPE
@@ -66,6 +67,20 @@ export const buildFormData = async (
 
   // SET SWAP CONDITION INFORMATION
   await appendSwapConditionInformation(formData, data);
+
+  // SET ADDRESS / LOCATION INFORMATION (if provided)
+  if (data.address) {
+    const { latitude, longitude, address, city, country, postalCode, radiusKm } = data.address;
+    if (latitude !== undefined && longitude !== undefined) {
+      formData.append('latitude', String(latitude));
+      formData.append('longitude', String(longitude));
+    }
+    if (address !== undefined) formData.append('address', address);
+    if (city !== undefined) formData.append('city', city);
+    if (country !== undefined) formData.append('country', country);
+    if (postalCode !== undefined) formData.append('postalCode', postalCode);
+    if (radiusKm !== undefined) formData.append('radiusKm', String(radiusKm));
+  }
 
   return formData;
 };

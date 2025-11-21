@@ -56,21 +56,24 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''}  `}
+      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
     >
       <FormProvider {...methods}>
-        {drawers.map(({ type, ref, left }) => (
-          <SideDrawer
-            key={type}
-            ref={ref}
-            open={isFilterOpen && isCategoryOrFilterOrSortBy === type}
-            left={isMobile ? true : left}
-          >
-            <form>
-              <BookFilter />
-            </form>
-          </SideDrawer>
-        ))}
+        {drawers.map(({ type, ref, left }) => {
+          const drawerLeft = pathname === '/map' ? true : isMobile ? true : left;
+          return (
+            <SideDrawer
+              key={type}
+              ref={ref}
+              open={isFilterOpen && isCategoryOrFilterOrSortBy === type}
+              left={drawerLeft}
+            >
+              <form>
+                <BookFilter />
+              </form>
+            </SideDrawer>
+          );
+        })}
       </FormProvider>
       <div
         className={`${

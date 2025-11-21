@@ -15,6 +15,7 @@ import PrivateRoute from './PrivateRoute';
 
 import NotFound from '../components/error/NotFound';
 import ContactUs from '../pages/contactUs/ContactUs';
+import Map from '../pages/map';
 import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
@@ -41,6 +42,10 @@ const routes = createBrowserRouter([
       {
         path: '/contact',
         element: <ContactUs />,
+      },
+      {
+        path: '/map',
+        element: <Map />,
       },
       {
         path: '/privacy-policy',

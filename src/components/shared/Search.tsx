@@ -6,9 +6,18 @@ import useDebounce from '../../hooks/useDebounce';
 import { useMouseClick } from '../../hooks/useMouse';
 import { setSearch } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import { cn } from '../../utility/cn';
 import Input from './Input';
 
-export default function Search({ onClose }: { onClose?: () => void }) {
+export default function Search({
+  onClose,
+  className,
+  placeholder,
+}: {
+  onClose?: () => void;
+  className?: string;
+  placeholder?: string;
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState<string>('');
@@ -22,30 +31,37 @@ export default function Search({ onClose }: { onClose?: () => void }) {
 
   return (
     <div ref={reference} className="relative w-full">
-      <div className="w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2">
+      <div
+        className={cn(
+          'w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2',
+          className,
+        )}
+      >
         <Input
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          placeholder={placeholder || 'Search Books...'}
           type="text"
-          className="w-full h-full lg:bg-white outline-none border-none px-3 py-1 placeholder:pl-3 md:placeholder:pl-8 placeholder:text-grayDark placeholder:font-poppins placeholder:text-xs bg-transparent"
+          className="w-full h-full lg:bg-white outline-none border-none px-3 py-1 placeholder:pl-3 md:placeholder:pl-6 placeholder:text-grayDark placeholder:font-poppins placeholder:text-xs bg-transparent"
         />
-        <div
-          className="flex items-center justify-between gap-1 rounded-full bg-primary-light h-[26px] px-2 text-primary py-1 transition-all duration-300 ease-in-out"
-          style={{ height: '32px' }}
-        >
-          <FaLocationDot className="transition-transform duration-300 ease-in-out transform" />
-          <p className="font-normal text-xs font-poppins">Helsinki</p>
-          <MdKeyboardArrowDown
-            className={`
+        <div className="flex items-center gap-2">
+          <div
+            className="flex items-center justify-between gap-1 rounded-full bg-primary-light h-[26px] px-2 text-primary py-1 transition-all duration-300 ease-in-out"
+            style={{ height: '32px' }}
+          >
+            <FaLocationDot className="transition-transform duration-300 ease-in-out transform" />
+            <p className="font-normal text-xs font-poppins">Helsinki</p>
+            <MdKeyboardArrowDown
+              className={`
             transition-transform duration-300 ease-in-out transform
             ${isFocused ? 'rotate-180' : 'rotate-0'}
           `}
-          />
-        </div>
-        {onClose && (
+            />
+          </div>
+
           <button
             type="button"
             onClick={onClose}
@@ -54,7 +70,7 @@ export default function Search({ onClose }: { onClose?: () => void }) {
           >
             <IoSearch className="w-4 h-4" />
           </button>
-        )}
+        </div>
       </div>
 
       {clicked && (
