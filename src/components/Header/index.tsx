@@ -3,6 +3,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import useDrawerOutsideClick from '../../hooks/useDrawerOutsideClick';
 import { useIsMobile } from '../../hooks/useIsMobile';
+import { useNotificationWS } from '../../hooks/useNotificationWS';
 import {
   setConditionFilter,
   setGenreFilter,
@@ -28,6 +29,9 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const params = pathname?.split('/').reverse()[0];
   const showTopHeaderPath = ShowTopHeaderPath(params);
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
+
+  // Initialize WebSocket connection for real-time notifications
+  useNotificationWS();
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {
