@@ -30,11 +30,12 @@ export default function Map() {
   useGeolocation();
   const navigate = useNavigate();
   const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
-  const { filter } = useAppSelector((state) => state.filter);
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
-
+const {
+  filter
+  } = useAppSelector((state) => state.filter);
   const { data, isLoading, isError } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
     { refetchOnMountOrArgChange: false },
