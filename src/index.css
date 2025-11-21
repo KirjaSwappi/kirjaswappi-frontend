@@ -11,7 +11,6 @@
   box-sizing: border-box;
 }
 
-
 @layer utilities {
   .custom-scrollbar::-webkit-scrollbar {
     width: 11px;

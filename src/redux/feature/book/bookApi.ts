@@ -133,46 +133,6 @@ export const bookApi = api.injectEndpoints({
       },
       providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
     }),
-
-    getBooksWithLocation: builder.query({
-      query: ({
-        filter = {} as IFilterData,
-        bounds,
-      }: {
-        filter?: IFilterData;
-        bounds?: {
-          north: number;
-          south: number;
-          east: number;
-          west: number;
-        };
-      }) => {
-        const params = new URLSearchParams();
-
-        // Add existing filter params
-        const filterQuery = buildBookQueryParams(filter);
-        if (filterQuery) {
-          filterQuery.split('&').forEach((pair) => {
-            const [key, value] = pair.split('=');
-            if (key && value) params.append(key, value);
-          });
-        }
-
-        // Add map bounds
-        if (bounds) {
-          params.append('north', bounds.north.toString());
-          params.append('south', bounds.south.toString());
-          params.append('east', bounds.east.toString());
-          params.append('west', bounds.west.toString());
-        }
-
-        return {
-          url: `/books/map?${params.toString()}`,
-          method: 'GET',
-        };
-      },
-      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
-    }),
   }),
 });
 
