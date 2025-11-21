@@ -29,8 +29,8 @@ export const addLocationToBooks = (books: IBook[]): IBookWithLocation[] => {
 export default function Map() {
   useGeolocation();
   const navigate = useNavigate();
-  const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
+  const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
