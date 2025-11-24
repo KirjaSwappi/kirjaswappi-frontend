@@ -34,10 +34,10 @@ const PrivacyPolicy = () => {
   }, [location]);
 
   return (
-    <div className="font-poppins pb-24 lg:bg-white lg:container">
-      <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
+    <div className=" container font-poppins  pb-20 lg:pb-6 pt-14 lg:pt-6  ">
+      <div className=" container lg:pt-[47px]  bg-white rounded-lg">
         <PrivacyPolicyHeader onBack={() => navigate('/')} />
-        <p className="pt-9 leading-6 px-4 lg:hidden font-normal text-[14px] px-4 pb-[12px]">
+        <p className="pt-9 leading-6 px-4 lg:hidden font-normal text-[14px] pb-[12px]">
           {t('privacypolicy.introduction')}
         </p>
 
