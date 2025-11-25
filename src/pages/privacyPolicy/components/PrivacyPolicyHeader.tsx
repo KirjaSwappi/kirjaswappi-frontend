@@ -1,6 +1,6 @@
 import React from 'react';
-import BookAddUpdateHeader from '../../addUpdateBook/_components/BookAddUpdateHeader';
 import { useTranslation } from 'react-i18next';
+import BookAddUpdateHeader from '../../addUpdateBook/_components/BookAddUpdateHeader';
 
 interface PrivacyPolicyHeaderProps {
   onBack: () => void;

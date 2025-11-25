@@ -13,6 +13,7 @@ function getTopHeaderPaths(params: string | undefined) {
     `/user/messages/${params}/isMessage=True`,
     '/map',
     '/privacy-policy',
+    '/support-us',
   ];
 }
 export const ShowTopHeaderPath = getTopHeaderPaths;
