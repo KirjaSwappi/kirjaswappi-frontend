@@ -116,3 +116,11 @@
 .leaflet-popup {
   z-index: 500 !important;
 }
+
+.bgr {
+  background-color: red;
+}
+
+.bge {
+  background-color: violet;
+}
