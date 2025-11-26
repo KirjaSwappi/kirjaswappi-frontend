@@ -1,4 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import SupportUsCard from './components/SupportUsCard';
+import SupportUsHeader from './components/SupportUsHeader';
 
 export type TSupportSection = {
   id: number;
@@ -40,9 +42,13 @@ export const supportSectionsData: TSupportSection[] = [
 ];
 
 const SupportUs = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="font-poppins pb-24 lg:bg-white lg:container  mt-6  ">
-      <div className="pt-[56px] lg:max-w-[80%] lg:mx-auto lg:px-12  ">
+      <div className="pt-[56px] lg:max-w-[80%] lg:mx-auto px-4 lg:px-12  ">
+        <SupportUsHeader onBack={() => navigate('/')} />
+
         {/*  */}
         <div className=" flex flex-col gap-y-36 ">
           {supportSectionsData?.map((item) => (
