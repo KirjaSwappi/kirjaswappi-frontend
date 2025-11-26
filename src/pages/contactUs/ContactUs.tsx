@@ -1,14 +1,14 @@
-import { useForm, FormProvider } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { InferType } from 'yup';
+import contactFrame from '../../assets/contactFrame.png';
+import Button from '../../components/shared/Button';
 import ControlledInputField from '../../components/shared/ControllerField';
 import InputLabel from '../../components/shared/InputLabel';
-import Button from '../../components/shared/Button';
-import { useNavigate } from 'react-router-dom';
 import BookAddUpdateHeader from '../addUpdateBook/_components/BookAddUpdateHeader';
-import { yupResolver } from '@hookform/resolvers/yup';
 import contactUsSchema from './schema/index';
-import contactFrame from '../../assets/contactFrame.png';
-import { InferType } from 'yup';
-import { useTranslation } from 'react-i18next';
 
 type ContactFormData = InferType<typeof contactUsSchema>;
 
@@ -28,7 +28,7 @@ export default function ContactUs() {
   };
 
   return (
-    <>
+    <div className="  mt-6 ">
       <div className="lg:hidden">
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('contactus.header')} />
       </div>
@@ -40,7 +40,7 @@ export default function ContactUs() {
           <p className="w-full block font-normal text-[10px] lg:text-[14px] leading-5 lg:leading-6 tracking-[0px] text-[#808080] mb-8 whitespace-normal">
             {t('contactus.subtitle')}
           </p>
-          <div className="w-full lg:max-w-lg">
+          <div className="w-full lg:max-w-lg ">
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-4 pb-4 ">
@@ -124,6 +124,6 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

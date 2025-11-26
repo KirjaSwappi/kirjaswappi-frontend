@@ -14,6 +14,7 @@ import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
 import NotFound from '../components/error/NotFound';
+import Collaboration from '../pages/Collaboration';
 import ContactUs from '../pages/contactUs/ContactUs';
 import Map from '../pages/map';
 import Messages from '../pages/messages/Messages';
@@ -50,6 +51,14 @@ const routes = createBrowserRouter([
       {
         path: '/privacy-policy',
         element: <PrivacyPolicy />,
+      },
+      {
+        path: '/contact-us',
+        element: <ContactUs />,
+      },
+      {
+        path: '/collaboration',
+        element: <Collaboration />,
       },
       {
         path: '/privacy-policy/:sectionKey',
