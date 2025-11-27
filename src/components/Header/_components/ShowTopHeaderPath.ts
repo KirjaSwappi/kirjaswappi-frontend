@@ -14,6 +14,7 @@ function getTopHeaderPaths(params: string | undefined) {
     '/map',
     '/contact-us',
     '/collaboration',
+    '/donation',
   ];
 }
 export const ShowTopHeaderPath = getTopHeaderPaths;
