@@ -104,7 +104,7 @@ export default function TopBar() {
             {/* right section  */}
             <div
               ref={reference}
-              className={`w-[220px] flex items-center justify-end gap-4 relative `}
+              className={`w-[230px] flex items-center justify-end gap-4 relative `}
             >
               <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
               {clicked && <LanguageMenuDropdown />}

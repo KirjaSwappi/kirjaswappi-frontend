@@ -1,5 +1,7 @@
-import { MapPin, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { FaLocationDot } from 'react-icons/fa6';
+import { IoIosSearch } from 'react-icons/io';
 import Button from '../../../components/shared/Button';
 import Input from '../../../components/shared/Input';
 
@@ -20,33 +22,33 @@ export default function BookSearchBar() {
   const [selectedLocation, setSelectedLocation] = useState<ILocation>(locations[0]);
 
   return (
-    <form className="space-y-4  ">
+    <div className="space-y-4  ">
       <div className=" overflow-hidden flex flex-col sm:flex-row gap-2 sm:gap-3 bg-white rounded-full p-2  border  border-gray  ">
-        <Input
-          type="text"
-          placeholder="What book are you looking for ?"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="flex-1 border-0  px-6  py-2 text-sm sm:text-base focus-visible:ring-0 placeholder:text-gray-400 overflow-hidden bg-white lg:bg-white "
-        />
+        <div className=" flex justify-between items-center ">
+          <IoIosSearch size={24} className="text-grayDark block lg:hidden " />
+
+          <Input
+            type="text"
+            placeholder="What book are you looking for ?"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="  flex-1 border-0  py-2 text-sm sm:text-base focus-visible:ring-0 placeholder:text-gray-400 overflow-hidden bg-white lg:bg-white lg:bge "
+          />
+        </div>
 
         {/* Location Selector */}
         <div className="flex items-center gap-1 px-3 py-2 bg-[#dbedff] border border-[#badbfd] rounded-full text-[#3879E9]">
-          <MapPin className="size-5  " />
+          <FaLocationDot className="size-4  " />
           <select
             value={selectedLocation.code}
             onChange={(e) => {
               const location = locations.find((l) => l.code === e.target.value);
               if (location) setSelectedLocation(location);
             }}
-            className="bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-gray-700 cursor-pointer  "
+            className="bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-gray-700 cursor-pointer   "
           >
             {locations.map((loc) => (
-              <option
-                className="  absolute top-10 left-0 z-10 mt-6 "
-                key={loc.code}
-                value={loc.code}
-              >
+              <option className="  " key={loc.code} value={loc.code}>
                 {loc.name}
               </option>
             ))}
@@ -61,6 +63,6 @@ export default function BookSearchBar() {
           <Search className="size-5 " />
         </Button>
       </div>
-    </form>
+    </div>
   );
 }

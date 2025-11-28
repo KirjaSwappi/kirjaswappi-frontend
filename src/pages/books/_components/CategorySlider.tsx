@@ -47,7 +47,7 @@ export default function CategorySlider() {
   return (
     <div className=" flex justify-center items-center gap-x-3  ">
       <button
-        onClick={() => swiperRef.current?.slideNext()}
+        onClick={() => swiperRef.current?.slidePrev()}
         className="flex items-center justify-center rounded-full bg-white transition-all duration-300 disabled:opacity-50 py-[10px] px-[9px] shadow "
         aria-label="Previous slide"
       >
@@ -75,7 +75,7 @@ export default function CategorySlider() {
       </Swiper>
 
       <button
-        onClick={() => swiperRef.current?.slidePrev()}
+        onClick={() => swiperRef.current?.slideNext()}
         className="flex items-center justify-center rounded-full bg-white transition-all duration-300 disabled:opacity-50 py-[10px] px-[9px] shadow "
         aria-label="Previous slide"
       >

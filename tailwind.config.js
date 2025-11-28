@@ -62,6 +62,10 @@ export default {
         lg: '1024px',
         xl: '1224px',
         '2xl': '1392px',
+        'sc-1400': '1400px',
+        'sc-500': '500px',
+        'sc-400': '400px',
+        'sc-375': '375px',
       },
       spacing: {
         '1px': '1px',

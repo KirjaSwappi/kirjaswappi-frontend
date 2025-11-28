@@ -35,7 +35,7 @@ export default function HeaderUserProfile() {
               <Image
                 src={blankProfileIcon}
                 alt="profile"
-                className="w-10 h-10 object-cover rounded-full border border-primary"
+                className="  size-8 xlg:size-10 object-cover rounded-full border border-primary"
               />
             </Link>
           ) : (
@@ -51,7 +51,7 @@ export default function HeaderUserProfile() {
                 <Image
                   src={profilePicture?.imageUrl ?? blankProfileIcon}
                   alt="profile"
-                  className="w-10 h-10 object-cover rounded-full border border-primary"
+                  className="size-8 xlg:size-10 object-cover rounded-full border border-primary"
                 />
                 <div className=" items-center gap-2 hidden lg:flex">
                   <p className="text-grayDark font-poppins font-normal text-sm">
