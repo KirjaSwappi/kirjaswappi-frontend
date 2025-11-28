@@ -19,10 +19,14 @@ export default function Collaboration() {
       </div>
 
       <div className="bg-[#F5F7FA] container min-h-screen pb-24 font-poppins lg:bg-white lg:pt-14">
-        <div className="py-8 w-[70%] mx-auto  ">
-          <h2 className="text-[16px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[40px] mt-10 lg:mt-0">
+        <div className="py-8 w-full lg:w-[70%] mx-auto  ">
+          <h2 className="text-[20px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[28px] lg:leading-[40px] mt-10 lg:mt-0">
             {t('collaboration.heading')}
           </h2>
+
+          <p className="w-full block lg:hidden font-normal text-[12px] lg:text-[14px] leading-[16px] lg:leading-6 tracking-[0px] text-[#808080] mb-8 whitespace-normal">
+            {t('collaboration.subtitle')}
+          </p>
 
           <SectionWithForm imageSrc="https://i.postimg.cc/TYQhzjd1/35240a629051b39fc0255c41172fcb57ce867969.jpg">
             <FormProvider {...methods}>

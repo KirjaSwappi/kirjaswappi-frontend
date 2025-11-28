@@ -22,6 +22,7 @@ import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
+import Volunteer from '../pages/volunteer';
 
 const routes = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const routes = createBrowserRouter([
       {
         path: '/donation',
         element: <Donation />,
+      },
+      {
+        path: '/volunteer',
+        element: <Volunteer />,
       },
       {
         path: '/privacy-policy/:sectionKey',
