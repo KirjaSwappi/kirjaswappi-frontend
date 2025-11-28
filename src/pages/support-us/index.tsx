@@ -47,10 +47,10 @@ const SupportUs = () => {
   return (
     <div className="font-poppins pb-24 lg:bg-white lg:container  mt-6  ">
       <div className="pt-[56px] lg:max-w-[80%] lg:mx-auto px-4 lg:px-12  ">
-        <SupportUsHeader onBack={() => navigate('/')} />
+        <SupportUsHeader onBack={() => navigate(-1)} />
 
         {/*  */}
-        <div className=" flex flex-col gap-y-36 ">
+        <div className=" flex flex-col gap-y-10 lg:gap-y-36 ">
           {supportSectionsData?.map((item) => (
             <SupportUsCard key={item?.id} data={item} />
           ))}
