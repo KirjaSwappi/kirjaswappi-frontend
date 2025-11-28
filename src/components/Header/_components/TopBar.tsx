@@ -55,7 +55,10 @@ export default function TopBar() {
                 className="h-7 cursor-pointer hidden lg:block"
               />
             </Link>
-            <div className="block transition-all duration-300 ease-in-out">
+
+            {/* mid , btn section  */}
+
+            <div className="block transition-all duration-300 ease-in-out  ">
               {showScrollSearch ? (
                 <div className="animate-fadeIn">
                   <ScrollSearch />
@@ -67,9 +70,10 @@ export default function TopBar() {
               )}
             </div>
 
+            {/* right section  */}
             <div
               ref={reference}
-              className={`w-[220px] flex items-center justify-end gap-4 relative`}
+              className={`w-[220px] flex items-center justify-end gap-4 relative `}
             >
               <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
               {clicked && <LanguageMenuDropdown />}
