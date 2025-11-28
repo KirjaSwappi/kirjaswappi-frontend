@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { dummyCategorySection } from '../constants/DummyData';
-import { getPrivacyPolicySections } from '../constants/sections';
 import PrivacyPolicyHeader from './PrivacyPolicyHeader';
 
 const PrivacyPolicyDetail: React.FC = () => {
@@ -11,11 +9,7 @@ const PrivacyPolicyDetail: React.FC = () => {
   const navigate = useNavigate();
   const { sectionKey } = useParams<{ sectionKey: string }>();
 
-  console.log('section key = ', sectionKey);
-
   const sectionData = dummyCategorySection.find((item) => item?.id === Number(sectionKey));
-
-  console.log(sectionData);
 
   // Redirect to full privacy policy on desktop view
   useEffect(() => {
@@ -31,8 +25,8 @@ const PrivacyPolicyDetail: React.FC = () => {
   }, [navigate]);
 
   // Flatten all items from static sections
-  const allItems = getPrivacyPolicySections(t).flatMap((section) => section.items);
-  const section = allItems.find((item) => item.title === sectionKey);
+  // const allItems = getPrivacyPolicySections(t).flatMap((section) => section.items);
+  // const section = allItems.find((item) => item.title === sectionKey);
 
   if (!sectionData) {
     return (
