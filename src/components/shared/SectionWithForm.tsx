@@ -17,7 +17,7 @@ export default function SectionWithForm({
       <div className="w-full lg:w-auto  ">{children}</div>
 
       {/* image section */}
-      <div className=" hidden lg:block w-[450px] aspect-[4/3] rounded-lg overflow-hidden border">
+      <div className=" hidden lg:block w-[450px] aspect-[4/3] rounded-lg overflow-hidden ">
         <img src={imageSrc} alt={imageAlt} className="w-full h-full object-cover" />
       </div>
     </section>

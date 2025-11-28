@@ -17,6 +17,7 @@ import NotFound from '../components/error/NotFound';
 import Collaboration from '../pages/Collaboration';
 import ContactUs from '../pages/contactUs/ContactUs';
 import Donation from '../pages/Donation';
+import Feedback from '../pages/FeedBack';
 import Map from '../pages/map';
 import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
@@ -69,6 +70,10 @@ const routes = createBrowserRouter([
       {
         path: '/volunteer',
         element: <Volunteer />,
+      },
+      {
+        path: '/feedback',
+        element: <Feedback />,
       },
       {
         path: '/privacy-policy/:sectionKey',
