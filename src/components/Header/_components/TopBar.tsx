@@ -75,19 +75,6 @@ export default function TopBar() {
             </Link>
 
             {/* mid , btn section  */}
-
-            {/* <div className="block transition-all duration-300 ease-in-out bg-red ">
-              {isScrolled ? (
-                <div className="animate-fadeIn">
-                  <BookSearchBar />
-                </div>
-              ) : (
-                <div className="animate-fadeIn">
-                  <ScrollSearch />
-                </div>
-              )}
-            </div> */}
-
             <div className=" block  ">
               <AnimatePresence mode="wait">
                 {isScrolled ? (
