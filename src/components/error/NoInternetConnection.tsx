@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../shared/Button';
-import { TbWorldOff } from 'react-icons/tb';
+import offline from '../../assets/offline.png';
+import Header from '../Header';
+import MobileHeader from '../Header/_components/MobileHeader';
+import ErrorPageHeader from './ErrorPageHeader';
 
 interface NoInternetConnectionProps {
   children: React.ReactNode;
@@ -24,22 +26,23 @@ const NoInternetConnection: React.FC<NoInternetConnectionProps> = ({ children })
 
   if (!isOnline) {
     return (
-      <div
-        className="flex items-center font-poppins justify-center min-h-screen bg-gray-100"
-        aria-live="assertive"
-      >
-        <div className="bg-white p-8 container text-center">
-          <div className="text-6xl mb-4 text-gray-700">
-            <TbWorldOff className="inline-block" />
+      <div>
+        <div className="lg:hidden">
+          <MobileHeader />
+        </div>
+        <Header showOn404={true} />
+        <div className="font-poppins container bg-athensGray lg:bg-white h-[87vh] pt-14 mt-3 flex flex-col justify-center items-center ">
+          <ErrorPageHeader
+            title={"You're offline"}
+            paragraph={
+              'Check your internet connection and try again. We’ll be right here when you’re back online.'
+            }
+          />
+
+          {/* img  */}
+          <div className="w-[265px] lg:w-[655px] h-[120px] lg:h-[290px] mt-8 lg:mt-16 ">
+            <img src={offline} alt="404Error" className=" w-full h-full " />
           </div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">No Internet Connection</h1>
-          <p className="text-gray-600 mb-6">Please check your internet connection and try again.</p>
-          <Button
-            onClick={() => window.location.reload()}
-            className="bg-blue-500 text-white px-6 py-4 lg:py-4 lg:px-9 rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Retry
-          </Button>
         </div>
       </div>
     );
