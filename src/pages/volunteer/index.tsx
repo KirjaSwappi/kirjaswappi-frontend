@@ -13,12 +13,12 @@ export default function Volunteer() {
   const methods = useForm();
 
   return (
-    <div className="  mt-6 ">
+    <div className="  my-6">
       <div className="lg:hidden">
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('volunteer.header')} />
       </div>
 
-      <div className="bg-[#F5F7FA] container min-h-screen pb-24 font-poppins lg:bg-white lg:pt-14">
+      <div className="bg-[#F5F7FA] container  font-poppins lg:bg-white pb-20 lg:pb-0 lg:pt-14 ">
         <div className="py-8 w-full lg:w-[70%] mx-auto  ">
           <h2 className="text-[20px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[28px] lg:leading-[40px] mt-10 lg:mt-0">
             {t('volunteer.heading')}
