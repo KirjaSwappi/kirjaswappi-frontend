@@ -21,7 +21,7 @@ export default function BookSearchBar() {
 
   return (
     <form className="space-y-4  ">
-      <div className=" overflow-hidden flex flex-col sm:flex-row gap-2 sm:gap-3 bg-white rounded-full p-2 shadow-lg  ">
+      <div className=" overflow-hidden flex flex-col sm:flex-row gap-2 sm:gap-3 bg-white rounded-full p-2  border  border-gray  ">
         <Input
           type="text"
           placeholder="What book are you looking for ?"

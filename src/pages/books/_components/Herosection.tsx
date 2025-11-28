@@ -51,8 +51,22 @@ export default function HeroSection() {
       api.off('select', onSelect);
     };
   }, [api]);
+
+  // scroll --> 251
+  // scroll --> 301
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosttion = window.scrollY;
+
+      console.log(scrollPosttion);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="rounded-lg overflow-hidden relative  ">
+    <section className="rounded-lg overflow-hidden relative   ">
       {/* search component  */}
       <div className="  absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
         <BookSearchBar />

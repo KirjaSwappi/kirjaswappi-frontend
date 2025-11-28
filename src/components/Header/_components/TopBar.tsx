@@ -1,7 +1,9 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useMouseClick } from '../../../hooks/useMouse';
+import BookSearchBar from '../../../pages/books/_components/BookSearchBar';
 import { useAppSelector } from '../../../redux/hooks';
 import Image from '../../shared/Image';
 import ScrollSearch from '../../shared/ScrollSearch';
@@ -15,6 +17,20 @@ export default function TopBar() {
   const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // scroll --> 251
+  // scroll --> 301
+
+  console.log(showScrollSearch);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 301);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,9 +51,11 @@ export default function TopBar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   useEffect(() => {
     setClicked(false);
   }, []);
+
   return (
     <div>
       <div className="lg:hidden">
@@ -58,16 +76,42 @@ export default function TopBar() {
 
             {/* mid , btn section  */}
 
-            <div className="block transition-all duration-300 ease-in-out  ">
-              {showScrollSearch ? (
+            {/* <div className="block transition-all duration-300 ease-in-out bg-red ">
+              {isScrolled ? (
                 <div className="animate-fadeIn">
-                  <ScrollSearch />
+                  <BookSearchBar />
                 </div>
               ) : (
                 <div className="animate-fadeIn">
                   <ScrollSearch />
                 </div>
               )}
+            </div> */}
+
+            <div className=" block  ">
+              <AnimatePresence mode="wait">
+                {isScrolled ? (
+                  <motion.div
+                    key="book-search"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <BookSearchBar />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="scroll-search"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ScrollSearch />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* right section  */}
