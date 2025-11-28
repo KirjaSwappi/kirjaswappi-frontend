@@ -42,6 +42,8 @@ export default {
         smokyBlack: '#0D0D0D',
         blackOlive: '#404040',
         AntiFlashWhite: '#F2F2F2',
+        athensGray: '#F5F7FA',
+        richBlack: '#1A1A1A',
       },
       fontSize: {
         sx: '10px',

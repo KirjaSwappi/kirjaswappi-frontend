@@ -17,6 +17,7 @@ export default function Books() {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+
   const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
 
