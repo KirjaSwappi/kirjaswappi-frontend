@@ -32,6 +32,7 @@ const refreshAuthToken = async () => {
     headers: { 'Content-Type': 'application/json' },
   });
   const data = await response.json();
+
   setCookie('jwtToken', data.jwtToken, 100); // 1 hour
   return data.jwtToken;
 };

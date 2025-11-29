@@ -5,21 +5,21 @@ import { IoIosSearch } from 'react-icons/io';
 import Button from '../../../components/shared/Button';
 import Input from '../../../components/shared/Input';
 
-interface ILocation {
-  name: string;
-  code: string;
-}
+// interface ILocation {
+//   label: string;
+//   value: string;
+// }
 
-const locations: ILocation[] = [
-  { name: 'Helsinki', code: 'HE' },
-  { name: 'Stockholm', code: 'ST' },
-  { name: 'Copenhagen', code: 'CP' },
-  { name: 'Oslo', code: 'OS' },
-];
+// const locationOptions: ILocation[] = [
+//   { label: 'Helsinki', value: 'HE' },
+//   { label: 'Stockholm', value: 'ST' },
+//   { label: 'Copenhagen', value: 'CP' },
+//   { label: 'Oslo', value: 'OS' },
+// ];
 
 export default function BookSearchBar() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<ILocation>(locations[0]);
+  // const [selectedLocation, setSelectedLocation] = useState<ILocation>(locationOptions[0]);
 
   return (
     <div className="space-y-4  ">
@@ -39,20 +39,31 @@ export default function BookSearchBar() {
         {/* Location Selector */}
         <div className="flex items-center gap-1 px-3 py-2 bg-[#dbedff] border border-[#badbfd] rounded-full text-[#3879E9]">
           <FaLocationDot className="size-4  " />
-          <select
-            value={selectedLocation.code}
+          {/* <select
+            value={selectedLocation.value}
             onChange={(e) => {
-              const location = locations.find((l) => l.code === e.target.value);
+              const location = locations.find((l) => l.value === e.target.value);
               if (location) setSelectedLocation(location);
             }}
             className="bg-transparent border-none outline-none focus:ring-0 text-sm font-medium text-gray-700 cursor-pointer   "
           >
             {locations.map((loc) => (
-              <option className="  " key={loc.code} value={loc.code}>
+              <option className="  " key={loc.value} value={loc.value}>
                 {loc.name}
               </option>
             ))}
-          </select>
+          </select> */}
+
+          {/* <Select
+            name="location"
+            value={selectedLocation.value}
+            options={locationOptions}
+            onChange={(e) => {
+              const loc = locationOptions.find((l) => l.value === e.target.value);
+              if (loc) setSelectedLocation(loc);
+            }}
+            className="bg-transparent border-none outline-none text-sm font-medium cursor-pointer px-0"
+          /> */}
         </div>
 
         {/* Search Button */}
