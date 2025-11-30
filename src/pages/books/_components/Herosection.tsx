@@ -10,6 +10,7 @@ import {
 } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 import { cn } from '../../../utility/cn';
+import BookSearchBar from './BookSearchBar';
 
 const SLIDES = [
   {
@@ -68,8 +69,8 @@ export default function HeroSection() {
     <section className="rounded-lg overflow-hidden relative   ">
       {/* search component  */}
       <div className=" hidden lg:block ">
-        <div className=" absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
-          {/* <BookSearchBar /> */}
+        <div className=" h-[54px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
+          <BookSearchBar />
         </div>
       </div>
 
