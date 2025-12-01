@@ -70,16 +70,7 @@ export const buildFormData = async (
 
   // SET ADDRESS / LOCATION INFORMATION (if provided)
   if (data.address) {
-    const { latitude, longitude, address, city, country, postalCode, radiusKm } = data.address;
-    if (latitude !== undefined && longitude !== undefined) {
-      formData.append('latitude', String(latitude));
-      formData.append('longitude', String(longitude));
-    }
-    if (address !== undefined) formData.append('address', address);
-    if (city !== undefined) formData.append('city', city);
-    if (country !== undefined) formData.append('country', country);
-    if (postalCode !== undefined) formData.append('postalCode', postalCode);
-    if (radiusKm !== undefined) formData.append('radiusKm', String(radiusKm));
+    formData.append('address', JSON.stringify(data.address));
   }
 
   return formData;

@@ -3,46 +3,61 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/shared/Button';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
-import { IBook } from '../books/interface';
 import MapContainer from './_components/MapContainer';
 import MapSearchAndFilterBooks from './_components/MapSearchAndFilterBooks';
 import { useGeolocation } from './hooks/useGeolocation';
-import { IBookWithLocation } from './interface';
+import { IBookWithLocation } from './types/interface';
 
-const getRandomInRange = (base: number, range: number) => base + (Math.random() - 0.5) * range;
+// const getRandomInRange = (base: number, range: number) => base + (Math.random() - 0.5) * range;
 
-const getRandomDateWithinDays = (days: number) =>
-  new Date(Date.now() - Math.random() * days * 24 * 60 * 60 * 1000);
+// const getRandomDateWithinDays = (days: number) =>
+//   new Date(Date.now() - Math.random() * days * 24 * 60 * 60 * 1000);
 
-export const addLocationToBooks = (books: IBook[]): IBookWithLocation[] => {
-  return books.map((book, index) => ({
-    ...book,
-    latitude: getRandomInRange(60.1699, 0.1),
-    longitude: getRandomInRange(24.9384, 0.1),
-    address: `Address ${index + 1}, Helsinki, Finland`,
-    city: 'Helsinki',
-    country: 'Finland',
-    createdAt: getRandomDateWithinDays(7).toISOString(),
-  }));
-};
+// const addLocationToBooks = (books: IBook[]): IBookWithLocation[] => {
+//   return books.map((book, index) => ({
+//     ...book,
+//     latitude: getRandomInRange(60.1699, 0.1),
+//     longitude: getRandomInRange(24.9384, 0.1),
+//     address: `Address ${index + 1}, Helsinki, Finland`,
+//     city: 'Helsinki',
+//     country: 'Finland',
+//     createdAt: getRandomDateWithinDays(7).toISOString(),
+//   }));
+// };
 
 export default function Map() {
-  useGeolocation();
   const navigate = useNavigate();
+  const { latitude, longitude } = useGeolocation();
   const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
+
   const { data, isLoading, isError } = useGetAllBooksQuery(
-    { filter, notOwnerId: id },
-    { refetchOnMountOrArgChange: false },
+    {
+      filter,
+      notOwnerId: id,
+      latitude: latitude ?? undefined,
+      longitude: longitude ?? undefined,
+    },
+    {
+      skip: !latitude || !longitude,
+      refetchOnMountOrArgChange: true,
+    },
   );
 
+  // useEffect(() => {
+  //   if (data?._embedded?.books) {
+  //     const booksWithLoc = addLocationToBooks(data._embedded.books);
+  //     setBooksWithLocation(booksWithLoc);
+  //   } else {
+  //     setBooksWithLocation([]);
+  //   }
+  // }, [data]);
   useEffect(() => {
     if (data?._embedded?.books) {
-      const booksWithLoc = addLocationToBooks(data._embedded.books);
-      setBooksWithLocation(booksWithLoc);
+      setBooksWithLocation(data._embedded.books);
     } else {
       setBooksWithLocation([]);
     }
@@ -54,6 +69,16 @@ export default function Map() {
     return (
       <div className="h-screen flex items-center justify-center">
         <p className="text-red-600">Error loading map data</p>
+      </div>
+    );
+  }
+  if (!latitude || !longitude) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Detecting your location...</p>
+        </div>
       </div>
     );
   }

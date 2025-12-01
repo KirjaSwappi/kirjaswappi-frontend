@@ -1,6 +1,6 @@
 import { Icon, divIcon } from 'leaflet';
 import { Marker, Popup } from 'react-leaflet';
-import { IBookWithLocation } from '../interface';
+import { IBookWithLocation } from '../types/interface';
 import BookPopup from './BookPopup';
 
 interface BookMarkerProps {

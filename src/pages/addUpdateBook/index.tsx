@@ -124,6 +124,7 @@ export default function AddUpdateBook() {
   };
 
   const handleAddUpdateBookFn = async <T extends IAddUpdateBookData>(data: T) => {
+    console.log(data.address);
     const formData = await buildFormData(data, userInformation.id, bookData?.id);
     try {
       const mutation = bookData?.id

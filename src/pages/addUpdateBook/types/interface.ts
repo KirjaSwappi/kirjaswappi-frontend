@@ -1,6 +1,20 @@
 import { FieldErrors } from 'react-hook-form';
 import { SwapType } from '../../../../types/enum';
 
+export interface ISearchResult {
+  display_name: string;
+  lat: string;
+  lon: string;
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+    county?: string;
+    country?: string;
+    postcode?: string;
+  };
+}
+
 export type TOptions = {
   label: string;
   value: string;

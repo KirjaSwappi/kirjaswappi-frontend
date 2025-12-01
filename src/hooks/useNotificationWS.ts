@@ -155,16 +155,16 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * @param event - The close event
    */
   const handleClose = (event: CloseEvent) => {
-    console.log('[NotificationWS] Connection closed:', event.code, event.reason);
+    // console.log('[NotificationWS] Connection closed:', event.code, event.reason);
     setIsConnected(false);
     clearTimers();
 
     // Only attempt reconnection if user is still authenticated and close was not clean
     if (userId && !event.wasClean && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
       const delay = getReconnectDelay(reconnectAttempts);
-      console.log(
-        `[NotificationWS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-      );
+      // console.log(
+      //   `[NotificationWS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
+      // );
 
       dispatch(setWSConnectionStatus('connecting'));
 

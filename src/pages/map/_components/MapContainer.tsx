@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import { MapContainer as LeafletMapContainer, TileLayer } from 'react-leaflet';
 import { useAppSelector } from '../../../redux/hooks';
-import { IBookWithLocation } from '../interface';
+import { IBookWithLocation } from '../types/interface';
 import BookMarker from './BookMarker';
 
 interface MapContainerProps {
