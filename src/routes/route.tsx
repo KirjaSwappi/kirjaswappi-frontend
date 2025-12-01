@@ -14,12 +14,16 @@ import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
 import NotFound from '../components/error/NotFound';
+import Collaboration from '../pages/Collaboration';
 import ContactUs from '../pages/contactUs/ContactUs';
+import Donation from '../pages/Donation';
+import Feedback from '../pages/FeedBack';
 import Map from '../pages/map';
 import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
+import Volunteer from '../pages/volunteer';
 
 const routes = createBrowserRouter([
   {
@@ -50,6 +54,26 @@ const routes = createBrowserRouter([
       {
         path: '/privacy-policy',
         element: <PrivacyPolicy />,
+      },
+      {
+        path: '/contact-us',
+        element: <ContactUs />,
+      },
+      {
+        path: '/collaboration',
+        element: <Collaboration />,
+      },
+      {
+        path: '/donation',
+        element: <Donation />,
+      },
+      {
+        path: '/volunteer',
+        element: <Volunteer />,
+      },
+      {
+        path: '/feedback',
+        element: <Feedback />,
       },
       {
         path: '/privacy-policy/:sectionKey',
