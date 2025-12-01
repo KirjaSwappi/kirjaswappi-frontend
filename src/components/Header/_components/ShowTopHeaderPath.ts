@@ -14,6 +14,11 @@ function getTopHeaderPaths(params: string | undefined) {
     '/map',
     '/privacy-policy',
     '/support-us',
+    '/contact-us',
+    '/collaboration',
+    '/donation',
+    '/volunteer',
+    '/feedback',
   ];
 }
 export const ShowTopHeaderPath = getTopHeaderPaths;
