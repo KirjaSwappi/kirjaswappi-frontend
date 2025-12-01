@@ -33,6 +33,7 @@ export default {
         black: '#000000',
         night: '#363739',
         gray: '#CCCCCC',
+        lightGray: '#F5F7FA',
         grayDark: '#808080',
         platinum: '#E6E6E6',
         platinumMix: '#E5E5E5',
