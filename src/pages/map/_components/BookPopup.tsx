@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import Image from '../../../components/shared/Image';
-import { IBookWithLocation } from '../interface';
 
 interface BookPopupProps {
-  books: IBookWithLocation[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  books: any[];
   onBookClick: (bookId: string) => void;
 }
 

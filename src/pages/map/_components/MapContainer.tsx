@@ -1,6 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { MapContainer as LeafletMapContainer, TileLayer } from 'react-leaflet';
-import { useAppSelector } from '../../../redux/hooks';
+import { useGeolocation } from '../hooks/useGeolocation';
 import { IBookWithLocation } from '../types/interface';
 import BookMarker from './BookMarker';
 
@@ -10,8 +10,8 @@ interface MapContainerProps {
 }
 
 export default function MapContainer({ books, onMarkerClick }: MapContainerProps) {
-  const { center, zoom } = useAppSelector((state) => state.map);
-
+  // const { center, zoom } = useAppSelector((state) => state.map);
+  const { latitude, longitude } = useGeolocation();
   const groupedBooks = books.reduce(
     (acc, book) => {
       const key = `${book.latitude.toFixed(4)}_${book.longitude.toFixed(4)}`;
@@ -32,8 +32,8 @@ export default function MapContainer({ books, onMarkerClick }: MapContainerProps
   return (
     <div className="h-full w-full">
       <LeafletMapContainer
-        center={[center.latitude, center.longitude]}
-        zoom={zoom}
+        center={[latitude ?? 0, longitude ?? 0]}
+        zoom={12}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
