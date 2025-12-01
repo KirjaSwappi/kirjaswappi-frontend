@@ -8,23 +8,6 @@ import MapSearchAndFilterBooks from './_components/MapSearchAndFilterBooks';
 import { useGeolocation } from './hooks/useGeolocation';
 import { IBookWithLocation } from './types/interface';
 
-// const getRandomInRange = (base: number, range: number) => base + (Math.random() - 0.5) * range;
-
-// const getRandomDateWithinDays = (days: number) =>
-//   new Date(Date.now() - Math.random() * days * 24 * 60 * 60 * 1000);
-
-// const addLocationToBooks = (books: IBook[]): IBookWithLocation[] => {
-//   return books.map((book, index) => ({
-//     ...book,
-//     latitude: getRandomInRange(60.1699, 0.1),
-//     longitude: getRandomInRange(24.9384, 0.1),
-//     address: `Address ${index + 1}, Helsinki, Finland`,
-//     city: 'Helsinki',
-//     country: 'Finland',
-//     createdAt: getRandomDateWithinDays(7).toISOString(),
-//   }));
-// };
-
 export default function Map() {
   const navigate = useNavigate();
   const { latitude, longitude } = useGeolocation();
@@ -47,14 +30,6 @@ export default function Map() {
     },
   );
 
-  // useEffect(() => {
-  //   if (data?._embedded?.books) {
-  //     const booksWithLoc = addLocationToBooks(data._embedded.books);
-  //     setBooksWithLocation(booksWithLoc);
-  //   } else {
-  //     setBooksWithLocation([]);
-  //   }
-  // }, [data]);
   useEffect(() => {
     if (data?._embedded?.books) {
       setBooksWithLocation(data._embedded.books);

@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { FieldError, FieldErrors, useFormContext } from 'react-hook-form';
 import { BiTargetLock } from 'react-icons/bi';
+import addGenreIcon from '../../../assets/addGenre.png';
 import closeIcon from '../../../assets/closeIcon.png';
+import genreAddGenreIcon from '../../../assets/genreAddPlus.png';
+import addmapIcon from '../../../assets/mapIcon.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import InputLabel from '../../../components/shared/InputLabel';
@@ -176,7 +179,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
           };
           console.log({ updatedAddress });
           setValue('address', updatedAddress);
-          setSearchQuery(geo.displayName); // Update search input with detailed address
+          setSearchQuery(geo.displayName);
         }
       } catch (reverseError) {
         console.log('Reverse geocoding failed, but we have coordinates:', reverseError);
@@ -233,17 +236,10 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
 
   return (
     <div className="pt-5 lg:pt-0">
-      <div className="lg:grid lg:grid-cols-2 gap-9 xl:gap-10 2xl:gap-20 md:gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:gap-10 2xl:gap-20 md:gap-4">
         <div className="w-full">
-          <div className="flex items-center justify-between py-4 border-b lg:border-b-0 border-platinumDark">
+          <div className="flex items-center justify-between border-b lg:border-b-0 border-platinumDark">
             <InputLabel label="Genre" required className="mb-0" />
-            <Button
-              type="button"
-              onClick={() => dispatch(setOpen(!open))}
-              className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
-            >
-              Add
-            </Button>
           </div>
           <div>
             {genres && genres.length > 0 ? (
@@ -261,8 +257,18 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 ))}
               </div>
             ) : (
-              <div className="h-[50px] lg:h-56 bg-white lg:bg-AntiFlashWhite mt-3 flex items-center justify-center rounded-md">
-                <p className="text-xs text-grayDark">Click &apos;Add&apos; to add genre</p>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => dispatch(setOpen(!open))}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && dispatch(setOpen(!open))}
+                className="h-40 lg:h-56 bg-[#F1F8FF] mt-3 flex items-center justify-center rounded-md border border-[#8CBEF2] border-dashed flex-col"
+              >
+                <div className="flex items-end mb-2">
+                  <Image src={addGenreIcon} alt="genre" className="w-[68px] h-[60px]" />
+                  <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
+                </div>
+                <p className="text-xs text-grayDark font-poppins">Click ‘Here’ to add genre</p>
               </div>
             )}
             {errors && errors['genres'] && (
@@ -273,10 +279,10 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
           </div>
         </div>
         <div className="w-full">
-          <div className="py-4 border-b lg:border-b-0 border-platinumDark">
+          <div className="border-b lg:border-b-0 border-platinumDark">
             <InputLabel label="Location" required={false} className="mb-2" />
             <div ref={searchRef} className="relative">
-              <div className="flex gap-2">
+              <div className="flex gap-2 bg-AntiFlashWhite border border-gray rounded-md">
                 <div className="flex-1 relative">
                   <input
                     type="text"
@@ -284,7 +290,10 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                     onChange={(e) => handleSearchInputChange(e.target.value)}
                     onFocus={() => searchQuery && setShowSearchDropdown(true)}
                     placeholder="Search for a location..."
-                    className="w-full px-4 py-3 border border-platinum rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3879E9] focus:border-transparent"
+                    className="w-full px-4 py-3 bg-transparent 
+  border-none focus:border-transparent 
+  focus:ring-0 focus:outline-none 
+  focus:shadow-none"
                   />
                   {isSearching && (
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -296,7 +305,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   type="button"
                   onClick={handleCurrentLocation}
                   disabled={isLoadingAddress}
-                  className="px-4 py-3 bg-white border border-platinum rounded-lg hover:bg-gray-50 disabled:opacity-50 flex items-center justify-center min-w-[50px]"
+                  className="px-4 py-3  disabled:opacity-50 flex items-center justify-center min-w-[50px]"
                   title="Use current location"
                 >
                   {isLoadingAddress ? (
@@ -307,7 +316,6 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 </button>
               </div>
 
-              {/* Search Dropdown */}
               {showSearchDropdown && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-platinum rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto">
                   {searchResults.map((result, index) => (
@@ -323,7 +331,6 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 </div>
               )}
 
-              {/* No Results Message */}
               {showSearchDropdown && searchQuery && !isSearching && searchResults.length === 0 && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-platinum rounded-lg shadow-lg z-10 p-4">
                   <div className="text-sm text-gray-500 text-center">No locations found</div>
@@ -373,10 +380,18 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 </p>
               </div>
             ) : (
-              <div className="h-56 bg-white lg:bg-AntiFlashWhite mt-3 flex items-center justify-center rounded-md border border-platinum">
-                <p className="text-xs text-grayDark text-center">
-                  Search for a location or use current location
-                </p>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={handleCurrentLocation}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCurrentLocation}
+                className="h-40 lg:h-56 bg-[#F1F8FF] mt-3 flex items-center justify-center rounded-md border border-[#8CBEF2] border-dashed flex-col"
+              >
+                <div className="flex items-end mb-2">
+                  <Image src={addmapIcon} alt="genre" className="w-[68px] h-[60px]" />
+                  <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
+                </div>
+                <p className="text-xs text-grayDark font-poppins">Click ‘Here’ to add location</p>
               </div>
             )}
             {errors && errors['address'] && (
