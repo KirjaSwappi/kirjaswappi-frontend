@@ -5,6 +5,8 @@ import SectionWithForm from '../../components/shared/SectionWithForm';
 import BookAddUpdateHeader from '../addUpdateBook/_components/BookAddUpdateHeader';
 import FeedbackForm from './form/FeedbackForm';
 
+import feedbackImage from '../../assets/feedback.jpg';
+
 export default function Feedback() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -17,17 +19,17 @@ export default function Feedback() {
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('feedback.header')} />
       </div>
 
-      <div className="bg-[#F5F7FA] container  font-poppins lg:bg-white pb-20 lg:pb-0 lg:pt-14 ">
-        <div className="py-8 w-full lg:w-[70%] mx-auto  ">
-          <h2 className="text-[20px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[28px] lg:leading-[40px] mt-10 lg:mt-0">
+      <div className="bg-lightGray container min-h-[86vh] pt-10 lg:pt-[4.5rem]  font-poppins lg:bg-white rounded-lg ">
+        <div className="w-full lg:w-[70%] mx-auto  ">
+          <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('feedback.heading')}
           </h2>
 
-          <p className="w-full block lg:hidden font-normal text-[12px] lg:text-[14px] leading-[16px] lg:leading-6 tracking-[0px] text-[#808080] mb-8 whitespace-normal">
+          <p className="w-full block lg:hidden pt-3 pb-6 font-normal text-[10px] leading-[16px] lg:leading-6 tracking-[0px] text-grayDark ">
             {t('feedback.subtitle')}
           </p>
 
-          <SectionWithForm imageSrc="https://i.postimg.cc/jj1bcg6c/73237aba83e1055f522168e3e5e4247769f0f95a.jpg">
+          <SectionWithForm imageSrc={feedbackImage}>
             <FormProvider {...methods}>
               <FeedbackForm />
             </FormProvider>
