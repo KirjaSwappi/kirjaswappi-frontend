@@ -28,23 +28,26 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="  my-6  ">
+    <div className="  my-6">
       <div className="lg:hidden">
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('contactus.header')} />
       </div>
-      <div className="bg-[#F5F7FA] container  font-poppins lg:bg-white pb-20 lg:pb-0 lg:pt-14 ">
-        <div className="py-8 lg:mt-0 lg:py-0 lg:mx-0 lg:ml-40">
-          <h2 className="text-[16px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[40px] mt-8 lg:mt-0">
+
+      <div className="bg-lightGray container  pt-12 lg:pt-[4.5rem] pb-8 font-poppins lg:bg-white rounded-lg ">
+        <div className="w-full lg:w-[70%] mx-auto  ">
+          <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('contactus.header')}
           </h2>
-          <p className="w-full block font-normal text-[10px] lg:text-[14px] leading-4 lg:leading-6 tracking-[0px] text-[#808080] mb-6 lg:mb-8 whitespace-normal">
+
+          <p className="w-full block pt-3 lg:pt-4 pb-6 lg:pb-8 font-normal lg:font-light text-[14px] leading-[16px] lg:leading-5 tracking-[0px] text-grayDark ">
             {t('contactus.subtitle')}
           </p>
-          <div className="w-full lg:max-w-lg ">
+
+          <div className="w-full lg:max-w-lg   ">
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="mt-4 pb-4 ">
-                  <InputLabel label={t('name')} />
+                <div className=" mb-6 ">
+                  <InputLabel label={t('contactus.name')} />
                   <ControlledInputField
                     name="name"
                     placeholder={t('contactus.namePlaceholder')}
@@ -52,8 +55,8 @@ export default function ContactUs() {
                     showErrorMessage
                   />
                 </div>
-                <div className="mt-4 pb-4">
-                  <InputLabel label={t('email')} />
+                <div className=" mb-6 ">
+                  <InputLabel label={t('contactus.email')} />
                   <ControlledInputField
                     name="email"
                     placeholder={t('contactus.emailPlaceholder')}
@@ -61,7 +64,7 @@ export default function ContactUs() {
                     showErrorMessage
                   />
                 </div>
-                <div className="mt-4 pb-4 ">
+                <div className=" mb-6 ">
                   <InputLabel label={t('contactus.subject')} />
                   <ControlledInputField
                     name="subject"
@@ -70,7 +73,7 @@ export default function ContactUs() {
                     showErrorMessage
                   />
                 </div>
-                <div className="mt-4 pb-4">
+                <div className=" mb-6 ">
                   <InputLabel label={t('contactus.message')} />
                   <ControlledInputField
                     type="textarea"
@@ -82,37 +85,34 @@ export default function ContactUs() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full lg:w-[151px] lg:h-[48px] lg:text-[14px] bg-primary text-white py-3 rounded-lg mt-4 lg:mt-2"
+                  className="w-full lg:w-[151px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-4 px-6 rounded-lg mb-14 lg:mb-0 "
                 >
                   {t('contactus.submit')}
                 </Button>
               </form>
             </FormProvider>
           </div>
-          <div className="hidden lg:block mt-16 pb-16 ">
+
+          <div className="hidden lg:block mt-14   ">
             <div className="w-full max-w-2xl bg-white mb-8">
-              <h3 className="font-semibold text-[22px] text-base mb-5">
+              <h3 className="font-semibold text-[22px] leading-[28px] mb-4 ">
                 {t('contactus.contactInfo')}
               </h3>
-              <p className="font-normal text-[16px] leading-[24px] mb-2 tracking-[0px] font-[Poppins] mr-2">
-                {t('contactus.website')}:{' '}
-                <a href="https://www.kirjaswappi.fi" target="_blank" rel="noopener noreferrer">
-                  www.Kirjaswappi.fi
-                </a>
+
+              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-[Poppins] mr-2">
+                Address: {t('contactus.address')}
               </p>
-              <p className="font-normal text-[16px] leading-[24px] mb-2 tracking-[0px] font-[Poppins] mr-2">
-                {t('email')}:{' '}
-                <a href="mailto:info@kirjaswappi.fi" className="">
-                  info@kirjaswappi.fi
-                </a>
-              </p>
-              <p className="font-normal text-[16px] leading-[24px] mb-2 tracking-[0px] font-[Poppins] mr-2">
-                {t('contactus.mailingAddress')}
-              </p>
-              <p className="font-normal text-[16px] leading-[24px] mb-2 tracking-[0px] font-[Poppins] mr-2">
+
+              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-[Poppins] mr-2">
                 {t('contactus.phone')}:{' '}
                 <a href="tel:+358408536161" className="">
                   +358408536161
+                </a>
+              </p>
+              <p className="font-normal text-[16px] leading-[24px] mb-6 tracking-[0px] font-[Poppins] mr-2">
+                {t('email')}:{' '}
+                <a href="mailto:info@kirjaswappi.fi" className="">
+                  info@kirjaswappi.fi
                 </a>
               </p>
             </div>
