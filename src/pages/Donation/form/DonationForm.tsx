@@ -45,11 +45,11 @@ export default function DonationForm() {
         />
       </div>
       <div className=" mb-12 lg:mb-6 ">
-        <InputLabel label={t('contactus.message')} />
+        <InputLabel label={t('donation.message')} />
         <ControlledInputField
           type="textarea"
           name="description"
-          placeholder={t('contactus.messagePlaceholder')}
+          placeholder={t('donation.messagePlaceholder')}
           className="rounded-md min-h-[122px] border-gray hover:border-blue-500 focus:border-blue-500 focus:outline-none"
           showErrorMessage
         />
