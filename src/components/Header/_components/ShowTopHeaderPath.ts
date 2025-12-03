@@ -12,6 +12,11 @@ function getTopHeaderPaths(params: string | undefined) {
     '/user/messages',
     `/user/messages/${params}/isMessage=True`,
     '/map',
+    '/contact-us',
+    '/collaboration',
+    '/donation',
+    '/volunteer',
+    '/feedback',
   ];
 }
 export const ShowTopHeaderPath = getTopHeaderPaths;

@@ -403,17 +403,17 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@lottiefiles/dotlottie-react@^0.17.5":
-  version "0.17.7"
-  resolved "https://registry.npmjs.org/@lottiefiles/dotlottie-react/-/dotlottie-react-0.17.7.tgz"
-  integrity sha512-A6wO3zqkDx/t0ULfctcr1Bmb1f1hc4zUV3NcbKQOsBGAOIx1vABV/fRabFYElvbJl9lmOR24yMh//Z0fvvJV+Q==
+"@lottiefiles/dotlottie-react@^0.17.8":
+  version "0.17.8"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-react/-/dotlottie-react-0.17.8.tgz#3b4cf38a4a81a765c8ca6b871390b38da8a9f1fc"
+  integrity sha512-Hk0bISNURSqL7t+H7S5lW2NQVa1hiibnqRRg6kOWZpswBxfQk+/6WBPc9EfuetdoZmiMoDsmcI0HR4I20oTBRg==
   dependencies:
-    "@lottiefiles/dotlottie-web" "0.56.0"
+    "@lottiefiles/dotlottie-web" "0.57.0"
 
-"@lottiefiles/dotlottie-web@0.56.0":
-  version "0.56.0"
-  resolved "https://registry.npmjs.org/@lottiefiles/dotlottie-web/-/dotlottie-web-0.56.0.tgz"
-  integrity sha512-bWHRIGzjZs3Hjkz0JRsCMX2ya9a1tGU4atdrlfM3UoN0iamsDE64kSCMfGuchCwGAxg0xEh84CkF+SVV1NU9ow==
+"@lottiefiles/dotlottie-web@0.57.0":
+  version "0.57.0"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-web/-/dotlottie-web-0.57.0.tgz#7611472348b332ff5333eb4aa9b41864801842ae"
+  integrity sha512-gcgvu9T21YzeY3JjHCZrxftucsxzMH6e9h+8NMv8mbfo1y1M9/jdcsdu40S+pnSLz9/OyiSBQ/EjDsbSOHZy0w==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -468,10 +468,10 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
-"@rolldown/pluginutils@1.0.0-beta.46":
-  version "1.0.0-beta.46"
-  resolved "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.46.tgz"
-  integrity sha512-xMNwJo/pHkEP/mhNVnW+zUiJDle6/hxrwO0mfSJuEVRbBfgrJFuUSRoZx/nYUw5pCjrysl9OkNXCkAdih8GCnA==
+"@rolldown/pluginutils@1.0.0-beta.47":
+  version "1.0.0-beta.47"
+  resolved "https://registry.yarnpkg.com/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.47.tgz#c282c4a8c39f3d6d2f1086aae09a34e6241f7a50"
+  integrity sha512-8QagwMH3kNCuzD8EWL8R2YPW5e4OrHNSAHRFDdmFqEwEaD/KcNKjVoumo+gP2vW5eKB2UPbM6vTYiGZX0ixLnw==
 
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
@@ -860,12 +860,12 @@
   resolved "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.3.0.tgz"
   integrity sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==
 
-"@vitejs/plugin-react-swc@^4.1.0":
-  version "4.2.1"
-  resolved "https://registry.npmjs.org/@vitejs/plugin-react-swc/-/plugin-react-swc-4.2.1.tgz"
-  integrity sha512-SIZ/XxeS2naLw4L2vVvpTyujM2OY+Rf+y6nWETqfoBrZpI3SFdyNJof3nQ8HbLhXJ1Eh9e9c0JGYC8GYPhLkCw==
+"@vitejs/plugin-react-swc@^4.2.2":
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-react-swc/-/plugin-react-swc-4.2.2.tgz#9818ed54318dcb0f254f6322c6bfbd0fcec2b087"
+  integrity sha512-x+rE6tsxq/gxrEJN3Nv3dIV60lFflPj94c90b+NNo6n1QV1QQUTLoL0MpaOVasUZ0zqVBn7ead1B5ecx1JAGfA==
   dependencies:
-    "@rolldown/pluginutils" "1.0.0-beta.46"
+    "@rolldown/pluginutils" "1.0.0-beta.47"
     "@swc/core" "^1.13.5"
 
 "@vitest/coverage-v8@^3.1.3":
@@ -1132,14 +1132,14 @@ async-function@^1.0.0:
   resolved "https://registry.npmjs.org/async-function/-/async-function-1.0.0.tgz"
   integrity sha512-hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==
 
-autoprefixer@^10.4.21:
-  version "10.4.21"
-  resolved "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.4.21.tgz"
-  integrity sha512-O+A6LWV5LDHSJD3LjHYoNi4VLsj/Whi7k6zG12xTYaU4cQ8oxQGckXNX8cRHK5yOZ/ppVHe0ZBXGzSV9jXdVbQ==
+autoprefixer@^10.4.22:
+  version "10.4.22"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.22.tgz#90b27ab55ec0cf0684210d1f056f7d65dac55f16"
+  integrity sha512-ARe0v/t9gO28Bznv6GgqARmVqcWOV3mfgUPn9becPHMiD3o9BwlRgaeccZnwTpZ7Zwqrm+c1sUSsMxIzQzc8Xg==
   dependencies:
-    browserslist "^4.24.4"
-    caniuse-lite "^1.0.30001702"
-    fraction.js "^4.3.7"
+    browserslist "^4.27.0"
+    caniuse-lite "^1.0.30001754"
+    fraction.js "^5.3.4"
     normalize-range "^0.1.2"
     picocolors "^1.1.1"
     postcss-value-parser "^4.2.0"
@@ -1166,10 +1166,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-baseline-browser-mapping@^2.8.19:
-  version "2.8.25"
-  resolved "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.8.25.tgz"
-  integrity sha512-2NovHVesVF5TXefsGX1yzx1xgr7+m9JQenvz6FQY3qd+YXkKkYiv+vTCc7OriP9mcDZpTC5mAOYN4ocd29+erA==
+baseline-browser-mapping@^2.8.25:
+  version "2.8.32"
+  resolved "https://registry.yarnpkg.com/baseline-browser-mapping/-/baseline-browser-mapping-2.8.32.tgz#5de72358cf363ac41e7d642af239f6ac5ed1270a"
+  integrity sha512-OPz5aBThlyLFgxyhdwf/s2+8ab3OvT7AdTNvKHBwpXomIYeXqpUUuT8LrdtxZSsWJ4R4CU1un4XGh5Ez3nlTpw==
 
 binary-extensions@^2.0.0:
   version "2.3.0"
@@ -1198,15 +1198,15 @@ braces@^3.0.3, braces@~3.0.2:
   dependencies:
     fill-range "^7.1.1"
 
-browserslist@^4.24.0, browserslist@^4.24.4:
-  version "4.27.0"
-  resolved "https://registry.npmjs.org/browserslist/-/browserslist-4.27.0.tgz"
-  integrity sha512-AXVQwdhot1eqLihwasPElhX2tAZiBjWdJ9i/Zcj2S6QYIjkx62OKSfnobkriB81C3l4w0rVy3Nt4jaTBltYEpw==
+browserslist@^4.24.0, browserslist@^4.27.0:
+  version "4.28.0"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.28.0.tgz#9cefece0a386a17a3cd3d22ebf67b9deca1b5929"
+  integrity sha512-tbydkR/CxfMwelN0vwdP/pLkDwyAASZ+VfWm4EOwlB6SWhx1sYnWLqo8N5j0rAzPfzfRaxt0mM/4wPU/Su84RQ==
   dependencies:
-    baseline-browser-mapping "^2.8.19"
-    caniuse-lite "^1.0.30001751"
-    electron-to-chromium "^1.5.238"
-    node-releases "^2.0.26"
+    baseline-browser-mapping "^2.8.25"
+    caniuse-lite "^1.0.30001754"
+    electron-to-chromium "^1.5.249"
+    node-releases "^2.0.27"
     update-browserslist-db "^1.1.4"
 
 cac@^6.7.14:
@@ -1250,10 +1250,10 @@ camelcase-css@^2.0.1:
   resolved "https://registry.npmjs.org/camelcase-css/-/camelcase-css-2.0.1.tgz"
   integrity sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==
 
-caniuse-lite@^1.0.30001702, caniuse-lite@^1.0.30001751:
-  version "1.0.30001754"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001754.tgz"
-  integrity sha512-x6OeBXueoAceOmotzx3PO4Zpt4rzpeIFsSr6AAePTZxSkXiYDUmpypEl7e2+8NCd9bD7bXjqyef8CJYPC1jfxg==
+caniuse-lite@^1.0.30001754:
+  version "1.0.30001757"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001757.tgz#a46ff91449c69522a462996c6aac4ef95d7ccc5e"
+  integrity sha512-r0nnL/I28Zi/yjk1el6ilj27tKcdjLsNqAOZr0yVjWPrSQyHgKI2INaEWw21bAQSv2LXRt1XuCS/GomNpWOxsQ==
 
 chai@^5.2.0:
   version "5.3.3"
@@ -1492,10 +1492,10 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.npmjs.org/eastasianwidth/-/eastasianwidth-0.2.0.tgz"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
-electron-to-chromium@^1.5.238:
-  version "1.5.249"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.249.tgz"
-  integrity sha512-5vcfL3BBe++qZ5kuFhD/p8WOM1N9m3nwvJPULJx+4xf2usSlZFJ0qoNYO2fOX4hi3ocuDcmDobtA+5SFr4OmBg==
+electron-to-chromium@^1.5.249:
+  version "1.5.262"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.262.tgz#c31eed591c6628908451c9ca0f0758ed514aa003"
+  integrity sha512-NlAsMteRHek05jRUxUR0a5jpjYq9ykk6+kO0yRaMi5moe7u0fVIOeQ3Y30A8dIiWFBNUoQGi1ljb1i5VtS9WQQ==
 
 embla-carousel-react@^8.5.2:
   version "8.6.0"
@@ -1987,10 +1987,10 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.6"
     signal-exit "^4.0.1"
 
-fraction.js@^4.3.7:
-  version "4.3.7"
-  resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz"
-  integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
+fraction.js@^5.3.4:
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-5.3.4.tgz#8c0fcc6a9908262df4ed197427bdeef563e0699a"
+  integrity sha512-1X1NTtiJphryn/uLQz3whtY6jK3fTqoE3ohKs0tT+Ujr1W59oopxmoEh7Lu5p6vBaPbgoM0bzveAW4Qi5RyWDQ==
 
 framer-motion@^12.23.22:
   version "12.23.24"
@@ -2855,7 +2855,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-node-releases@^2.0.26:
+node-releases@^2.0.27:
   version "2.0.27"
   resolved "https://registry.npmjs.org/node-releases/-/node-releases-2.0.27.tgz"
   integrity sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==
@@ -3135,10 +3135,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^3.6.2:
-  version "3.6.2"
-  resolved "https://registry.npmjs.org/prettier/-/prettier-3.6.2.tgz"
-  integrity sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==
+prettier@^3.7.3:
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.7.3.tgz#99a8891f6c990cfa54bcff2a0d276e6f845e59ab"
+  integrity sha512-QgODejq9K3OzoBbuyobZlUhznP5SKwPqp+6Q6xw6o8gnhr4O85L2U915iM2IDcfF2NPXVaM9zlo9tdwipnYwzg==
 
 prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
@@ -3187,10 +3187,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-hook-form@^7.66.1:
-  version "7.66.1"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.66.1.tgz#da56644b4ad9bd31254662d3242975681e29558c"
-  integrity sha512-2KnjpgG2Rhbi+CIiIBQQ9Df6sMGH5ExNyFl4Hw9qO7pIqMBR8Bvu9RQyjl3JM4vehzCh9soiNUM/xYMswb2EiA==
+react-hook-form@^7.67.0:
+  version "7.67.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.67.0.tgz#fd942240fa2b774034f63b22d6f85649cf4de664"
+  integrity sha512-E55EOwKJHHIT/I6J9DmQbCWToAYSw9nN5R57MZw9rMtjh+YQreMDxRLfdjfxQbiJ3/qbg3Z02wGzBX4M+5fMtQ==
 
 react-i18next@*, react-i18next@^16.3.5:
   version "16.3.5"
