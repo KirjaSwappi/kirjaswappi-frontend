@@ -33,7 +33,7 @@ export default function ContactUs() {
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('contactus.header')} />
       </div>
 
-      <div className="bg-lightGray container  pt-12 lg:pt-[4.5rem] pb-8 font-poppins lg:bg-white rounded-lg ">
+      <div className="bg-lightGray container  pt-12 lg:pt-[4.5rem] min-h-[86vh]font-poppins lg:bg-white rounded-lg ">
         <div className="w-full lg:w-[70%] mx-auto  ">
           <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('contactus.header')}
@@ -43,7 +43,7 @@ export default function ContactUs() {
             {t('contactus.subtitle')}
           </p>
 
-          <div className="w-full lg:max-w-lg   ">
+          <div className="w-full lg:max-w-lg  ">
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className=" mb-6 ">
@@ -93,7 +93,7 @@ export default function ContactUs() {
             </FormProvider>
           </div>
 
-          <div className="hidden lg:block mt-14   ">
+          <div className="hidden lg:block mt-14  ">
             <div className="w-full max-w-2xl bg-white mb-8">
               <h3 className="font-semibold text-[22px] leading-[28px] mb-4 ">
                 {t('contactus.contactInfo')}
@@ -119,7 +119,7 @@ export default function ContactUs() {
             <img
               src={contactFrame}
               alt={t('contactus.contactMapAlt')}
-              className="w-full max-w-2xl rounded-lg object-cover"
+              className="w-full max-w-2xl rounded-lg object-cover pb-16 "
             />
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Collaboration() {
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('collaboration.header')} />
       </div>
 
-      <div className="bg-lightGray container  pt-10 lg:pt-[4.5rem] pb-8 font-poppins lg:bg-white rounded-lg ">
+      <div className="bg-lightGray container  pt-10 lg:pt-[4.5rem] min-h-[86vh] font-poppins lg:bg-white rounded-lg ">
         <div className="w-full lg:w-[70%] mx-auto  ">
           <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('collaboration.heading')}

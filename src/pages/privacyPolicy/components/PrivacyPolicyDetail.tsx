@@ -43,28 +43,30 @@ const PrivacyPolicyDetail: React.FC = () => {
   }
 
   return (
-    <div className="font-poppins  min-h-screen ">
+    <div className="font-poppins  min-h-screen pb-32 ">
       <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
         <PrivacyPolicyHeader onBack={() => navigate('/privacy-policy')} />
 
         <div className="px-4 sm:px-6 mt-6 ">
-          <h1 className=" font-bold text-lg mb-6 ">{sectionData?.Mobilecategory} </h1>
+          <h1 className=" font-semibold text-[16px] leading-[28px] text-black3a mb-6 ">
+            {sectionData?.Mobilecategory}{' '}
+          </h1>
 
-          <p> {sectionData?.title} </p>
+          <p className="text-[14px] leading-[24px]  "> {sectionData?.title} </p>
 
           {sectionData?.children?.map((item, index) => (
-            <div key={index} className=" mt-9 ">
+            <div key={index} className=" mt-7 ">
               {item?.subHeading && (
-                <p className=" font-semibold ">
+                <p className=" font-semibold text-[14px] leading-[24px] text-smokyBlack ">
                   {String.fromCharCode(97 + index)}. {item?.subHeading}{' '}
                 </p>
               )}
 
-              <ul className=" pl-8 ">
+              <ul className=" pl-8 pt-2 ">
                 {item?.points?.map((point, idx) => (
                   <li
                     key={idx}
-                    className="list-disc  text-left "
+                    className="list-disc  text-left  text-[16px] leading-[28px] text-smokyBlack "
                     dangerouslySetInnerHTML={{ __html: point }}
                   />
                 ))}
@@ -74,7 +76,7 @@ const PrivacyPolicyDetail: React.FC = () => {
 
           {sectionData?.paragraph && (
             <p
-              className={` mt-7 ${sectionData?.category === 'Data Security' && 'pl-6  '}   `}
+              className={` mt-6 text-[14px] leading-[24px] text-black3a  ${sectionData?.category === 'Data Security' && 'pl-6  '}   `}
               dangerouslySetInnerHTML={{ __html: sectionData?.paragraph }}
             />
           )}

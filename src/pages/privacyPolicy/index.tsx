@@ -23,12 +23,12 @@ const PrivacyPolicy = () => {
   }, [location]);
 
   return (
-    <div className="font-poppins pb-24 lg:bg-white lg:container  mt-6 ">
-      <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12 ">
-        <PrivacyPolicyHeader onBack={() => navigate('/')} />
+    <div className="font-poppins bg-lightGray lg:container lg:bg-white pb-12 lg:pb-0  my-6 rounded-lg ">
+      <div className=" lg:w-[70%] lg:mx-auto pb-8 ">
+        <PrivacyPolicyHeader onBack={() => navigate(-1)} />
 
-        <div className="  headerSection pl-6  my-5 hidden lg:flex flex-col gap-y-8  ">
-          <p className=" text-grayDark ">Last Updated: 16.03.2025 </p>
+        <div className="  headerSection pl-6 pt-5 hidden lg:flex flex-col gap-y-7 text-[14px] leading-[24px]  ">
+          <p className=" text-grayDark  ">Last Updated: 16.03.2025 </p>
           <p>
             {' '}
             Welcome to KirjaSwappi (kirjaswappi.fi). We are committed to protecting your privacy and
@@ -42,8 +42,8 @@ const PrivacyPolicy = () => {
           </p>
         </div>
 
-        <p className="pt-9 leading-6 px-4 lg:hidden font-normal text-[14px] px-4 pb-[12px]">
-          {t('privacypolicy.introduction')}
+        <p className="pt-12 pb-4 px-4 lg:hidden text-[14px] leading-[24px] text-black3a ">
+          {t('privacypolicy.subtitle')}
         </p>
 
         {/* mobile section  */}
@@ -54,19 +54,19 @@ const PrivacyPolicy = () => {
         </div>
 
         {/* desktop view  */}
-        <div className=" pl-6 hidden lg:block ">
+        <div className=" pl-6 hidden lg:block  ">
           {dummyCategorySection?.map((section, index) => (
             <div key={index} className=" mt-12 ">
-              <h1 className=" font-bold text-lg mb-3 ">
+              <h1 className=" font-bold text-smokyBlack text-[18px] leading-[23px] mb-3  ">
                 {index + 1} {section?.category}{' '}
               </h1>
 
-              <p> {section?.title} </p>
+              <p className=" text-[14px] leading-[24px] text-smokyBlack "> {section?.title} </p>
 
               {section?.children?.map((item, index) => (
-                <div key={index} className=" mt-7 ">
+                <div key={index} className=" mt-6 ">
                   {item?.subHeading && (
-                    <p className=" font-semibold ">
+                    <p className=" font-semibold text-[14px] leading-[24px] text-smokyBlack  ">
                       {String.fromCharCode(97 + index)}. {item?.subHeading}{' '}
                     </p>
                   )}
@@ -75,7 +75,7 @@ const PrivacyPolicy = () => {
                     {item?.points?.map((point, idx) => (
                       <li
                         key={idx}
-                        className="list-disc text-left"
+                        className="list-disc text-left text-[14px] leading-[24px] text-smokyBlack "
                         dangerouslySetInnerHTML={{ __html: point }}
                       />
                     ))}
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
 
               {section?.paragraph && (
                 <p
-                  className={` mt-7 ${section?.category === 'Data Security' && 'pl-6 '}   `}
+                  className={`  text-[14px] leading-[24px] text-smokyBlack mt-6 ${section?.category === 'Data Security' && 'pl-5 '}   `}
                   dangerouslySetInnerHTML={{ __html: section?.paragraph }}
                 />
               )}
@@ -95,8 +95,10 @@ const PrivacyPolicy = () => {
 
         {/* end section  */}
         <div className=" mt-14 pl-6  hidden lg:block  ">
-          <h1 className=" font-bold text-lg mb-3 ">End of Privacy Policy</h1>
-          <p>
+          <h1 className="  font-bold text-smokyBlack text-[18px] leading-[23px] mb-3 ">
+            End of Privacy Policy
+          </h1>
+          <p className="text-[14px] leading-[24px] text-smokyBlack">
             This template is designed to be comprehensive and compliant with general privacy laws,
             such as the GDPR and CCPA. However, you may want to consult a legal professional to
             ensure it meets all specific requirements for your jurisdiction.
