@@ -70,7 +70,7 @@ export const buildFormData = async (
 
   // SET ADDRESS / LOCATION INFORMATION (if provided)
   if (data.address) {
-    formData.append('address', JSON.stringify(data.address));
+    formData.append('location', JSON.stringify(data.address));
   }
 
   return formData;

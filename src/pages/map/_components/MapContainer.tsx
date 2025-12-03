@@ -10,7 +10,6 @@ interface MapContainerProps {
 }
 
 export default function MapContainer({ books, onMarkerClick }: MapContainerProps) {
-  // const { center, zoom } = useAppSelector((state) => state.map);
   const { latitude, longitude } = useGeolocation();
   const groupedBooks = books.reduce(
     (acc, book) => {
