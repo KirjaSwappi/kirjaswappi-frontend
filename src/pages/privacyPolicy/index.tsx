@@ -1,25 +1,14 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useMemo, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PrivacyPolicyHeader from './components/PrivacyPolicyHeader';
 import PrivacyPolicySection from './components/PrivacyPolicySection';
-import { useTranslation } from 'react-i18next';
-import { getPrivacyPolicySections } from './constants/sections';
+import { dummyCategorySection } from './constants/DummyData';
 
 const PrivacyPolicy = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const sections = getPrivacyPolicySections(t);
-  const sequentialNumbers = useMemo(() => {
-    const numbers: Record<string, number> = {};
-    let currentNumber = 1;
-    sections.forEach((section) => {
-      section.items.forEach((item) => {
-        numbers[item.title] = currentNumber++;
-      });
-    });
-    return numbers;
-  }, [sections]);
 
   useEffect(() => {
     // If we're coming from a specific section page (mobile view)
@@ -34,40 +23,85 @@ const PrivacyPolicy = () => {
   }, [location]);
 
   return (
-    <div className="font-poppins pb-24 lg:bg-white lg:container">
-      <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
-        <PrivacyPolicyHeader onBack={() => navigate('/')} />
-        <p className="pt-9 leading-6 px-4 lg:hidden font-normal text-[14px] px-4 pb-[12px]">
-          {t('privacypolicy.introduction')}
+    <div className="font-poppins bg-lightGray lg:container lg:bg-white pb-12 lg:pb-0  my-6 rounded-lg ">
+      <div className=" lg:w-[70%] lg:mx-auto pb-8 ">
+        <PrivacyPolicyHeader onBack={() => navigate(-1)} />
+
+        <div className="  headerSection pl-6 pt-5 hidden lg:flex flex-col gap-y-7 text-[14px] leading-[24px]  ">
+          <p className=" text-grayDark  ">Last Updated: 16.03.2025 </p>
+          <p className=" text-smokyBlack ">
+            Welcome to KirjaSwappi (kirjaswappi.fi). We are committed to protecting your privacy and
+            ensuring that your personal information is handled in a safe and responsible manner.
+            This Privacy Policy outlines how we collect, use, store, and protect your information
+            when you use our Website.
+          </p>
+          <p className=" text-smokyBlack ">
+            By using KirjaSwappi, you agree to the terms of this Privacy Policy. If you do not agree
+            with any part of this policy, please do not use our Website.
+          </p>
+        </div>
+
+        <p className="pt-12 pb-4 px-4 lg:hidden text-[14px] leading-[24px] text-black3a ">
+          {t('privacypolicy.subtitle')}
         </p>
 
-        {/* Information we collect */}
-        <div className="lg:hidden">
-          {sections.map((section, index) => (
-            <PrivacyPolicySection key={index} category={section.category} items={section.items} />
+        {/* mobile section  */}
+        <div className="lg:hidden ">
+          {dummyCategorySection.map((section, index) => (
+            <PrivacyPolicySection key={index} category={section?.Mobilecategory} item={section} />
           ))}
         </div>
 
-        {/* Desktop view */}
-        <div className="hidden lg:block">
-          {sections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="pt-2">
-              <h2 className="pl-3 font-poppins font-semibold text-[20px] leading-[28px] tracking-[0px] lg:hidden">
-                {sectionIndex + 1}. {section.category}
-              </h2>
+        {/* desktop view  */}
+        <div className=" pl-6 hidden lg:block  ">
+          {dummyCategorySection?.map((section, index) => (
+            <div key={index} className=" mt-12 ">
+              <h1 className=" font-bold text-smokyBlack text-[18px] leading-[23px] mb-3  ">
+                {index + 1} {section?.category}{' '}
+              </h1>
 
-              {section.items.map((item) => (
-                <div key={item.title} id={item.title} className="pl-6 pt-4">
-                  <p className="font-poppins font-bold text-[18px] leading-[23px] tracking-[0px] lg:font-bold lg:text-[18px] lg:leading-[23px] lg:tracking-[0px]">
-                    {sequentialNumbers[item.title]}. {item.title}
-                  </p>
-                  <div className="pt-2 font-poppins font-normal text-[14px] leading-[24px] tracking-[0px] lg:font-normal lg:text-[14px] lg:leading-[24px] lg:tracking-[0px] lg:pt-4 lg:pr-[16px] lg:pb-[12px] lg:pl-6">
-                    {item.content}
-                  </div>
+              <p className=" text-[14px] leading-[24px] text-smokyBlack "> {section?.title} </p>
+
+              {section?.children?.map((item, index) => (
+                <div key={index} className=" mt-6 ">
+                  {item?.subHeading && (
+                    <p className=" font-semibold text-[14px] leading-[24px] text-smokyBlack  ">
+                      {String.fromCharCode(97 + index)}. {item?.subHeading}{' '}
+                    </p>
+                  )}
+
+                  <ul className=" pl-5 ">
+                    {item?.points?.map((point, idx) => (
+                      <li
+                        key={idx}
+                        className="list-disc text-left text-[14px] leading-[24px] text-smokyBlack "
+                        dangerouslySetInnerHTML={{ __html: point }}
+                      />
+                    ))}
+                  </ul>
                 </div>
               ))}
+
+              {section?.paragraph && (
+                <p
+                  className={`  text-[14px] leading-[24px] text-smokyBlack mt-6 ${section?.category === 'Data Security' && 'pl-5 '}   `}
+                  dangerouslySetInnerHTML={{ __html: section?.paragraph }}
+                />
+              )}
             </div>
           ))}
+        </div>
+
+        {/* end section  */}
+        <div className=" mt-14 pl-6  hidden lg:block  ">
+          <h1 className="  font-bold text-smokyBlack text-[18px] leading-[23px] mb-3 ">
+            End of Privacy Policy
+          </h1>
+          <p className="text-[14px] leading-[24px] text-smokyBlack">
+            This template is designed to be comprehensive and compliant with general privacy laws,
+            such as the GDPR and CCPA. However, you may want to consult a legal professional to
+            ensure it meets all specific requirements for your jurisdiction.
+          </p>
         </div>
       </div>
     </div>

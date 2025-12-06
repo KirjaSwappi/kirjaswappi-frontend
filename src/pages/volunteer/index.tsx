@@ -6,6 +6,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import SectionWithForm from '../../components/shared/SectionWithForm';
 import VolunteerForm from './form/VolunteerForm';
 
+import volunteerImage from '../../assets/volunteer.jpg';
+
 export default function Volunteer() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -18,17 +20,17 @@ export default function Volunteer() {
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('volunteer.header')} />
       </div>
 
-      <div className="bg-[#F5F7FA] container  font-poppins lg:bg-white pb-20 lg:pb-0 lg:pt-14 ">
-        <div className="py-8 w-full lg:w-[70%] mx-auto  ">
-          <h2 className="text-[20px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[28px] lg:leading-[40px] mt-10 lg:mt-0">
+      <div className="bg-lightGray container pb-5 lg:pb-0 pt-10 lg:pt-[4.5rem] min-h-[86vh] font-poppins lg:bg-white rounded-lg ">
+        <div className="w-full lg:w-[70%] mx-auto  ">
+          <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('volunteer.heading')}
           </h2>
 
-          <p className="w-full block lg:hidden font-normal text-[12px] lg:text-[14px] leading-[16px] lg:leading-6 tracking-[0px] text-[#808080] mb-8 whitespace-normal">
+          <p className="w-full block lg:hidden pt-3 pb-6 font-normal text-[10px] leading-[16px] lg:leading-6 tracking-[0px] text-grayDark ">
             {t('volunteer.subtitle')}
           </p>
 
-          <SectionWithForm imageSrc="https://i.postimg.cc/TYQhzjd1/35240a629051b39fc0255c41172fcb57ce867969.jpg">
+          <SectionWithForm imageSrc={volunteerImage}>
             <FormProvider {...methods}>
               <VolunteerForm />
             </FormProvider>

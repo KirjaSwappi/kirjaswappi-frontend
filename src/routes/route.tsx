@@ -23,6 +23,7 @@ import Messages from '../pages/messages/Messages';
 import PrivacyPolicy from '../pages/privacyPolicy';
 import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
 import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
+import SupportUs from '../pages/support-us';
 import Volunteer from '../pages/volunteer';
 
 const routes = createBrowserRouter([
@@ -50,6 +51,10 @@ const routes = createBrowserRouter([
       {
         path: '/map',
         element: <Map />,
+      },
+      {
+        path: '/support-us',
+        element: <SupportUs />,
       },
       {
         path: '/privacy-policy',
