@@ -28,19 +28,19 @@ export default function ContactUs() {
   };
 
   return (
-    <>
+    <div className="  my-6  ">
       <div className="lg:hidden">
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('contactus.header')} />
       </div>
-      <div className="bg-[#F5F7FA] container min-h-screen pb-24 font-poppins lg:bg-white lg:pt-14">
+      <div className="bg-[#F5F7FA] container  font-poppins lg:bg-white pb-20 lg:pb-0 lg:pt-14 ">
         <div className="py-8 lg:mt-0 lg:py-0 lg:mx-0 lg:ml-40">
-          <h2 className="text-[16px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[40px] mt-10 lg:mt-0">
+          <h2 className="text-[16px] lg:text-[32px] lg:font-semibold font-medium mb-3 leading-[40px] mt-8 lg:mt-0">
             {t('contactus.header')}
           </h2>
-          <p className="w-full block font-normal text-[10px] lg:text-[14px] leading-5 lg:leading-6 tracking-[0px] text-[#808080] mb-8 whitespace-normal">
+          <p className="w-full block font-normal text-[10px] lg:text-[14px] leading-4 lg:leading-6 tracking-[0px] text-[#808080] mb-6 lg:mb-8 whitespace-normal">
             {t('contactus.subtitle')}
           </p>
-          <div className="w-full lg:max-w-lg">
+          <div className="w-full lg:max-w-lg ">
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-4 pb-4 ">
@@ -89,7 +89,7 @@ export default function ContactUs() {
               </form>
             </FormProvider>
           </div>
-          <div className="hidden lg:block mt-16 mb-8">
+          <div className="hidden lg:block mt-16 pb-16 ">
             <div className="w-full max-w-2xl bg-white mb-8">
               <h3 className="font-semibold text-[22px] text-base mb-5">
                 {t('contactus.contactInfo')}
@@ -124,6 +124,6 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
