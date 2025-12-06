@@ -48,14 +48,14 @@ const PrivacyPolicyDetail: React.FC = () => {
         <PrivacyPolicyHeader onBack={() => navigate('/privacy-policy')} />
 
         <div className="px-4 sm:px-6 mt-6 ">
-          <h1 className=" font-semibold text-[16px] leading-[28px] text-black3a mb-6 ">
+          <h1 className=" font-semibold text-[16px] leading-[28px] text-black3a  ">
             {sectionData?.Mobilecategory}{' '}
           </h1>
 
-          <p className="text-[14px] leading-[24px]  "> {sectionData?.title} </p>
+          <p className="text-[14px] leading-[24px] mt-6 "> {sectionData?.title} </p>
 
           {sectionData?.children?.map((item, index) => (
-            <div key={index} className=" mt-7 ">
+            <div key={index} className=" mt-10 ">
               {item?.subHeading && (
                 <p className=" font-semibold text-[14px] leading-[24px] text-smokyBlack ">
                   {String.fromCharCode(97 + index)}. {item?.subHeading}{' '}

@@ -29,14 +29,13 @@ const PrivacyPolicy = () => {
 
         <div className="  headerSection pl-6 pt-5 hidden lg:flex flex-col gap-y-7 text-[14px] leading-[24px]  ">
           <p className=" text-grayDark  ">Last Updated: 16.03.2025 </p>
-          <p>
-            {' '}
+          <p className=" text-smokyBlack ">
             Welcome to KirjaSwappi (kirjaswappi.fi). We are committed to protecting your privacy and
             ensuring that your personal information is handled in a safe and responsible manner.
             This Privacy Policy outlines how we collect, use, store, and protect your information
             when you use our Website.
           </p>
-          <p>
+          <p className=" text-smokyBlack ">
             By using KirjaSwappi, you agree to the terms of this Privacy Policy. If you do not agree
             with any part of this policy, please do not use our Website.
           </p>

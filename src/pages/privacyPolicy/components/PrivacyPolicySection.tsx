@@ -17,11 +17,11 @@ const PrivacyPolicySection = ({ category, item }: any) => {
       <div className="block lg:hidden bg-white py-3  ">
         <Link
           to={`/privacy-policy/${item?.id}`}
-          className="px-4 py-3 text-[14px] leading-[24px] text-black3a  flex justify-between items-center "
+          className="p-4  text-black3a  flex justify-between items-center "
         >
-          <p> {category}</p>
+          <p className=" text-[16px] leading-[24px] "> {category}</p>
 
-          <FaAngleRight />
+          <FaAngleRight className="  font-light size-6 " />
         </Link>
       </div>
     </div>
