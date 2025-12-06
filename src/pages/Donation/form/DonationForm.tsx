@@ -8,7 +8,7 @@ export default function DonationForm() {
 
   return (
     <form>
-      <div className="mt-4 pb-4 ">
+      <div className=" mb-6 ">
         <InputLabel label={t('name')} />
         <ControlledInputField
           name="name"
@@ -17,7 +17,7 @@ export default function DonationForm() {
           showErrorMessage
         />
       </div>
-      <div className="mt-4 pb-4">
+      <div className="mb-6 ">
         <InputLabel label={t('email')} />
         <ControlledInputField
           name="email"
@@ -26,7 +26,7 @@ export default function DonationForm() {
           showErrorMessage
         />
       </div>
-      <div className="mt-4 pb-4 ">
+      <div className="mb-6  ">
         <InputLabel label={t('donation.subject')} />
         <ControlledInputField
           name="subject"
@@ -35,7 +35,7 @@ export default function DonationForm() {
           showErrorMessage
         />
       </div>
-      <div className="mt-4 pb-4 ">
+      <div className=" mb-6 ">
         <InputLabel label={t('donation.askingAmount')} />
         <ControlledInputField
           name="askingAmount"
@@ -44,19 +44,19 @@ export default function DonationForm() {
           showErrorMessage
         />
       </div>
-      <div className="mt-4 pb-4">
-        <InputLabel label={t('contactus.message')} />
+      <div className=" mb-12 lg:mb-6 ">
+        <InputLabel label={t('donation.message')} />
         <ControlledInputField
           type="textarea"
           name="description"
-          placeholder={t('contactus.messagePlaceholder')}
+          placeholder={t('donation.messagePlaceholder')}
           className="rounded-md min-h-[122px] border-gray hover:border-blue-500 focus:border-blue-500 focus:outline-none"
           showErrorMessage
         />
       </div>
       <Button
         type="submit"
-        className="w-full lg:w-[151px] lg:h-[48px] lg:text-[14px] bg-primary text-white py-3 rounded-lg mt-4 lg:mt-2"
+        className="w-full lg:w-[99px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-3 px-6 rounded-lg mb-14 lg:mb-0 "
       >
         {t('donation.submit')}
       </Button>

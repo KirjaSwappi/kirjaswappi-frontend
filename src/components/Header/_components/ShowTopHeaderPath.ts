@@ -12,6 +12,8 @@ function getTopHeaderPaths(params: string | undefined) {
     '/user/messages',
     `/user/messages/${params}/isMessage=True`,
     '/map',
+    '/privacy-policy',
+    '/support-us',
     '/contact-us',
     '/collaboration',
     '/donation',
