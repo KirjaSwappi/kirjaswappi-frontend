@@ -21,7 +21,7 @@ export default function OfferedBy({
       <div className="flex gap-1 my-5">
         <span className=" w-[1px] h-4 bg-[#B2B2B2] lg:mr-8 hidden lg:block"></span>
         <Image src={locationIcon} alt="location" />
-        <p className="text-xs font-poppins font-normal">{location.city}</p>
+        <p className="text-xs font-poppins font-normal">{location?.city}</p>
       </div>
       <div>
         <div className="flex gap-8 items-end">
