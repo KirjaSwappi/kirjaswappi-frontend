@@ -67,7 +67,7 @@ export const bookApi = api.injectEndpoints({
         latitude,
         longitude,
         notOwnerId,
-        pageSize = 20,
+        pageSize = 10,
       }: {
         filter?: IFilterData;
         ownerId?: string;

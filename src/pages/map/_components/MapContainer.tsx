@@ -6,11 +6,20 @@ import BookMarker from './BookMarker';
 
 interface MapContainerProps {
   books: IBookWithLocation[];
-  onMarkerClick: (bookId: string) => void;
 }
 
-export default function MapContainer({ books, onMarkerClick }: MapContainerProps) {
+export default function MapContainer({ books }: MapContainerProps) {
   const { latitude, longitude } = useGeolocation();
+  if (latitude == null || longitude == null) {
+    return (
+      <div className="h-full flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading map...</p>
+        </div>
+      </div>
+    );
+  }
   const groupedBooks = books.reduce(
     (acc, book) => {
       const key = `${book.latitude.toFixed(4)}_${book.longitude.toFixed(4)}`;
@@ -31,9 +40,9 @@ export default function MapContainer({ books, onMarkerClick }: MapContainerProps
   return (
     <div className="h-full w-full">
       <LeafletMapContainer
-        center={[latitude ?? 0, longitude ?? 0]}
+        center={[latitude, longitude]}
         zoom={12}
-        style={{ height: '100%', width: '100%' }}
+        style={{ height: '100vh', width: '100%' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -45,7 +54,6 @@ export default function MapContainer({ books, onMarkerClick }: MapContainerProps
             key={`${marker.latitude}_${marker.longitude}_${index}`}
             books={marker.books}
             position={[marker.latitude, marker.longitude]}
-            onMarkerClick={onMarkerClick}
           />
         ))}
       </LeafletMapContainer>

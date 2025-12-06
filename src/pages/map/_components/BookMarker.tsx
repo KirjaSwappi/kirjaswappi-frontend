@@ -6,7 +6,6 @@ import BookPopup from './BookPopup';
 interface BookMarkerProps {
   books: IBookWithLocation[];
   position: [number, number];
-  onMarkerClick: (bookId: string) => void;
 }
 
 // Fix for default markers in react-leaflet
@@ -25,7 +24,7 @@ const hashString = (str: string) => {
   return Math.abs(hash);
 };
 
-export default function BookMarker({ books, position, onMarkerClick }: BookMarkerProps) {
+export default function BookMarker({ books, position }: BookMarkerProps) {
   const isCluster = books.length > 1;
 
   const createClusterIcon = (count: number) => {
@@ -73,7 +72,7 @@ export default function BookMarker({ books, position, onMarkerClick }: BookMarke
   return (
     <Marker position={position} icon={markerIcon}>
       <Popup maxWidth={450} minWidth={320} offset={[0, -10]}>
-        <BookPopup books={books} onBookClick={onMarkerClick} />
+        <BookPopup books={books} />
       </Popup>
     </Marker>
   );

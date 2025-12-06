@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../../components/shared/Button';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
 import MapContainer from './_components/MapContainer';
@@ -9,7 +7,6 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { IBookWithLocation } from './types/interface';
 
 export default function Map() {
-  const navigate = useNavigate();
   const { latitude, longitude } = useGeolocation();
   const [booksWithLocation, setBooksWithLocation] = useState<IBookWithLocation[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
@@ -32,13 +29,28 @@ export default function Map() {
 
   useEffect(() => {
     if (data?._embedded?.books) {
-      setBooksWithLocation(data._embedded.books);
+      const normalizedBooks: IBookWithLocation[] = data._embedded.books
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .filter((book: any) => book.location?.latitude != null && book.location?.longitude != null)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .map((book: any) => {
+          console.log(book);
+          return {
+            ...book,
+            latitude: book.location.latitude,
+            longitude: book.location.longitude,
+            address: book.location.address,
+            city: book.location.city,
+            country: book.location.country,
+            createdAt: book.offeredAgo,
+          };
+        });
+
+      setBooksWithLocation(normalizedBooks);
     } else {
       setBooksWithLocation([]);
     }
   }, [data]);
-
-  const handleMarkerClick = (bookId: string) => navigate(`/book-details/${bookId}`);
 
   if (isError) {
     return (
@@ -71,47 +83,14 @@ export default function Map() {
           </div>
         ) : (
           <div className="h-full w-full relative">
-            <MapContainer books={booksWithLocation} onMarkerClick={handleMarkerClick} />
+            <MapContainer books={booksWithLocation} />
             {booksWithLocation.length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white z-[999999] font-poppins text-base">
+              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white  font-poppins text-base h-[calc(100vh-70px)]">
                 <p>No books found with location data</p>
               </div>
             )}
           </div>
         )}
-
-        <div className="absolute bottom-6 right-6 z-10 flex flex-col gap-2">
-          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
-            <svg
-              className="w-5 h-5 text-gray"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </Button>
-          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
-            <svg
-              className="w-5 h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-            </svg>
-          </Button>
-          <Button className="w-12 h-12 bg-white rounded-full shadow-lg border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition">
-            <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06z" />
-            </svg>
-          </Button>
-        </div>
       </div>
     </div>
   );
