@@ -13,7 +13,7 @@ export default function MapSearchAndFilterBooks() {
   const dispatch = useAppDispatch();
   return (
     <div className="absolute left-1/2 -translate-x-1/2 top-10 z-[9999999] w-full px-4">
-      <div className="lg:w-[35%] h-[54px] flex mx-auto items-center gap-3">
+      <div className="w-full lg:w-[35%] h-[54px] flex mx-auto items-center gap-3">
         <Button
           onClick={() => {
             dispatch(setFilterOpen(true));

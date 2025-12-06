@@ -18,11 +18,13 @@ export default function OfferedBy({
   const navigate = useNavigate();
   return (
     <div className="flex flex-col lg:flex-row-reverse lg:justify-end lg:gap-8 mt-5 xl:mt-12">
-      <div className="flex gap-1 my-5">
-        <span className=" w-[1px] h-4 bg-[#B2B2B2] lg:mr-8 hidden lg:block"></span>
-        <Image src={locationIcon} alt="location" />
-        <p className="text-xs font-poppins font-normal">{location?.city}</p>
-      </div>
+      {location?.city && (
+        <div className="flex gap-1 my-5">
+          <span className=" w-[1px] h-4 bg-[#B2B2B2] lg:mr-8 hidden lg:block"></span>
+          <Image src={locationIcon} alt="location" />
+          <p className="text-xs font-poppins font-normal">{location?.city}</p>
+        </div>
+      )}
       <div>
         <div className="flex gap-8 items-end">
           <div>
