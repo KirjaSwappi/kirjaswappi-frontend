@@ -1,3 +1,4 @@
+262626;
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -45,6 +46,10 @@ export default {
         AntiFlashWhite: '#F2F2F2',
         athensGray: '#F5F7FA',
         richBlack: '#1A1A1A',
+        black2: '#1A1A1A',
+        black3a: '#0F1417',
+        iceWhite: '#F7FAFC',
+        charcoal: '#262626',
       },
       fontSize: {
         sx: '10px',

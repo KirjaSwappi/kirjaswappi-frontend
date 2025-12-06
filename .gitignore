@@ -26,3 +26,7 @@ package-lock.json
 *.sln
 *.sw?
 /coverage
+
+
+.vscode/
+.vscode/*

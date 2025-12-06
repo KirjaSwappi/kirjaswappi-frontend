@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import PrivacyPolicyHeader from './PrivacyPolicyHeader';
 import { useTranslation } from 'react-i18next';
-import { getPrivacyPolicySections } from '../constants/sections';
+import { useNavigate, useParams } from 'react-router-dom';
+import { dummyCategorySection } from '../constants/DummyData';
+import PrivacyPolicyHeader from './PrivacyPolicyHeader';
 
 const PrivacyPolicyDetail: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { sectionKey } = useParams<{ sectionKey: string }>();
+
+  const sectionData = dummyCategorySection.find((item) => item?.id === Number(sectionKey));
 
   // Redirect to full privacy policy on desktop view
   useEffect(() => {
@@ -23,10 +25,10 @@ const PrivacyPolicyDetail: React.FC = () => {
   }, [navigate]);
 
   // Flatten all items from static sections
-  const allItems = getPrivacyPolicySections(t).flatMap((section) => section.items);
-  const section = allItems.find((item) => item.title === sectionKey);
+  // const allItems = getPrivacyPolicySections(t).flatMap((section) => section.items);
+  // const section = allItems.find((item) => item.title === sectionKey);
 
-  if (!section) {
+  if (!sectionData) {
     return (
       <div className="font-poppins pb-24 lg:bg-white lg:container">
         <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
@@ -41,14 +43,43 @@ const PrivacyPolicyDetail: React.FC = () => {
   }
 
   return (
-    <div className="font-poppins  min-h-screen">
+    <div className="font-poppins  min-h-screen pb-32 ">
       <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
         <PrivacyPolicyHeader onBack={() => navigate('/privacy-policy')} />
-        <div className="px-4 sm:px-6">
-          <h2 className="text-[16px] sm:mt-4 sm:mb-3 font-semibold mb-6 leading-7 tracking-normal">
-            {section.title}
-          </h2>
-          <div className="text-[15px] text-gray-700">{section.content}</div>
+
+        <div className="px-4 sm:px-6 mt-6 ">
+          <h1 className=" font-semibold text-[16px] leading-[28px] text-black3a  ">
+            {sectionData?.Mobilecategory}{' '}
+          </h1>
+
+          <p className="text-[14px] leading-[24px] mt-6 "> {sectionData?.title} </p>
+
+          {sectionData?.children?.map((item, index) => (
+            <div key={index} className=" mt-10 ">
+              {item?.subHeading && (
+                <p className=" font-semibold text-[14px] leading-[24px] text-smokyBlack ">
+                  {String.fromCharCode(97 + index)}. {item?.subHeading}{' '}
+                </p>
+              )}
+
+              <ul className=" pl-8 pt-2 ">
+                {item?.points?.map((point, idx) => (
+                  <li
+                    key={idx}
+                    className="list-disc  text-left  text-[16px] leading-[28px] text-smokyBlack "
+                    dangerouslySetInnerHTML={{ __html: point }}
+                  />
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {sectionData?.paragraph && (
+            <p
+              className={` mt-6 text-[14px] leading-[24px] text-black3a  ${sectionData?.category === 'Data Security' && 'pl-6  '}   `}
+              dangerouslySetInnerHTML={{ __html: sectionData?.paragraph }}
+            />
+          )}
         </div>
       </div>
     </div>
