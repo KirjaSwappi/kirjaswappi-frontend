@@ -70,7 +70,7 @@ export default function Filter() {
           </div>
 
           {/* middle section --> category section slider */}
-          <div className=" flex-1 min-w-0 max-w-[50%] xl:max-w-[44%] ">
+          <div className=" flex-1 min-w-0 max-w-[48%] ">
             <CategorySlider />
           </div>
 

@@ -26,6 +26,8 @@ export default function Books() {
     },
   );
 
+  // console.log(data);
+
   // <=======Fetch data store in state=======>
   useEffect(() => {
     if (data?._embedded?.books) {

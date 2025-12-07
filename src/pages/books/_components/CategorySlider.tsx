@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
 import type { Swiper as SwiperType } from 'swiper';
-import { setGenreFilter } from '../../../redux/feature/filter/filterSlice';
+import { clearAllFilters, setGenreFilter } from '../../../redux/feature/filter/filterSlice';
 import { useGetGenreQuery } from '../../../redux/feature/genre/genreApi';
 
 interface ICategory {
@@ -32,7 +32,7 @@ export default function CategorySlider() {
     label: value.name,
   }));
 
-  console.log(selectedGenre);
+  console.log('selected genre = ', selectedGenre);
 
   const handleSelectGenre = (genreId: string) => {
     if (genreId === selectedGenre) {
@@ -49,9 +49,10 @@ export default function CategorySlider() {
     }
   }, [selectedGenre, dispatch]);
 
-  if (isGenreLoading) {
-    return <p>loading....</p>;
-  }
+  // for clear all filter
+  useEffect(() => {
+    dispatch(clearAllFilters());
+  }, []);
 
   return (
     <div className=" flex justify-between items-center gap-x-3  ">
@@ -65,25 +66,46 @@ export default function CategorySlider() {
 
       <Swiper
         slidesPerView={4}
-        spaceBetween={0}
+        spaceBetween={15}
         loop={true}
         navigation={false}
         modules={[Pagination, Navigation]}
-        className="mySwiper  flex justify-between items-center "
+        className="mySwiper  flex justify-between items-center"
         onSwiper={(swiper) => {
           swiperRef.current = swiper;
         }}
+        breakpoints={{
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 15,
+          },
+
+          1280: {
+            slidesPerView: 4,
+            spaceBetween: 15,
+          },
+        }}
       >
-        {CategoryData.map((category) => (
-          <SwiperSlide key={category?.id} className=" py-0.5  ">
-            <button
-              className={`cursor-pointer font-poppins  py-2 px-5 t font-medium rounded-[27px] shadow-md text-[14px] ${category?.id === selectedGenre ? ' bg-[#BADBFD] text-primary ' : 'ext-grayDark bg-white '} `}
-              onClick={() => handleSelectGenre(category.id)}
-            >
-              {category.label}
-            </button>
-          </SwiperSlide>
-        ))}
+        {isGenreLoading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <SwiperSlide key={index} className="py-0.5  ">
+                <div className="h-10 w-24 bg-gray rounded-[27px] animate-pulse" />
+              </SwiperSlide>
+            ))
+          : CategoryData.map((category) => (
+              <SwiperSlide key={category.id} className="py-0.5">
+                <button
+                  className={`w-full cursor-pointer font-poppins py-2 px-5 font-medium rounded-[27px] shadow-md text-[14px] ${
+                    category.id === selectedGenre
+                      ? 'bg-[#BADBFD] text-primary'
+                      : 'text-grayDark bg-white'
+                  }`}
+                  onClick={() => handleSelectGenre(category.id)}
+                >
+                  {category.label}
+                </button>
+              </SwiperSlide>
+            ))}
       </Swiper>
 
       <button
