@@ -32,7 +32,7 @@ export default function CategorySlider() {
     label: value.name,
   }));
 
-  console.log('selected genre = ', selectedGenre);
+  // console.log('selected genre = ', selectedGenre);
 
   const handleSelectGenre = (genreId: string) => {
     if (genreId === selectedGenre) {
@@ -95,9 +95,9 @@ export default function CategorySlider() {
           : CategoryData.map((category) => (
               <SwiperSlide key={category.id} className="py-0.5">
                 <button
-                  className={`w-full cursor-pointer font-poppins py-2 px-5 font-medium rounded-[27px] shadow-md text-[14px] ${
+                  className={`w-full cursor-pointer font-poppins py-2 px-5 font-medium rounded-[27px] shadow text-[14px] ${
                     category.id === selectedGenre
-                      ? 'bg-[#BADBFD] text-primary'
+                      ? 'bg-primary text-white'
                       : 'text-grayDark bg-white'
                   }`}
                   onClick={() => handleSelectGenre(category.id)}

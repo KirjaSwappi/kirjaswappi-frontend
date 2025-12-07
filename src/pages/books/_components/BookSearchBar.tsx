@@ -35,8 +35,8 @@ export default function BookSearchBar() {
   const [selectedLocation, setSelectedLocation] = useState<ILocation>(locationOptions[0]);
 
   return (
-    <div className=" font-poppins overflow-hidden flex  justify-between items-center  bg-white rounded-full border  border-gray py-2 px-2  ">
-      <div className="   pl-3 ">
+    <div className=" w-full h-full font-poppins  flex  justify-between items-center  bg-white rounded-full border  border-gray py-2 px-2 custom-scrollbar ">
+      <div className="pl-3 ">
         <Input
           type="text"
           placeholder="What book are you looking for ?"
@@ -48,8 +48,8 @@ export default function BookSearchBar() {
 
       {/* Location Selector */}
       <div className=" flex items-center gap-2  ">
-        <div className="SelectInputSection bg-[#BADBFD] border border-[#badbfd] rounded-2xl text-[#3879E9] flex items-center gap-2 py-1 px-3 relative ">
-          <FaLocationDot className="size-4  " />
+        <div className="SelectInputSection bg-primary_4 border border-[#badbfd] rounded-2xl text-[#3879E9] flex justify-between items-center gap-2 px-3   relative w-[9.5rem] h-[2.4rem]">
+          <FaLocationDot className="size-3 " />
 
           <Select
             value={selectedLocation.value}
@@ -58,16 +58,16 @@ export default function BookSearchBar() {
               if (loc) setSelectedLocation(loc);
             }}
           >
-            <SelectTrigger className="bg-transparent shadow-none text-sm font-medium px-0 border-none outline-none focus:ring-0">
+            <SelectTrigger className=" text-[12px]  h-full flex justify-evenly shadow-none text-sm font-medium px-0 border-none outline-none focus:ring-0  ">
               <SelectValue placeholder="Select location" />
             </SelectTrigger>
 
-            <SelectContent className=" py-2 px-3 rounded-lg w-[215px] max-h-[294px] overflow-auto absolute top-4 -right-20 ">
+            <SelectContent className="  py-4 px-3 rounded-lg w-[215px] max-h-[294px] absolute top-2 -left-24 ">
               {locationOptions.map((loc) => (
                 <SelectItem
                   key={loc.value}
                   value={loc.value}
-                  className=" text-blackOlive hover:text-black cursor-pointer text-[15px] leading-[24px] py-1 border-b border-[#BADBFD] outline-none  "
+                  className=" font-poppins text-blackOlive hover:text-black cursor-pointer text-[14px] leading-[24px] py-4 border-b border-[#BADBFD] outline-none    "
                 >
                   {loc.label}
                 </SelectItem>
@@ -77,7 +77,10 @@ export default function BookSearchBar() {
         </div>
 
         {/* Search Button */}
-        <Button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2">
+        <Button
+          type="submit"
+          className=" bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2"
+        >
           <Search className="size-6 " />
         </Button>
       </div>

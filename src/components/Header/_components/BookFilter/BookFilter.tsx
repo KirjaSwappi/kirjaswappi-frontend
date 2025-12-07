@@ -19,7 +19,7 @@ export default function BookFilter() {
   }
 
   return (
-    <div className="overflow-y-scroll h-screen custom-scrollbar">
+    <div className="overflow-y-scroll h-screen custom-scrollbar  ">
       <div>
         <BookFilterReset />
         <Line className="my-4" />

@@ -69,7 +69,7 @@ export default function HeroSection() {
     <section className="rounded-lg overflow-hidden relative   ">
       {/* search component  */}
       <div className=" hidden lg:block ">
-        <div className=" h-[54px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
+        <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
           <BookSearchBar />
         </div>
       </div>
