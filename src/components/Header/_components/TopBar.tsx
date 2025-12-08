@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useMouseClick } from '../../../hooks/useMouse';
 import BookSearchBar from '../../../pages/books/_components/BookSearchBar';
@@ -18,6 +18,9 @@ export default function TopBar() {
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
   const [isScrolled, setIsScrolled] = useState(false);
+
+  const { pathname } = useLocation();
+  const isHomePage = pathname === '/';
 
   // scroll --> 251
   // scroll --> 301
@@ -75,22 +78,36 @@ export default function TopBar() {
             </Link>
 
             {/* mid , btn section  */}
-            <div className=" block  ">
+            {/* mid , btn section  */}
+            <div className="block">
               <AnimatePresence mode="wait">
-                {isScrolled ? (
-                  <motion.div
-                    className=" h-12 w-[86%] mx-auto  "
-                    key="book-search"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <BookSearchBar />
-                  </motion.div>
+                {isHomePage ? (
+                  isScrolled ? (
+                    <motion.div
+                      className="h-12 w-[86%] mx-auto"
+                      key="book-search"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <BookSearchBar />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="scroll-search"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ScrollSearch />
+                    </motion.div>
+                  )
                 ) : (
+                  // All other pages: Always show ScrollSearch
                   <motion.div
-                    key="scroll-search"
+                    key="always-scroll-search"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
