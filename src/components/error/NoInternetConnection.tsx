@@ -38,8 +38,8 @@ const NoInternetConnection: React.FC<NoInternetConnectionProps> = ({ children })
           <ErrorPageHeader title={t('offline.heading')} paragraph={t('offline.title')} />
 
           {/* img  */}
-          <div className="w-[320px] lg:w-[726px] h-[270px] lg:h-[590px] bg-red ">
-            <img src={offline} alt="404Error" className=" w-full h-full " />
+          <div className="w-[320px] lg:w-[726px] h-[270px] lg:h-[590px] ">
+            <img src={offline} alt="offlineImage" className=" w-full h-full " />
           </div>
         </div>
       </div>
