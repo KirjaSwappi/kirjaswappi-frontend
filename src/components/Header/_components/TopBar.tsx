@@ -79,6 +79,7 @@ export default function TopBar() {
               <AnimatePresence mode="wait">
                 {isScrolled ? (
                   <motion.div
+                    className=" h-12 w-[86%] mx-auto  "
                     key="book-search"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

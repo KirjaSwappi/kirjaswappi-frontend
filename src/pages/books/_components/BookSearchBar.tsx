@@ -36,19 +36,19 @@ export default function BookSearchBar() {
 
   return (
     <div className=" w-full h-full font-poppins  flex  justify-between items-center  bg-white rounded-full border  border-gray py-2 px-2 custom-scrollbar ">
-      <div className="pl-3 ">
+      <div className="pl-3  ">
         <Input
           type="text"
           placeholder="What book are you looking for ?"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="  flex-1 border-0  py-2 text-sm sm:text-base focus-visible:ring-0 placeholder:text-gray-400 overflow-hidden bg-white lg:bg-white lg:bge "
+          className="  flex-1 border-0 text-sm sm:text-base focus-visible:ring-0 placeholder:text-gray-400 overflow-hidden bg-white lg:bg-white lg:bge "
         />
       </div>
 
       {/* Location Selector */}
       <div className=" flex items-center gap-2  ">
-        <div className="SelectInputSection bg-primary_4 border border-[#badbfd] rounded-2xl text-[#3879E9] flex justify-between items-center gap-2 px-3   relative w-[9.5rem] h-[2.4rem]">
+        <div className="SelectInputSection bg-primary_4 border border-[#badbfd] rounded-2xl text-[#3879E9] flex justify-between items-center gap-2 px-3   relative w-[9.5rem] h-[2.35rem]">
           <FaLocationDot className="size-3 " />
 
           <Select

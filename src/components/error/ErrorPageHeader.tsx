@@ -5,7 +5,7 @@ interface IProps {
 
 export default function ErrorPageHeader({ title, paragraph }: IProps) {
   return (
-    <div className="  ">
+    <div className=" font-poppins ">
       <h1 className=" font-semibold text-[24px] lg:text-[32px] leading-[40px] text-richBlack mb-5 text-center ">
         {title}
       </h1>

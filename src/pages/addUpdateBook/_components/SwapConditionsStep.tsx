@@ -116,9 +116,9 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
           ))}
         </div>
         <Separator className="lg:hidden" />
-        <div>
+        <div className=" ">
           {swapType === SwapType.BYBOOKS && (
-            <div>
+            <div className="  ">
               {fields.map((swappableBook, index) => {
                 const flag = watch(`swappableBooks.${index}.flag`);
                 const { coverPhoto, title, author } = watch(`swappableBooks.${index}`);
