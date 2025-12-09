@@ -22,9 +22,6 @@ export default function TopBar() {
   const { pathname } = useLocation();
   const isHomePage = pathname === '/';
 
-  // scroll --> 251
-  // scroll --> 301
-
   console.log(showScrollSearch);
 
   useEffect(() => {
@@ -77,8 +74,6 @@ export default function TopBar() {
               />
             </Link>
 
-            {/* mid , btn section  */}
-            {/* mid , btn section  */}
             <div className="block">
               <AnimatePresence mode="wait">
                 {isHomePage ? (
@@ -105,7 +100,6 @@ export default function TopBar() {
                     </motion.div>
                   )
                 ) : (
-                  // All other pages: Always show ScrollSearch
                   <motion.div
                     key="always-scroll-search"
                     initial={{ opacity: 0, y: -10 }}
@@ -122,7 +116,7 @@ export default function TopBar() {
             {/* right section  */}
             <div
               ref={reference}
-              className={`w-[230px] flex items-center justify-end gap-4 relative `}
+              className={`w-[250px] flex items-center justify-end gap-4 relative `}
             >
               <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
               {clicked && <LanguageMenuDropdown />}
