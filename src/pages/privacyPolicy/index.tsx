@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PrivacyPolicyHeader from './components/PrivacyPolicyHeader';
 import PrivacyPolicySection from './components/PrivacyPolicySection';
-import { dummyCategorySection } from './constants/DummyData';
+import { usePrivacyPolicyData } from './components/usePrivacyPolicyData';
 
 const PrivacyPolicy = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { CategorySectionData } = usePrivacyPolicyData();
 
   useEffect(() => {
     // If we're coming from a specific section page (mobile view)
@@ -28,17 +30,9 @@ const PrivacyPolicy = () => {
         <PrivacyPolicyHeader onBack={() => navigate(-1)} />
 
         <div className="  headerSection pl-6 pt-5 hidden lg:flex flex-col gap-y-7 text-[14px] leading-[24px]  ">
-          <p className=" text-grayDark  ">Last Updated: 16.03.2025 </p>
-          <p className=" text-smokyBlack ">
-            Welcome to KirjaSwappi (kirjaswappi.fi). We are committed to protecting your privacy and
-            ensuring that your personal information is handled in a safe and responsible manner.
-            This Privacy Policy outlines how we collect, use, store, and protect your information
-            when you use our Website.
-          </p>
-          <p className=" text-smokyBlack ">
-            By using KirjaSwappi, you agree to the terms of this Privacy Policy. If you do not agree
-            with any part of this policy, please do not use our Website.
-          </p>
+          <p className=" text-grayDark  "> {t('privacypolicy.lastupdated')}: 16.03.2025 </p>
+          <p className=" text-smokyBlack ">{t('privacypolicy.intro1')}</p>
+          <p className=" text-smokyBlack ">{t('privacypolicy.intro2')}</p>
         </div>
 
         <p className="pt-12 pb-4 px-4 lg:hidden text-[14px] leading-[24px] text-black3a ">
@@ -47,14 +41,14 @@ const PrivacyPolicy = () => {
 
         {/* mobile section  */}
         <div className="lg:hidden ">
-          {dummyCategorySection.map((section, index) => (
+          {CategorySectionData.map((section, index) => (
             <PrivacyPolicySection key={index} category={section?.Mobilecategory} item={section} />
           ))}
         </div>
 
         {/* desktop view  */}
         <div className=" pl-6 hidden lg:block  ">
-          {dummyCategorySection?.map((section, index) => (
+          {CategorySectionData?.map((section, index) => (
             <div key={index} className=" mt-12 ">
               <h1 className=" font-bold text-smokyBlack text-[18px] leading-[23px] mb-3  ">
                 {index + 1} {section?.category}{' '}
@@ -95,12 +89,10 @@ const PrivacyPolicy = () => {
         {/* end section  */}
         <div className=" mt-14 pl-6  hidden lg:block  ">
           <h1 className="  font-bold text-smokyBlack text-[18px] leading-[23px] mb-3 ">
-            End of Privacy Policy
+            {t('privacypolicy.end.title')}
           </h1>
           <p className="text-[14px] leading-[24px] text-smokyBlack">
-            This template is designed to be comprehensive and compliant with general privacy laws,
-            such as the GDPR and CCPA. However, you may want to consult a legal professional to
-            ensure it meets all specific requirements for your jurisdiction.
+            {t('privacypolicy.end.description')}
           </p>
         </div>
       </div>

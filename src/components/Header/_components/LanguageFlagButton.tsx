@@ -23,11 +23,15 @@ export default function LanguageFlagButton({
   return (
     <Button
       id="language"
-      className={`flex items-center justify-center w-10 h-10 border border-primary rounded-full overflow-hidden `}
+      className={`flex items-center justify-center size-8 xlg:size-10 border border-primary rounded-full overflow-hidden `}
       onClick={() => setClicked(!clicked)}
       aria-label="Change language"
     >
-      <Image src={flagSrc} alt="Current Language Flag" className="w-10 h-10 object-cover" />
+      <Image
+        src={flagSrc}
+        alt="Current Language Flag"
+        className="size-8 xlg:size-10 bgr object-cover"
+      />
     </Button>
   );
 }

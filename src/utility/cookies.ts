@@ -19,12 +19,14 @@ export const getCookie = (name: string) => {
 
   for (let i = 0; i < cookiesArray.length; i++) {
     const cookie = cookiesArray[i].trim();
+
     if (cookie.indexOf(nameEQ) === 0) {
       const encryptedValue = cookie.substring(nameEQ.length, cookie.length);
       const decryptedValue = CryptoJS.AES.decrypt(
         encryptedValue,
         import.meta.env.VITE_SECRET_KEY,
       ).toString(CryptoJS.enc.Utf8);
+
       return JSON.parse(decryptedValue);
     }
   }

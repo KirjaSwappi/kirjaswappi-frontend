@@ -24,6 +24,7 @@ export default {
       },
       colors: {
         primary: '#3879E9',
+        primary_4: '#dbedff',
         'primary-light': '#DBEDFF',
         secondary: '#B90E25',
         red: '#EA244E',
@@ -43,6 +44,8 @@ export default {
         smokyBlack: '#0D0D0D',
         blackOlive: '#404040',
         AntiFlashWhite: '#F2F2F2',
+        athensGray: '#F5F7FA',
+        richBlack: '#1A1A1A',
         black2: '#1A1A1A',
         black3a: '#0F1417',
         iceWhite: '#F7FAFC',
@@ -67,6 +70,10 @@ export default {
         lg: '1024px',
         xl: '1224px',
         '2xl': '1392px',
+        'sc-1400': '1400px',
+        'sc-500': '500px',
+        'sc-400': '400px',
+        'sc-375': '375px',
       },
       spacing: {
         '1px': '1px',

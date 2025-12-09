@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { dummyCategorySection } from '../constants/DummyData';
 import PrivacyPolicyHeader from './PrivacyPolicyHeader';
+import { usePrivacyPolicyData } from './usePrivacyPolicyData';
 
 const PrivacyPolicyDetail: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { sectionKey } = useParams<{ sectionKey: string }>();
 
-  const sectionData = dummyCategorySection.find((item) => item?.id === Number(sectionKey));
+  const { getSectionById } = usePrivacyPolicyData(); // Use the hook
+
+  const sectionData = getSectionById(Number(sectionKey));
 
   // Redirect to full privacy policy on desktop view
   useEffect(() => {

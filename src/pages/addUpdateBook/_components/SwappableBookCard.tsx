@@ -60,7 +60,7 @@ function SwappableBookCard({
   return (
     <div
       id={`swappableBook-${id}`}
-      className="bg-white p-4 rounded-xl flex gap-4 mt-3 lg:mt-0 shadow-sm lg:border border-gray"
+      className="bg-white p-4 rounded-xl flex gap-4 my-3 shadow-sm lg:border border-gray "
     >
       <div className="w-3/12 h-20 max-h-20">
         <Image src={coverPhotoUrl} alt="Cover" className="w-20 h-20 object-cover rounded-md" />

@@ -30,10 +30,11 @@ export default function MobileHeader() {
         shouldCollapse ? 'bg-white shadow-md ' : 'bg-transparent'
       }`}
     >
-      <div className="container">
+      <div className="container  ">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
+            {/* left icon */}
+            <div className="flex items-center gap-2  ">
               <Link
                 to="/"
                 aria-label="Go to homepage"
@@ -45,14 +46,16 @@ export default function MobileHeader() {
                   className={`cursor-pointer ${scrolled ? 'w-10 h-10' : 'h-7'}`}
                 />
               </Link>
+              {/* left arrow button  */}
               {searchToggle && (
                 <Button
                   onClick={() => setSearchToggle(false)}
-                  className="w-12 sm:w-10 h-10 border border-gray rounded-full flex items-center justify-center"
+                  className="w-12 sm:w-10 h-10 border border-gray rounded-full flex items-center justify-center  "
                 >
                   <Image src={leftArrowGray} alt="Left Arrow" className="h-4" />
                 </Button>
               )}
+
               {shouldCollapse && (
                 <Button
                   type="button"
@@ -67,7 +70,7 @@ export default function MobileHeader() {
                       setQuery={setQuery}
                       isShowFilterIcon={false}
                       isShowSortingIcon={false}
-                      className={`h-10 px-0 pl-2 overflow-hidden lg:hidden ${searchToggle ? 'w-full pr-3' : 'w-10'} `}
+                      className={`  h-10 px-0 pl-2 overflow-hidden lg:hidden ${searchToggle ? 'w-full pr-3' : 'w-10'} `}
                     />
                   }
                 </Button>
@@ -76,7 +79,7 @@ export default function MobileHeader() {
             <div className={`${searchToggle && 'hidden sm:flex'} flex items-center gap-2`}>
               <div
                 ref={reference}
-                className={`w-[120px] flex items-center justify-end gap-4 relative`}
+                className={` w-[130px] xlg:w-[160px] flex items-center justify-end gap-1 xlg:gap-4 relative`}
               >
                 <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
                 {clicked && <LanguageMenuDropdown />}
