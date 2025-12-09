@@ -46,9 +46,7 @@ export default function BookDetails() {
   }, [bookData?.owner?.id, userInformation.id]);
 
   const navigateToEditBook = () => {
-    if (isProfile) {
-      navigate(`/profile/update-book/${id}`);
-    }
+    if (isProfile) navigate(`/profile/update-book/${id}`);
   };
 
   const isEditBookOrSwapRequestFn = () => {
@@ -160,6 +158,7 @@ export default function BookDetails() {
                   imageUrl={userProfile?.imageUrl}
                   ownerName={bookData?.owner?.name}
                   ownerId={bookData?.owner?.id}
+                  location={bookData.location}
                 />
               </div>
               <div className="mt-5 hidden lg:block">
@@ -179,6 +178,7 @@ export default function BookDetails() {
             imageUrl={userProfile?.imageUrl}
             ownerName={bookData?.owner?.name}
             ownerId={bookData?.owner?.id}
+            location={bookData.location}
           />
         </div>
       </div>

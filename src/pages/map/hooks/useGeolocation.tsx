@@ -1,34 +1,46 @@
-import { useEffect } from 'react';
-import { useAppDispatch } from '../../../redux/hooks';
-import { setMapCenter, setUserLocation } from '../../../redux/feature/map/mapSlice';
+import { useEffect, useState } from 'react';
 
 export const useGeolocation = () => {
-  const dispatch = useAppDispatch();
+  const [coords, setCoords] = useState<{
+    latitude: number | null;
+    longitude: number | null;
+  }>({
+    latitude: null,
+    longitude: null,
+  });
+
+  const [permissionChecked, setPermissionChecked] = useState(false);
 
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          dispatch(setUserLocation({ latitude, longitude }));
-          dispatch(setMapCenter({ latitude, longitude }));
+          setCoords({ latitude, longitude });
+          setPermissionChecked(true);
         },
         (error) => {
           console.warn('Geolocation error:', error);
-          // Fall back to Helsinki
-          const defaultLocation = { latitude: 60.1699, longitude: 24.9384 };
-          dispatch(setMapCenter(defaultLocation));
+
+          // ❗️SET DEFAULT ONLY IF USER REJECTED ACCESS
+          if (error.code === error.PERMISSION_DENIED) {
+            setCoords({ latitude: 60.1699, longitude: 24.9384 });
+          }
+
+          setPermissionChecked(true);
         },
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 300000, // 5 minutes
+          maximumAge: 300000,
         },
       );
     } else {
-      // Geolocation not supported, use default location
-      const defaultLocation = { latitude: 60.1699, longitude: 24.9384 };
-      dispatch(setMapCenter(defaultLocation));
+      // If device does not support GPS
+      setCoords({ latitude: 60.1699, longitude: 24.9384 });
+      setPermissionChecked(true);
     }
-  }, [dispatch]);
+  }, []);
+
+  return { coords, permissionChecked };
 };

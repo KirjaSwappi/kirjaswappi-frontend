@@ -13,7 +13,6 @@ import { api } from './api/apiSlice';
 import authSlice, { IInitialState, initialState } from './feature/auth/authSlice';
 import bookSlice, { IBookInitialState } from './feature/book/bookSlice';
 import filterSlice, { IFilterInitialState } from './feature/filter/filterSlice';
-import mapSlice from './feature/map/mapSlice';
 import messagesSlice, { ChatState } from './feature/messages/messagesSlice';
 import notificationSlice, {
   INotificationInitialState,
@@ -22,7 +21,6 @@ import openSlice, { IOpenInitialState } from './feature/open/openSlice';
 import stepSlice, { IStepInitialState } from './feature/step/stepSlice';
 import swapSlice from './feature/swap/swapSlice';
 import { ISwapBookInitialInformation } from './feature/swap/types/interface';
-import { IMapState } from '../pages/map/interface';
 const cookieUser = getCookie('user');
 const user = cookieUser ? cookieUser : {};
 
@@ -47,7 +45,6 @@ const store: EnhancedStore<
     swapBook: ISwapBookInitialInformation;
     chat: ChatState;
     book: IBookInitialState;
-    map: IMapState;
   },
   UnknownAction,
   Tuple<
@@ -76,7 +73,6 @@ const store: EnhancedStore<
     swapBook: swapSlice,
     chat: messagesSlice,
     book: bookSlice,
-    map: mapSlice,
   },
   preloadedState,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),

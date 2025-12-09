@@ -28,3 +28,12 @@ export interface BookImageSliderProps {
   images: string[];
   className?: string;
 }
+export interface ILocation {
+  address: string;
+  city: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  postalCode: string;
+  radiusKm: number;
+}

@@ -21,6 +21,7 @@ import { useGeolocation } from '../map/hooks/useGeolocation';
 import Stepper from './_components/Stepper';
 import { validationSchemas } from './Schema';
 
+import { toast } from 'react-toastify';
 import AddGenre from '../../components/shared/AddGenre';
 import Button from '../../components/shared/Button';
 import { useAppSelector } from '../../redux/hooks';
@@ -37,7 +38,6 @@ export default function AddUpdateBook() {
   const [active, setActive] = useState<number>(0);
   const { userInformation } = useAppSelector((state) => state.auth);
 
-  // LANGUAGE, CONDITION, & BOOK QUERY
   const { data: languageDataOptions, isLoading: languageLoading } =
     useGetSupportLanguageQuery(undefined);
   const { data: conditionDataOptions, isLoading: conditionLoading } =
@@ -124,6 +124,7 @@ export default function AddUpdateBook() {
   };
 
   const handleAddUpdateBookFn = async <T extends IAddUpdateBookData>(data: T) => {
+    console.log(data.address);
     const formData = await buildFormData(data, userInformation.id, bookData?.id);
     try {
       const mutation = bookData?.id
@@ -131,7 +132,8 @@ export default function AddUpdateBook() {
         : addBook(formData);
 
       await mutation.unwrap();
-      navigate(`/profile/user-profile`);
+      toast.success('Book created successfully done.');
+      navigate(`/profile/user-profile/${userInformation.id}`);
     } catch (error) {
       console.error('Submission failed:', error);
     }
@@ -195,7 +197,7 @@ export default function AddUpdateBook() {
                         languages={languages}
                         conditions={conditions}
                       />
-                      <div className="mt-4 flex justify-between gap-3 pb-3 lg:justify-end">
+                      <div className="mt-4 flex justify-between gap-3 pb-12 lg:justify-end">
                         {active > 0 && (
                           <Button
                             onClick={handlePrev}

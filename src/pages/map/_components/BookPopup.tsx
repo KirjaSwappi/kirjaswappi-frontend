@@ -1,26 +1,12 @@
 import { Link } from 'react-router-dom';
 import Image from '../../../components/shared/Image';
-import { IBookWithLocation } from '../interface';
 
 interface BookPopupProps {
-  books: IBookWithLocation[];
-  onBookClick: (bookId: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  books: any[];
 }
 
-export default function BookPopup({ books, onBookClick }: BookPopupProps) {
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays}d ago`;
-    const diffInWeeks = Math.floor(diffInDays / 7);
-    return `${diffInWeeks}w ago`;
-  };
-
+export default function BookPopup({ books }: BookPopupProps) {
   const isSingle = books.length === 1;
 
   return (
@@ -38,7 +24,6 @@ export default function BookPopup({ books, onBookClick }: BookPopupProps) {
             key={book.id}
             to={`/book-details/${book.id}`}
             className={`flex items-center gap-3 hover:bg-gray-50 p-3 rounded-xl transition-colors mb-2 last:mb-0`}
-            onClick={() => onBookClick(book.id)}
           >
             <div className="flex-shrink-0">
               <Image
@@ -62,7 +47,7 @@ export default function BookPopup({ books, onBookClick }: BookPopupProps) {
               >
                 By {book.author}
               </p>
-              <p className="text-xs text-gray-500">{formatTimeAgo(book.createdAt)}</p>
+              <p className="text-xs text-gray">{book.createdAt}</p>
             </div>
           </Link>
         ))}

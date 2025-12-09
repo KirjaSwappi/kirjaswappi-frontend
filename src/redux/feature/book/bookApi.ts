@@ -64,11 +64,15 @@ export const bookApi = api.injectEndpoints({
       query: ({
         filter = { pageNumber: 0 } as IFilterData,
         ownerId,
+        latitude,
+        longitude,
         notOwnerId,
-        pageSize = 20,
+        pageSize = 10,
       }: {
         filter?: IFilterData;
         ownerId?: string;
+        latitude?: number;
+        longitude?: number;
         notOwnerId?: string;
         pageNumber?: number;
         pageSize?: number;
@@ -82,7 +86,8 @@ export const bookApi = api.injectEndpoints({
 
         appendOwnerParams(queryParams, ownerId, notOwnerId);
         appendPaginationParams(queryParams, filter.pageNumber, pageSize);
-
+        if (latitude) queryParams.append('nearLatitude', String(latitude));
+        if (longitude) queryParams.append('nearLongitude', String(longitude));
         return {
           url: `/books?${queryParams.toString()}`,
           method: 'GET',
