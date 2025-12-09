@@ -9,16 +9,25 @@ export const useGeolocation = () => {
     longitude: null,
   });
 
+  const [permissionChecked, setPermissionChecked] = useState(false);
+
   useEffect(() => {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setCoords({ latitude, longitude });
+          setPermissionChecked(true);
         },
         (error) => {
           console.warn('Geolocation error:', error);
-          setCoords({ latitude: 60.1699, longitude: 24.9384 });
+
+          // ❗️SET DEFAULT ONLY IF USER REJECTED ACCESS
+          if (error.code === error.PERMISSION_DENIED) {
+            setCoords({ latitude: 60.1699, longitude: 24.9384 });
+          }
+
+          setPermissionChecked(true);
         },
         {
           enableHighAccuracy: true,
@@ -27,9 +36,11 @@ export const useGeolocation = () => {
         },
       );
     } else {
+      // If device does not support GPS
       setCoords({ latitude: 60.1699, longitude: 24.9384 });
+      setPermissionChecked(true);
     }
   }, []);
 
-  return coords;
+  return { coords, permissionChecked };
 };

@@ -9,7 +9,8 @@ interface MapContainerProps {
 }
 
 export default function MapContainer({ books }: MapContainerProps) {
-  const { latitude, longitude } = useGeolocation();
+  const { coords } = useGeolocation();
+  const { latitude, longitude } = coords;
   if (latitude == null || longitude == null) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-100">
@@ -41,7 +42,7 @@ export default function MapContainer({ books }: MapContainerProps) {
     <div className="h-full w-full">
       <LeafletMapContainer
         center={[latitude, longitude]}
-        zoom={12}
+        zoom={20}
         style={{ height: '100vh', width: '100%' }}
       >
         <TileLayer
