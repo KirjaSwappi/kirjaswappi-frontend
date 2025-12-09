@@ -10,6 +10,7 @@ import {
 } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 import { cn } from '../../../utility/cn';
+import BookSearchBar from './BookSearchBar';
 
 const SLIDES = [
   {
@@ -31,6 +32,7 @@ const SLIDES = [
     image: heroImg,
   },
 ];
+
 export default function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -49,8 +51,29 @@ export default function HeroSection() {
       api.off('select', onSelect);
     };
   }, [api]);
+
+  // scroll --> 251
+  // scroll --> 301
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosttion = window.scrollY;
+
+      console.log(scrollPosttion);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <section className="rounded-lg overflow-hidden ">
+    <section className="rounded-lg overflow-hidden relative  ">
+      {/* search component  */}
+      <div className=" hidden lg:block ">
+        <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
+          <BookSearchBar />
+        </div>
+      </div>
+
       <Carousel opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
           {SLIDES.map((slide) => (

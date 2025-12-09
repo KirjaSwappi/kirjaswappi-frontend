@@ -12,6 +12,7 @@ import {
   setIsCategoryOrFilterOrSortBy,
 } from '../../../redux/feature/filter/filterSlice';
 import { FilterItemEnum } from '../../../utility/enum';
+import CategorySlider from './CategorySlider';
 
 export default function Filter() {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ export default function Filter() {
   };
 
   return (
-    <div ref={placeholderRef} className="w-full">
+    <div ref={placeholderRef} className="w-full  ">
       <div
         ref={filterRef}
         className={`z-10 ${
@@ -54,7 +55,8 @@ export default function Filter() {
         <div
           className={`${isFixed ? 'container' : ''} pb-6 pt-5 flex items-center justify-between`}
         >
-          <div className="flex items-center gap-2">
+          {/* left section  */}
+          <div className="flex items-center gap-2  ">
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.CATEGORY)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
@@ -66,7 +68,14 @@ export default function Filter() {
               Add Book
             </Button>
           </div>
-          <div className="flex items-center gap-2">
+
+          {/* middle section --> category section slider */}
+          <div className=" flex-1 min-w-0 max-w-[48%] ">
+            <CategorySlider />
+          </div>
+
+          {/* right section --> filter , sort  */}
+          <div className="flex items-center gap-2 ">
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"

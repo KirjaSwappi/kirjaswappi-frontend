@@ -56,7 +56,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
+      className={`  ${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
     >
       <FormProvider {...methods}>
         {drawers.map(({ type, ref, left }) => {
@@ -78,7 +78,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
       <div
         className={`${
           isHeaderShow ? 'block ' : 'hidden'
-        } fixed w-full  flex flex-col gap-[12px] z-30`}
+        } fixed w-full  flex flex-col gap-[12px] z-30  `}
       >
         <TopBar></TopBar>
       </div>

@@ -33,7 +33,7 @@ export default function FilterByGenre() {
   const genres = mergeGenresWithIcons(genreData?.parentGenres);
 
   return (
-    <div className="px-4">
+    <div className="px-4  ">
       {isGenreLoading ? (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }, (_, index) => (

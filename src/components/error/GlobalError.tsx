@@ -1,7 +1,7 @@
 import React from 'react';
+import { BiSolidError } from 'react-icons/bi';
 import { IoMdHome } from 'react-icons/io';
 import { IoRefresh } from 'react-icons/io5';
-import { BiSolidError } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 
 interface GlobalErrorProps {
