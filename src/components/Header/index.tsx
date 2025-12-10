@@ -29,8 +29,6 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const showTopHeaderPath = ShowTopHeaderPath(params);
   const isHeaderShow = showTopHeaderPath.includes(pathname) || showOn404;
 
-  // Initialize WebSocket connection for real-time notifications
-  // useNotificationWS();
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {

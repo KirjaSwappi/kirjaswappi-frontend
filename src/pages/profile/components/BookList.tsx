@@ -4,7 +4,7 @@ import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
 import { useSkeleton } from '../../../hooks/useSkeleton';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
-import { IBook } from '../../books/interface';
+import { IBook } from '../../books/types/interface';
 
 export default function BookList() {
   const { showSkeleton } = useSkeleton();

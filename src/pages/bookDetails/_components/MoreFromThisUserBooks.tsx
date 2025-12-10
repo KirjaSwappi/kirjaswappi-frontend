@@ -3,7 +3,7 @@ import Button from '../../../components/shared/Button';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
 import { useGetMoreBooksByBookIdQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
-import { IBook } from '../../books/interface';
+import { IBook } from '../../books/types/interface';
 
 export default function MoreFromThisUserBooks({ bookId }: { bookId: string | undefined }) {
   if (!bookId) return;

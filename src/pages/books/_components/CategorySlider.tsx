@@ -1,38 +1,29 @@
-import { Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-
-import 'swiper/css';
-import 'swiper/css/pagination';
-
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { useDispatch } from 'react-redux';
-import type { Swiper as SwiperType } from 'swiper';
+import Button from '../../../components/shared/Button';
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from '../../../components/shared/Carousel';
 import { clearAllFilters, setGenreFilter } from '../../../redux/feature/filter/filterSlice';
 import { useGetGenreQuery } from '../../../redux/feature/genre/genreApi';
-
-interface ICategory {
-  id: string;
-  name: string;
-}
+import { IGenre } from '../types/interface';
 
 export default function CategorySlider() {
-  const swiperRef = useRef<SwiperType | null>(null);
-
+  const [api, setApi] = useState<CarouselApi>();
   const dispatch = useDispatch();
-
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
 
   const { data: genreData = [], isLoading: isGenreLoading } = useGetGenreQuery(undefined);
-
   const parentGenres = genreData?.parentGenres ?? {};
 
-  const CategoryData = Object.values(parentGenres as ICategory[] | []).map((value: ICategory) => ({
+  const genres = Object.values(parentGenres as IGenre[] | []).map((value: IGenre) => ({
     id: value.id,
-    label: value.name,
+    name: value.name,
   }));
-
-  // console.log('selected genre = ', selectedGenre);
 
   const handleSelectGenre = (genreId: string) => {
     if (genreId === selectedGenre) {
@@ -46,75 +37,62 @@ export default function CategorySlider() {
   useEffect(() => {
     if (selectedGenre) {
       dispatch(setGenreFilter([selectedGenre]));
+    } else {
+      dispatch(setGenreFilter([]));
     }
   }, [selectedGenre, dispatch]);
 
-  // for clear all filter
   useEffect(() => {
     dispatch(clearAllFilters());
   }, []);
 
   return (
-    <div className=" flex justify-between items-center gap-x-3  ">
-      <button
-        onClick={() => swiperRef.current?.slidePrev()}
-        className="flex items-center justify-center rounded-full bg-white transition-all duration-300 disabled:opacity-50 py-[10px] px-[9px] shadow "
-        aria-label="Previous slide"
+    <div className="flex justify-between items-center gap-x-2 w-full">
+      {/* Previous */}
+      <Button
+        onClick={() => api?.scrollPrev()}
+        className="flex items-center justify-center rounded-full bg-white w-7 h-7 shadow-sm"
       >
-        <IoIosArrowBack className="text-blackOlive text-base transition-all duration-300 " />
-      </button>
-
-      <Swiper
-        slidesPerView={4}
-        spaceBetween={15}
-        loop={true}
-        navigation={false}
-        modules={[Pagination, Navigation]}
-        className="mySwiper  flex justify-between items-center"
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
+        <IoIosArrowBack className="text-blackOlive text-base" />
+      </Button>
+      <Carousel
+        opts={{
+          align: 'center',
         }}
-        breakpoints={{
-          768: {
-            slidesPerView: 3,
-            spaceBetween: 15,
-          },
-
-          1280: {
-            slidesPerView: 4,
-            spaceBetween: 15,
-          },
-        }}
+        setApi={setApi}
+        className="flex-1"
       >
-        {isGenreLoading
-          ? Array.from({ length: 6 }).map((_, index) => (
-              <SwiperSlide key={index} className="py-0.5  ">
-                <div className="h-10 w-24 bg-gray rounded-[27px] animate-pulse" />
-              </SwiperSlide>
-            ))
-          : CategoryData.map((category) => (
-              <SwiperSlide key={category.id} className="py-0.5">
-                <button
-                  className={`w-full cursor-pointer font-poppins py-2 px-5 font-medium rounded-[27px] shadow text-[14px] ${
-                    category.id === selectedGenre
-                      ? 'bg-primary text-white'
-                      : 'text-grayDark bg-white'
-                  }`}
-                  onClick={() => handleSelectGenre(category.id)}
-                >
-                  {category.label}
-                </button>
-              </SwiperSlide>
-            ))}
-      </Swiper>
+        <CarouselContent className="flex items-center">
+          {isGenreLoading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <CarouselItem key={index} className="basis-1/4">
+                  <div className="h-[37px] w-full bg-platinum animate-pulse rounded-full" />
+                </CarouselItem>
+              ))
+            : genres?.map((genre) => (
+                <CarouselItem key={genre.id} className="basis-1/4">
+                  <Button
+                    className={`w-full h-[37px] rounded-full text-sm shadow-sm ${
+                      genre.name === selectedGenre
+                        ? 'bg-primary text-white'
+                        : 'bg-white text-grayDark'
+                    }`}
+                    onClick={() => handleSelectGenre(genre.name)}
+                  >
+                    {genre.name}
+                  </Button>
+                </CarouselItem>
+              ))}
+        </CarouselContent>
+      </Carousel>
 
-      <button
-        onClick={() => swiperRef.current?.slideNext()}
-        className="flex items-center justify-center rounded-full bg-white transition-all duration-300 disabled:opacity-50 py-[10px] px-[9px] shadow "
-        aria-label="Previous slide"
+      {/* Next */}
+      <Button
+        onClick={() => api?.scrollNext()}
+        className="flex items-center justify-center rounded-full bg-white w-7 h-7 shadow-sm"
       >
-        <IoIosArrowForward className="text-blackOlive text-base transition-all duration-300 " />
-      </button>
+        <IoIosArrowForward className="text-blackOlive text-base" />
+      </Button>
     </div>
   );
 }

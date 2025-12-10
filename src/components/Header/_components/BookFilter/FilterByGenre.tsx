@@ -79,16 +79,18 @@ export default function FilterByGenre() {
                     {expanded[parent.id] && parent?.childGenres?.length > 0 && (
                       <div className="ml-3 mt-2 space-y-2 border-l border-platinumMix pl-4">
                         {parent.childGenres.map((child) => {
-                          const isChecked = field.value.includes(child.id);
+                          const isChecked = field.value.includes(child.name);
                           return (
                             <Button
                               type="button"
                               key={child.id}
                               onClick={() => {
                                 if (isChecked) {
-                                  field.onChange(field.value.filter((v: string) => v !== child.id));
+                                  field.onChange(
+                                    field.value.filter((v: string) => v !== child.name),
+                                  );
                                 } else {
-                                  field.onChange([...field.value, child.id]);
+                                  field.onChange([...field.value, child.name]);
                                 }
                               }}
                               className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
