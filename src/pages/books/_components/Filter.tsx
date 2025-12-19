@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import CategoryIcon from '../../../assets/categoryIcon.svg';
 import filtergrayIcon from '../../../assets/filtergray.svg';
 import sortByIcon from '../../../assets/sortBy.svg';
@@ -11,11 +12,15 @@ import {
   setFilterOpen,
   setIsCategoryOrFilterOrSortBy,
 } from '../../../redux/feature/filter/filterSlice';
+import { setLoginModalOpen } from '../../../redux/feature/open/openSlice';
+import { useAppSelector } from '../../../redux/hooks';
 import { FilterItemEnum } from '../../../utility/enum';
 import CategorySlider from './CategorySlider';
 
 export default function Filter() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userInformation } = useAppSelector((state) => state.auth);
   const [isFixed, setIsFixed] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
@@ -55,7 +60,6 @@ export default function Filter() {
         <div
           className={`${isFixed ? 'container' : ''} pb-6 pt-5 flex items-center justify-between`}
         >
-          {/* left section  */}
           <div className="flex items-center gap-2  ">
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.CATEGORY)}
@@ -63,18 +67,24 @@ export default function Filter() {
             >
               <Image src={CategoryIcon} alt="category" /> Category
             </Button>
-            <Button className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium">
+            <Button
+              className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+              onClick={() => {
+                if (userInformation.id) {
+                  navigate(`/profile/user-profile/${userInformation.id}`);
+                } else {
+                  dispatch(setLoginModalOpen(true));
+                }
+              }}
+            >
               <FiPlus />
               Add Book
             </Button>
           </div>
-
-          {/* middle section --> category section slider */}
           <div className=" flex-1 min-w-0 max-w-[48%] ">
             <CategorySlider />
           </div>
 
-          {/* right section --> filter , sort  */}
           <div className="flex items-center gap-2 ">
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
