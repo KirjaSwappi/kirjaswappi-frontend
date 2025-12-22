@@ -27,6 +27,10 @@ export function buildBookQueryParams(filter: IFilterData) {
     filter.sortBy.forEach((s) => params.append('sort', s));
   }
 
+  if (filter.city) {
+    params.append('city', filter.city);
+  }
+
   return params.toString();
 }
 

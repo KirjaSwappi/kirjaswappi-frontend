@@ -52,6 +52,12 @@ export const bookApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getCities: builder.query({
+      query: () => ({
+        url: '/cities',
+        method: 'GET',
+      }),
+    }),
 
     getMoreBooksByBookId: builder.query({
       query: ({ id }: { id: string }) => ({
@@ -150,6 +156,7 @@ export const {
   useGetSupportConditionQuery,
   useGetAllBooksQuery,
   useGetMoreBooksByBookIdQuery,
+  useGetCitiesQuery,
   useDeleteBookByIdMutation,
   useGetBooksListedByIdQuery,
   useGetBooksWithLocationQuery,

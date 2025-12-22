@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { useMouseClick } from '../../../hooks/useMouse';
-import BookSearchBar from '../../../pages/books/_components/BookSearchBar';
 import { useAppSelector } from '../../../redux/hooks';
 import Image from '../../shared/Image';
 import ScrollSearch from '../../shared/ScrollSearch';
+import Search from '../../shared/Search';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
@@ -86,7 +86,11 @@ export default function TopBar() {
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <BookSearchBar />
+                      <Search
+                        className="h-[54px] rounded-full justify-between"
+                        placeholder="Find books"
+                      />
+                      {/* <BookSearchBar /> */}
                     </motion.div>
                   ) : (
                     <motion.div

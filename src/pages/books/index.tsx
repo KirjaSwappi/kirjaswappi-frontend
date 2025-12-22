@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import NotFound from '../../assets/notFound.png';
 import BookCard from '../../components/shared/BookCard';
+import Image from '../../components/shared/Image';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { setPageNumber } from '../../redux/feature/filter/filterSlice';
@@ -8,7 +10,6 @@ import { goToTop } from '../../utility/helper';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
 import { IBook } from './types/interface';
-
 export default function Books() {
   const observer = useRef<IntersectionObserver>();
   const [books, setBooks] = useState<IBook[]>([]);
@@ -26,11 +27,12 @@ export default function Books() {
     },
   );
 
-  // console.log(data);
+  console.log(data);
 
   // <=======Fetch data store in state=======>
   useEffect(() => {
-    if (data?._embedded?.books) {
+    // If API returned books, merge/paginate them into state
+    if (data?._embedded?.books && data._embedded.books.length > 0) {
       setBooks((prevBooks) => {
         const newBooks = data._embedded.books;
         const allBooks = filter.pageNumber === 0 ? newBooks : [...prevBooks, ...newBooks];
@@ -39,8 +41,17 @@ export default function Books() {
         );
         return uniqueBooks;
       });
+      return;
     }
-  }, [data?._embedded?.books, filter.pageNumber]);
+
+    // If API responded but there are no books (no _embedded key or empty array),
+    // reset the books state when we're on the first page so UI shows the empty state.
+    if (data && (!data._embedded || !data._embedded.books || data._embedded.books.length === 0)) {
+      if (filter.pageNumber === 0) {
+        setBooks([]);
+      }
+    }
+  }, [data, filter.pageNumber]);
 
   // <======= Reset page number =======>
   useEffect(() => {
@@ -51,6 +62,7 @@ export default function Books() {
     filter.genre.join(','),
     filter.condition.join(','),
     filter.language.join(','),
+    filter.city,
   ]);
 
   // <======= Intersection observe =======>
@@ -84,20 +96,34 @@ export default function Books() {
         <div className="relative hidden lg:block">
           <Filter />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 mt-4 lg:mt-0">
-          {books.map((book: IBook, idx: number) => {
-            if (idx === books.length - 1) {
-              return (
-                <div ref={lastBookRef} key={idx}>
-                  <BookCard book={book} hasPermission={id === book.ownerId} />
-                </div>
-              );
-            }
-            return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
-          })}
-          {isInitialLoading &&
-            Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
-        </div>
+        {books.length === 0 && !isInitialLoading ? (
+          <div className="flex flex-col items-center justify-center mt-6">
+            <div className="bg-white w-full rounded-lg p-6 flex  min-h-[50vh] justify-center flex-col items-center">
+              <h3 className="text-xl lg:text-2xl font-semibold mb-2 font-poppins text-[#262626]">
+                No books available
+              </h3>
+              <p className="text-sm text-[#262626] mb-4 font-poppins text-center">
+                We couldn&apos;t find any books matching your filters.
+              </p>
+              <Image src={NotFound} alt="not found" className="w-28 lg:w-40" />
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 mt-4 lg:mt-0">
+            {books.map((book: IBook, idx: number) => {
+              if (idx === books.length - 1) {
+                return (
+                  <div ref={lastBookRef} key={idx}>
+                    <BookCard book={book} hasPermission={id === book.ownerId} />
+                  </div>
+                );
+              }
+              return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
+            })}
+            {isInitialLoading &&
+              Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
+          </div>
+        )}
       </div>
     </section>
   );

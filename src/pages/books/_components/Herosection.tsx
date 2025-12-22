@@ -9,8 +9,8 @@ import {
   CarouselItem,
 } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
+import Search from '../../../components/shared/Search';
 import { cn } from '../../../utility/cn';
-import BookSearchBar from './BookSearchBar';
 
 const SLIDES = [
   {
@@ -52,21 +52,14 @@ export default function HeroSection() {
     };
   }, [api]);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scrollPosttion = window.scrollY;
-
-  //     console.log(scrollPosttion);
-  //   };
-
-  //   window.addEventListener('scroll', handleScroll);
-  // }, []);
-
   return (
     <section className="rounded-lg overflow-hidden relative  ">
       <div className=" hidden lg:block ">
         <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
-          <BookSearchBar />
+          <Search
+            className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"
+            placeholder="Find books"
+          />
         </div>
       </div>
 

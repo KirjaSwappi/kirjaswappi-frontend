@@ -25,7 +25,10 @@ export default function MapSearchAndFilterBooks() {
           <Image src={filterIcon} alt="filter" className="w-6 h-6" />
         </Button>
 
-        <Search className="h-[54px] rounded-full justify-between" placeholder="Find books" />
+        <Search
+          className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"
+          placeholder="Find books"
+        />
       </div>
     </div>
   );

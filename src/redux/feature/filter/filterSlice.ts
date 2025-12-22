@@ -6,6 +6,7 @@ export interface IFilterInitialState {
     genre: string[];
     language: string[];
     condition: string[];
+    city?: string;
     search: string;
     sortBy: string[];
     pageNumber: number;
@@ -20,6 +21,7 @@ const initialState: IFilterInitialState = {
     genre: [],
     language: [],
     condition: [],
+    city: '',
     sortBy: [],
     search: '',
     pageNumber: 0,
@@ -34,6 +36,9 @@ const filterSlice = createSlice({
   reducers: {
     setSearch: (state, action) => {
       state.filter.search = action.payload;
+    },
+    setCityFilter: (state, action: PayloadAction<string>) => {
+      state.filter.city = action.payload;
     },
     setGenreFilter: (state, action: PayloadAction<string[]>) => {
       state.filter.genre = [...action.payload];
@@ -77,6 +82,7 @@ export const {
   setLanguageFilter,
   setConditionFilter,
   setSearch,
+  setCityFilter,
   setHasMore,
   setPageNumber,
   setFilterOpen,
