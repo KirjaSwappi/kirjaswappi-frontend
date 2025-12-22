@@ -11,43 +11,42 @@ export default function BookPopup({ books }: BookPopupProps) {
 
   return (
     <div
-      className={`p-0 ${isSingle ? 'min-w-[280px]' : 'overflow-y-auto min-w-[213px] min-h-[85px]'}`}
+      className={`${
+        isSingle
+          ? 'w-[220px]'
+          : 'w-[260px] max-h-[320px] overflow-y-auto rounded-r-3xl rounded-tl-3xl bg-[#1A1A1A] p-4 '
+      }`}
     >
-      {!isSingle && (
-        <div className="p-3">
-          <h3 className="font-semibold text-base text-gray">{books.length} books available</h3>
-        </div>
-      )}
-      <div className="p-2">
+      {/* BOOK LIST */}
+      <div className={`flex flex-col gap-3 ${isSingle ? 'p-4' : 'p-0 '}`}>
         {books.map((book) => (
           <Link
             key={book.id}
             to={`/book-details/${book.id}`}
-            className={`flex items-center gap-3 hover:bg-gray-50 p-3 rounded-xl transition-colors mb-2 last:mb-0`}
+            className={`flex items-center gap-3 p-0 bg-[#1A1A1A] transition rounded-r-full rounded-tl-full ${isSingle ? 'p-4' : 'p-0'}`}
           >
-            <div className="flex-shrink-0">
+            <div
+              className={`relative flex-shrink-0  ${
+                isSingle ? 'w-[48px] h-[48px]' : 'w-[48px] h-[48px]'
+              }`}
+            >
               <Image
                 src={book.coverPhotoUrl}
                 alt={book.title}
-                className={`object-cover rounded-lg shadow-sm ${
-                  isSingle ? 'w-14 h-18' : 'w-12 h-16'
-                }`}
+                className="object-cover rounded-md w-full h-full"
               />
             </div>
-            <div className="flex-1 min-w-0">
-              <h3
-                className={`font-semibold truncate mb-1 ${
-                  isSingle ? 'text-base text-gray-900' : 'text-sm text-gray-900'
-                }`}
-              >
+            {/* TEXT */}
+            <div className="min-w-0">
+              <h3 className="text-sm font-medium text-white truncate font-poppins !my-0">
                 {book.title}
               </h3>
-              <p
-                className={`truncate mb-1 text-xs ${isSingle ? 'text-gray-600' : 'text-gray-600'}`}
-              >
+              <p className="text-xs text-white truncate font-light font-poppins !my-0">
                 By {book.author}
               </p>
-              <p className="text-xs text-gray">{book.createdAt}</p>
+              <p className="text-[8px] text-gray font-light font-poppins !my-0 ">
+                {book.createdAt}
+              </p>
             </div>
           </Link>
         ))}

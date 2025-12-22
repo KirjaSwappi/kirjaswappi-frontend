@@ -26,18 +26,81 @@ const hashString = (str: string) => {
 
 export default function BookMarker({ books, position }: BookMarkerProps) {
   const isCluster = books.length > 1;
+  console.log(books);
+  const createClusterIcon = (books: IBookWithLocation[]) => {
+    const maxVisible = 3;
+    const visibleBooks = books.slice(0, maxVisible);
+    const extraCount = books.length - maxVisible;
 
-  const createClusterIcon = (count: number) => {
-    const size = count > 10 ? 50 : count > 5 ? 45 : 40;
+    const colors = ['#60A5FA', '#F87171', '#FBBF24', '#34D399', '#A78BFA'];
+
+    const circlesHtml = visibleBooks
+      .map((book, index) => {
+        const initial = book.title?.charAt(0)?.toUpperCase() || 'B';
+        const color = colors[hashString(book.id) % colors.length];
+        const left = index * 14;
+
+        return `
+        <div
+          style="
+            position:absolute;
+            left:${left}px;
+            width:28px;
+            height:28px;
+            border-radius:50%;
+            background:${color};
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-weight:600;
+            font-size:12px;
+            border:2px solid #fff;
+            z-index:${10 - index};
+          "
+        >
+          ${initial}
+        </div>
+      `;
+      })
+      .join('');
+
+    const extraHtml =
+      extraCount > 0
+        ? `
+        <div
+          style="
+            position:absolute;
+            left:${maxVisible * 14}px;
+            width:28px;
+            height:28px;
+            border-radius:50%;
+            background:#111;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:11px;
+            border:2px solid #fff;
+          "
+        >
+          +${extraCount}
+        </div>
+      `
+        : '';
+
+    const width = 28 + (visibleBooks.length - 1) * 14 + (extraCount > 0 ? 14 : 0);
+
     return divIcon({
       html: `
-        <div class="flex items-center justify-center font-bold text-white shadow-lg rounded-full !bg-[#3879E9] border-4 border-white transition-transform duration-200 hover:scale-110"
-             style="width:${size}px; height:${size}px; font-size:${count > 10 ? '16px' : '14px'}">
-          ${count}
-        </div>
-      `,
-      iconSize: [size, size],
-      iconAnchor: [size / 2, size / 2],
+      <div style="position:relative;width:${width}px;height:28px">
+        ${circlesHtml}
+        ${extraHtml}
+      </div>
+    `,
+      iconSize: [width, 28],
+      iconAnchor: [width / 2, 28],
+      popupAnchor: [0, -28],
     });
   };
 
@@ -67,11 +130,11 @@ export default function BookMarker({ books, position }: BookMarkerProps) {
     });
   };
 
-  const markerIcon = isCluster ? createClusterIcon(books.length) : createBookIcon(books[0]);
+  const markerIcon = isCluster ? createClusterIcon(books) : createBookIcon(books[0]);
 
   return (
     <Marker position={position} icon={markerIcon}>
-      <Popup maxWidth={450} minWidth={320} offset={[0, -10]}>
+      <Popup offset={[0, -10]}>
         <BookPopup books={books} />
       </Popup>
     </Marker>

@@ -52,15 +52,15 @@ export default function HeroSection() {
     };
   }, [api]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosttion = window.scrollY;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollPosttion = window.scrollY;
 
-      console.log(scrollPosttion);
-    };
+  //     console.log(scrollPosttion);
+  //   };
 
-    window.addEventListener('scroll', handleScroll);
-  }, []);
+  //   window.addEventListener('scroll', handleScroll);
+  // }, []);
 
   return (
     <section className="rounded-lg overflow-hidden relative  ">

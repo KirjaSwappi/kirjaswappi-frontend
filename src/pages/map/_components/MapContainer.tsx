@@ -18,11 +18,43 @@ interface MapContainerProps {
   books: IBookWithLocation[];
 }
 
+const normalize = (num: number, precision = 4) => Number(num.toFixed(precision));
+
 export default function MapContainer({ books }: MapContainerProps) {
   const { coords, permissionChecked } = useGeolocation();
   const { latitude, longitude } = coords;
 
-  // ✅ Nearest book calculation
+  /* =========================
+     GROUP BOOKS BY LOCATION
+  ========================= */
+  const groupedBooks = useMemo(() => {
+    const map = new Map<
+      string,
+      { latitude: number; longitude: number; books: IBookWithLocation[] }
+    >();
+
+    books.forEach((book) => {
+      const lat = normalize(book.latitude);
+      const lng = normalize(book.longitude);
+      const key = `${lat}_${lng}`;
+
+      if (!map.has(key)) {
+        map.set(key, {
+          latitude: lat,
+          longitude: lng,
+          books: [],
+        });
+      }
+
+      map.get(key)!.books.push(book);
+    });
+
+    return Array.from(map.values());
+  }, [books]);
+
+  /* =========================
+     NEAREST BOOK
+  ========================= */
   const nearestBook = useMemo(() => {
     if (!latitude || !longitude || books.length === 0) return null;
 
@@ -53,28 +85,35 @@ export default function MapContainer({ books }: MapContainerProps) {
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {/* User location marker */}
+      {/* USER LOCATION */}
       <Marker position={[latitude, longitude]} icon={userLocationIcon}>
         <Popup>You are here</Popup>
       </Marker>
 
-      {/* All books */}
-      {books.map((book) => (
-        <BookMarker key={book.id} books={[book]} position={[book.latitude, book.longitude]} />
+      {/* 📚 GROUPED BOOK MARKERS */}
+      {groupedBooks.map((group, index) => (
+        <BookMarker
+          key={`${group.latitude}_${group.longitude}_${index}`}
+          books={group.books}
+          position={[group.latitude, group.longitude]}
+        />
       ))}
 
-      {/* Only nearest book: distance line */}
+      {/* 📍 NEAREST BOOK LINE */}
       {nearestBook && (
         <Polyline
           positions={[
             [latitude, longitude],
             [nearestBook.latitude, nearestBook.longitude],
           ]}
-          pathOptions={{ color: 'blue', weight: 3, dashArray: '5,10' }}
+          pathOptions={{
+            color: '#3879E9',
+            weight: 3,
+            dashArray: '5,10',
+          }}
         />
       )}
 
-      {/* Bottom controls */}
       <MapControls latitude={latitude} longitude={longitude} />
     </LeafletMapContainer>
   );

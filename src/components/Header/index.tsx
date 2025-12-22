@@ -7,6 +7,7 @@ import {
   setConditionFilter,
   setGenreFilter,
   setLanguageFilter,
+  setSortByFilter,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { FilterItemEnum } from '../../utility/enum';
@@ -35,18 +36,21 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
       genre: [],
       language: [],
       condition: [],
+      sortBy: [],
     },
   });
   const { control } = methods;
   const watchedFields = useWatch({
     control,
-    name: ['genre', 'language', 'condition'],
+    name: ['genre', 'language', 'condition', 'sortBy'],
   });
+
   useEffect(() => {
-    const [genre, language, condition] = watchedFields;
+    const [genre, language, condition, sortBy] = watchedFields;
     dispatch(setGenreFilter(genre));
     dispatch(setLanguageFilter(language));
     dispatch(setConditionFilter(condition));
+    dispatch(setSortByFilter(sortBy));
   }, [watchedFields, dispatch]);
 
   const drawers = getDrawers(categoryRef, filterRef, sortByRef);
