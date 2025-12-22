@@ -1,12 +1,8 @@
 import { Link } from 'react-router-dom';
 import Image from '../../../components/shared/Image';
+import { IBookWithLocation } from '../types/interface';
 
-interface BookPopupProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  books: any[];
-}
-
-export default function BookPopup({ books }: BookPopupProps) {
+export default function BookPopup({ books }: { books: IBookWithLocation[] }) {
   const isSingle = books.length === 1;
 
   return (
