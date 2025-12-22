@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
-import { IBook } from './interface';
+import { IBook } from './types/interface';
 
 export default function Books() {
   const observer = useRef<IntersectionObserver>();

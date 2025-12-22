@@ -19,7 +19,6 @@ export default function Map() {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
 
-  // --- FIXED QUERY ---
   const queryArgs =
     permissionChecked && latitude != null && longitude != null
       ? {
@@ -36,25 +35,24 @@ export default function Map() {
 
   useEffect(() => {
     if (data?._embedded?.books) {
-      const normalizedBooks: IBookWithLocation[] = data._embedded.books
-        .filter((book: any) => book.location?.latitude && book.location?.longitude)
-        .map((book: any) => ({
-          ...book,
-          latitude: book.location.latitude,
-          longitude: book.location.longitude,
-          address: book.location.address,
-          city: book.location.city,
-          country: book.location.country,
-          createdAt: book.offeredAgo,
+      const normalized: IBookWithLocation[] = data._embedded.books
+        .filter((b: any) => b.location?.latitude && b.location?.longitude)
+        .map((b: any) => ({
+          ...b,
+          latitude: b.location.latitude,
+          longitude: b.location.longitude,
+          address: b.location.address,
+          city: b.location.city,
+          country: b.location.country,
+          createdAt: b.offeredAgo,
         }));
 
-      setBooksWithLocation(normalizedBooks);
+      setBooksWithLocation(normalized);
     } else {
       setBooksWithLocation([]);
     }
   }, [data]);
 
-  // --- ERROR UI ---
   if (isError) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -63,51 +61,31 @@ export default function Map() {
     );
   }
 
-  // --- WAIT FOR LOCATION ---
   if (!latitude || !longitude) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
           <p className="text-gray-600">Detecting your location...</p>
         </div>
       </div>
     );
   }
-  console.log(isLoading, booksWithLocation);
+
   return (
-    <div className="flex min-h-screen lg:min-h-[calc(100vh-80px)] relative">
+    <div className="relative min-h-screen">
       <MapSearchAndFilterBooks />
 
-      <div className="flex-1">
-        {isLoading ? (
-          <div className="h-full flex items-center justify-center bg-gray-100">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading map...</p>
-            </div>
+      {isLoading ? (
+        <div className="h-screen flex items-center justify-center bg-gray-100">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
+            <p className="text-gray-600">Loading map...</p>
           </div>
-        ) : (
-          <MapContainer books={booksWithLocation} />
-        )}
-        {/* {isLoading ? (
-          <div className="h-full flex items-center justify-center bg-gray-100">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading map...</p>
-            </div>
-          </div>
-        ) : (
-          <div className="h-full w-full relative">
-            <MapContainer books={booksWithLocation} />
-            {!isLoading && booksWithLocation.length === 0 && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white font-poppins text-base h-[calc(100vh-70px)]">
-                <p>No books found with location data</p>
-              </div>
-            )}
-          </div>
-        )} */}
-      </div>
+        </div>
+      ) : (
+        <MapContainer books={booksWithLocation} />
+      )}
     </div>
   );
 }

@@ -8,7 +8,7 @@ import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
 import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
-import { IBook } from '../../pages/books/interface';
+import { IBook } from '../../pages/books/types/interface';
 import {
   useDeleteBookByIdMutation,
   useLazyGetBookByIdQuery,
