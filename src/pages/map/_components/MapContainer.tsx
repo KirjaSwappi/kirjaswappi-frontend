@@ -1,63 +1,120 @@
 import 'leaflet/dist/leaflet.css';
-import { MapContainer as LeafletMapContainer, TileLayer } from 'react-leaflet';
+import { useMemo } from 'react';
+import {
+  MapContainer as LeafletMapContainer,
+  Marker,
+  Polyline,
+  Popup,
+  TileLayer,
+} from 'react-leaflet';
+import { userLocationIcon } from '../../../hooks/userLocationIcon';
+import { getDistanceInMeters } from '../../../utility/distance';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { IBookWithLocation } from '../types/interface';
 import BookMarker from './BookMarker';
+import MapControls from './MapControls';
 
 interface MapContainerProps {
   books: IBookWithLocation[];
 }
 
+const normalize = (num: number, precision = 4) => Number(num.toFixed(precision));
+
 export default function MapContainer({ books }: MapContainerProps) {
-  const { coords } = useGeolocation();
+  const { coords, permissionChecked } = useGeolocation();
   const { latitude, longitude } = coords;
-  if (latitude == null || longitude == null) {
+
+  /* =========================
+     GROUP BOOKS BY LOCATION
+  ========================= */
+  const groupedBooks = useMemo(() => {
+    const map = new Map<
+      string,
+      { latitude: number; longitude: number; books: IBookWithLocation[] }
+    >();
+
+    books.forEach((book) => {
+      const lat = normalize(book.latitude);
+      const lng = normalize(book.longitude);
+      const key = `${lat}_${lng}`;
+
+      if (!map.has(key)) {
+        map.set(key, {
+          latitude: lat,
+          longitude: lng,
+          books: [],
+        });
+      }
+
+      map.get(key)!.books.push(book);
+    });
+
+    return Array.from(map.values());
+  }, [books]);
+
+  /* =========================
+     NEAREST BOOK
+  ========================= */
+  const nearestBook = useMemo(() => {
+    if (!latitude || !longitude || books.length === 0) return null;
+
+    return books.reduce<IBookWithLocation | null>((closest, book) => {
+      if (!closest) return book;
+
+      const d1 = getDistanceInMeters(latitude, longitude, closest.latitude, closest.longitude);
+      const d2 = getDistanceInMeters(latitude, longitude, book.latitude, book.longitude);
+
+      return d2 < d1 ? book : closest;
+    }, null);
+  }, [books, latitude, longitude]);
+
+  if (!permissionChecked || !latitude || !longitude) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-100">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading map...</p>
-        </div>
+        <p>Loading map…</p>
       </div>
     );
   }
-  const groupedBooks = books.reduce(
-    (acc, book) => {
-      const key = `${book.latitude.toFixed(4)}_${book.longitude.toFixed(4)}`;
-      if (!acc[key]) {
-        acc[key] = {
-          latitude: book.latitude,
-          longitude: book.longitude,
-          books: [],
-        };
-      }
-      acc[key].books.push(book);
-      return acc;
-    },
-    {} as Record<string, { latitude: number; longitude: number; books: IBookWithLocation[] }>,
-  );
 
-  const markers = Object.values(groupedBooks);
   return (
-    <div className="h-full w-full">
-      <LeafletMapContainer
-        center={[latitude, longitude]}
-        zoom={20}
-        style={{ height: '100vh', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+    <LeafletMapContainer
+      center={[latitude, longitude]}
+      zoom={16}
+      zoomControl={false}
+      style={{ height: '100vh', width: '100%' }}
+    >
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-        {markers.map((marker, index) => (
-          <BookMarker
-            key={`${marker.latitude}_${marker.longitude}_${index}`}
-            books={marker.books}
-            position={[marker.latitude, marker.longitude]}
-          />
-        ))}
-      </LeafletMapContainer>
-    </div>
+      {/* USER LOCATION */}
+      <Marker position={[latitude, longitude]} icon={userLocationIcon}>
+        <Popup>You are here</Popup>
+      </Marker>
+
+      {/* 📚 GROUPED BOOK MARKERS */}
+      {groupedBooks.map((group, index) => (
+        <BookMarker
+          key={`${group.latitude}_${group.longitude}_${index}`}
+          books={group.books}
+          position={[group.latitude, group.longitude]}
+        />
+      ))}
+
+      {/* 📍 NEAREST BOOK LINE */}
+      {nearestBook && (
+        <Polyline
+          positions={[
+            [latitude, longitude],
+            [nearestBook.latitude, nearestBook.longitude],
+          ]}
+          pathOptions={{
+            color: '#3879E9',
+            weight: 3,
+            dashArray: '5,10',
+          }}
+        />
+      )}
+
+      <MapControls latitude={latitude} longitude={longitude} />
+    </LeafletMapContainer>
   );
 }

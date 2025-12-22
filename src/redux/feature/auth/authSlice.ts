@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { IBook } from '../../../pages/books/interface';
+import { IBook } from '../../../pages/books/types/interface';
 import { clearCookie } from '../../../utility/cookies';
 import { authApi } from './authApi';
 interface IErrorPayload {

@@ -7,8 +7,6 @@ export enum FilterItemEnum {
 export enum SortByEnum {
   title = 'title',
   author = 'author',
-  // language = 'language',
-  // condition = 'condition',
-  'genres.name' = 'genres.name',
-  bookUpdatedAt = 'bookUpdatedAt',
+  language = 'language',
+  condition = 'condition',
 }

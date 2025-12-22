@@ -16,3 +16,8 @@ export interface IBook {
     name: string;
   };
 }
+
+export interface IGenre {
+  id: string;
+  name: string;
+}

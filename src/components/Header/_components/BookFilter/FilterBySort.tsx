@@ -6,10 +6,8 @@ import Line from '../../../shared/Line';
 const sortLabels: Record<SortByEnum, string> = {
   [SortByEnum.title]: 'A-Z (Title)',
   [SortByEnum.author]: 'Author (A-Z)',
-  //   [SortByEnum.language]: 'Language (A-Z)',
-  //   [SortByEnum.condition]: 'Condition (A-Z)',
-  [SortByEnum['genres.name']]: 'Genres (A-Z)',
-  [SortByEnum.bookUpdatedAt]: 'Newest First',
+  [SortByEnum.language]: 'Language (A-Z)',
+  [SortByEnum.condition]: 'Condition (A-Z)',
 };
 
 export default function FilterBySort() {

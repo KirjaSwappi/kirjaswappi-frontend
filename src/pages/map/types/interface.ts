@@ -1,4 +1,4 @@
-import { IBook } from '../../books/interface';
+import { IBook } from '../../books/types/interface';
 
 export interface IBookWithLocation extends IBook {
   latitude: number;

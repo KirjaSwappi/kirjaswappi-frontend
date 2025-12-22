@@ -7,6 +7,7 @@ export interface IFilterInitialState {
     language: string[];
     condition: string[];
     search: string;
+    sortBy: string[];
     pageNumber: number;
     hasMore: boolean;
   };
@@ -19,6 +20,7 @@ const initialState: IFilterInitialState = {
     genre: [],
     language: [],
     condition: [],
+    sortBy: [],
     search: '',
     pageNumber: 0,
     hasMore: false,
@@ -42,6 +44,9 @@ const filterSlice = createSlice({
     setConditionFilter: (state, action: PayloadAction<string[]>) => {
       state.filter.condition = [...action.payload];
     },
+    setSortByFilter: (state, action: PayloadAction<string[]>) => {
+      state.filter.sortBy = [...action.payload];
+    },
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.filter.hasMore = action.payload;
     },
@@ -62,6 +67,7 @@ const filterSlice = createSlice({
       state.filter.language = [];
       state.filter.condition = [];
       state.filter.search = '';
+      state.filter.sortBy = [];
     },
   },
 });
@@ -77,5 +83,6 @@ export const {
   setSearchFilter,
   clearAllFilters,
   setIsCategoryOrFilterOrSortBy,
+  setSortByFilter,
 } = filterSlice.actions;
 export default filterSlice.reducer;
