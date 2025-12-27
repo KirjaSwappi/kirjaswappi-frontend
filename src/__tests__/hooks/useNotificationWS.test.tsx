@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useNotificationWS } from './useNotificationWS';
-import { setupTestStore } from '../test/utils/test-utils';
-import { MockWebSocket } from '../test/mocks/websocket';
+import { useNotificationWS } from '../../hooks/useNotificationWS';
+import { setupTestStore } from '../utils/test-utils';
+import { MockWebSocket } from '../mocks/websocket';
 import { ReactNode } from 'react';
-import { initialState as authInitialState } from '../redux/feature/auth/authSlice';
+import { initialState as authInitialState } from '../../redux/feature/auth/authSlice';
 
 // Help helper to wrap hook with Provider
 const wrapper = (store: ReturnType<typeof setupTestStore>) => {

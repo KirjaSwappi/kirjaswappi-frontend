@@ -1,9 +1,9 @@
 import { act, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import NotificationBell from './NotificationBell';
-import { renderWithProviders } from '../../../test/utils/test-utils';
-import { initialState as authInitialState } from '../../../redux/feature/auth/authSlice';
-import { initialState as notificationInitialState } from '../../../redux/feature/notification/notificationSlice';
+import NotificationBell from '../../../../components/Header/_components/NotificationBell';
+import { renderWithProviders } from '../../../utils/test-utils';
+import { initialState as authInitialState } from '../../../../redux/feature/auth/authSlice';
+import { initialState as notificationInitialState } from '../../../../redux/feature/notification/notificationSlice';
 
 // Mock the image assets
 vi.mock('../../../assets/notification.svg', () => ({ default: 'mock-bell-icon' }));
