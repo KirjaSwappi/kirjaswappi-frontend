@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { INotification, WSConnectionStatus } from '../../../types/notification';
 import type { RootState } from '../../store';
 
@@ -75,7 +75,7 @@ const saveNotificationsToStorage = (notifications: INotification[], unreadCount:
 // Load persisted notifications
 const persistedData = loadNotificationsFromStorage();
 
-const initialState: INotificationInitialState = {
+export const initialState: INotificationInitialState = {
   isShow: false,
   messageType: '',
   message: '',
@@ -210,18 +210,18 @@ const notificationSlice = createSlice({
 // Selector functions for derived state
 export const selectNotifications = (state: RootState) => state.notification.notifications;
 
-export const selectSortedNotifications = (state: RootState) => {
+export const selectSortedNotifications = createSelector([selectNotifications], (notifications) => {
   // Already sorted by newest first when added, but ensure consistency
-  return [...state.notification.notifications].sort((a, b) => {
+  return [...notifications].sort((a, b) => {
     return new Date(b.time).getTime() - new Date(a.time).getTime();
   });
-};
+});
 
 export const selectUnreadCount = (state: RootState) => state.notification.unreadCount;
 
-export const selectUnreadNotifications = (state: RootState) => {
-  return state.notification.notifications.filter((n) => !n.isRead);
-};
+export const selectUnreadNotifications = createSelector([selectNotifications], (notifications) => {
+  return notifications.filter((n) => !n.isRead);
+});
 
 export const selectIsNotificationPanelOpen = (state: RootState) =>
   state.notification.isNotificationPanelOpen;
