@@ -2,7 +2,12 @@ import { Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import SwapModal from '../components/shared/SwapRequestModal/SwapRequestModal';
+import { useNotificationWS } from '../hooks/useNotificationWS';
+
 export default function Layout() {
+  // Initialize notification WebSocket connection
+  useNotificationWS();
+
   return (
     <div className="bg-light min-h-screen overflow-auto ">
       <Header />
