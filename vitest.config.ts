@@ -9,7 +9,7 @@ export default defineConfig({
     setupFiles: ['./src/__tests__/setup.ts'],
     coverage: {
       provider: 'v8',
-      reporter: ['json', 'text', 'html'],
+      reporter: ['json', 'json-summary', 'text', 'html'],
       reportsDirectory: 'coverage',
     },
   },

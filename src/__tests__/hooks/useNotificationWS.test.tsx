@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useNotificationWS } from '../../hooks/useNotificationWS';
@@ -68,7 +68,9 @@ describe('useNotificationWS', () => {
       Time: new Date().toISOString(),
     };
 
-    ws.triggerMessage(mockPayload);
+    await act(async () => {
+      ws.triggerMessage(mockPayload);
+    });
 
     await waitFor(() => {
       const notifications = store.getState().notification.notifications;
@@ -87,7 +89,9 @@ describe('useNotificationWS', () => {
     const ws1 = MockWebSocket.lastInstance!;
 
     // Trigger abnormal close
-    ws1.triggerClose(1006, 'Abnormal Closure', false);
+    await act(async () => {
+      ws1.triggerClose(1006, 'Abnormal Closure', false);
+    });
 
     await waitFor(() => {
       expect(store.getState().notification.wsConnectionStatus).toBe('connecting');
