@@ -10,17 +10,23 @@ const mockUseAppSelector = vi.fn();
 
 vi.mock('../../redux/hooks', () => ({
   useAppDispatch: () => mockUseAppDispatch(),
-  useAppSelector: (selector: any) => mockUseAppSelector(selector),
+  useAppSelector: (selector: (state: unknown) => unknown) => mockUseAppSelector(selector),
 }));
 
 // Mock Redux actions
 vi.mock('../../redux/feature/open/openSlice', () => ({
-  setLoginModalOpen: vi.fn((value: boolean) => ({ type: 'open/setLoginModalOpen', payload: value })),
+  setLoginModalOpen: vi.fn((value: boolean) => ({
+    type: 'open/setLoginModalOpen',
+    payload: value,
+  })),
 }));
 
 vi.mock('../../redux/feature/swap/swapSlice', () => ({
   setSwapModal: vi.fn((value: boolean) => ({ type: 'swap/setSwapModal', payload: value })),
-  setSwapBook: vi.fn((bookData: ISwapBookInformation) => ({ type: 'swap/setSwapBook', payload: bookData })),
+  setSwapBook: vi.fn((bookData: ISwapBookInformation) => ({
+    type: 'swap/setSwapBook',
+    payload: bookData,
+  })),
   setBookIdToSwapWith: vi.fn((id: string) => ({ type: 'swap/setBookIdToSwapWith', payload: id })),
 }));
 
@@ -55,7 +61,7 @@ describe('useLoginModalOrSwapRequest', () => {
 
   it('should open swap modal when user is logged in', () => {
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
 
     const { result } = renderHook(() => useLoginModalOrSwapRequest());
@@ -84,7 +90,7 @@ describe('useLoginModalOrSwapRequest', () => {
     };
 
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
 
     const { result } = renderHook(() => useLoginModalOrSwapRequest());
@@ -101,7 +107,7 @@ describe('useLoginModalOrSwapRequest', () => {
     const bookId = 'book-456';
 
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
 
     const { result } = renderHook(() => useLoginModalOrSwapRequest());
@@ -131,7 +137,7 @@ describe('useLoginModalOrSwapRequest', () => {
     const bookId = 'book-456';
 
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
 
     const { result } = renderHook(() => useLoginModalOrSwapRequest());
@@ -177,7 +183,7 @@ describe('useLoginModalOrSwapRequest', () => {
 
   it('should memoize the handleLoginOrSwap function with useCallback', () => {
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
 
     const { result, rerender } = renderHook(() => useLoginModalOrSwapRequest());
@@ -199,7 +205,7 @@ describe('useLoginModalOrSwapRequest', () => {
 
     // Change user information
     mockUseAppSelector.mockReturnValue({
-      userInformation: { email: 'test@example.com' }
+      userInformation: { email: 'test@example.com' },
     });
     rerender();
 

@@ -9,7 +9,7 @@ const mockUseAppSelector = vi.fn();
 
 vi.mock('../../redux/hooks', () => ({
   useAppDispatch: () => mockUseAppDispatch(),
-  useAppSelector: (selector: any) => mockUseAppSelector(selector),
+  useAppSelector: (selector: (state: unknown) => unknown) => mockUseAppSelector(selector),
 }));
 
 // Mock Redux actions

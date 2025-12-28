@@ -38,7 +38,7 @@ describe('useMouseClick', () => {
     // Set up the reference
     const mockElement = document.createElement('div');
     act(() => {
-      (result.current.reference as any).current = mockElement;
+      result.current.reference.current = mockElement;
     });
 
     // Set clicked to true initially
@@ -72,7 +72,7 @@ describe('useMouseClick', () => {
     // Set up the reference
     const mockElement = document.createElement('div');
     act(() => {
-      (result.current.reference as any).current = mockElement;
+      result.current.reference.current = mockElement;
     });
 
     // Create a click event inside the element
@@ -97,7 +97,7 @@ describe('useMouseClick', () => {
     // Set up the reference
     const mockElement = document.createElement('div');
     act(() => {
-      (result.current.reference as any).current = mockElement;
+      result.current.reference.current = mockElement;
     });
 
     // Create a button element and click event
@@ -161,7 +161,7 @@ describe('useMouseClick', () => {
     // Set up the reference
     const mockElement = document.createElement('div');
     act(() => {
-      (result.current.reference as any).current = mockElement;
+      result.current.reference.current = mockElement;
     });
 
     // Set clicked to true

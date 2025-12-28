@@ -17,10 +17,9 @@ describe('useDebounce', () => {
   });
 
   it('should debounce the value update', () => {
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounce(value, delay),
-      { initialProps: { value: 'initial', delay: 500 } }
-    );
+    const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+      initialProps: { value: 'initial', delay: 500 },
+    });
 
     // Initial value should be returned immediately
     expect(result.current).toBe('initial');
@@ -43,10 +42,9 @@ describe('useDebounce', () => {
   });
 
   it('should reset the timer when value changes before delay expires', () => {
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounce(value, delay),
-      { initialProps: { value: 'first', delay: 500 } }
-    );
+    const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+      initialProps: { value: 'first', delay: 500 },
+    });
 
     expect(result.current).toBe('first');
 
@@ -86,10 +84,9 @@ describe('useDebounce', () => {
   });
 
   it('should handle different delay values', () => {
-    const { result, rerender } = renderHook(
-      ({ value, delay }) => useDebounce(value, delay),
-      { initialProps: { value: 'initial', delay: 1000 } }
-    );
+    const { result, rerender } = renderHook(({ value, delay }) => useDebounce(value, delay), {
+      initialProps: { value: 'initial', delay: 1000 },
+    });
 
     expect(result.current).toBe('initial');
 

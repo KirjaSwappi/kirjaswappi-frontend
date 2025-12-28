@@ -10,7 +10,7 @@ const mockUseAppSelector = vi.fn();
 
 vi.mock('../../redux/hooks', () => ({
   useAppDispatch: () => mockUseAppDispatch(),
-  useAppSelector: (selector: any) => mockUseAppSelector(selector),
+  useAppSelector: (selector: (state: unknown) => unknown) => mockUseAppSelector(selector),
 }));
 
 // Mock Redux actions
@@ -18,7 +18,7 @@ vi.mock('../../redux/feature/filter/filterSlice', () => ({
   setFilterOpen: vi.fn((value: boolean) => ({ type: 'filter/setFilterOpen', payload: value })),
   setIsCategoryOrFilterOrSortBy: vi.fn((value: FilterItemEnum | null) => ({
     type: 'filter/setIsCategoryOrFilterOrSortBy',
-    payload: value
+    payload: value,
   })),
 }));
 
@@ -28,7 +28,10 @@ vi.mock('../../hooks/useMouse', () => ({
   useMouseClick: (callback: () => void) => mockUseMouseClick(callback),
 }));
 
-import { setFilterOpen, setIsCategoryOrFilterOrSortBy } from '../../redux/feature/filter/filterSlice';
+import {
+  setFilterOpen,
+  setIsCategoryOrFilterOrSortBy,
+} from '../../redux/feature/filter/filterSlice';
 
 describe('useDrawerOutsideClick', () => {
   beforeEach(() => {

@@ -198,7 +198,7 @@ describe('useScroll', () => {
     // Rapidly change scroll positions
     const positions = [0, 50, 100, 30, 80, 10];
 
-    positions.forEach((position, index) => {
+    positions.forEach((position) => {
       Object.defineProperty(window, 'scrollY', {
         writable: true,
         value: position,
