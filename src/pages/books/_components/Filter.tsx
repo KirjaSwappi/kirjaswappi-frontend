@@ -58,7 +58,7 @@ export default function Filter() {
         }`}
       >
         <div
-          className={`${isFixed ? 'container' : ''} pb-6 pt-5 flex items-center justify-between`}
+          className={`${isFixed ? 'container py-3' : 'pb-6 pt-5 '}  flex items-center justify-between`}
         >
           <div className="flex items-center gap-2  ">
             <Button

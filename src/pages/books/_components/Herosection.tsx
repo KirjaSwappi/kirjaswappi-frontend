@@ -54,7 +54,7 @@ export default function HeroSection() {
 
   return (
     <section className="rounded-lg overflow-hidden relative  ">
-      <div className=" hidden lg:block ">
+      <div className="hidden lg:block ">
         <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
           <Search
             className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"

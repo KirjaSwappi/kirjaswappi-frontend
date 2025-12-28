@@ -25,18 +25,21 @@ export default function Search({
   className?: string;
   placeholder?: string;
 }) {
+  const { city, search } = useAppSelector((state) => state.filter.filter);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState<string>(search);
   const debouncedSearch = useDebounce(query, 300);
   const { reference } = useMouseClick();
-  const dispatch = useAppDispatch();
   const { data } = useGetCitiesQuery(undefined);
-  const selectedCity = useAppSelector((s) => s.filter.filter.city);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(setSearch(debouncedSearch));
   }, [debouncedSearch, dispatch]);
 
+  useEffect(() => {
+    setQuery(search);
+  }, [search]);
   return (
     <div ref={reference} className="relative w-full">
       <div
@@ -55,7 +58,7 @@ export default function Search({
         />
         <div className="flex items-center gap-2">
           <Select
-            value={selectedCity ?? ''}
+            value={city ?? ''}
             onValueChange={(val) => dispatch(setCityFilter(val === '__all' ? '' : val))}
           >
             <SelectTrigger

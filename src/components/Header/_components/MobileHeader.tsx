@@ -13,6 +13,7 @@ import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
 import NotificationBell from './NotificationBell';
+
 export default function MobileHeader() {
   const location = useLocation();
   const { scrolled } = useScroll();
@@ -33,7 +34,6 @@ export default function MobileHeader() {
       <div className="container  ">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            {/* left icon */}
             <div className="flex items-center gap-2  ">
               <Link
                 to="/"

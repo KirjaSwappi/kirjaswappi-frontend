@@ -48,7 +48,6 @@ export default function CategorySlider() {
 
   return (
     <div className="flex justify-between items-center gap-x-2 w-full">
-      {/* Previous */}
       <Button
         onClick={() => api?.scrollPrev()}
         className="flex items-center justify-center rounded-full bg-white w-7 h-7 shadow-sm"
