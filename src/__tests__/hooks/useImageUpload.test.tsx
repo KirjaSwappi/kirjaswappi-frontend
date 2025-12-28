@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useImageUpload } from '../../hooks/useImageUpload';
 
 describe('useImageUpload', () => {
@@ -10,10 +10,30 @@ describe('useImageUpload', () => {
   };
 
   const createMockEvent = (file: File): React.ChangeEvent<HTMLInputElement> => {
+    const target = {
+      files: [file],
+      value: '',
+      name: 'file',
+      type: 'file',
+    } as unknown as HTMLInputElement;
+
     return {
-      target: {
-        files: [file],
-      },
+      target,
+      currentTarget: target,
+      preventDefault: vi.fn(),
+      stopPropagation: vi.fn(),
+      nativeEvent: new Event('change'),
+      bubbles: false,
+      cancelable: true,
+      composed: false,
+      defaultPrevented: false,
+      eventPhase: 0,
+      isTrusted: true,
+      timeStamp: Date.now(),
+      type: 'change',
+      isDefaultPrevented: vi.fn(() => false),
+      isPropagationStopped: vi.fn(() => false),
+      persist: vi.fn(),
     } as React.ChangeEvent<HTMLInputElement>;
   };
 

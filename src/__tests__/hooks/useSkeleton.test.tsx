@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { useSkeleton } from '../../hooks/useSkeleton';
 
 describe('useSkeleton', () => {
@@ -70,7 +70,7 @@ describe('useSkeleton', () => {
   });
 
   it('should clear timeout on unmount', () => {
-    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+    const clearTimeoutSpy = vi.spyOn(globalThis, 'clearTimeout');
 
     const { unmount } = renderHook(() => useSkeleton());
 

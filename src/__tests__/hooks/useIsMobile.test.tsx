@@ -1,11 +1,11 @@
 import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi, type MockInstance } from 'vitest';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
 describe('useIsMobile', () => {
   let mockInnerWidth: number;
-  let addEventListenerSpy: vi.SpyInstance;
-  let removeEventListenerSpy: vi.SpyInstance;
+  let addEventListenerSpy: MockInstance;
+  let removeEventListenerSpy: MockInstance;
 
   beforeEach(() => {
     // Mock window.innerWidth

@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import { ISwapBookInformation } from '../../redux/feature/swap/types/interface';
+import { SwapType } from '../../../types/enum';
 
 // Mock Redux hooks
 const mockDispatch = vi.fn();
@@ -79,14 +80,22 @@ describe('useLoginModalOrSwapRequest', () => {
       id: 'book-123',
       title: 'Test Book',
       author: 'Test Author',
-      condition: 'Good',
-      images: [],
-      genre: 'Fiction',
+      genres: ['Fiction'],
+      language: 'English',
       description: 'Test description',
-      location: 'Test location',
-      userId: 'user-123',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      condition: 'Good',
+      coverPhotoUrls: [],
+      owner: {
+        id: 'user-123',
+        name: 'Test User',
+      },
+      swapCondition: {
+        swapType: SwapType.BYBOOKS,
+        giveAway: false,
+        openForOffers: true,
+        swappableGenres: ['Fiction'],
+        swappableBooks: [],
+      },
     };
 
     mockUseAppSelector.mockReturnValue({
@@ -125,14 +134,22 @@ describe('useLoginModalOrSwapRequest', () => {
       id: 'book-123',
       title: 'Test Book',
       author: 'Test Author',
-      condition: 'Good',
-      images: [],
-      genre: 'Fiction',
+      genres: ['Fiction'],
+      language: 'English',
       description: 'Test description',
-      location: 'Test location',
-      userId: 'user-123',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      condition: 'Good',
+      coverPhotoUrls: [],
+      owner: {
+        id: 'user-123',
+        name: 'Test User',
+      },
+      swapCondition: {
+        swapType: SwapType.BYBOOKS,
+        giveAway: false,
+        openForOffers: true,
+        swappableGenres: ['Fiction'],
+        swappableBooks: [],
+      },
     };
     const bookId = 'book-456';
 
@@ -156,14 +173,22 @@ describe('useLoginModalOrSwapRequest', () => {
       id: 'book-123',
       title: 'Test Book',
       author: 'Test Author',
-      condition: 'Good',
-      images: [],
-      genre: 'Fiction',
+      genres: ['Fiction'],
+      language: 'English',
       description: 'Test description',
-      location: 'Test location',
-      userId: 'user-123',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      condition: 'Good',
+      coverPhotoUrls: [],
+      owner: {
+        id: 'user-123',
+        name: 'Test User',
+      },
+      swapCondition: {
+        swapType: SwapType.BYBOOKS,
+        giveAway: false,
+        openForOffers: true,
+        swappableGenres: ['Fiction'],
+        swappableBooks: [],
+      },
     };
     const bookId = 'book-456';
 

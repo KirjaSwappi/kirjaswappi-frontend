@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 export function useSwapModal() {
   const dispatch = useAppDispatch();
-  const swapModalOpen = useAppSelector((state) => state.swap.swapModalOpen);
+  const swapModalOpen = useAppSelector((state) => state.swapBook.swapModalOpen);
 
   const setSwapModalOpen = useCallback(
     (open: boolean) => {

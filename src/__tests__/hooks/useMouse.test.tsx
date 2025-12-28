@@ -1,11 +1,20 @@
 import { renderHook, act } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+  type MockedFunction,
+  type MockInstance,
+} from 'vitest';
 import { useMouseClick } from '../../hooks/useMouse';
 
 describe('useMouseClick', () => {
-  let mockCallback: vi.MockedFunction<() => void>;
-  let addEventListenerSpy: vi.SpyInstance;
-  let removeEventListenerSpy: vi.SpyInstance;
+  let mockCallback: MockedFunction<() => void>;
+  let addEventListenerSpy: MockInstance;
+  let removeEventListenerSpy: MockInstance;
   let eventHandler: (event: MouseEvent) => void;
 
   beforeEach(() => {
@@ -14,7 +23,7 @@ describe('useMouseClick', () => {
     removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
 
     // Capture the event handler when it's added
-    addEventListenerSpy.mockImplementation((event, handler) => {
+    addEventListenerSpy.mockImplementation((event: string, handler: EventListener) => {
       if (event === 'mousedown') {
         eventHandler = handler as (event: MouseEvent) => void;
       }
@@ -37,8 +46,9 @@ describe('useMouseClick', () => {
 
     // Set up the reference
     const mockElement = document.createElement('div');
-    act(() => {
-      result.current.reference.current = mockElement;
+    Object.defineProperty(result.current.reference, 'current', {
+      value: mockElement,
+      writable: true,
     });
 
     // Set clicked to true initially
@@ -71,8 +81,9 @@ describe('useMouseClick', () => {
 
     // Set up the reference
     const mockElement = document.createElement('div');
-    act(() => {
-      result.current.reference.current = mockElement;
+    Object.defineProperty(result.current.reference, 'current', {
+      value: mockElement,
+      writable: true,
     });
 
     // Create a click event inside the element
@@ -96,8 +107,9 @@ describe('useMouseClick', () => {
 
     // Set up the reference
     const mockElement = document.createElement('div');
-    act(() => {
-      result.current.reference.current = mockElement;
+    Object.defineProperty(result.current.reference, 'current', {
+      value: mockElement,
+      writable: true,
     });
 
     // Create a button element and click event
@@ -160,8 +172,9 @@ describe('useMouseClick', () => {
 
     // Set up the reference
     const mockElement = document.createElement('div');
-    act(() => {
-      result.current.reference.current = mockElement;
+    Object.defineProperty(result.current.reference, 'current', {
+      value: mockElement,
+      writable: true,
     });
 
     // Set clicked to true
