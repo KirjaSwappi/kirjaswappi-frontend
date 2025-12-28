@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import heroImg from '../../../assets/heroSectionImage.png';
 import Button from '../../../components/shared/Button';
@@ -36,6 +36,35 @@ const SLIDES = [
 export default function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const searchRef = useRef<HTMLDivElement | null>(null);
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    let raf = 0;
+    const handle = () => {
+      raf = requestAnimationFrame(() => {
+        if (!searchRef.current) return;
+        const searchRect = searchRef.current.getBoundingClientRect();
+        const navEl = document.getElementById('top-nav-bar');
+        const navBottom = navEl ? navEl.getBoundingClientRect().bottom : 80;
+        const shouldHide = searchRect.top <= navBottom;
+        if (shouldHide !== isHidden) {
+          setIsHidden(shouldHide);
+          window.dispatchEvent(
+            new CustomEvent('hero-search-visibility', { detail: { hidden: shouldHide } }),
+          );
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handle, { passive: true });
+    // run once on mount
+    handle();
+    return () => {
+      window.removeEventListener('scroll', handle);
+      cancelAnimationFrame(raf);
+    };
+  }, [isHidden]);
 
   useEffect(() => {
     if (!api) return;
@@ -55,11 +84,16 @@ export default function HeroSection() {
   return (
     <section className="rounded-lg overflow-hidden relative  ">
       <div className="hidden lg:block ">
-        <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
-          <Search
-            className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"
-            placeholder="Find books"
-          />
+        <div
+          ref={searchRef}
+          className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  "
+        >
+          {!isHidden && (
+            <Search
+              className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"
+              placeholder="Find books"
+            />
+          )}
         </div>
       </div>
 
