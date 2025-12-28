@@ -19,7 +19,7 @@ export interface IInitialState {
     id?: string;
     firstName?: string;
     lastName: string;
-    email: string;
+    email?: string;
     streetName?: null;
     houseNumber?: null;
     zipCode?: number;
