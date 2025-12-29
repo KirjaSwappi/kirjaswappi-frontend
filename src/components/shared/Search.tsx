@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from './cusSelect/CustomSelect';
 import Input from './Input';
+import Button from './Button';
 
 export default function Search({
   onClose,
@@ -44,7 +45,7 @@ export default function Search({
     <div ref={reference} className="relative w-full">
       <div
         className={cn(
-          'w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2',
+          'w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center justify-between px-4 transition-all duration-300 ease-in-out gap-2',
           className,
         )}
       >
@@ -79,14 +80,14 @@ export default function Search({
               ))}
             </SelectContent>
           </Select>
-          <button
+          <Button
             type="button"
             onClick={onClose}
-            className="flex items-center justify-center w-16 h-10 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 -mr-2"
+            className="flex items-center justify-center w-16 h-10 p-2 rounded-full bg-primary text-white hover:bg-blue-600 transition-all duration-200 -mr-2"
             aria-label="Close search and return to menu"
           >
             <IoSearch className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -58,7 +58,6 @@ export default function HeroSection() {
     };
 
     window.addEventListener('scroll', handle, { passive: true });
-    // run once on mount
     handle();
     return () => {
       window.removeEventListener('scroll', handle);
