@@ -3,7 +3,7 @@ export interface IBook {
   title: string;
   author: string;
   genres: string[];
-  offeredAgo: string;
+  offeredAgo?: string;
   language: string;
   description: string;
   condition: string;
