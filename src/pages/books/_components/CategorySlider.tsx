@@ -12,7 +12,7 @@ import { clearAllFilters, setGenreFilter } from '../../../redux/feature/filter/f
 import { useGetGenreQuery } from '../../../redux/feature/genre/genreApi';
 import { IGenre } from '../types/interface';
 
-export default function CategorySlider() {
+export default function CategorySlider({ isFixed }: { isFixed: boolean }) {
   const [api, setApi] = useState<CarouselApi>();
   const dispatch = useDispatch();
   const [selectedGenre, setSelectedGenre] = useState<string | null>(null);
@@ -71,7 +71,7 @@ export default function CategorySlider() {
             : genres?.map((genre) => (
                 <CarouselItem key={genre.id} className="basis-1/4">
                   <Button
-                    className={`w-full h-[37px] rounded-full text-sm shadow-sm ${
+                    className={`w-full h-[37px] rounded-full text-sm shadow-sm  ${isFixed ? 'border border-platinum' : ''} ${
                       genre.name === selectedGenre
                         ? 'bg-primary text-white'
                         : 'bg-white text-grayDark'

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { MdKeyboardArrowDown } from 'react-icons/md';
@@ -28,19 +29,58 @@ export default function Filter() {
   useEffect(() => {
     const headerHeight = 80;
     const handleScroll = () => {
-      if (filterRef.current && placeholderRef.current) {
-        const rect = placeholderRef.current.getBoundingClientRect();
+      if (!filterRef.current || !placeholderRef.current) return;
 
-        if (rect.top <= headerHeight) {
-          setIsFixed(true);
-        } else {
-          setIsFixed(false);
-        }
+      const rect = placeholderRef.current.getBoundingClientRect();
+      const shouldBeFixed = rect.top <= headerHeight;
+
+      if (shouldBeFixed && !isFixed) {
+        // measure before taking out of document flow
+        const height = filterRef.current.getBoundingClientRect().height;
+        placeholderRef.current.style.height = `${height}px`;
+        setIsFixed(true);
+      } else if (!shouldBeFixed && isFixed) {
+        // play slide-out animation while keeping the element fixed,
+        // then switch back to relative after animation completes to avoid jump
+        const el = filterRef.current;
+        if (!el) return;
+        const onAnimationEnd = (ev: AnimationEvent) => {
+          if (ev.animationName === 'filterSlideOut') {
+            el.classList.remove('filter-slide-out');
+            setIsFixed(false);
+            placeholderRef.current!.style.height = 'auto';
+            el.removeEventListener('animationend', onAnimationEnd as any);
+          }
+        };
+
+        el.addEventListener('animationend', onAnimationEnd as any);
+        el.classList.add('filter-slide-out');
       }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isFixed]);
+
+  const slideStyle = `
+.filter-slide-in {
+  animation: filterSlideIn 220ms cubic-bezier(.25,.8,.25,1) both;
+  will-change: transform;
+}
+@keyframes filterSlideIn {
+  from { transform: translateY(-12px); }
+  to { transform: translateY(0); }
+}
+.filter-slide-out {
+  animation: filterSlideOut 180ms cubic-bezier(.4,0,.2,1) both;
+  will-change: transform;
+}
+@keyframes filterSlideOut {
+  from { transform: translateY(0); }
+  to { transform: translateY(-12px); }
+}
+`;
 
   const isFilterOrCategoryOrSortByFn = (value: FilterItemEnum | null) => {
     dispatch(setIsCategoryOrFilterOrSortBy(value));
@@ -49,11 +89,12 @@ export default function Filter() {
 
   return (
     <div ref={placeholderRef} className="w-full  ">
+      <style>{slideStyle}</style>
       <div
         ref={filterRef}
         className={`z-10 ${
           isFixed
-            ? 'fixed top-[80px] left-0 right-0 bg-white shadow-md border-t border-platinumMix'
+            ? 'fixed top-[80px] left-0 right-0 bg-white shadow-md border-t border-platinumMix filter-slide-in'
             : 'relative bg-transparent border-none'
         }`}
       >
@@ -82,7 +123,7 @@ export default function Filter() {
             </Button>
           </div>
           <div className=" flex-1 min-w-0 max-w-[48%] ">
-            <CategorySlider />
+            <CategorySlider isFixed={isFixed} />
           </div>
 
           <div className="flex items-center gap-2 ">

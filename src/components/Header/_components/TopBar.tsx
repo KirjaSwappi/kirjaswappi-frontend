@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoSearch } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
@@ -12,35 +11,29 @@ import Search from '../../shared/Search';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
+import MobileHeader from './MobileHeader';
 import NotificationBell from './NotificationBell';
 
 export default function TopBar() {
-  const [showScrollSearch, setShowScrollSearch] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const filteredMenu = menu.filter(({ isShow }) => isShow);
+  const shouldShowTopBarSearch = pathname === '/map';
+
   const {
     clicked: searchClicked,
     setClicked: setSearchClicked,
     reference: searchReference,
   } = useMouseClick();
 
-  console.log(showScrollSearch);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent)?.detail;
-      setShowScrollSearch(Boolean(detail?.hidden));
-    };
-    window.addEventListener('hero-search-visibility', handler as EventListener);
-    return () => window.removeEventListener('hero-search-visibility', handler as EventListener);
-  }, []);
-
   return (
     <div>
-      <div className="lg:hidden">{/* <MobileHeader /> */}</div>
+      <div className="lg:hidden">
+        {' '}
+        <MobileHeader />{' '}
+      </div>
       <div
         className={`h-20 px-4 py-2 w-full z-50 fixed top-0 lg:shadow-sm transition-all duration-300 hidden lg:flex items-center justify-center flex-col gap-4 shadow-md bg-white`}
       >
@@ -92,18 +85,21 @@ export default function TopBar() {
                       </div>
                     );
                   })}
-                  <Button
-                    onClick={() => setSearchClicked((prev) => !prev)}
-                    className={` flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white hover:bg-primary transition-all duration-200 ml-2`}
-                    style={{ position: 'relative' }}
-                    aria-label="Search"
-                  >
-                    <IoSearch className="w-4 h-4" />
-                  </Button>
+                  {!shouldShowTopBarSearch && (
+                    <Button
+                      id="top-bar-search"
+                      onClick={() => setSearchClicked((prev) => !prev)}
+                      className={` flex items-center justify-center w-10 h-10 rounded-full bg-primary text-white hover:bg-primary transition-all duration-200 ml-2`}
+                      style={{ position: 'relative' }}
+                      aria-label="Search"
+                    >
+                      <IoSearch className="w-4 h-4" />
+                    </Button>
+                  )}
                 </div>
 
                 <div
-                  className={`absolute left-0 top-0 !w-full h-full flex items-center transition-opacity duration-300 ease-in-out ${
+                  className={`absolute left-0 top-0 w-full h-full flex items-center transition-opacity duration-300 ease-in-out ${
                     searchClicked
                       ? 'opacity-100 pointer-events-auto'
                       : 'opacity-0 pointer-events-none'

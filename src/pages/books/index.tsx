@@ -4,7 +4,6 @@ import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { goToTop } from '../../utility/helper';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
 import NoBooksAvailable from './_components/NoBooksAvailable';
@@ -73,13 +72,12 @@ export default function Books() {
       prevFilter.city !== currentFilter.city;
 
     if (isFilterChanged) {
-      goToTop();
+      // goToTop();
       dispatch(setPageNumber(0));
       prevFilterRef.current = currentFilter;
     }
   }, [filter.search, filter.genre, filter.condition, filter.language, filter.city, dispatch]);
 
-  // Reset search & page when leaving the page
   useEffect(() => {
     return () => {
       dispatch(setPageNumber(0));
