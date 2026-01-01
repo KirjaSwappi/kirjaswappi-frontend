@@ -46,12 +46,12 @@ export async function urlToDataUrl(url: string): Promise<string> {
   const base64 = await blobToBase64(blob);
   return base64 as string;
 }
-export const getFileToUrl = (coverPhoto: File | string) => {
+export const getFileToUrl = (coverPhoto: File | string | null | undefined) => {
   if (coverPhoto instanceof File) return URL.createObjectURL(coverPhoto);
   return coverPhoto || '';
 };
 
-export const options = (options: string[]) => {
+export const options = (options: string[] | null | undefined) => {
   if (options && options?.length > 0) {
     const option = options?.map((item: string) => {
       return { label: item, value: item };
@@ -64,7 +64,7 @@ export function isString(value: unknown): value is string {
   return typeof value === 'string';
 }
 
-export function isUserProfile(userId: string, id: string) {
+export function isUserProfile(userId: string | number, id: string | number) {
   if (String(userId) === String(id)) {
     return true;
   }

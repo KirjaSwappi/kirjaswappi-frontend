@@ -8,7 +8,7 @@ import {
 import { NotificationPayload, UseNotificationWSReturn, WSMessage } from '../types/notification';
 
 // WebSocket configuration constants
-const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || 'wss://notify.kirjaswappi.fi/ws';
+const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || 'wss://ans.kirjaswappi.fi/ws';
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY = 1000; // 1 second
 const MAX_RECONNECT_DELAY = 30000; // 30 seconds

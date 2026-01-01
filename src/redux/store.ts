@@ -36,7 +36,7 @@ const preloadedState = {
 
 const store: EnhancedStore<
   {
-    api: CombinedState<Record<string, never>, never, 'api'>;
+    api: ReturnType<typeof api.reducer>;
     auth: IInitialState;
     step: IStepInitialState;
     open: IOpenInitialState;
