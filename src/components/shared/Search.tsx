@@ -84,7 +84,7 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
               onChange={(e) => setQuery(e.target.value)}
               placeholder={placeholder || 'Search Books...'}
               type="text"
-              className="w-full h-full outline-none border-none px-3 py-1 bg-transparent placeholder:text-grayDark placeholder:text-xs"
+              className="w-full h-full outline-none border-none px-3 py-1 !bg-white placeholder:text-grayDark placeholder:text-xs"
             />
           )}
 
@@ -113,7 +113,7 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
               <Button
                 type="button"
                 onClick={onClose}
-                className="w-10 h-10 rounded-full bg-primary text-white hover:bg-blue-600 flex items-center justify-center"
+                className="w-10 h-10 rounded-full bg-primary text-white hover:bg-blue-600 flex items-center justify-center shrink-0"
                 aria-label="Close search"
               >
                 <IoSearch className="w-4 h-4" />

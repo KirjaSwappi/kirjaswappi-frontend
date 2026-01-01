@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import useDrawerOutsideClick from '../../hooks/useDrawerOutsideClick';
@@ -16,11 +16,13 @@ import { ShowTopHeaderPath } from './_components/ShowTopHeaderPath';
 import SideDrawer from './_components/SideDrawer';
 import getDrawers from './_components/SideFilterDrawers';
 import TopBar from './_components/TopBar';
+import { cn } from '../../utility/cn';
 
 export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const [searchToggle, setSearchToggle] = useState<boolean>(false);
   const { isFilterOpen, isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   const categoryRef = useDrawerOutsideClick(FilterItemEnum.CATEGORY).reference;
   const filterRef = useDrawerOutsideClick(FilterItemEnum.FILTER).reference;
@@ -57,7 +59,10 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
 
   return (
     <header
-      className={`${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
+      className={cn(
+        searchToggle ? 'pb-24' : 'pb-28 lg:pb-20',
+        pathname !== '/' && 'hidden lg:block',
+      )}
     >
       <FormProvider {...methods}>
         {drawers.map(({ type, ref, left }) => {
@@ -81,7 +86,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
           isHeaderShow ? 'block ' : 'hidden'
         } fixed w-full  flex flex-col gap-[12px] z-30  `}
       >
-        <TopBar></TopBar>
+        <TopBar searchToggle={searchToggle} setSearchToggle={setSearchToggle}></TopBar>
       </div>
     </header>
   );

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { Link, useLocation } from 'react-router-dom';
 import leftArrowGray from '../../../assets/leftArrowGray.png';
@@ -16,24 +15,31 @@ import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
 import NotificationBell from './NotificationBell';
 
-export default function MobileHeader() {
+export default function MobileHeader({
+  searchToggle,
+  setSearchToggle,
+}: {
+  searchToggle: boolean;
+  setSearchToggle: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const location = useLocation();
   const { scrolled } = useScroll();
-  const [searchToggle, setSearchToggle] = useState<boolean>(false);
+  // const [searchToggle, setSearchToggle] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
 
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
   const isHomePage = pathname === '/';
-
+  console.log(searchToggle);
   return (
     <div
       className={`${
         shouldCollapse ? 'h-20' : 'h-28'
       } py-2 w-full z-50 fixed top-0 lg:shadow-sm transition-all duration-300 flex items-center justify-center flex-col gap-4 ${
         shouldCollapse ? 'bg-white shadow-md' : 'bg-light'
-      }`}
+      } 
+      `}
     >
       <div className="container">
         <div className="flex flex-col gap-3">
