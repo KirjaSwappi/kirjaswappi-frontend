@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@lottiefiles/dotlottie-react": "^0.17.8",
+    "@lottiefiles/dotlottie-react": "^0.17.12",
     "@radix-ui/react-select": "^2.2.6",
     "@react-oauth/google": "^0.12.2",
     "@reduxjs/toolkit": "^2.11.2",
