@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BookCard from '../../components/shared/BookCard';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
-import { setPageNumber } from '../../redux/feature/filter/filterSlice';
+import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { goToTop } from '../../utility/helper';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
+import NoBooksAvailable from './_components/NoBooksAvailable';
 import { IBook } from './types/interface';
 
 export default function Books() {
@@ -18,19 +18,15 @@ export default function Books() {
   } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
+  // Fetch books
   const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
-
-    {
-      refetchOnMountOrArgChange: false,
-    },
+    { refetchOnMountOrArgChange: false },
   );
 
-  // console.log(data);
-
-  // <=======Fetch data store in state=======>
+  // Merge & paginate data
   useEffect(() => {
-    if (data?._embedded?.books) {
+    if (data?._embedded?.books?.length > 0) {
       setBooks((prevBooks) => {
         const newBooks = data._embedded.books;
         const allBooks = filter.pageNumber === 0 ? newBooks : [...prevBooks, ...newBooks];
@@ -39,21 +35,57 @@ export default function Books() {
         );
         return uniqueBooks;
       });
+      return;
     }
-  }, [data?._embedded?.books, filter.pageNumber]);
 
-  // <======= Reset page number =======>
+    // If no books returned for first page, reset state
+    if (data && (!data._embedded?.books || data._embedded.books.length === 0)) {
+      if (filter.pageNumber === 0) setBooks([]);
+    }
+  }, [data, filter.pageNumber]);
+
+  // Infinite scroll: detect filter changes
+  const prevFilterRef = useRef({
+    search: filter.search,
+    genre: filter.genre.join(','),
+    condition: filter.condition.join(','),
+    language: filter.language.join(','),
+    city: filter.city,
+  });
+
   useEffect(() => {
-    goToTop();
-    dispatch(setPageNumber(0));
-  }, [
-    filter.search,
-    filter.genre.join(','),
-    filter.condition.join(','),
-    filter.language.join(','),
-  ]);
+    const currentFilter = {
+      search: filter.search,
+      genre: filter.genre.join(','),
+      condition: filter.condition.join(','),
+      language: filter.language.join(','),
+      city: filter.city,
+    };
 
-  // <======= Intersection observe =======>
+    const prevFilter = prevFilterRef.current;
+
+    const isFilterChanged =
+      prevFilter.search !== currentFilter.search ||
+      prevFilter.genre !== currentFilter.genre ||
+      prevFilter.condition !== currentFilter.condition ||
+      prevFilter.language !== currentFilter.language ||
+      prevFilter.city !== currentFilter.city;
+
+    if (isFilterChanged) {
+      // goToTop();
+      dispatch(setPageNumber(0));
+      prevFilterRef.current = currentFilter;
+    }
+  }, [filter.search, filter.genre, filter.condition, filter.language, filter.city, dispatch]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setPageNumber(0));
+      dispatch(clearAllFilters());
+    };
+  }, [dispatch]);
+
+  // Intersection Observer for infinite scroll
   const lastBookRef = useCallback(
     (node: HTMLDivElement) => {
       if (isFetching) return;
@@ -70,34 +102,39 @@ export default function Books() {
       });
       if (node) observer.current.observe(node);
     },
-    [isLoading, data, filter.pageNumber],
+    [isFetching, data, filter.pageNumber, dispatch],
   );
+
   const isInitialLoading = isFetching || isLoading;
 
   if (isError) return <p>Something went wrong</p>;
+
   return (
     <section>
       <div className="container min-h-[80vh] pb-24 lg:py-6">
-        <div>
-          <HeroSection />
-        </div>
+        <HeroSection />
         <div className="relative hidden lg:block">
           <Filter />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 mt-4 lg:mt-0">
-          {books.map((book: IBook, idx: number) => {
-            if (idx === books.length - 1) {
-              return (
-                <div ref={lastBookRef} key={idx}>
-                  <BookCard book={book} hasPermission={id === book.ownerId} />
-                </div>
-              );
-            }
-            return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
-          })}
-          {isInitialLoading &&
-            Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
-        </div>
+
+        {books.length === 0 && !isInitialLoading ? (
+          <NoBooksAvailable />
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6 mt-4 lg:mt-0">
+            {books.map((book: IBook, idx: number) => {
+              if (idx === books.length - 1) {
+                return (
+                  <div ref={lastBookRef} key={idx}>
+                    <BookCard book={book} hasPermission={id === book.ownerId} />
+                  </div>
+                );
+              }
+              return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
+            })}
+            {isInitialLoading &&
+              Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
+          </div>
+        )}
       </div>
     </section>
   );

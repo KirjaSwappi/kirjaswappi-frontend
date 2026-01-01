@@ -158,7 +158,7 @@ export default function BookDetails() {
                   imageUrl={userProfile?.imageUrl}
                   ownerName={bookData?.owner?.name}
                   ownerId={bookData?.owner?.id}
-                  location={bookData.location}
+                  location={bookData?.location}
                 />
               </div>
               <div className="mt-5 hidden lg:block">
@@ -178,7 +178,7 @@ export default function BookDetails() {
             imageUrl={userProfile?.imageUrl}
             ownerName={bookData?.owner?.name}
             ownerId={bookData?.owner?.id}
-            location={bookData.location}
+            location={bookData?.location}
           />
         </div>
       </div>

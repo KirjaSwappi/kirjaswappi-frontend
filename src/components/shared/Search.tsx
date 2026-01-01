@@ -1,83 +1,131 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { FaLocationDot } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
-import { MdKeyboardArrowDown } from 'react-icons/md';
 import useDebounce from '../../hooks/useDebounce';
 import { useMouseClick } from '../../hooks/useMouse';
-import { setSearch } from '../../redux/feature/filter/filterSlice';
-import { useAppDispatch } from '../../redux/hooks';
+import { useGetCitiesQuery } from '../../redux/feature/book/bookApi';
+import { setCityFilter, setSearch } from '../../redux/feature/filter/filterSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { cn } from '../../utility/cn';
+import Button from './Button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './cusSelect/CustomSelect';
 import Input from './Input';
 
-export default function Search({
-  onClose,
-  className,
-  placeholder,
-}: {
+type SearchProps = {
   onClose?: () => void;
   className?: string;
   placeholder?: string;
-}) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [isFocused, setIsFocused] = useState(false);
-  const [query, setQuery] = useState<string>('');
-  const debouncedSearch = useDebounce(query, 300);
-  const { clicked, reference } = useMouseClick();
-  const dispatch = useAppDispatch();
+  isShowSearchButton?: boolean;
+  isShowSearchInput?: boolean;
+  isShowSearchCity?: boolean;
+};
 
-  useEffect(() => {
-    dispatch(setSearch(debouncedSearch));
-  }, [debouncedSearch, dispatch]);
+const Search = forwardRef<HTMLInputElement, SearchProps>(
+  (
+    {
+      onClose,
+      className,
+      placeholder,
+      isShowSearchButton = true,
+      isShowSearchInput = true,
+      isShowSearchCity = true,
+    },
+    forwardedRef,
+  ) => {
+    const { city, search } = useAppSelector((state) => state.filter.filter);
+    const dispatch = useAppDispatch();
 
-  return (
-    <div ref={reference} className="relative w-full">
-      <div
-        className={cn(
-          'w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center px-4 transition-all duration-300 ease-in-out gap-2',
-          className,
-        )}
-      >
-        <Input
-          ref={inputRef}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          placeholder={placeholder || 'Search Books...'}
-          type="text"
-          className="w-full h-full lg:bg-white outline-none border-none px-3 py-1 placeholder:pl-3 md:placeholder:pl-6 placeholder:text-grayDark placeholder:font-poppins placeholder:text-xs bg-transparent"
-        />
-        <div className="flex items-center gap-2">
-          <div
-            className="flex items-center justify-between gap-1 rounded-full bg-primary-light h-[26px] px-2 text-primary py-1 transition-all duration-300 ease-in-out"
-            style={{ height: '32px' }}
-          >
-            <FaLocationDot className="transition-transform duration-300 ease-in-out transform" />
-            <p className="font-normal text-xs font-poppins">Helsinki</p>
-            <MdKeyboardArrowDown
-              className={`
-            transition-transform duration-300 ease-in-out transform
-            ${isFocused ? 'rotate-180' : 'rotate-0'}
-          `}
+    const internalInputRef = useRef<HTMLInputElement | null>(null);
+    const { reference } = useMouseClick();
+    const { data } = useGetCitiesQuery(undefined);
+
+    const [query, setQuery] = useState<string>(search);
+    const debouncedSearch = useDebounce(query, 300);
+
+    /** 🔹 Sync debounced search */
+    useEffect(() => {
+      dispatch(setSearch(debouncedSearch));
+    }, [debouncedSearch, dispatch]);
+
+    /** 🔹 Sync redux → local */
+    useEffect(() => {
+      setQuery(search);
+    }, [search]);
+
+    /** 🔹 Merge forwarded ref + internal ref */
+    const setRefs = (el: HTMLInputElement | null) => {
+      internalInputRef.current = el;
+
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(el);
+      } else if (forwardedRef) {
+        forwardedRef.current = el;
+      }
+    };
+
+    return (
+      <div ref={reference} className="relative w-full">
+        <div
+          className={cn(
+            'w-full h-[48px] rounded-3xl bg-white border border-platinumMix shadow-sm flex items-center justify-between px-4 gap-2 transition-all duration-300 ease-in-out',
+            className,
+          )}
+        >
+          {isShowSearchInput && (
+            <Input
+              ref={setRefs}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={placeholder || 'Search Books...'}
+              type="text"
+              className="w-full h-full outline-none border-none px-3 py-1 !bg-white placeholder:text-grayDark placeholder:text-xs"
             />
-          </div>
+          )}
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex items-center justify-center w-16 h-10 p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 -mr-2"
-            aria-label="Close search and return to menu"
-          >
-            <IoSearch className="w-4 h-4" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            {isShowSearchCity && (
+              <Select
+                value={city ?? ''}
+                onValueChange={(val) => dispatch(setCityFilter(val === '__all' ? '' : val))}
+              >
+                <SelectTrigger className="flex items-center gap-1 rounded-full bg-primary-light h-8 px-2 text-primary">
+                  <FaLocationDot />
+                  <SelectValue placeholder="All cities" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__all">All cities</SelectItem>
+                  {data?.map((c: { name: string }) => (
+                    <SelectItem key={c.name} value={c.name}>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
+            {isShowSearchButton && (
+              <Button
+                type="button"
+                onClick={onClose}
+                className="w-10 h-10 rounded-full bg-primary text-white hover:bg-blue-600 flex items-center justify-center shrink-0"
+                aria-label="Close search"
+              >
+                <IoSearch className="w-4 h-4" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
+    );
+  },
+);
 
-      {clicked && (
-        <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-lg p-4">
-          <div className="flex flex-col gap-2"></div>
-        </div>
-      )}
-    </div>
-  );
-}
+Search.displayName = 'Search';
+
+export default Search;

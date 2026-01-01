@@ -216,7 +216,7 @@ export default function BookCard({
               </div>
               <div className="flex items-center gap-1">
                 <FaRegClock className="text-sx text-grayDark" />
-                <p className="font-poppins font-normal text-sx text-grayDark">29 mins. ago</p>
+                <p className="font-poppins font-normal text-sx text-grayDark">{book?.offeredAgo}</p>
               </div>
             </div>
           </div>

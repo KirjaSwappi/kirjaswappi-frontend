@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import heroImg from '../../../assets/heroSectionImage.png';
 import Button from '../../../components/shared/Button';
@@ -10,7 +10,6 @@ import {
 } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 import { cn } from '../../../utility/cn';
-import BookSearchBar from './BookSearchBar';
 
 const SLIDES = [
   {
@@ -36,6 +35,34 @@ const SLIDES = [
 export default function HeroSection() {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const searchRef = useRef<HTMLDivElement | null>(null);
+  const [isHidden, setIsHidden] = useState(false);
+
+  useEffect(() => {
+    let raf = 0;
+    const handle = () => {
+      raf = requestAnimationFrame(() => {
+        if (!searchRef.current) return;
+        const searchRect = searchRef.current.getBoundingClientRect();
+        const navEl = document.getElementById('top-nav-bar');
+        const navBottom = navEl ? navEl.getBoundingClientRect().bottom : 80;
+        const shouldHide = searchRect.top <= navBottom;
+        if (shouldHide !== isHidden) {
+          setIsHidden(shouldHide);
+          window.dispatchEvent(
+            new CustomEvent('hero-search-visibility', { detail: { hidden: shouldHide } }),
+          );
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handle, { passive: true });
+    handle();
+    return () => {
+      window.removeEventListener('scroll', handle);
+      cancelAnimationFrame(raf);
+    };
+  }, [isHidden]);
 
   useEffect(() => {
     if (!api) return;
@@ -52,24 +79,8 @@ export default function HeroSection() {
     };
   }, [api]);
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const scrollPosttion = window.scrollY;
-
-  //     console.log(scrollPosttion);
-  //   };
-
-  //   window.addEventListener('scroll', handleScroll);
-  // }, []);
-
   return (
-    <section className="rounded-lg overflow-hidden relative  ">
-      <div className=" hidden lg:block ">
-        <div className="h-[55px] w-[582px] absolute top-[80%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10  ">
-          <BookSearchBar />
-        </div>
-      </div>
-
+    <section className="rounded-lg overflow-hidden relative ">
       <Carousel opts={{ loop: true }} setApi={setApi}>
         <CarouselContent>
           {SLIDES.map((slide) => (
