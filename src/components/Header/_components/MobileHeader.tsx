@@ -5,7 +5,8 @@ import logo from '../../../assets/logo.png';
 import logoIcon from '../../../assets/logoIcon.png';
 import { useMouseClick } from '../../../hooks/useMouse';
 import useScroll from '../../../hooks/useScroll';
-import { useAppSelector } from '../../../redux/hooks';
+import { setSearchToggle } from '../../../redux/feature/open/openSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
 import Search from '../../shared/Search';
@@ -15,19 +16,13 @@ import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
 import NotificationBell from './NotificationBell';
 
-export default function MobileHeader({
-  searchToggle,
-  setSearchToggle,
-}: {
-  searchToggle: boolean;
-  setSearchToggle: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function MobileHeader() {
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const { scrolled } = useScroll();
-  // const [searchToggle, setSearchToggle] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
-
+  const { searchToggle } = useAppSelector((state) => state.open);
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
   const isHomePage = pathname === '/';
@@ -43,9 +38,7 @@ export default function MobileHeader({
     >
       <div className="container">
         <div className="flex flex-col gap-3">
-          {/* Header top row */}
           <div className="flex justify-between items-center">
-            {/* Left: Logo / Search */}
             <div className="flex items-center gap-2 w-full">
               {!searchToggle && (
                 <Link to="/" aria-label="Go to homepage" className="shrink-0">
@@ -60,7 +53,7 @@ export default function MobileHeader({
               {searchToggle && (
                 <Button
                   id="leftArrowButton"
-                  onClick={() => setSearchToggle(false)}
+                  onClick={() => dispatch(setSearchToggle(false))}
                   className="w-10 h-10 shrink-0 border border-gray rounded-full flex items-center justify-center"
                 >
                   <Image src={leftArrowGray} alt="Left Arrow" className="h-4" />
@@ -72,7 +65,7 @@ export default function MobileHeader({
                   {!searchToggle ? (
                     <Button
                       type="button"
-                      onClick={() => setSearchToggle(true)}
+                      onClick={() => dispatch(setSearchToggle(true))}
                       aria-label="Show search"
                       className="w-10 h-10 shrink-0 bg-transparent border border-platinumMix rounded-full flex items-center justify-center"
                     >
@@ -85,7 +78,6 @@ export default function MobileHeader({
               )}
             </div>
 
-            {/* Right: User, Notifications, Language */}
             <div className={`${searchToggle && 'hidden sm:flex'} flex items-center gap-2`}>
               <div
                 ref={reference}
@@ -99,7 +91,6 @@ export default function MobileHeader({
             </div>
           </div>
 
-          {/* Search Bar (home page, not scrolled) */}
           {!scrolled && isHomePage && (
             <div className={`${searchToggle ? 'hidden' : 'block'} lg:hidden w-full`}>
               <SearchBar />

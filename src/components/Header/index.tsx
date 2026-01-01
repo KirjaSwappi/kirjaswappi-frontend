@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import useDrawerOutsideClick from '../../hooks/useDrawerOutsideClick';
@@ -10,19 +10,19 @@ import {
   setSortByFilter,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { cn } from '../../utility/cn';
 import { FilterItemEnum } from '../../utility/enum';
 import BookFilter from './_components/BookFilter/BookFilter';
 import { ShowTopHeaderPath } from './_components/ShowTopHeaderPath';
 import SideDrawer from './_components/SideDrawer';
 import getDrawers from './_components/SideFilterDrawers';
 import TopBar from './_components/TopBar';
-import { cn } from '../../utility/cn';
 
 export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [searchToggle, setSearchToggle] = useState<boolean>(false);
+  const { searchToggle } = useAppSelector((state) => state.open);
   const { isFilterOpen, isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   const categoryRef = useDrawerOutsideClick(FilterItemEnum.CATEGORY).reference;
   const filterRef = useDrawerOutsideClick(FilterItemEnum.FILTER).reference;
@@ -86,7 +86,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
           isHeaderShow ? 'block ' : 'hidden'
         } fixed w-full  flex flex-col gap-[12px] z-30  `}
       >
-        <TopBar searchToggle={searchToggle} setSearchToggle={setSearchToggle}></TopBar>
+        <TopBar></TopBar>
       </div>
     </header>
   );

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoSearch } from 'react-icons/io5';
 import { Link, useLocation } from 'react-router-dom';
@@ -15,13 +14,7 @@ import LanguageMenuDropdown from './LanguageMenuDropdown';
 import MobileHeader from './MobileHeader';
 import NotificationBell from './NotificationBell';
 
-export default function TopBar({
-  searchToggle,
-  setSearchToggle,
-}: {
-  searchToggle: boolean;
-  setSearchToggle: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function TopBar() {
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { pathname } = useLocation();
@@ -39,7 +32,7 @@ export default function TopBar({
     <div>
       <div className="lg:hidden">
         {' '}
-        <MobileHeader searchToggle={searchToggle} setSearchToggle={setSearchToggle} />{' '}
+        <MobileHeader />{' '}
       </div>
       <div
         className={`h-20 px-4 py-2 w-full z-50 fixed top-0 lg:shadow-sm transition-all duration-300 hidden lg:flex items-center justify-center flex-col gap-4 shadow-md bg-white`}
