@@ -10,6 +10,7 @@ import {
   setSortByFilter,
 } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { cn } from '../../utility/cn';
 import { FilterItemEnum } from '../../utility/enum';
 import BookFilter from './_components/BookFilter/BookFilter';
 import { ShowTopHeaderPath } from './_components/ShowTopHeaderPath';
@@ -21,6 +22,7 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
   const isMobile = useIsMobile();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { searchToggle } = useAppSelector((state) => state.open);
   const { isFilterOpen, isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   const categoryRef = useDrawerOutsideClick(FilterItemEnum.CATEGORY).reference;
   const filterRef = useDrawerOutsideClick(FilterItemEnum.FILTER).reference;
@@ -57,7 +59,10 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
 
   return (
     <header
-      className={`  ${isHeaderShow ? 'pb-28 lg:pb-20' : 'pb-0'} ${pathname !== '/' ? 'hidden lg:block' : ''} `}
+      className={cn(
+        searchToggle ? 'pb-24' : 'pb-28 lg:pb-20',
+        pathname !== '/' && 'hidden lg:block',
+      )}
     >
       <FormProvider {...methods}>
         {drawers.map(({ type, ref, left }) => {

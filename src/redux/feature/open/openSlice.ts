@@ -6,6 +6,7 @@ export interface IOpenInitialState {
   showAlert: boolean;
   message: string;
   loginModalOpen: boolean;
+  searchToggle: boolean;
 }
 
 const initialState: IOpenInitialState = {
@@ -14,6 +15,7 @@ const initialState: IOpenInitialState = {
   showAlert: false,
   message: '',
   loginModalOpen: false,
+  searchToggle: false,
 };
 const openSlice = createSlice({
   name: 'open',
@@ -25,8 +27,11 @@ const openSlice = createSlice({
     setLoginModalOpen: (state, action: PayloadAction<boolean>) => {
       state.loginModalOpen = action.payload;
     },
+    setSearchToggle: (state, action: PayloadAction<boolean>) => {
+      state.searchToggle = action.payload;
+    },
   },
 });
 
-export const { setOpen, setLoginModalOpen } = openSlice.actions;
+export const { setOpen, setLoginModalOpen, setSearchToggle } = openSlice.actions;
 export default openSlice.reducer;

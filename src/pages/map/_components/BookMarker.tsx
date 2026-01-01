@@ -26,7 +26,7 @@ const hashString = (str: string) => {
 
 export default function BookMarker({ books, position }: BookMarkerProps) {
   const isCluster = books.length > 1;
-  console.log(books);
+
   const createClusterIcon = (books: IBookWithLocation[]) => {
     const maxVisible = 3;
     const visibleBooks = books.slice(0, maxVisible);
