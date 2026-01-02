@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import book from '../../../assets/book3.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
+import { useGetInboxQuery } from '../../../redux/feature/messages/inboxApi';
 import { selectChat } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
@@ -13,8 +15,43 @@ export default function ChatList() {
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState<string>('');
   const { chats, selectedChatId } = useAppSelector((state) => state.chat);
+  const { userInformation } = useAppSelector((state) => state.auth);
 
-  const filteredChats = chats.filter((chat) => {
+  const { data: inboxData } = useGetInboxQuery(
+    { userId: userInformation.id as string },
+    { skip: !userInformation.id },
+  );
+
+  // prefer server inbox when available, fall back to local redux chats
+  const sourceChats = Array.isArray(inboxData) && inboxData.length > 0 ? inboxData : chats;
+
+  const normalizeServerItem = (item: any) => {
+    const other = item.sender?.id === userInformation.id ? item.receiver : item.sender;
+    const partnerName = other?.name || item.sender?.name || item.receiver?.name || 'Unknown';
+    const lastText = item.note || item.bookToSwapWith?.title || item.swapStatus || '';
+    return {
+      id: item.id,
+      name: partnerName,
+      unread: !!item.unread,
+      unreadMessageCount: item.unreadMessageCount ?? 0,
+      messages: [
+        {
+          id: item.id,
+          sender: item.sender?.id === userInformation.id ? 'me' : 'them',
+          text: lastText,
+          time: item.updatedAt,
+          unread: !!item.unread,
+        },
+      ],
+    };
+  };
+
+  const normalizedSourceChats = sourceChats.map((c: any) => {
+    if (c && Array.isArray(c.messages)) return c;
+    return normalizeServerItem(c);
+  });
+
+  const filteredChats = normalizedSourceChats.filter((chat) => {
     return chat.name.toLowerCase().includes(search.toLowerCase());
   });
   return (
