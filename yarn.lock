@@ -843,10 +843,10 @@
   resolved "https://registry.npmjs.org/@react-leaflet/core/-/core-2.1.0.tgz"
   integrity sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==
 
-"@react-oauth/google@^0.12.2":
-  version "0.12.2"
-  resolved "https://registry.npmjs.org/@react-oauth/google/-/google-0.12.2.tgz"
-  integrity sha512-d1GVm2uD4E44EJft2RbKtp8Z1fp/gK8Lb6KHgs3pHlM0PxCXGLaq8LLYQYENnN4xPWO1gkL4apBtlPKzpLvZwg==
+"@react-oauth/google@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.13.4.tgz#c462a651880162d43fd899ef91526a515ef60a78"
+  integrity sha512-hGKyNEH+/PK8M0sFEuo3MAEk0txtHpgs94tDQit+s2LXg7b6z53NtzHfqDvoB2X8O6lGB+FRg80hY//X6hfD+w==
 
 "@reduxjs/toolkit@^2.11.2":
   version "2.11.2"
