@@ -31,7 +31,7 @@
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "embla-carousel-react": "^8.5.2",
-    "framer-motion": "^12.23.24",
+    "framer-motion": "^12.26.1",
     "i18next": "^25.7.3",
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
