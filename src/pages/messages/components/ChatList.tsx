@@ -10,6 +10,7 @@ import { useGetInboxQuery } from '../../../redux/feature/messages/inboxApi';
 import { selectChat } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
+
 export default function ChatList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -24,16 +25,18 @@ export default function ChatList() {
 
   // prefer server inbox when available, fall back to local redux chats
   const sourceChats = Array.isArray(inboxData) && inboxData.length > 0 ? inboxData : chats;
-
+  console.log(inboxData);
   const normalizeServerItem = (item: any) => {
-    const other = item.sender?.id === userInformation.id ? item.receiver : item.sender;
-    const partnerName = other?.name || item.sender?.name || item.receiver?.name || 'Unknown';
-    const lastText = item.note || item.bookToSwapWith?.title || item.swapStatus || '';
+    const senderName = item?.sender?.name;
+    const partnerName = item.bookToSwapWith?.title || 'Unknown';
+    const lastText = item.note || `${senderName} sent a message`;
+
     return {
       id: item.id,
       name: partnerName,
       unread: !!item.unread,
       unreadMessageCount: item.unreadMessageCount ?? 0,
+      // sender
       messages: [
         {
           id: item.id,
@@ -54,6 +57,7 @@ export default function ChatList() {
   const filteredChats = normalizedSourceChats.filter((chat) => {
     return chat.name.toLowerCase().includes(search.toLowerCase());
   });
+  console.log(filteredChats);
   return (
     <div className="flex flex-col h-full">
       <div className="shrink-0">
@@ -121,7 +125,9 @@ export default function ChatList() {
                           <p className="font-medium text-smokyBlack text-sm font-poppins">
                             {truncateText(chat.name, 12)}
                           </p>
-                          <span className="text-grayDark font-poppins text-sx">[by Rahat]</span>
+                          <span className="text-grayDark font-poppins text-sx">
+                            [by {chat?.senderName}]
+                          </span>
                         </div>
                         <p className="font-poppins text-blackOlive text-xs w-7">5 m</p>
                       </div>
