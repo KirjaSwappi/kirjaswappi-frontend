@@ -13,6 +13,7 @@ import notificationReducer, {
   selectUnreadNotifications,
 } from '../../../redux/feature/notification/notificationSlice';
 import { INotification } from '../../../types/notification';
+import type { RootState } from '../../../redux/store';
 
 // Mock sessionStorage
 const sessionStorageMock = (() => {
@@ -383,7 +384,9 @@ describe('notificationSlice', () => {
           },
         ];
 
-        const sorted = selectSortedNotifications({ notification: { ...initialState, notifications } } as any);
+        const sorted = selectSortedNotifications({
+          notification: { ...initialState, notifications },
+        } as RootState);
 
         expect(sorted[0].title).toBe('New Notification');
         expect(sorted[1].title).toBe('Old Notification');
@@ -411,7 +414,9 @@ describe('notificationSlice', () => {
           },
         ];
 
-        const unread = selectUnreadNotifications({ notification: { ...initialState, notifications } } as any);
+        const unread = selectUnreadNotifications({
+          notification: { ...initialState, notifications },
+        } as RootState);
 
         expect(unread).toHaveLength(1);
         expect(unread[0].title).toBe('Unread Notification');
