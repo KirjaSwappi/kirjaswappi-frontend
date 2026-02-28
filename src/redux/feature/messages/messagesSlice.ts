@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// 📁 src/features/chat/types.ts
 export interface Message {
-  id: number;
+  id: number | string;
   sender: 'me' | 'them';
   text: string;
   time: string;
@@ -14,7 +13,51 @@ export interface Chat {
   id: string;
   name: string;
   unread: boolean;
+  unreadMessageCount?: number;
   messages: Message[];
+  senderName?: string;
+  updatedAt?: string;
+  // Server-side inbox item fields
+  conversationType?: 'sent' | 'received';
+  receiver?: { id: string; name: string };
+  sender?: { id: string; name: string };
+  bookToSwapWith?: { id: string; title: string; author: string; condition: string };
+  swapStatus?: string;
+  swapType?: string;
+  note?: string;
+}
+
+// Server-side inbox item type
+export interface InboxItem {
+  id: string;
+  askForGiveaway: boolean;
+  bookToSwapWith: {
+    author: string;
+    condition: string;
+    id: string;
+    title: string;
+  };
+  conversationType: 'sent' | 'received';
+  hasNewMessages: boolean;
+  note: string;
+  receiver: {
+    id: string;
+    name: string;
+  };
+  requestedAt: string;
+  sender: {
+    id: string;
+    name: string;
+  };
+  swapOffer: {
+    offeredBookTitle: string | null;
+    offeredGenreName: string | null;
+  } | null;
+  swapStatus: string;
+  swapType: string;
+  unread: boolean;
+  unreadMessageCount: number;
+  updatedAt: string;
 }
 
 export interface ChatState {
@@ -23,98 +66,19 @@ export interface ChatState {
 }
 
 const initialState: ChatState = {
-  chats: [
-    {
-      id: '1',
-      name: 'Harry Porter',
-      unread: true,
-      messages: [
-        {
-          id: 1,
-          sender: 'them',
-          text: 'Hi! How are you?',
-          time: '9:00 AM',
-          unread: true,
-          images: [
-            'https://img.drz.lazcdn.com/collect/sg/p/0a89447e673f3eac01af2a172099bf4b.jpg_400x400q80.jpg_.webp',
-          ],
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Marr’s Search for Meaning',
-      unread: false,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '3',
-      name: 'Marr’s Search for Meaning',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '4',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '5',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '6',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '7',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '8',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-    {
-      id: '9',
-      name: 'Marr’s Search for Meaning ',
-      unread: true,
-      messages: [
-        { id: 1, sender: 'them', text: 'I want to swap this book.', time: '9:12 AM' },
-        { id: 2, sender: 'me', text: 'Anyone here to chat?', time: '9:17 AM' },
-      ],
-    },
-  ],
+  chats: [],
   selectedChatId: '',
+};
+
+// Helper function to move chat to front
+const moveChatToFront = (chats: Chat[], chatId: string): Chat[] => {
+  const chatIndex = chats.findIndex((c) => c.id === chatId);
+  if (chatIndex === -1 || chatIndex === 0) return chats;
+
+  const chat = chats[chatIndex];
+  const newChats = [...chats];
+  newChats.splice(chatIndex, 1);
+  return [chat, ...newChats];
 };
 
 const chatSlice = createSlice({
@@ -126,11 +90,103 @@ const chatSlice = createSlice({
       const chat = state.chats.find((c) => c.id === action.payload);
       if (chat) {
         chat.unread = false;
+        chat.unreadMessageCount = 0;
         chat.messages = chat.messages.map((m) => ({ ...m, unread: false }));
       }
     },
     resetChat: (state) => {
       state.selectedChatId = '';
+    },
+    setInboxList: (state, action: PayloadAction<InboxItem[]>) => {
+      // Deduplicate inbox items by ID before transforming (more efficient using Map)
+      const uniqueItemsMap = new Map<string, InboxItem>();
+      action.payload.forEach((item) => {
+        if (!uniqueItemsMap.has(item.id)) {
+          uniqueItemsMap.set(item.id, item);
+        }
+      });
+      const uniqueItems = Array.from(uniqueItemsMap.values());
+
+      // Transform inbox items to chat format
+      state.chats = uniqueItems.map((item) => {
+        const partnerName =
+          item.conversationType === 'sent' ? item.receiver.name : item.sender.name;
+        const bookTitle = item.bookToSwapWith?.title || 'Unknown Book';
+        const lastText = item.note || `${item.sender.name} sent a message`;
+
+        return {
+          id: item.id,
+          name: bookTitle,
+          unread: item.unread,
+          unreadMessageCount: item.unreadMessageCount || 0,
+          senderName: partnerName,
+          updatedAt: item.updatedAt,
+          conversationType: item.conversationType,
+          receiver: item.receiver,
+          sender: item.sender,
+          bookToSwapWith: item.bookToSwapWith,
+          swapStatus: item.swapStatus,
+          swapType: item.swapType,
+          note: item.note,
+          messages: [
+            {
+              id: item.id,
+              sender: item.conversationType === 'sent' ? 'me' : 'them',
+              text: lastText,
+              time: item.updatedAt,
+              unread: item.unread,
+            },
+          ],
+        };
+      });
+    },
+    updateInboxItem: (state, action: PayloadAction<InboxItem>) => {
+      const item = action.payload;
+      const existingChatIndex = state.chats.findIndex((c) => c.id === item.id);
+
+      const partnerName = item.conversationType === 'sent' ? item.receiver.name : item.sender.name;
+      const bookTitle = item.bookToSwapWith?.title || 'Unknown Book';
+      const lastText = item.note || `${item.sender.name} sent a message`;
+
+      const updatedChat: Chat = {
+        id: item.id,
+        name: bookTitle,
+        unread: item.unread,
+        unreadMessageCount: item.unreadMessageCount || 0,
+        senderName: partnerName,
+        updatedAt: item.updatedAt,
+        conversationType: item.conversationType,
+        receiver: item.receiver,
+        sender: item.sender,
+        bookToSwapWith: item.bookToSwapWith,
+        swapStatus: item.swapStatus,
+        swapType: item.swapType,
+        note: item.note,
+        messages: [
+          {
+            id: item.id,
+            sender: item.conversationType === 'sent' ? 'me' : 'them',
+            text: lastText,
+            time: item.updatedAt,
+            unread: item.unread,
+          },
+        ],
+      };
+
+      if (existingChatIndex !== -1) {
+        // Update existing chat and move to front if it has new messages
+        const existingChat = state.chats[existingChatIndex];
+        updatedChat.messages = existingChat.messages; // Preserve existing messages
+        state.chats[existingChatIndex] = updatedChat;
+
+        // Move to front if it has new messages or was updated
+        if (item.hasNewMessages || item.unread) {
+          state.chats = moveChatToFront(state.chats, item.id);
+        }
+      } else {
+        // Add new chat at the front
+        state.chats = [updatedChat, ...state.chats];
+      }
     },
     sendMessage: (
       state,
@@ -144,30 +200,64 @@ const chatSlice = createSlice({
           sender: 'me' as const,
           text,
           images,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          time: new Date().toISOString(),
         };
         chat.messages.push(message);
+        chat.updatedAt = new Date().toISOString();
+        // Move to front when sending a message
+        state.chats = moveChatToFront(state.chats, chatId);
       }
     },
-    receiveMessage: (state, action: PayloadAction<{ chatId: string; text: string }>) => {
-      const { chatId, text } = action.payload;
+    receiveMessage: (
+      state,
+      action: PayloadAction<{ chatId: string; text: string; senderId?: string; userId?: string }>,
+    ) => {
+      const { chatId, text, senderId, userId } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
+        const isMe = senderId === userId || chat.conversationType === 'sent';
         const message = {
           id: Date.now(),
-          sender: 'them' as const,
+          sender: isMe ? ('me' as const) : ('them' as const),
           text,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          unread: true,
+          time: new Date().toISOString(),
+          unread: !isMe,
         };
         chat.messages.push(message);
-        if (state.selectedChatId !== chatId) {
+        chat.updatedAt = new Date().toISOString();
+
+        if (!isMe && state.selectedChatId !== chatId) {
           chat.unread = true;
+          chat.unreadMessageCount = (chat.unreadMessageCount || 0) + 1;
+          // Move to front when receiving a new message
+          state.chats = moveChatToFront(state.chats, chatId);
         }
+      }
+    },
+    addChatMessages: (state, action: PayloadAction<{ chatId: string; messages: Message[] }>) => {
+      const { chatId, messages } = action.payload;
+      const chat = state.chats.find((c) => c.id === chatId);
+      if (chat) {
+        // Merge messages, avoiding duplicates
+        const existingIds = new Set(chat.messages.map((m) => m.id));
+        const newMessages = messages.filter((m) => !existingIds.has(m.id));
+        chat.messages = [...chat.messages, ...newMessages].sort((a, b) => {
+          const timeA = new Date(a.time).getTime();
+          const timeB = new Date(b.time).getTime();
+          return timeA - timeB;
+        });
       }
     },
   },
 });
 
-export const { selectChat, resetChat, sendMessage, receiveMessage } = chatSlice.actions;
+export const {
+  selectChat,
+  resetChat,
+  sendMessage,
+  receiveMessage,
+  setInboxList,
+  updateInboxItem,
+  addChatMessages,
+} = chatSlice.actions;
 export default chatSlice.reducer;

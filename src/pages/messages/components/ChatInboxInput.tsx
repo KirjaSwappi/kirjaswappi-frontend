@@ -8,13 +8,14 @@ import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
 import { sendMessage } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { messagesSchema, MessagesType } from '../Schema';
+import { MessagesType, messagesSchema } from '../Schema';
 import FilesUpload from './FilesUpload';
 
 export default function ChatInboxInput() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
   const { selectedChatId } = useAppSelector((state) => state.chat);
+  // const { sendChatMessage, isConnected } = useChatWS();
   const methods = useForm({
     resolver: yupResolver(messagesSchema),
     mode: 'onChange',
