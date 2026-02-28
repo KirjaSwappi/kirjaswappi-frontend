@@ -240,21 +240,25 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     dispatch(setWSConnectionStatus('disconnected'));
   };
 
-  // Effect: Connect when user ID is available, disconnect when user logs out
+  // Effect: Connect when user ID is available
   useEffect(() => {
     if (userId) {
       connect();
-    } else {
-      // User logged out - clean up
-      disconnect();
-      dispatch(clearNotifications());
     }
 
     // Cleanup on unmount
     return () => {
       disconnect();
     };
-  }, [userId, reconnectAttempts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, reconnectAttempts]); // Reconnect on userId change or reconnect attempt
+
+  // Effect: Clear notifications when user logs out
+  useEffect(() => {
+    if (!userId) {
+      dispatch(clearNotifications());
+    }
+  }, [userId, dispatch]);
 
   // Get current connection status from Redux
   const connectionStatus = useAppSelector((state) => state.notification.wsConnectionStatus);
