@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useChatWS } from '../../hooks/useChatWS';
 import { selectChat } from '../../redux/feature/messages/messagesSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ChatInboxInput from './components/ChatInboxInput';
 import ChatList from './components/ChatList';
 import ChatWindow from './components/ChatWindow';
@@ -14,6 +15,8 @@ export default function Messages() {
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get('messageId');
+
+  useChatWS();
 
   useEffect(() => {
     if (messageId) {
@@ -54,7 +57,6 @@ export default function Messages() {
         </div>
       </main>
 
-      {/* User Profile */}
       <aside
         className="h-screen lg:h-[85vh] xl:h-[82vh] hidden xl:block xl:w-[25%] rounded-xl overflow-hidden overflow-y-auto custom-scrollbar lg:bg-white"
         style={{ scrollbarWidth: 'none' }}
