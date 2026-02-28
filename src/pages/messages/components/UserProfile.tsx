@@ -10,7 +10,6 @@ import { useAppSelector } from '../../../redux/hooks';
 
 export default function UserProfile() {
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
-  const { userInformation } = useAppSelector((state) => state.auth);
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId);
 

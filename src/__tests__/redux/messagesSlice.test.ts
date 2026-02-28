@@ -222,10 +222,7 @@ describe('messagesSlice', () => {
         selectedChatId: '',
       };
 
-      const result = messagesSlice(
-        stateWithChats,
-        sendMessage({ chatId: 'chat-2', text: 'Test' }),
-      );
+      const result = messagesSlice(stateWithChats, sendMessage({ chatId: 'chat-2', text: 'Test' }));
 
       expect(result.chats[0].id).toBe('chat-2');
     });
@@ -257,7 +254,12 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        receiveMessage({ chatId: 'chat-1', text: 'Hello from them', senderId: 'user-2', userId: 'user-1' }),
+        receiveMessage({
+          chatId: 'chat-1',
+          text: 'Hello from them',
+          senderId: 'user-2',
+          userId: 'user-1',
+        }),
       );
 
       expect(result.chats[0].messages).toHaveLength(1);

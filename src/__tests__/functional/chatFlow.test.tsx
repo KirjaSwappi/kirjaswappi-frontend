@@ -176,10 +176,7 @@ describe('Chat Messaging Flow (Functional)', () => {
     renderMessages();
 
     await waitFor(() => {
-      expect(mockUseGetInboxQuery).toHaveBeenCalledWith(
-        { userId: 'user-1' },
-        expect.any(Object),
-      );
+      expect(mockUseGetInboxQuery).toHaveBeenCalledWith({ userId: 'user-1' }, expect.any(Object));
     });
   });
 
@@ -223,8 +220,18 @@ describe('Chat Messaging Flow (Functional)', () => {
             unread: false,
             unreadMessageCount: 0,
             messages: [
-              { id: 'msg-1', sender: 'them', text: 'Hello, interested in your book', time: '2024-01-01T10:00:00Z' },
-              { id: 'msg-2', sender: 'me', text: 'Sure, let me know', time: '2024-01-01T10:01:00Z' },
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: 'Hello, interested in your book',
+                time: '2024-01-01T10:00:00Z',
+              },
+              {
+                id: 'msg-2',
+                sender: 'me',
+                text: 'Sure, let me know',
+                time: '2024-01-01T10:01:00Z',
+              },
             ],
           },
         ],

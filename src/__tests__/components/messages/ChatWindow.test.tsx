@@ -153,8 +153,18 @@ describe('ChatWindow Component', () => {
             unread: false,
             unreadMessageCount: 0,
             messages: [
-              { id: 'msg-1', sender: 'them', text: 'Hello, how are you?', time: '2024-01-01T10:00:00Z' },
-              { id: 'msg-2', sender: 'me', text: 'I am fine, thanks!', time: '2024-01-01T10:01:00Z' },
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: 'Hello, how are you?',
+                time: '2024-01-01T10:00:00Z',
+              },
+              {
+                id: 'msg-2',
+                sender: 'me',
+                text: 'I am fine, thanks!',
+                time: '2024-01-01T10:01:00Z',
+              },
             ],
           },
         ],
@@ -240,7 +250,7 @@ describe('ChatWindow Component', () => {
       isSuccess: true,
     });
 
-    const { container } = renderWithProviders(<ChatWindow />, {
+    renderWithProviders(<ChatWindow />, {
       preloadedState: stateWithOwnMessage,
     });
 
@@ -297,9 +307,7 @@ describe('ChatWindow Component', () => {
             name: 'Test Book',
             unread: false,
             unreadMessageCount: 0,
-            messages: [
-              { id: 'msg-1', sender: 'me', text: 'Test', time: '2024-01-01T14:30:00Z' },
-            ],
+            messages: [{ id: 'msg-1', sender: 'me', text: 'Test', time: '2024-01-01T14:30:00Z' }],
           },
         ],
         selectedChatId: 'swap-123',

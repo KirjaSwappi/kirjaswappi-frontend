@@ -21,7 +21,6 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
-  const { userInformation } = useAppSelector((state) => state.auth);
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId);
 
@@ -81,19 +80,13 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               onClick={() => setBookOpen(!bookOpen)}
               className="w-6 h-6 flex items-center justify-center bg-white rounded-full text-grayDark"
             >
-              <IoIosArrowDown
-                className={`transition-transform ${bookOpen ? 'rotate-180' : ''}`}
-              />
+              <IoIosArrowDown className={`transition-transform ${bookOpen ? 'rotate-180' : ''}`} />
             </Button>
           </div>
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
-                <Image
-                  src={book3}
-                  alt="Book"
-                  className="w-[71px] h-[71px] object-cover rounded"
-                />
+                <Image src={book3} alt="Book" className="w-[71px] h-[71px] object-cover rounded" />
                 <div className="flex flex-col gap-1">
                   <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">

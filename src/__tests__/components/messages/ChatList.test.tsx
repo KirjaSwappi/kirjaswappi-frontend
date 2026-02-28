@@ -161,7 +161,9 @@ describe('ChatList Component', () => {
             unread: true,
             unreadMessageCount: 3,
             senderName: 'User Two',
-            messages: [{ id: 'msg-1', sender: 'them', text: 'Hello there', time: '2024-01-02T00:00:00Z' }],
+            messages: [
+              { id: 'msg-1', sender: 'them', text: 'Hello there', time: '2024-01-02T00:00:00Z' },
+            ],
           },
           {
             id: 'swap-2',
@@ -381,7 +383,12 @@ describe('ChatList Component', () => {
             unreadMessageCount: 0,
             senderName: 'User Two',
             messages: [
-              { id: 'msg-1', sender: 'them', text: 'This is the last message', time: '2024-01-02T00:00:00Z' },
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: 'This is the last message',
+                time: '2024-01-02T00:00:00Z',
+              },
             ],
           },
         ],
@@ -412,7 +419,13 @@ describe('ChatList Component', () => {
             unreadMessageCount: 0,
             senderName: 'User Two',
             messages: [
-              { id: 'msg-1', sender: 'them', text: '', time: '2024-01-02T00:00:00Z', images: ['image.jpg'] },
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: '',
+                time: '2024-01-02T00:00:00Z',
+                images: ['image.jpg'],
+              },
             ],
           },
         ],

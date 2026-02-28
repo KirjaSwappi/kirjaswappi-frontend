@@ -85,9 +85,7 @@ export default function ChatList() {
         {filteredChats.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full px-4 text-center">
             <p className="text-gray-500">No conversations yet</p>
-            <p className="text-xs text-gray-400 mt-1">
-              Start a swap request to begin chatting
-            </p>
+            <p className="text-xs text-gray-400 mt-1">Start a swap request to begin chatting</p>
           </div>
         ) : (
           filteredChats.map((chat) => {
