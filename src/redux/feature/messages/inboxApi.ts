@@ -49,7 +49,7 @@ export const inboxApi = api.injectEndpoints({
         url: `/swap-requests/${swapRequestId}/chat?userId=${userId}`,
         method: 'GET',
       }),
-      providesTags: (result, error, { swapRequestId }) => [
+      providesTags: (_result, _error, { swapRequestId }) => [
         { type: 'ChatMessages', id: swapRequestId },
       ],
     }),
@@ -75,7 +75,7 @@ export const inboxApi = api.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: (result, error, { swapRequestId }) => [
+      invalidatesTags: (_result, _error, { swapRequestId }) => [
         { type: 'ChatMessages', id: swapRequestId },
         'Inbox',
       ],

@@ -89,7 +89,7 @@ export default function ChatList() {
           </div>
         ) : (
           filteredChats.map((chat) => {
-            const lastMsg = chat.messages.at(-1);
+            const lastMsg = chat.messages[chat.messages.length - 1];
             const hasUnread = chat.unread || (chat.unreadMessageCount ?? 0) > 0;
 
             return (

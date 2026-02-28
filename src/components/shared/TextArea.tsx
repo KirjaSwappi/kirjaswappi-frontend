@@ -11,10 +11,24 @@ interface TextAreaProps {
   showErrorMessage?: boolean;
   className?: string;
   onBlur?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  disabled?: boolean;
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ name, onChange, value, placeholder, error, showErrorMessage, className, onBlur }, ref) => {
+  (
+    {
+      name,
+      onChange,
+      value,
+      placeholder,
+      error,
+      showErrorMessage,
+      className,
+      onBlur,
+      disabled = false,
+    },
+    ref,
+  ) => {
     return (
       <div className="flex flex-col">
         <textarea
@@ -24,6 +38,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           onBlur={onBlur}
           value={value}
           placeholder={placeholder}
+          disabled={disabled}
           className={cn(
             `w-full h-[48px] px-[14px] py-2 bg-white lg:bg-AntiFlashWhite border lg:border-grayDark border-gray ${
               error ? 'border-rose-500' : 'focus:ring-grayDark focus:border-grayDark'

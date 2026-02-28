@@ -10,13 +10,26 @@ interface ISelectProps {
   placeholder?: string;
   className?: string;
   showErrorMessage?: boolean;
+  disabled?: boolean;
   options: {
     label: string;
     value: string;
   }[];
 }
 const Select = forwardRef<HTMLSelectElement, ISelectProps>(
-  ({ value, name, onChange, className, error, options, showErrorMessage = false }, ref) => {
+  (
+    {
+      value,
+      name,
+      onChange,
+      className,
+      error,
+      options,
+      showErrorMessage = false,
+      disabled = false,
+    },
+    ref,
+  ) => {
     return (
       <div className="flex flex-col">
         <select
@@ -28,6 +41,7 @@ const Select = forwardRef<HTMLSelectElement, ISelectProps>(
             className,
           )}
           onChange={onChange}
+          disabled={disabled}
         >
           <option value="">Select {name || 'options'}</option>
           {options.map((option, index) => (
