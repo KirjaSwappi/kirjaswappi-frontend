@@ -22,6 +22,8 @@ describe('useNotificationWS', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     MockWebSocket.lastInstance = null;
+    // Clear sessionStorage to prevent state leakage between tests
+    sessionStorage.clear();
     // Mock console to avoid test output clutter
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -74,12 +76,17 @@ describe('useNotificationWS', () => {
     });
   });
 
-  it('should not establish connection when userId is not present', () => {
+  it('should not establish connection when userId is not present', async () => {
     store = setupStoreWithoutUser();
     renderHook(() => useNotificationWS(), { wrapper: wrapper(store) });
 
-    // Wait a bit to ensure no connection is made
-    expect(MockWebSocket.lastInstance).toBeNull();
+    // Wait to ensure effects have run and no connection is made
+    await waitFor(
+      () => {
+        expect(MockWebSocket.lastInstance).toBeNull();
+      },
+      { timeout: 100 },
+    );
   });
 
   it('should dispatch addNotification when a valid notification is received', async () => {

@@ -1,4 +1,29 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
+
+// Mock sessionStorage BEFORE importing the slice
+// This is critical because the slice reads from sessionStorage at module import time
+const sessionStorageMock = vi.hoisted(() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+});
+
+Object.defineProperty(globalThis, 'sessionStorage', {
+  value: sessionStorageMock,
+  writable: true,
+  configurable: true,
+});
+
 import notificationReducer, {
   initialState,
   setMessages,
@@ -14,25 +39,6 @@ import notificationReducer, {
 } from '../../../redux/feature/notification/notificationSlice';
 import { INotification } from '../../../types/notification';
 import type { RootState } from '../../../redux/store';
-
-// Mock sessionStorage
-const sessionStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
-Object.defineProperty(window, 'sessionStorage', { value: sessionStorageMock });
 
 describe('notificationSlice', () => {
   beforeEach(() => {
