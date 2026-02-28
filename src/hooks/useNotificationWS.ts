@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   addNotification,
@@ -69,7 +69,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
   /**
    * Clear all timers and intervals
    */
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
@@ -78,12 +78,12 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
       clearInterval(pingIntervalRef.current);
       pingIntervalRef.current = null;
     }
-  };
+  }, []);
 
   /**
    * Start ping interval to keep connection alive
    */
-  const startPingInterval = () => {
+  const startPingInterval = useCallback(() => {
     clearTimers();
     pingIntervalRef.current = setInterval(() => {
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -94,104 +94,113 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
         }
       }
     }, PING_INTERVAL);
-  };
+  }, [clearTimers]);
 
   /**
    * Handle incoming WebSocket messages
    * @param event - The WebSocket message event
    */
-  const handleMessage = (event: MessageEvent) => {
-    try {
-      const message: WSMessage = JSON.parse(event.data);
+  const handleMessage = useCallback(
+    (event: MessageEvent) => {
+      try {
+        const message: WSMessage = JSON.parse(event.data);
 
-      // Handle ping message
-      if (isPingMessage(message)) {
-        // Send pong response
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-          wsRef.current.send(JSON.stringify({ type: 'pong' }));
-        }
-        return;
-      }
-
-      // Handle notification payload
-      if (isNotificationPayload(message)) {
-        // Validate payload structure
-        if (!message.UserID || !message.Title || !message.Message || !message.Time) {
-          console.error('[NotificationWS] Invalid notification payload structure:', message);
+        // Handle ping message
+        if (isPingMessage(message)) {
+          // Send pong response
+          if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            wsRef.current.send(JSON.stringify({ type: 'pong' }));
+          }
           return;
         }
 
-        // Dispatch notification to Redux store
-        dispatch(
-          addNotification({
-            userId: message.UserID,
-            title: message.Title,
-            message: message.Message,
-            time: message.Time,
-          }),
-        );
+        // Handle notification payload
+        if (isNotificationPayload(message)) {
+          // Validate payload structure
+          if (!message.UserID || !message.Title || !message.Message || !message.Time) {
+            console.error('[NotificationWS] Invalid notification payload structure:', message);
+            return;
+          }
 
-        console.log('[NotificationWS] Notification received:', message.Title);
+          // Dispatch notification to Redux store
+          dispatch(
+            addNotification({
+              userId: message.UserID,
+              title: message.Title,
+              message: message.Message,
+              time: message.Time,
+            }),
+          );
+
+          console.log('[NotificationWS] Notification received:', message.Title);
+        }
+      } catch (error) {
+        console.error('[NotificationWS] Message parsing error:', error);
+        // Continue operation - don't crash the app
       }
-    } catch (error) {
-      console.error('[NotificationWS] Message parsing error:', error);
-      // Continue operation - don't crash the app
-    }
-  };
+    },
+    [dispatch],
+  );
 
   /**
    * Handle WebSocket connection open event
    */
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     console.log('[NotificationWS] Connection established');
     setIsConnected(true);
     setReconnectAttempts(0);
     dispatch(setWSConnectionStatus('connected'));
     startPingInterval();
-  };
+  }, [dispatch, startPingInterval]);
 
   /**
    * Handle WebSocket connection close event
    * @param event - The close event
    */
-  const handleClose = (event: CloseEvent) => {
-    // console.log('[NotificationWS] Connection closed:', event.code, event.reason);
-    setIsConnected(false);
-    clearTimers();
+  const handleClose = useCallback(
+    (event: CloseEvent) => {
+      // console.log('[NotificationWS] Connection closed:', event.code, event.reason);
+      setIsConnected(false);
+      clearTimers();
 
-    // Only attempt reconnection if user is still authenticated and close was not clean
-    if (userId && !event.wasClean && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-      const delay = getReconnectDelay(reconnectAttempts);
-      // console.log(
-      //   `[NotificationWS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-      // );
+      // Only attempt reconnection if user is still authenticated and close was not clean
+      if (userId && !event.wasClean && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+        const delay = getReconnectDelay(reconnectAttempts);
+        // console.log(
+        //   `[NotificationWS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
+        // );
 
-      dispatch(setWSConnectionStatus('connecting'));
+        dispatch(setWSConnectionStatus('connecting'));
 
-      reconnectTimeoutRef.current = setTimeout(() => {
-        setReconnectAttempts((prev) => prev + 1);
-      }, delay);
-    } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-      console.error('[NotificationWS] Max reconnection attempts reached');
-      dispatch(setWSConnectionStatus('error'));
-    } else {
-      dispatch(setWSConnectionStatus('disconnected'));
-    }
-  };
+        reconnectTimeoutRef.current = setTimeout(() => {
+          setReconnectAttempts((prev) => prev + 1);
+        }, delay);
+      } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        console.error('[NotificationWS] Max reconnection attempts reached');
+        dispatch(setWSConnectionStatus('error'));
+      } else {
+        dispatch(setWSConnectionStatus('disconnected'));
+      }
+    },
+    [userId, reconnectAttempts, dispatch, clearTimers],
+  );
 
   /**
    * Handle WebSocket connection error event
    * @param event - The error event
    */
-  const handleError = (event: Event) => {
-    console.error('[NotificationWS] Connection error:', event);
-    dispatch(setWSConnectionStatus('error'));
-  };
+  const handleError = useCallback(
+    (event: Event) => {
+      console.error('[NotificationWS] Connection error:', event);
+      dispatch(setWSConnectionStatus('error'));
+    },
+    [dispatch],
+  );
 
   /**
    * Establish WebSocket connection
    */
-  const connect = () => {
+  const connect = useCallback(() => {
     if (!userId) {
       console.log('[NotificationWS] No user ID available, skipping connection');
       return;
@@ -221,12 +230,12 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
       console.error('[NotificationWS] Connection creation error:', error);
       dispatch(setWSConnectionStatus('error'));
     }
-  };
+  }, [userId, dispatch, handleOpen, handleMessage, handleClose, handleError]);
 
   /**
    * Close WebSocket connection gracefully
    */
-  const disconnect = () => {
+  const disconnect = useCallback(() => {
     clearTimers();
 
     if (wsRef.current) {
@@ -238,23 +247,26 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     setIsConnected(false);
     setReconnectAttempts(0);
     dispatch(setWSConnectionStatus('disconnected'));
-  };
+  }, [dispatch, clearTimers]);
 
-  // Effect: Connect when user ID is available, disconnect when user logs out
+  // Effect: Connect when user ID is available
   useEffect(() => {
     if (userId) {
       connect();
-    } else {
-      // User logged out - clean up
-      disconnect();
-      dispatch(clearNotifications());
     }
 
     // Cleanup on unmount
     return () => {
       disconnect();
     };
-  }, [userId, reconnectAttempts]);
+  }, [userId, reconnectAttempts, connect, disconnect]);
+
+  // Effect: Clear notifications when user logs out
+  useEffect(() => {
+    if (!userId) {
+      dispatch(clearNotifications());
+    }
+  }, [userId, dispatch]);
 
   // Get current connection status from Redux
   const connectionStatus = useAppSelector((state) => state.notification.wsConnectionStatus);

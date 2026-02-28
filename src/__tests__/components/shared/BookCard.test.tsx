@@ -140,6 +140,7 @@ describe('BookCard Component', () => {
     ownerId: 'owner-1',
     ownerProfilePhoto: 'https://example.com/profile.jpg',
     coverPhotoUrls: ['https://example.com/cover1.jpg', 'https://example.com/cover2.jpg'],
+    offeredAgo: '29 mins. ago',
     owner: {
       id: 'owner-1',
       name: 'John Doe',
