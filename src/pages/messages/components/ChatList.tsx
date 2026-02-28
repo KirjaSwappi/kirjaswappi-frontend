@@ -24,6 +24,7 @@ export default function ChatList() {
     data: inboxData,
     isLoading,
     isSuccess,
+    isError,
   } = useGetInboxQuery(
     { userId: userInformation.id as string },
     { skip: !userInformation.id || (chats && chats.length > 0) },
@@ -63,6 +64,15 @@ export default function ChatList() {
         {Array.from({ length: 6 }).map((_, i) => (
           <ChatListSkeleton key={i} />
         ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full px-4 text-center">
+        <p className="text-red-500 font-medium">Failed to load conversations</p>
+        <p className="text-xs text-gray-400 mt-1">Please try refreshing the page</p>
       </div>
     );
   }

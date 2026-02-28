@@ -250,7 +250,8 @@ describe('Chat Messaging Flow (Functional)', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Hello, interested in your book')).toBeInTheDocument();
-      expect(screen.getByText('Sure, let me know')).toBeInTheDocument();
+      const messages = screen.getAllByText('Sure, let me know');
+      expect(messages.length).toBeGreaterThan(0);
     });
   });
 

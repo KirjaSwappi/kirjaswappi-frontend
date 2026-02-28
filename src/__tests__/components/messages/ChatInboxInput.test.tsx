@@ -199,18 +199,45 @@ describe('ChatInboxInput Component', () => {
     });
   });
 
-  it('should add optimistic message to Redux before API call', async () => {
+  it('should add optimistic message and remove it after send', async () => {
     const user = userEvent.setup();
+    let resolvePromise: () => void;
+    const delayedPromise = new Promise<void>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    // Mock with delayed resolution so we can check optimistic state
+    mockSendChatMessage.mockReturnValue({
+      unwrap: () => delayedPromise,
+    });
 
     const { store } = renderWithProviders(<ChatInboxInput />, { preloadedState });
 
     const input = screen.getByPlaceholderText('Write here...');
-    await user.type(input, 'Optimistic message{Enter}');
+    await user.type(input, 'Optimistic message');
 
+    // Submit the form
+    await user.keyboard('{Enter}');
+
+    // Check optimistic message is added immediately
     await waitFor(() => {
       const state = store.getState();
       const messages = state.chat.chats[0].messages;
-      expect(messages.some((m) => m.text === 'Optimistic message')).toBe(true);
+      const hasTempMessage = messages.some(
+        (m) => m.text === 'Optimistic message' && String(m.id).startsWith('temp-'),
+      );
+      expect(hasTempMessage).toBe(true);
+    });
+
+    // Resolve the API call
+    resolvePromise!();
+
+    // After successful send, temp messages should be removed
+    await waitFor(() => {
+      const state = store.getState();
+      const messages = state.chat.chats[0].messages;
+      const hasTempMessage = messages.some((m) => String(m.id).startsWith('temp-'));
+      expect(hasTempMessage).toBe(false);
     });
   });
 });

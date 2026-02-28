@@ -107,12 +107,15 @@ const chatSlice = createSlice({
       });
       const uniqueItems = Array.from(uniqueItemsMap.values());
 
-      // Transform inbox items to chat format
+      // Transform inbox items to chat format, preserving existing messages
       state.chats = uniqueItems.map((item) => {
         const partnerName =
           item.conversationType === 'sent' ? item.receiver.name : item.sender.name;
         const bookTitle = item.bookToSwapWith?.title || 'Unknown Book';
         const lastText = item.note || `${item.sender.name} sent a message`;
+
+        // Find existing chat to preserve loaded messages
+        const existingChat = state.chats.find((c) => c.id === item.id);
 
         return {
           id: item.id,
@@ -128,7 +131,7 @@ const chatSlice = createSlice({
           swapStatus: item.swapStatus,
           swapType: item.swapType,
           note: item.note,
-          messages: [
+          messages: existingChat?.messages || [
             {
               id: item.id,
               sender: item.conversationType === 'sent' ? 'me' : 'them',
@@ -215,7 +218,7 @@ const chatSlice = createSlice({
       const { chatId, text, senderId, userId } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
-        const isMe = senderId === userId || chat.conversationType === 'sent';
+        const isMe = senderId === userId;
         const message = {
           id: Date.now(),
           sender: isMe ? ('me' as const) : ('them' as const),
@@ -248,6 +251,13 @@ const chatSlice = createSlice({
         });
       }
     },
+    removeTempMessages: (state, action: PayloadAction<{ chatId: string }>) => {
+      const { chatId } = action.payload;
+      const chat = state.chats.find((c) => c.id === chatId);
+      if (chat) {
+        chat.messages = chat.messages.filter((m) => !String(m.id).startsWith('temp-'));
+      }
+    },
   },
 });
 
@@ -259,5 +269,6 @@ export const {
   setInboxList,
   updateInboxItem,
   addChatMessages,
+  removeTempMessages,
 } = chatSlice.actions;
 export default chatSlice.reducer;

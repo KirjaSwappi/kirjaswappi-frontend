@@ -8,7 +8,7 @@ import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
 import { showToast } from '../../../components/shared/toast';
 import { useSendChatMessageMutation } from '../../../redux/feature/messages/inboxApi';
-import { addChatMessages } from '../../../redux/feature/messages/messagesSlice';
+import { addChatMessages, removeTempMessages } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { MessagesType, messagesSchema } from '../Schema';
 import FilesUpload from './FilesUpload';
@@ -82,6 +82,8 @@ export default function ChatInboxInput() {
         images: imageFiles.length > 0 ? imageFiles : undefined,
       }).unwrap();
 
+      // Remove temp optimistic messages after successful send
+      dispatch(removeTempMessages({ chatId: selectedChatId }));
       reset();
     } catch (error) {
       showToast('error', 'Failed to send message');
