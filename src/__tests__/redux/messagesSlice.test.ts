@@ -47,7 +47,7 @@ describe('messagesSlice', () => {
   };
 
   describe('selectChat', () => {
-    it('should select a chat and mark it as read', () => {
+    it('should select a chat without modifying unread status', () => {
       const stateWithChats: ChatState = {
         chats: [
           {
@@ -66,9 +66,10 @@ describe('messagesSlice', () => {
       const result = messagesSlice(stateWithChats, selectChat('chat-1'));
 
       expect(result.selectedChatId).toBe('chat-1');
-      expect(result.chats[0].unread).toBe(false);
-      expect(result.chats[0].unreadMessageCount).toBe(0);
-      expect(result.chats[0].messages[0].unread).toBe(false);
+      // Unread status is now managed by backend, not local state
+      expect(result.chats[0].unread).toBe(true);
+      expect(result.chats[0].unreadMessageCount).toBe(3);
+      expect(result.chats[0].messages[0].unread).toBe(true);
     });
 
     it('should handle selecting non-existent chat', () => {

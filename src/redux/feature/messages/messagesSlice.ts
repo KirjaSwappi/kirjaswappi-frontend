@@ -87,12 +87,6 @@ const chatSlice = createSlice({
   reducers: {
     selectChat: (state, action: PayloadAction<string>) => {
       state.selectedChatId = action.payload;
-      const chat = state.chats.find((c) => c.id === action.payload);
-      if (chat) {
-        chat.unread = false;
-        chat.unreadMessageCount = 0;
-        chat.messages = chat.messages.map((m) => ({ ...m, unread: false }));
-      }
     },
     resetChat: (state) => {
       state.selectedChatId = '';
