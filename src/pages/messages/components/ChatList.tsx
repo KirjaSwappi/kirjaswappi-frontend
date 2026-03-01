@@ -36,6 +36,10 @@ export default function ChatList() {
   useEffect(() => {
     if (!isSuccess || !Array.isArray(inboxData) || inboxData.length === 0) return;
 
+    console.log('[ChatList] Inbox data from API:', inboxData);
+    console.log('[ChatList] First item unreadMessageCount:', inboxData[0]?.unreadMessageCount);
+    console.log('[ChatList] First item isUnread:', (inboxData[0] as any)?.isUnread);
+
     dispatch(setInboxList(inboxData));
 
     if (!hasAutoSelected.current && !selectedChatId) {
