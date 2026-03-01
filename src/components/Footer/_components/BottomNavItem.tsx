@@ -2,21 +2,35 @@ import { Link } from 'react-router-dom';
 import Image from '../../shared/Image';
 
 interface IBottomNavItem {
-  route?: string;
-  icon: string;
-  isActive: boolean;
-  value: string;
+  readonly route?: string;
+  readonly icon: string;
+  readonly isActive: boolean;
+  readonly value: string;
+  readonly badgeCount?: number;
 }
 
-export default function BottomNavItem({ route, icon, isActive, value }: IBottomNavItem) {
+export default function BottomNavItem({
+  route,
+  icon,
+  isActive,
+  value,
+  badgeCount,
+}: IBottomNavItem) {
+  const showBadge = badgeCount && badgeCount > 0;
+
   return (
     <Link
       to={route || '#'}
-      className={`flex flex-col items-center gap-1 p-1 `}
+      className={`flex flex-col items-center gap-1 p-1 relative`}
       style={{
         transition: 'background-color 0.2s ease-in-out',
       }}
     >
+      {showBadge && (
+        <span className="absolute top-0 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+          {badgeCount > 9 ? '9+' : badgeCount}
+        </span>
+      )}
       <div className="h-7 flex items-center justify-center">
         <Image
           src={icon}
