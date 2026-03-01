@@ -6,9 +6,10 @@ import locationIcon from '../../../assets/location-icon.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import { resetChat } from '../../../redux/feature/messages/messagesSlice';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import ChatInfoDropdown from './ChatInfoDropdown';
 import ConfirmModal from './ConfirmModal';
+
 type IChatWindowTopBarProps = {
   bookOpen: boolean;
   setBookOpen: (open: boolean) => void;
@@ -19,6 +20,21 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const [blockOpen, setBlockOpen] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+
+  const selectedChat = chats.find((chat) => chat.id === selectedChatId);
+
+  if (!selectedChat) {
+    return null;
+  }
+
+  const partnerName =
+    selectedChat.conversationType === 'sent'
+      ? selectedChat.receiver?.name
+      : selectedChat.sender?.name;
+  const bookTitle = selectedChat.bookToSwapWith?.title || 'Unknown Book';
+  const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
+  const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
 
   return (
     <div className="bg-white">
@@ -34,7 +50,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           >
             <IoIosArrowBack size={20} className="text-black" />
           </Button>
-          <h1 className="font-poppins text-sm">Minhazur Rahman</h1>
+          <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
           <ChatInfoDropdown
             onViewProfile={() => alert('View Profile')}
             onMute={() => setMuteOpen(true)}
@@ -44,13 +60,11 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         </div>
         <div className="border-t border-platinumMix">
           <div className="flex gap-4 py-[11px] px-4">
-            <Image src={book3} alt="Books" className="w-[37px]" />
+            <Image src={book3} alt="Book" className="w-[37px] h-[37px] object-cover rounded" />
             <div className="flex flex-col gap-1">
-              <h3 className="font-poppins text-xs text-smokyBlack font-medium">
-                Man’s search for meaning
-              </h3>
+              <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
               <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
-                by Rahat
+                by {bookAuthor}
               </p>
             </div>
           </div>
@@ -58,30 +72,30 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         <div className="bg-[#DEE7F5] px-4 py-3">
           <div className="flex items-center justify-between">
             <h3 className="font-poppins text-xs text-grayDark font-normal">
-              Rahat Hasan wants to swap with this book
+              {selectedChat.conversationType === 'sent'
+                ? `You want to swap with this book`
+                : `${partnerName} wants to swap with this book`}
             </h3>
             <Button
               onClick={() => setBookOpen(!bookOpen)}
               className="w-6 h-6 flex items-center justify-center bg-white rounded-full text-grayDark"
             >
-              <IoIosArrowDown />
+              <IoIosArrowDown className={`transition-transform ${bookOpen ? 'rotate-180' : ''}`} />
             </Button>
           </div>
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
-                <Image src={book3} alt="Books" className="w-[71px]" />
+                <Image src={book3} alt="Book" className="w-[71px] h-[71px] object-cover rounded" />
                 <div className="flex flex-col gap-1">
-                  <h3 className="font-poppins text-xs text-smokyBlack font-medium">
-                    Man’s search for meaning
-                  </h3>
+                  <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
-                    by Rahat
+                    by {bookAuthor}
                   </p>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
                     Book Condition:{' '}
-                    <span className="text-[#3FBA49] bg-[#3FBA4914] py-0.5 px-1.5 rounded-md">
-                      Used Like New
+                    <span className="text-[#3FBA49] bg-[#3FBA4914] py-0.5 px-1.5 rounded-md capitalize">
+                      {bookCondition.toLowerCase().replace('_', ' ')}
                     </span>
                   </p>
                   <div className="flex items-center mb-1.5 lg:mb-2">
@@ -91,7 +105,9 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                       className="mr-1 flex-shrink-0 w-4 h-4"
                     />
                     <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                      Helsinki
+                      {selectedChat.conversationType === 'sent'
+                        ? selectedChat.receiver?.name
+                        : selectedChat.sender?.name}
                     </span>
                   </div>
                 </div>
@@ -114,7 +130,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
       <ConfirmModal
         open={blockOpen}
         onConfirm={() => {
-          //   setBlockOpen(false);
+          setBlockOpen(false);
           alert('Blocked!');
         }}
         btnValue="Block"

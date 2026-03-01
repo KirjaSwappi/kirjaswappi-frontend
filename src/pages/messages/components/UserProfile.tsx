@@ -1,30 +1,40 @@
 import { FaRegUser } from 'react-icons/fa6';
-import { useParams } from 'react-router-dom';
 import campaign from '../../../assets/Campaign.jpg';
 import locationIcon from '../../../assets/location-icon.png';
 import Image from '../../../components/shared/Image';
-
 import {
   useGetUserByIdQuery,
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
+
 export default function UserProfile() {
-  const params = useParams();
-  const {
-    userInformation: { id },
-  } = useAppSelector((state) => state.auth);
-  const userId = params.id || id;
+  const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+
+  const selectedChat = chats.find((chat) => chat.id === selectedChatId);
+
+  const partnerId =
+    selectedChat?.conversationType === 'sent'
+      ? selectedChat.receiver?.id
+      : selectedChat?.sender?.id;
+
   const { data: imageData, isLoading } = useGetUserProfileImageQuery(
-    { userId: userId },
-    { skip: !userId },
+    { userId: partnerId as string },
+    { skip: !partnerId },
   );
+
   const { data, isLoading: isUserLoading } = useGetUserByIdQuery(
-    { userId: userId as string },
-    {
-      skip: !userId,
-    },
+    { userId: partnerId as string },
+    { skip: !partnerId },
   );
+
+  if (!selectedChat || !partnerId) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500 text-sm">Select a chat to view profile</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative pt-6 2xl:pt-10 w-full h-full">
@@ -65,7 +75,7 @@ export default function UserProfile() {
                   {favItem}
                 </p>
                 <span
-                  className={`lg:hidden bg- ${
+                  className={`lg:hidden ${
                     data?.favGenres.length - 1 === index ? 'hidden' : 'block'
                   } inline-block mx-2 font-poppins font-light text-sm`}
                 >
@@ -83,19 +93,21 @@ export default function UserProfile() {
         <div className="flex items-center py-2 px-4 justify-evenly">
           <div className="flex flex-col gap-1 items-center">
             <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
-            <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
+            <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
           </div>
           <span className="h-12 w-[1px] block bg-platinumMix"></span>
           <div className="flex flex-col gap-1 items-center">
             <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
-            <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
+            <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
           </div>
         </div>
       </div>
       <div className="hidden lg:block border-b border-AntiFlashWhite px-4 py-5">
         <div className="flex flex-row gap-1 items-center">
           <Image src={locationIcon} alt="edit" className="w-4" />
-          <p className="font-poppins text-xs font-light text-blackOlive">Senate Square, Helsinki</p>
+          <p className="font-poppins text-xs font-light text-blackOlive">
+            {data?.city || 'Location not specified'}
+          </p>
         </div>
       </div>
       <div>
