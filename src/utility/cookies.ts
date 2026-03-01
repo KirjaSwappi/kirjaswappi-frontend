@@ -21,13 +21,22 @@ export const getCookie = (name: string) => {
     const cookie = cookiesArray[i].trim();
 
     if (cookie.indexOf(nameEQ) === 0) {
-      const encryptedValue = cookie.substring(nameEQ.length, cookie.length);
-      const decryptedValue = CryptoJS.AES.decrypt(
-        encryptedValue,
-        import.meta.env.VITE_SECRET_KEY,
-      ).toString(CryptoJS.enc.Utf8);
+      try {
+        const encryptedValue = cookie.substring(nameEQ.length, cookie.length);
+        const decryptedValue = CryptoJS.AES.decrypt(
+          encryptedValue,
+          import.meta.env.VITE_SECRET_KEY,
+        ).toString(CryptoJS.enc.Utf8);
 
-      return JSON.parse(decryptedValue);
+        if (!decryptedValue) {
+          return null;
+        }
+
+        return JSON.parse(decryptedValue);
+      } catch (error) {
+        console.error('Error decrypting cookie:', error);
+        return null;
+      }
     }
   }
   return null;
