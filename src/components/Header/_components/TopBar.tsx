@@ -19,17 +19,10 @@ export default function TopBar() {
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
   const totalUnreadCount = useAppSelector(selectTotalUnreadCount);
-  const chats = useAppSelector((state) => state.chat.chats);
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const filteredMenu = menu.filter(({ isShow }) => isShow);
   const shouldShowTopBarSearch = pathname === '/map';
-
-  console.log('[TopBar] Total unread count:', totalUnreadCount);
-  console.log(
-    '[TopBar] Chats:',
-    chats.map((c) => ({ id: c.id, unreadMessageCount: c.unreadMessageCount })),
-  );
 
   const {
     clicked: searchClicked,
@@ -67,18 +60,6 @@ export default function TopBar() {
                     const isActive = pathname === route;
                     const isMessagesMenu = value === 'messages';
                     const showBadge = isMessagesMenu && totalUnreadCount > 0;
-
-                    if (isMessagesMenu) {
-                      console.log(
-                        '[TopBar Badge] isMessagesMenu:',
-                        isMessagesMenu,
-                        'totalUnreadCount:',
-                        totalUnreadCount,
-                        'showBadge:',
-                        showBadge,
-                      );
-                    }
-
                     return (
                       <div key={id} className="flex items-center">
                         <Link
