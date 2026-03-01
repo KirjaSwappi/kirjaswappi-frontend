@@ -27,7 +27,10 @@ export default function ChatList() {
     isError,
   } = useGetInboxQuery(
     { userId: userInformation.id as string },
-    { skip: !userInformation.id || (chats && chats.length > 0) },
+    {
+      skip: !userInformation.id,
+      refetchOnMountOrArgChange: 30,
+    },
   );
 
   useEffect(() => {

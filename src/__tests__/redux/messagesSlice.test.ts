@@ -7,6 +7,7 @@ import messagesSlice, {
   sendMessage,
   receiveMessage,
   addChatMessages,
+  selectTotalUnreadCount,
   ChatState,
   InboxItem,
 } from '../../redux/feature/messages/messagesSlice';
@@ -418,6 +419,104 @@ describe('messagesSlice', () => {
       expect(result.chats[0].messages[0].text).toBe('First');
       expect(result.chats[0].messages[1].text).toBe('Second');
       expect(result.chats[0].messages[2].text).toBe('Third');
+    });
+  });
+
+  describe('selectTotalUnreadCount', () => {
+    it('should return total unread count from all chats', () => {
+      const state = {
+        chat: {
+          chats: [
+            {
+              id: '1',
+              name: 'Chat 1',
+              unread: true,
+              unreadMessageCount: 3,
+              messages: [],
+            },
+            {
+              id: '2',
+              name: 'Chat 2',
+              unread: true,
+              unreadMessageCount: 5,
+              messages: [],
+            },
+            {
+              id: '3',
+              name: 'Chat 3',
+              unread: false,
+              unreadMessageCount: 0,
+              messages: [],
+            },
+          ],
+          selectedChatId: '',
+        },
+      };
+
+      expect(selectTotalUnreadCount(state)).toBe(8);
+    });
+
+    it('should handle chats with undefined unreadMessageCount', () => {
+      const state = {
+        chat: {
+          chats: [
+            {
+              id: '1',
+              name: 'Chat 1',
+              unread: true,
+              unreadMessageCount: 3,
+              messages: [],
+            },
+            {
+              id: '2',
+              name: 'Chat 2',
+              unread: true,
+              unreadMessageCount: undefined,
+              messages: [],
+            },
+          ],
+          selectedChatId: '',
+        },
+      };
+
+      expect(selectTotalUnreadCount(state)).toBe(3);
+    });
+
+    it('should return 0 when no chats have unread messages', () => {
+      const state = {
+        chat: {
+          chats: [
+            {
+              id: '1',
+              name: 'Chat 1',
+              unread: false,
+              unreadMessageCount: 0,
+              messages: [],
+            },
+            {
+              id: '2',
+              name: 'Chat 2',
+              unread: false,
+              unreadMessageCount: 0,
+              messages: [],
+            },
+          ],
+          selectedChatId: '',
+        },
+      };
+
+      expect(selectTotalUnreadCount(state)).toBe(0);
+    });
+
+    it('should return 0 when chats array is empty', () => {
+      const state = {
+        chat: {
+          chats: [],
+          selectedChatId: '',
+        },
+      };
+
+      expect(selectTotalUnreadCount(state)).toBe(0);
     });
   });
 });
