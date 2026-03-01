@@ -26,7 +26,10 @@ export default function TopBar() {
   const shouldShowTopBarSearch = pathname === '/map';
 
   console.log('[TopBar] Total unread count:', totalUnreadCount);
-  console.log('[TopBar] Chats:', chats.map(c => ({ id: c.id, unreadMessageCount: c.unreadMessageCount })));
+  console.log(
+    '[TopBar] Chats:',
+    chats.map((c) => ({ id: c.id, unreadMessageCount: c.unreadMessageCount })),
+  );
 
   const {
     clicked: searchClicked,
@@ -66,7 +69,14 @@ export default function TopBar() {
                     const showBadge = isMessagesMenu && totalUnreadCount > 0;
 
                     if (isMessagesMenu) {
-                      console.log('[TopBar Badge] isMessagesMenu:', isMessagesMenu, 'totalUnreadCount:', totalUnreadCount, 'showBadge:', showBadge);
+                      console.log(
+                        '[TopBar Badge] isMessagesMenu:',
+                        isMessagesMenu,
+                        'totalUnreadCount:',
+                        totalUnreadCount,
+                        'showBadge:',
+                        showBadge,
+                      );
                     }
 
                     return (

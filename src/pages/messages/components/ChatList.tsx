@@ -38,7 +38,7 @@ export default function ChatList() {
 
     console.log('[ChatList] Inbox data from API:', inboxData);
     console.log('[ChatList] First item unreadMessageCount:', inboxData[0]?.unreadMessageCount);
-    console.log('[ChatList] First item isUnread:', (inboxData[0] as any)?.isUnread);
+    console.log('[ChatList] First item unread:', inboxData[0]?.unread);
 
     dispatch(setInboxList(inboxData));
 
