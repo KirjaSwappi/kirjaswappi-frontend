@@ -52,6 +52,10 @@ export const inboxApi = api.injectEndpoints({
       providesTags: (_result, _error, { swapRequestId }) => [
         { type: 'ChatMessages', id: swapRequestId },
       ],
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(api.util.invalidateTags(['Inbox']));
+      },
     }),
 
     sendChatMessage: builder.mutation<

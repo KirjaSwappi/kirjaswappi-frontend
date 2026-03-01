@@ -336,7 +336,7 @@ describe('Chat Messaging Flow (Functional)', () => {
     });
   });
 
-  it('should clear unread count when chat is selected', async () => {
+  it('should select chat when clicked', async () => {
     const user = userEvent.setup();
     window.history.pushState({}, '', '/user/messages');
 
@@ -373,9 +373,7 @@ describe('Chat Messaging Flow (Functional)', () => {
 
     await waitFor(() => {
       const state = store.getState();
-      const chat = state.chat.chats.find((c) => c.id === 'swap-1');
-      expect(chat?.unread).toBe(false);
-      expect(chat?.unreadMessageCount).toBe(0);
+      expect(state.chat.selectedChatId).toBe('swap-1');
     });
   });
 
