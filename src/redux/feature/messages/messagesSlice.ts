@@ -261,6 +261,10 @@ const chatSlice = createSlice({
   },
 });
 
+// =========== SELECTORS ===========
+export const selectTotalUnreadCount = (state: { chat: ChatState }) =>
+  state.chat.chats.reduce((total, chat) => total + (chat.unreadMessageCount || 0), 0);
+
 export const {
   selectChat,
   resetChat,
