@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { renderWithProviders } from '../../utils/test-utils';
 import TopBar from '../../../components/Header/_components/TopBar';
