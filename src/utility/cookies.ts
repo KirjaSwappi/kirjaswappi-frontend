@@ -29,12 +29,19 @@ export const getCookie = (name: string) => {
         ).toString(CryptoJS.enc.Utf8);
 
         if (!decryptedValue) {
+          if (import.meta.env.DEV) {
+            console.error(`Empty decrypted cookie value for "${name}", clearing cookie.`);
+          }
+          clearCookie(name);
           return null;
         }
 
         return JSON.parse(decryptedValue);
       } catch (error) {
-        console.error('Error decrypting cookie:', error);
+        if (import.meta.env.DEV) {
+          console.error('Error decrypting cookie:', error);
+        }
+        clearCookie(name);
         return null;
       }
     }
