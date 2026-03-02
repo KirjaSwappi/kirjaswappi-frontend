@@ -123,9 +123,9 @@ describe('TopBar Unread Badge', () => {
       auth: { userInformation: { id: 'user-1' }, isLoggedIn: true },
       chat: {
         chats: [
-          { id: 'chat-1', name: 'Book 1', unreadMessageCount: 2, messages: [] },
-          { id: 'chat-2', name: 'Book 2', unreadMessageCount: 3, messages: [] },
-          { id: 'chat-3', name: 'Book 3', unreadMessageCount: 1, messages: [] },
+          { id: 'chat-1', name: 'Book 1', unread: true, unreadMessageCount: 2, messages: [] },
+          { id: 'chat-2', name: 'Book 2', unread: true, unreadMessageCount: 3, messages: [] },
+          { id: 'chat-3', name: 'Book 3', unread: true, unreadMessageCount: 1, messages: [] },
         ],
         selectedChatId: '',
       },
