@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { menu } from '../../../data/menu';
 import { useMouseClick } from '../../../hooks/useMouse';
+import { selectTotalUnreadCount } from '../../../redux/feature/messages/messagesSlice';
 import { useAppSelector } from '../../../redux/hooks';
 import Button from '../../shared/Button';
 import Image from '../../shared/Image';
@@ -17,6 +18,7 @@ import NotificationBell from './NotificationBell';
 export default function TopBar() {
   const { clicked, setClicked, reference } = useMouseClick();
   const { userInformation } = useAppSelector((state) => state.auth);
+  const totalUnreadCount = useAppSelector(selectTotalUnreadCount);
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const filteredMenu = menu.filter(({ isShow }) => isShow);
@@ -56,16 +58,23 @@ export default function TopBar() {
                 >
                   {filteredMenu.map(({ id, route, icon, value }, index) => {
                     const isActive = pathname === route;
+                    const isMessagesMenu = value === 'messages';
+                    const showBadge = isMessagesMenu && totalUnreadCount > 0;
                     return (
                       <div key={id} className="flex items-center">
                         <Link
                           to={route || '#'}
-                          className={`flex items-center justify-center gap-2 rounded-full transition-all duration-200 ease-in-out w-[120px] h-10 ${
+                          className={`flex items-center justify-center gap-2 rounded-full transition-all duration-200 ease-in-out w-[120px] h-10 relative ${
                             isActive
                               ? 'text-primary font-medium bg-AntiFlashWhite'
                               : 'text-[#A6A6A6]'
                           }`}
                         >
+                          {showBadge && (
+                            <span className="absolute -top-1 left-8 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                              {totalUnreadCount > 9 ? '9+' : totalUnreadCount}
+                            </span>
+                          )}
                           <Image
                             src={icon}
                             alt="icon"

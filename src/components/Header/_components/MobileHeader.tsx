@@ -26,7 +26,7 @@ export default function MobileHeader() {
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
   const isHomePage = pathname === '/';
-  console.log(searchToggle);
+
   return (
     <div
       className={`${

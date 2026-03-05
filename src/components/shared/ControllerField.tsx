@@ -16,6 +16,7 @@ interface ControlledInputFieldProps {
   radioOptions?: { label: string; value: string }[];
   showErrorMessage?: boolean;
   autoComplete?: 'on' | 'off';
+  disabled?: boolean;
 }
 
 const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldProps>(
@@ -28,6 +29,7 @@ const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldPr
       options,
       showErrorMessage = false,
       autoComplete = 'on',
+      disabled = false,
     },
     ref,
   ) => {
@@ -47,6 +49,7 @@ const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldPr
               className={className}
               showErrorMessage={showErrorMessage}
               autoComplete={autoComplete}
+              disabled={disabled}
             />
           ) : type === 'select' ? (
             <Select
@@ -56,6 +59,7 @@ const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldPr
               error={error?.message}
               className={className}
               showErrorMessage={showErrorMessage}
+              disabled={disabled}
             />
           ) : (
             <TextArea
@@ -64,6 +68,7 @@ const ControlledInputField = forwardRef<HTMLInputElement, ControlledInputFieldPr
               error={error?.message}
               className={className}
               showErrorMessage={showErrorMessage}
+              disabled={disabled}
             />
           );
         }}

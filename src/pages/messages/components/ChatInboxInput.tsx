@@ -6,15 +6,21 @@ import sendIcon from '../../../assets/sendIcon.png';
 import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import Image from '../../../components/shared/Image';
-import { sendMessage } from '../../../redux/feature/messages/messagesSlice';
+import { showToast } from '../../../components/shared/toast';
+import { useSendChatMessageMutation } from '../../../redux/feature/messages/inboxApi';
+import { addChatMessages, removeTempMessages } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { messagesSchema, MessagesType } from '../Schema';
+import { MessagesType, messagesSchema } from '../Schema';
 import FilesUpload from './FilesUpload';
 
 export default function ChatInboxInput() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
   const { selectedChatId } = useAppSelector((state) => state.chat);
+  const { userInformation } = useAppSelector((state) => state.auth);
+
+  const [sendChatMessage, { isLoading }] = useSendChatMessageMutation();
+
   const methods = useForm({
     resolver: yupResolver(messagesSchema),
     mode: 'onChange',
@@ -38,29 +44,56 @@ export default function ChatInboxInput() {
     }
   }, [imageFiles]);
 
-  const onSubmit = (data: MessagesType) => {
-    const { message } = data;
-    const images = [];
-    if (data.files?.length) {
-      const fileUrls = data?.files
-        ?.filter((file): file is File => file instanceof File)
-        .map((file) => URL.createObjectURL(file));
-      images.push(...fileUrls);
-    }
+  const onSubmit = async (data: MessagesType) => {
+    if (!selectedChatId || !userInformation.id) return;
 
+    const { message, files } = data;
     const trimmedMessage = message?.trim();
 
-    if (trimmedMessage || images.length > 0) {
+    if (!trimmedMessage && (!files || files.length === 0)) {
+      return;
+    }
+
+    const imageFiles = files?.filter((file): file is File => file instanceof File) || [];
+
+    // Optimistic update
+    if (trimmedMessage || imageFiles.length > 0) {
+      const optimisticMessage = {
+        id: `temp-${Date.now()}`,
+        sender: 'me' as const,
+        text: trimmedMessage || '',
+        time: new Date().toISOString(),
+        images: imageFiles.length > 0 ? imageFiles.map((f) => URL.createObjectURL(f)) : undefined,
+      };
+
       dispatch(
-        sendMessage({
+        addChatMessages({
           chatId: selectedChatId,
-          text: trimmedMessage ?? '',
-          images: images.length > 0 ? images : undefined,
+          messages: [optimisticMessage],
         }),
       );
     }
-    reset();
+
+    try {
+      await sendChatMessage({
+        swapRequestId: selectedChatId,
+        userId: userInformation.id,
+        message: trimmedMessage || undefined,
+        images: imageFiles.length > 0 ? imageFiles : undefined,
+      }).unwrap();
+
+      // Remove temp optimistic messages after successful send
+      dispatch(removeTempMessages({ chatId: selectedChatId }));
+      reset();
+    } catch (error) {
+      showToast('error', 'Failed to send message');
+      console.error('Failed to send message:', error);
+    }
   };
+
+  if (!selectedChatId) {
+    return null;
+  }
 
   return (
     <div className="px-4 py-3 xl:py-4 bg-light lg:bg-white w-full">
@@ -92,6 +125,7 @@ export default function ChatInboxInput() {
               }`}
               placeholder="Write here..."
               autoComplete="off"
+              disabled={isLoading}
             />
             <Button
               onKeyDown={(e) => {
@@ -101,7 +135,8 @@ export default function ChatInboxInput() {
                 }
               }}
               type="submit"
-              className="w-[36px] h-[36px] rounded-full absolute right-2 top-1/2 -translate-y-1/2 flex items-center hover:bg-AntiFlashWhite justify-center"
+              disabled={isLoading}
+              className="w-[36px] h-[36px] rounded-full absolute right-2 top-1/2 -translate-y-1/2 flex items-center hover:bg-AntiFlashWhite justify-center disabled:opacity-50"
             >
               <Image src={sendIcon} alt="upload Image" />
             </Button>

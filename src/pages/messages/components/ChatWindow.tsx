@@ -1,75 +1,111 @@
 import { useEffect, useRef } from 'react';
 import Image from '../../../components/shared/Image';
-import { receiveMessage } from '../../../redux/feature/messages/messagesSlice';
+import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
+import { addChatMessages } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+
 export default function ChatWindow() {
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { chats, selectedChatId } = useAppSelector((state) => state.chat);
+  const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+  const { userInformation } = useAppSelector((state) => state.auth);
 
   const findChat = chats.find((chat) => chat.id === selectedChatId);
 
+  const {
+    data: chatData,
+    isLoading: isChatLoading,
+    isSuccess: isChatSuccess,
+  } = useGetChatMessagesQuery(
+    { swapRequestId: selectedChatId as string, userId: userInformation.id as string },
+    { skip: !selectedChatId || !userInformation.id },
+  );
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      dispatch(receiveMessage({ chatId: selectedChatId, text: 'Hello, this is a reply!' }));
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [dispatch, selectedChatId]);
+    if (!selectedChatId || !isChatSuccess || !Array.isArray(chatData)) return;
+
+    const mapped = chatData.map((m) => ({
+      id: m.id,
+      sender: m.ownMessage ? ('me' as const) : ('them' as const),
+      text: m.message ?? '',
+      time: m.sentAt,
+      images: m.imageUrls ?? undefined,
+    }));
+
+    dispatch(addChatMessages({ chatId: selectedChatId, messages: mapped }));
+  }, [dispatch, selectedChatId, chatData, isChatSuccess]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [findChat?.messages]);
 
+  if (!selectedChatId) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500">Select a chat to start messaging</p>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full relative">
       <div>
-        {findChat?.messages.map((msg) => {
-          return (
-            <div
-              key={msg.id}
-              className={`flex items-end gap-3 ${
-                msg.sender === 'me' ? 'justify-end' : 'justify-start'
-              }`}
-            >
+        {isChatLoading ? (
+          <div className="p-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-4 bg-gray-200 rounded mb-3 w-3/4" />
+            ))}
+          </div>
+        ) : (
+          <>
+            {(findChat?.messages || []).map((msg) => (
               <div
-                className={`flex flex-col ${
-                  msg.sender === 'me' ? 'items-end' : 'items-start'
-                } max-w-[60%]`}
+                key={msg.id}
+                className={`flex items-end gap-3 mb-4 ${
+                  msg.sender === 'me' ? 'justify-end' : 'justify-start'
+                }`}
               >
-                {msg.images && (
-                  <div>
-                    {msg.images.map((img, index) => (
-                      <Image
-                        key={index}
-                        src={img}
-                        alt={msg.text}
-                        className="rounded-xl max-w-[140px] xl:max-w-[200px] mb-0.5"
-                      />
-                    ))}
-                  </div>
-                )}
-                {msg.text && (
+                <div
+                  className={`flex flex-col ${
+                    msg.sender === 'me' ? 'items-end' : 'items-start'
+                  } max-w-[60%]`}
+                >
+                  {msg.images && msg.images.length > 0 && (
+                    <div className="mb-1">
+                      {msg.images.map((img, index) => (
+                        <Image
+                          key={index}
+                          src={img}
+                          alt={msg.text || 'Image'}
+                          className="rounded-xl max-w-[140px] xl:max-w-[200px] mb-0.5"
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {msg.text && (
+                    <div
+                      className={`inline-block font-poppins text-sm font-normal max-w-fit break-words p-3 rounded-xl ${
+                        msg.sender === 'me' ? 'bg-primary text-white' : 'bg-gray-200 text-black'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  )}
                   <div
-                    className={`inline-block font-poppins text-sm font-normal max-w-fit break-words ${
-                      msg.sender === 'me'
-                        ? 'bg-primary text-white rounded-xl p-3 self-end'
-                        : 'bg-gray-200 text-black rounded-xl self-star'
+                    className={`text-xs mt-1 text-gray-500 ${
+                      msg.sender === 'me' ? 'text-right pr-1' : 'text-left pl-1'
                     }`}
                   >
-                    {msg.text}
+                    {new Date(msg.time).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </div>
-                )}
-                <div
-                  className={`text-sx mt-2 ${
-                    msg.sender === 'me' ? 'text-right pr-3' : 'text-left'
-                  }`}
-                >
-                  {msg.time}
                 </div>
               </div>
-            </div>
-          );
-        })}
+            ))}
+          </>
+        )}
         <div ref={bottomRef} />
       </div>
     </div>

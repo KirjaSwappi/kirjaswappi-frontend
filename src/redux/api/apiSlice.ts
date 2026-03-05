@@ -83,6 +83,8 @@ export const api = createApi({
     'UpdateBook',
     'DeleteBook',
     'SwapRequest',
+    'Inbox',
+    'ChatMessages',
   ],
   endpoints: () => ({}),
 });
