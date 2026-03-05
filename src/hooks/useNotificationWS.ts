@@ -102,7 +102,10 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    */
   const handleMessage = (event: MessageEvent) => {
     try {
-      const message: WSMessage = JSON.parse(event.data);
+      const data = typeof event.data === 'string' ? event.data : '';
+      if (!data) return;
+
+      const message: WSMessage = JSON.parse(data);
 
       // Handle ping message
       if (isPingMessage(message)) {
