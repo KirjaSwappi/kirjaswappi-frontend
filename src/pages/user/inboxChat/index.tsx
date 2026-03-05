@@ -6,22 +6,15 @@ import {
   addMessage,
   setMessages,
   setLoadingMessages,
+  clearMessages,
   ChatMessage,
 } from '../../../redux/feature/chat/chatMessageSlice';
 import { getCookie } from '../../../utility/cookies';
+import { API_BASE, getStompBrokerUrl } from '../../../utils/stomp.utils';
 
 import ChatInput from './_components/ChatInput';
 import ChatHeader from './_components/ChatHeader';
 import MessagesList from './_components/MessageList';
-
-// Derive WS URL from the REST API URL
-const getStompBrokerUrl = (): string => {
-  const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8080/api/v1';
-  const base = apiUrl.replace(/\/api\/v1\/?$/, '');
-  return base.replace(/^http/, 'ws') + '/ws/websocket';
-};
-
-const API_BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8080/api/v1';
 
 export const Index = () => {
   const { id: swapRequestId } = useParams<{ id: string }>();
@@ -74,7 +67,9 @@ export const Index = () => {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log('[InboxChat] STOMP connected');
+        if (import.meta.env.MODE === 'development') {
+          console.log('[InboxChat] STOMP connected');
+        }
 
         // Subscribe to live messages for this conversation
         client.subscribe(`/user/queue/chat/${swapRequestId}`, (frame: IMessage) => {
@@ -106,8 +101,9 @@ export const Index = () => {
     return () => {
       client.deactivate();
       clientRef.current = null;
+      dispatch(clearMessages(swapRequestId));
     };
-  }, [swapRequestId, currentUserId, fetchMessages]);
+  }, [swapRequestId, currentUserId, fetchMessages, dispatch]);
 
   // Fetch swap request details to get peer name for the header
   useEffect(() => {

@@ -1,15 +1,8 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import { useAppSelector } from '../redux/hooks';
 import { getCookie } from '../utility/cookies';
-
-// Derive the STOMP WebSocket URL from the REST API URL
-// e.g. https://api.kirjaswappi.fi/api/v1  ->  wss://api.kirjaswappi.fi/ws
-const getStompBrokerUrl = (): string => {
-  const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8080/api/v1';
-  const base = apiUrl.replace(/\/api\/v1\/?$/, '');
-  return base.replace(/^http/, 'ws') + '/ws/websocket';
-};
+import { getStompBrokerUrl } from '../utils/stomp.utils';
 
 const STOMP_BROKER_URL = getStompBrokerUrl();
 const RECONNECT_DELAY = 5000;
@@ -40,7 +33,7 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
   const userId = useAppSelector((state) => state.auth.userInformation.id);
   const clientRef = useRef<Client | null>(null);
   const activeSubscriptionsRef = useRef<StompSubscription[]>([]);
-  const isConnectedRef = useRef(false);
+  const [isConnected, setIsConnected] = useState(false);
 
   const getAuthToken = (): string | null => {
     return getCookie('jwtToken');
@@ -59,7 +52,7 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
     if (clientRef.current?.active) {
       clientRef.current.deactivate();
     }
-    isConnectedRef.current = false;
+    setIsConnected(false);
   }, []);
 
   const subscribe = useCallback(
@@ -102,7 +95,7 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
       heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log('[StompWS] Connected to broker');
-        isConnectedRef.current = true;
+        setIsConnected(true);
 
         // Set up any subscriptions passed initially
         if (subscriptions) {
@@ -114,7 +107,7 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
       },
       onDisconnect: () => {
         console.log('[StompWS] Disconnected from broker');
-        isConnectedRef.current = false;
+        setIsConnected(false);
       },
       onStompError: (frame) => {
         console.error('[StompWS] STOMP error:', frame.headers['message'], frame.body);
@@ -137,6 +130,6 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
   return {
     subscribe,
     publish,
-    isConnected: isConnectedRef.current,
+    isConnected,
   };
 };

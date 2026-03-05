@@ -101,10 +101,16 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * @param event - The WebSocket message event
    */
   const handleMessage = useCallback(
-    (event: MessageEvent) => {
+    async (event: MessageEvent) => {
       try {
-        const data = typeof event.data === 'string' ? event.data : '';
-        if (!data) return;
+        let data = '';
+        if (typeof event.data === 'string') {
+          data = event.data;
+        } else if (event.data instanceof Blob) {
+          data = await event.data.text();
+        } else if (event.data instanceof ArrayBuffer) {
+          data = new TextDecoder().decode(event.data);
+        }
 
         const message: WSMessage = JSON.parse(data);
 

@@ -12,14 +12,7 @@ import {
   InboxItem,
 } from '../../../redux/feature/chat/chatMessageSlice';
 import { getCookie } from '../../../utility/cookies';
-
-const getStompBrokerUrl = (): string => {
-  const apiUrl = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8080/api/v1';
-  const base = apiUrl.replace(/\/api\/v1\/?$/, '');
-  return base.replace(/^http/, 'ws') + '/ws/websocket';
-};
-
-const API_BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:8080/api/v1';
+import { API_BASE, getStompBrokerUrl } from '../../../utils/stomp.utils';
 
 const Inbox = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -61,7 +54,9 @@ const Inbox = () => {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log('[Inbox] STOMP connected');
+        if (import.meta.env.MODE === 'development') {
+          console.log('[Inbox] STOMP connected');
+        }
 
         // Full inbox update (e.g. on initial subscription)
         client.subscribe('/user/queue/inbox/update', (frame: IMessage) => {
