@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useGetUserByIdQuery } from './redux/feature/auth/authApi';
 import { setUserInformation } from './redux/feature/auth/authSlice';
-import { useAppSelector } from './redux/hooks';
+import { useGetInboxQuery } from './redux/feature/messages/inboxApi';
+import { setInboxList } from './redux/feature/messages/messagesSlice';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 import routes from './routes/route';
 export default function Authenticate() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { data } = useGetUserByIdQuery(
     { userId: userInformation.id as string },
@@ -16,11 +17,22 @@ export default function Authenticate() {
     },
   );
 
+  const { data: inboxData, isSuccess: isInboxSuccess } = useGetInboxQuery(
+    { userId: userInformation.id as string },
+    { skip: !userInformation.id, refetchOnMountOrArgChange: 30 },
+  );
+
   useEffect(() => {
     if (data) {
       dispatch(setUserInformation(data));
     }
   }, [data]);
+
+  useEffect(() => {
+    if (isInboxSuccess && Array.isArray(inboxData)) {
+      dispatch(setInboxList(inboxData));
+    }
+  }, [isInboxSuccess, inboxData, dispatch]);
 
   return (
     <React.Fragment>

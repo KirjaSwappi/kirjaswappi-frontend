@@ -71,7 +71,7 @@ export default function TopBar() {
                           }`}
                         >
                           {showBadge && (
-                            <span className="absolute -top-1 left-8 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                            <span className="absolute -top-1 left-8 bg-red text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
                               {totalUnreadCount > 9 ? '9+' : totalUnreadCount}
                             </span>
                           )}
