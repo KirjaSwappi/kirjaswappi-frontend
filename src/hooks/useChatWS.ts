@@ -1,6 +1,7 @@
 import { Client, IMessage } from '@stomp/stompjs';
 import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
+import { api } from '../redux/api/apiSlice';
 import {
   InboxItem,
   receiveMessage,
@@ -260,6 +261,9 @@ export const useChatWS = (): UseChatWSReturn => {
           // Subscribe to inbox updates
           client.subscribe('/user/queue/inbox/item-update', handleInboxItemUpdate);
           client.subscribe('/user/queue/inbox/update', handleInboxUpdate);
+          client.subscribe('/user/queue/inbox/refresh', () => {
+            dispatch(api.util.invalidateTags(['Inbox']));
+          });
 
           // Trigger initial inbox load
           client.publish({

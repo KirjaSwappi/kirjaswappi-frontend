@@ -252,12 +252,27 @@ const chatSlice = createSlice({
         chat.messages = chat.messages.filter((m) => !String(m.id).startsWith('temp-'));
       }
     },
+    markChatRead: (state, action: PayloadAction<string>) => {
+      const chat = state.chats.find((c) => c.id === action.payload);
+      if (chat) {
+        chat.unread = false;
+        chat.unreadMessageCount = 0;
+      }
+    },
   },
 });
 
 // =========== SELECTORS ===========
 export const selectTotalUnreadCount = (state: { chat: ChatState }) =>
-  state.chat.chats.reduce((total, chat) => total + (chat.unreadMessageCount || 0), 0);
+  state.chat.chats.reduce((total, chat) => {
+    const count =
+      chat.unreadMessageCount && chat.unreadMessageCount > 0
+        ? chat.unreadMessageCount
+        : chat.unread
+          ? 1
+          : 0;
+    return total + count;
+  }, 0);
 
 export const {
   selectChat,
@@ -268,5 +283,6 @@ export const {
   updateInboxItem,
   addChatMessages,
   removeTempMessages,
+  markChatRead,
 } = chatSlice.actions;
 export default chatSlice.reducer;

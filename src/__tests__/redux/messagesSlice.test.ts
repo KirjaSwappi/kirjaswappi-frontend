@@ -479,7 +479,8 @@ describe('messagesSlice', () => {
         },
       };
 
-      expect(selectTotalUnreadCount(state)).toBe(3);
+      // Chat 1 has unreadMessageCount=3, Chat 2 has unread=true (no count) → counts as 1
+      expect(selectTotalUnreadCount(state)).toBe(4);
     });
 
     it('should return 0 when no chats have unread messages', () => {

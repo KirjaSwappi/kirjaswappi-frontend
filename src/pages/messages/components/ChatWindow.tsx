@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import Image from '../../../components/shared/Image';
 import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
-import { addChatMessages } from '../../../redux/feature/messages/messagesSlice';
+import { addChatMessages, markChatRead } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 export default function ChatWindow() {
@@ -33,6 +33,7 @@ export default function ChatWindow() {
     }));
 
     dispatch(addChatMessages({ chatId: selectedChatId, messages: mapped }));
+    dispatch(markChatRead(selectedChatId));
   }, [dispatch, selectedChatId, chatData, isChatSuccess]);
 
   useEffect(() => {
