@@ -142,7 +142,7 @@ export const useChatWS = (): UseChatWSReturn => {
     }
 
     try {
-      stompClientRef.current.subscribe(`/user/queue/chat/${swapRequestId}`, (message) =>
+      stompClientRef.current.subscribe(`/user/queue/chat.${swapRequestId}`, (message) =>
         handleChatMessage(swapRequestId, message),
       );
 
@@ -259,9 +259,9 @@ export const useChatWS = (): UseChatWSReturn => {
           clearReconnectTimeout();
 
           // Subscribe to inbox updates
-          client.subscribe('/user/queue/inbox/item-update', handleInboxItemUpdate);
-          client.subscribe('/user/queue/inbox/update', handleInboxUpdate);
-          client.subscribe('/user/queue/inbox/refresh', () => {
+          client.subscribe('/user/queue/inbox.item-update', handleInboxItemUpdate);
+          client.subscribe('/user/queue/inbox.update', handleInboxUpdate);
+          client.subscribe('/user/queue/inbox.refresh', () => {
             dispatch(api.util.invalidateTags(['Inbox']));
           });
 
@@ -274,7 +274,7 @@ export const useChatWS = (): UseChatWSReturn => {
           // Subscribe to currently selected chat if any
           if (selectedChatId && !subscribedChatsRef.current.has(selectedChatId)) {
             try {
-              client.subscribe(`/user/queue/chat/${selectedChatId}`, (message) =>
+              client.subscribe(`/user/queue/chat.${selectedChatId}`, (message) =>
                 handleChatMessage(selectedChatId, message),
               );
               subscribedChatsRef.current.add(selectedChatId);
