@@ -27,20 +27,9 @@ export interface INotification {
 }
 
 /**
- * WebSocket message types for handling different message kinds
- */
-export interface PingMessage {
-  type: 'ping';
-}
-
-export interface PongMessage {
-  type: 'pong';
-}
-
-/**
  * Union type for all possible WebSocket messages
  */
-export type WSMessage = NotificationPayload | PingMessage | PongMessage;
+export type WSMessage = NotificationPayload;
 
 /**
  * WebSocket connection status states

@@ -12,7 +12,6 @@ const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || 'wss://ans.kirjaswapp
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY = 1000; // 1 second
 const MAX_RECONNECT_DELAY = 30000; // 30 seconds
-const PING_INTERVAL = 30000; // 30 seconds
 
 /**
  * Calculate exponential backoff delay for reconnection attempts
@@ -40,17 +39,6 @@ const isNotificationPayload = (message: WSMessage): message is NotificationPaylo
 };
 
 /**
- * Type guard to check if a message is a ping message
- * @param message - The parsed WebSocket message
- * @returns True if the message is a ping message
- */
-const isPingMessage = (message: WSMessage): message is { type: 'ping' } => {
-  return (
-    typeof message === 'object' && message !== null && 'type' in message && message.type === 'ping'
-  );
-};
-
-/**
  * Custom hook for managing WebSocket connection to the notification service
  * Handles connection lifecycle, reconnection logic, and message processing
  *
@@ -62,39 +50,28 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
 
+  // Stable refs for latest values used inside WS callbacks
+  const userIdRef = useRef(userId);
+  const reconnectAttemptsRef = useRef(reconnectAttempts);
+  useEffect(() => {
+    userIdRef.current = userId;
+  }, [userId]);
+  useEffect(() => {
+    reconnectAttemptsRef.current = reconnectAttempts;
+  }, [reconnectAttempts]);
+
   /**
-   * Clear all timers and intervals
+   * Clear reconnect timer
    */
   const clearTimers = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
     }
-    if (pingIntervalRef.current) {
-      clearInterval(pingIntervalRef.current);
-      pingIntervalRef.current = null;
-    }
   }, []);
-
-  /**
-   * Start ping interval to keep connection alive
-   */
-  const startPingInterval = useCallback(() => {
-    clearTimers();
-    pingIntervalRef.current = setInterval(() => {
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        try {
-          wsRef.current.send(JSON.stringify({ type: 'ping' }));
-        } catch (error) {
-          console.error('[NotificationWS] Error sending ping:', error);
-        }
-      }
-    }, PING_INTERVAL);
-  }, [clearTimers]);
 
   /**
    * Handle incoming WebSocket messages
@@ -113,15 +90,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
         }
 
         const message: WSMessage = JSON.parse(data);
-
-        // Handle ping message
-        if (isPingMessage(message)) {
-          // Send pong response
-          if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(JSON.stringify({ type: 'pong' }));
-          }
-          return;
-        }
 
         // Handle notification payload
         if (isNotificationPayload(message)) {
@@ -159,8 +127,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     setIsConnected(true);
     setReconnectAttempts(0);
     dispatch(setWSConnectionStatus('connected'));
-    startPingInterval();
-  }, [dispatch, startPingInterval]);
+  }, [dispatch]);
 
   /**
    * Handle WebSocket connection close event
@@ -168,30 +135,27 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    */
   const handleClose = useCallback(
     (event: CloseEvent) => {
-      // console.log('[NotificationWS] Connection closed:', event.code, event.reason);
       setIsConnected(false);
       clearTimers();
 
-      // Only attempt reconnection if user is still authenticated and close was not clean
-      if (userId && !event.wasClean && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-        const delay = getReconnectDelay(reconnectAttempts);
-        // console.log(
-        //   `[NotificationWS] Reconnecting in ${delay}ms (attempt ${reconnectAttempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
-        // );
+      const attempts = reconnectAttemptsRef.current;
 
+      // Only attempt reconnection if user is still authenticated and close was not clean
+      if (userIdRef.current && !event.wasClean && attempts < MAX_RECONNECT_ATTEMPTS) {
+        const delay = getReconnectDelay(attempts);
         dispatch(setWSConnectionStatus('connecting'));
 
         reconnectTimeoutRef.current = setTimeout(() => {
           setReconnectAttempts((prev) => prev + 1);
         }, delay);
-      } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      } else if (attempts >= MAX_RECONNECT_ATTEMPTS) {
         console.error('[NotificationWS] Max reconnection attempts reached');
         dispatch(setWSConnectionStatus('error'));
       } else {
         dispatch(setWSConnectionStatus('disconnected'));
       }
     },
-    [userId, reconnectAttempts, dispatch, clearTimers],
+    [dispatch, clearTimers],
   );
 
   /**
@@ -210,7 +174,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * Establish WebSocket connection
    */
   const connect = useCallback(() => {
-    if (!userId) {
+    if (!userIdRef.current) {
       console.log('[NotificationWS] No user ID available, skipping connection');
       return;
     }
@@ -222,7 +186,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     }
 
     try {
-      const wsUrl = `${WS_URL}?userId=${userId}`;
+      const wsUrl = `${WS_URL}?userId=${userIdRef.current}`;
       console.log('[NotificationWS] Connecting to:', wsUrl);
 
       dispatch(setWSConnectionStatus('connecting'));
@@ -239,7 +203,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
       console.error('[NotificationWS] Connection creation error:', error);
       dispatch(setWSConnectionStatus('error'));
     }
-  }, [userId, dispatch, handleOpen, handleMessage, handleClose, handleError]);
+  }, [dispatch, handleOpen, handleMessage, handleClose, handleError]);
 
   /**
    * Close WebSocket connection gracefully
@@ -258,7 +222,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     dispatch(setWSConnectionStatus('disconnected'));
   }, [dispatch, clearTimers]);
 
-  // Effect: Connect when user ID is available
+  // Effect: Connect when user ID is available or reconnect attempt increments
   useEffect(() => {
     if (userId) {
       connect();
@@ -268,7 +232,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     return () => {
       disconnect();
     };
-  }, [userId, reconnectAttempts, connect, disconnect]);
+  }, [userId, reconnectAttempts]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Effect: Clear notifications when user logs out
   useEffect(() => {
