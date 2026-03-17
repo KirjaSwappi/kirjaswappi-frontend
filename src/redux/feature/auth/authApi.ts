@@ -56,7 +56,7 @@ export const authApi = api.injectEndpoints({
         dispatch(bookApi.endpoints.getAllBooks.initiate({}));
       },
     }),
-    sentOTP: builder.query({
+    sentOTP: builder.mutation({
       query: ({ email }) => {
         return {
           url: `/send-otp`,
@@ -74,7 +74,7 @@ export const authApi = api.injectEndpoints({
         };
       },
     }),
-    verifyOTP: builder.query({
+    verifyOTP: builder.mutation({
       query: ({ email, otp }) => {
         return {
           url: `/verify-otp`,
@@ -188,8 +188,8 @@ export const {
   useLoginMutation,
   useDeleteUserMutation,
   useVerifyEmailMutation,
-  useLazySentOTPQuery,
-  useLazyVerifyOTPQuery,
+  useSentOTPMutation,
+  useVerifyOTPMutation,
   useResetPasswordMutation,
   useGetUserProfileImageQuery,
   useGetUserByIdQuery,

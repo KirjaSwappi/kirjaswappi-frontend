@@ -10,8 +10,8 @@ import MessageToastify from '../../../components/shared/MessageToastify';
 import OTP from '../../../components/shared/OTP';
 import { ERROR, SUCCESS } from '../../../constant/MESSAGETYPE';
 import {
-  useLazySentOTPQuery,
-  useLazyVerifyOTPQuery,
+  useSentOTPMutation,
+  useVerifyOTPMutation,
   useResetPasswordMutation,
 } from '../../../redux/feature/auth/authApi';
 import { setAuthMessage, setError, setOtp } from '../../../redux/feature/auth/authSlice';
@@ -28,8 +28,8 @@ interface INewPassForm {
 
 export default function ResetPassword() {
   const dispatch = useDispatch();
-  const [sentOTP] = useLazySentOTPQuery();
-  const [verifyOTP] = useLazyVerifyOTPQuery();
+  const [sentOTP] = useSentOTPMutation();
+  const [verifyOTP] = useVerifyOTPMutation();
   const [resetPassword] = useResetPasswordMutation();
   const navigate = useNavigate();
 

@@ -1,30 +1,39 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import App from '../App';
 import AppErrorBoundary from '../components/error/AppErrorBoundary';
 import GlobalError from '../components/error/GlobalError';
-import AddUpdateBook from '../pages/addUpdateBook';
 import Login from '../pages/auth/login';
 import Register from '../pages/auth/register';
 import ResetPassword from '../pages/auth/resetPassword';
 import BookDetails from '../pages/bookDetails';
 import Books from '../pages/books';
 import Profile from '../pages/profile';
-import EditProfile from '../pages/profile/components/EditProfile';
 import Authenticate from './Authenticate';
 import PrivateRoute from './PrivateRoute';
 
 import NotFound from '../components/error/NotFound';
-import Collaboration from '../pages/Collaboration';
-import ContactUs from '../pages/contactUs/ContactUs';
-import Donation from '../pages/Donation';
-import Feedback from '../pages/FeedBack';
-import Map from '../pages/map';
-import Messages from '../pages/messages/Messages';
-import PrivacyPolicy from '../pages/privacyPolicy';
-import PrivacyPolicyDetail from '../pages/privacyPolicy/components/PrivacyPolicyDetail';
-import ProfileDashboard from '../pages/profile/components/ProfileDashboard';
-import SupportUs from '../pages/support-us';
-import Volunteer from '../pages/volunteer';
+import Spinner from '../components/shared/Spinner';
+
+const AddUpdateBook = lazy(() => import('../pages/addUpdateBook'));
+const EditProfile = lazy(() => import('../pages/profile/components/EditProfile'));
+const Map = lazy(() => import('../pages/map'));
+const Messages = lazy(() => import('../pages/messages/Messages'));
+const Collaboration = lazy(() => import('../pages/Collaboration'));
+const ContactUs = lazy(() => import('../pages/contactUs/ContactUs'));
+const Donation = lazy(() => import('../pages/Donation'));
+const Feedback = lazy(() => import('../pages/FeedBack'));
+const PrivacyPolicy = lazy(() => import('../pages/privacyPolicy'));
+const PrivacyPolicyDetail = lazy(
+  () => import('../pages/privacyPolicy/components/PrivacyPolicyDetail'),
+);
+const ProfileDashboard = lazy(() => import('../pages/profile/components/ProfileDashboard'));
+const SupportUs = lazy(() => import('../pages/support-us'));
+const Volunteer = lazy(() => import('../pages/volunteer'));
+
+function LazyRoute({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<Spinner />}>{children}</Suspense>;
+}
 
 const routes = createBrowserRouter([
   {
@@ -46,63 +55,104 @@ const routes = createBrowserRouter([
       },
       {
         path: '/contact',
-        element: <ContactUs />,
+        element: (
+          <LazyRoute>
+            <ContactUs />
+          </LazyRoute>
+        ),
       },
       {
         path: '/map',
-        element: <Map />,
+        element: (
+          <LazyRoute>
+            <Map />
+          </LazyRoute>
+        ),
       },
       {
         path: '/support-us',
-        element: <SupportUs />,
+        element: (
+          <LazyRoute>
+            <SupportUs />
+          </LazyRoute>
+        ),
       },
       {
         path: '/privacy-policy',
-        element: <PrivacyPolicy />,
+        element: (
+          <LazyRoute>
+            <PrivacyPolicy />
+          </LazyRoute>
+        ),
       },
       {
         path: '/contact-us',
-        element: <ContactUs />,
+        element: (
+          <LazyRoute>
+            <ContactUs />
+          </LazyRoute>
+        ),
       },
       {
         path: '/collaboration',
-        element: <Collaboration />,
+        element: (
+          <LazyRoute>
+            <Collaboration />
+          </LazyRoute>
+        ),
       },
       {
         path: '/donation',
-        element: <Donation />,
+        element: (
+          <LazyRoute>
+            <Donation />
+          </LazyRoute>
+        ),
       },
       {
         path: '/volunteer',
-        element: <Volunteer />,
+        element: (
+          <LazyRoute>
+            <Volunteer />
+          </LazyRoute>
+        ),
       },
       {
         path: '/feedback',
-        element: <Feedback />,
+        element: (
+          <LazyRoute>
+            <Feedback />
+          </LazyRoute>
+        ),
       },
       {
         path: '/privacy-policy/:sectionKey',
-        element: <PrivacyPolicyDetail />,
+        element: (
+          <LazyRoute>
+            <PrivacyPolicyDetail />
+          </LazyRoute>
+        ),
       },
       {
         path: '/profile',
-        element: (
-          // <PrivateRoute>
-          <Profile />
-          // </PrivateRoute>
-        ),
+        element: <Profile />,
         children: [
           {
-            loader: () => <p>Loading...</p>,
             index: true,
             path: 'user-profile/:id',
-            element: <ProfileDashboard />,
+            element: (
+              <LazyRoute>
+                <ProfileDashboard />
+              </LazyRoute>
+            ),
           },
           {
             path: 'edit-user',
             element: (
               <PrivateRoute>
-                <EditProfile />
+                <LazyRoute>
+                  <EditProfile />
+                </LazyRoute>
               </PrivateRoute>
             ),
           },
@@ -110,7 +160,9 @@ const routes = createBrowserRouter([
             path: 'add-book',
             element: (
               <PrivateRoute>
-                <AddUpdateBook />
+                <LazyRoute>
+                  <AddUpdateBook />
+                </LazyRoute>
               </PrivateRoute>
             ),
           },
@@ -118,7 +170,9 @@ const routes = createBrowserRouter([
             path: 'update-book/:id',
             element: (
               <PrivateRoute>
-                <AddUpdateBook />
+                <LazyRoute>
+                  <AddUpdateBook />
+                </LazyRoute>
               </PrivateRoute>
             ),
           },
@@ -134,23 +188,27 @@ const routes = createBrowserRouter([
         children: [
           {
             path: 'messages',
-            element: <Messages />,
+            element: (
+              <LazyRoute>
+                <Messages />
+              </LazyRoute>
+            ),
           },
           {
             path: 'messages/:id',
-            element: <Messages />,
+            element: (
+              <LazyRoute>
+                <Messages />
+              </LazyRoute>
+            ),
           },
         ],
-      },
-      {
-        path: '/map',
-        element: <Profile />,
       },
       {
         path: '/message',
         element: (
           <PrivateRoute>
-            <Navigate to="/inbox" replace />
+            <Navigate to="/user/messages" replace />
           </PrivateRoute>
         ),
       },
@@ -178,33 +236,12 @@ const routes = createBrowserRouter([
           </Authenticate>
         ),
       },
-      // {
-      //   // path: "/profile",
-      //   // element: (
-      //   //   <PrivateRoute>
-      //   //     {" "}
-      //   //     <User />{" "}
-      //   //   </PrivateRoute>
-      //   // ),
-      //   children: [
-      //     // {
-      //     //   index: true,
-      //     //   element: <UserProfile />,
-      //     // },
-
-      //   ],
-      // },
       {
         path: '*',
         element: <NotFound />,
       },
     ],
   },
-
-  // {
-  //   path: "/notFound",
-  //   element: <NotFound />,
-  // },
 ]);
 
 export default routes;
