@@ -11,10 +11,9 @@ interface ApiErrorPayload {
   };
 }
 
-export function extractApiErrorMessage(
-  payload: FetchBaseQueryError | undefined,
-): string | undefined {
-  const data = (payload as FetchBaseQueryError | undefined)?.data as ApiErrorPayload | undefined;
+export function extractApiErrorMessage(payload: unknown): string | undefined {
+  if (!isFetchBaseQueryError(payload)) return undefined;
+  const data = payload.data as ApiErrorPayload | undefined;
   if (data && typeof data.error === 'object' && data.error !== null) {
     return data.error.message;
   }

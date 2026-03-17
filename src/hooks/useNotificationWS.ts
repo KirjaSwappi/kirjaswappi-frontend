@@ -140,7 +140,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
               time: message.Time,
             }),
           );
-
         }
       } catch (error) {
         console.error('[NotificationWS] Message parsing error:', error);

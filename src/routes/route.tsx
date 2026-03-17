@@ -24,7 +24,9 @@ const ContactUs = lazy(() => import('../pages/contactUs/ContactUs'));
 const Donation = lazy(() => import('../pages/Donation'));
 const Feedback = lazy(() => import('../pages/FeedBack'));
 const PrivacyPolicy = lazy(() => import('../pages/privacyPolicy'));
-const PrivacyPolicyDetail = lazy(() => import('../pages/privacyPolicy/components/PrivacyPolicyDetail'));
+const PrivacyPolicyDetail = lazy(
+  () => import('../pages/privacyPolicy/components/PrivacyPolicyDetail'),
+);
 const ProfileDashboard = lazy(() => import('../pages/profile/components/ProfileDashboard'));
 const SupportUs = lazy(() => import('../pages/support-us'));
 const Volunteer = lazy(() => import('../pages/volunteer'));
