@@ -83,9 +83,7 @@ export const useChatWS = (): UseChatWSReturn => {
   const handleChatMessage = (swapRequestId: string, message: IMessage) => {
     try {
       const chatMessage = JSON.parse(message.body);
-      console.log('[ChatWS] Received chat message:', chatMessage);
 
-      // Dispatch the message to Redux
       dispatch(
         receiveMessage({
           chatId: swapRequestId,
@@ -105,8 +103,6 @@ export const useChatWS = (): UseChatWSReturn => {
   const handleInboxItemUpdate = (message: IMessage) => {
     try {
       const inboxItem: InboxItem = JSON.parse(message.body);
-      console.log('[ChatWS] Received inbox item update:', inboxItem);
-
       dispatch(updateInboxItem(inboxItem));
     } catch (error) {
       console.error('[ChatWS] Error parsing inbox item update:', error);
@@ -119,8 +115,6 @@ export const useChatWS = (): UseChatWSReturn => {
   const handleInboxUpdate = (message: IMessage) => {
     try {
       const inboxList: InboxItem[] = JSON.parse(message.body);
-      console.log('[ChatWS] Received inbox update:', inboxList);
-
       dispatch(setInboxList(inboxList));
     } catch (error) {
       console.error('[ChatWS] Error parsing inbox update:', error);
@@ -131,15 +125,8 @@ export const useChatWS = (): UseChatWSReturn => {
    * Subscribe to a specific chat
    */
   const subscribeToChat = (swapRequestId: string) => {
-    if (!stompClientRef.current || !stompClientRef.current.connected) {
-      console.warn('[ChatWS] Cannot subscribe: client not connected');
-      return;
-    }
-
-    if (subscribedChatsRef.current.has(swapRequestId)) {
-      console.log(`[ChatWS] Already subscribed to chat: ${swapRequestId}`);
-      return;
-    }
+    if (!stompClientRef.current || !stompClientRef.current.connected) return;
+    if (subscribedChatsRef.current.has(swapRequestId)) return;
 
     try {
       stompClientRef.current.subscribe(`/user/queue/chat.${swapRequestId}`, (message) =>
@@ -147,7 +134,6 @@ export const useChatWS = (): UseChatWSReturn => {
       );
 
       subscribedChatsRef.current.add(swapRequestId);
-      console.log(`[ChatWS] Subscribed to chat: ${swapRequestId}`);
     } catch (error) {
       console.error(`[ChatWS] Error subscribing to chat ${swapRequestId}:`, error);
     }
@@ -169,7 +155,6 @@ export const useChatWS = (): UseChatWSReturn => {
       // Note: STOMP.js doesn't provide direct unsubscribe by destination
       // We'll track subscriptions and clean up on disconnect
       subscribedChatsRef.current.delete(swapRequestId);
-      console.log(`[ChatWS] Unsubscribed from chat: ${swapRequestId}`);
     } catch (error) {
       console.error(`[ChatWS] Error unsubscribing from chat ${swapRequestId}:`, error);
     }
@@ -179,17 +164,13 @@ export const useChatWS = (): UseChatWSReturn => {
    * Send a chat message
    */
   const sendChatMessage = (swapRequestId: string, message: string) => {
-    if (!stompClientRef.current || !stompClientRef.current.connected) {
-      console.warn('[ChatWS] Cannot send message: client not connected');
-      return;
-    }
+    if (!stompClientRef.current || !stompClientRef.current.connected) return;
 
     try {
       stompClientRef.current.publish({
         destination: `/app/chat/${swapRequestId}/send`,
         body: JSON.stringify({ message }),
       });
-      console.log(`[ChatWS] Sent message to chat: ${swapRequestId}`);
     } catch (error) {
       console.error(`[ChatWS] Error sending message to chat ${swapRequestId}:`, error);
     }
@@ -199,10 +180,7 @@ export const useChatWS = (): UseChatWSReturn => {
    * Establish WebSocket connection
    */
   const connect = () => {
-    if (!userId) {
-      console.log('[ChatWS] No user ID available, skipping connection');
-      return;
-    }
+    if (!userId) return;
 
     // Close existing connection if any
     if (stompClientRef.current) {
@@ -212,10 +190,7 @@ export const useChatWS = (): UseChatWSReturn => {
 
     try {
       const jwtToken = getCookie('jwtToken');
-      if (!jwtToken) {
-        console.warn('[ChatWS] No JWT token available');
-        return;
-      }
+      if (!jwtToken) return;
 
       const socket = new SockJS(WS_URL, null, {
         headers: {
@@ -227,11 +202,9 @@ export const useChatWS = (): UseChatWSReturn => {
 
       // Handle SockJS connection errors (e.g., 403 on /info request)
       socket.onerror = (error) => {
-        console.error('[ChatWS] SockJS connection error:', error);
-        // Check if it's an authentication error
         const errorEvent = error as ErrorEvent;
         if (errorEvent?.type === 'error') {
-          console.error('[ChatWS] Connection failed - this may be an authentication issue');
+          console.error('[ChatWS] SockJS connection error:', error);
           setIsConnected(false);
           setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
         }
@@ -253,7 +226,6 @@ export const useChatWS = (): UseChatWSReturn => {
           }
         },
         onConnect: () => {
-          console.log('[ChatWS] Connected successfully');
           setIsConnected(true);
           setReconnectAttempts(0);
           clearReconnectTimeout();
@@ -278,7 +250,6 @@ export const useChatWS = (): UseChatWSReturn => {
                 handleChatMessage(selectedChatId, message),
               );
               subscribedChatsRef.current.add(selectedChatId);
-              console.log(`[ChatWS] Subscribed to chat: ${selectedChatId}`);
             } catch (error) {
               console.error(`[ChatWS] Error subscribing to chat ${selectedChatId}:`, error);
             }
@@ -295,43 +266,30 @@ export const useChatWS = (): UseChatWSReturn => {
             frame.headers?.['message']?.includes('Forbidden') ||
             frame.headers?.['message']?.includes('Unauthorized')
           ) {
-            console.error('[ChatWS] Authentication error - stopping reconnection attempts');
             setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
             return;
           }
         },
         onWebSocketClose: (event) => {
-          console.log('[ChatWS] WebSocket closed', event);
           setIsConnected(false);
           subscribedChatsRef.current.clear();
 
           // Don't reconnect if we've hit max attempts or if it was an auth error
-          if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-            console.error('[ChatWS] Max reconnection attempts reached');
-            return;
-          }
+          if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
 
-          // Check if close was due to authentication failure (code 1008 = policy violation, often used for auth)
           if (event.code === 1008 || event.code === 1002) {
-            console.error(
-              '[ChatWS] Connection closed due to authentication/policy violation - stopping reconnection',
-            );
             setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
             return;
           }
 
           // Attempt reconnection
           const delay = getReconnectDelay(reconnectAttempts);
-          console.log(
-            `[ChatWS] Attempting reconnection in ${delay}ms (attempt ${reconnectAttempts + 1})`,
-          );
           reconnectTimeoutRef.current = setTimeout(() => {
             setReconnectAttempts((prev) => prev + 1);
             connect();
           }, delay);
         },
         onDisconnect: () => {
-          console.log('[ChatWS] Disconnected');
           setIsConnected(false);
           subscribedChatsRef.current.clear();
         },
@@ -352,7 +310,6 @@ export const useChatWS = (): UseChatWSReturn => {
     clearReconnectTimeout();
 
     if (stompClientRef.current) {
-      console.log('[ChatWS] Disconnecting...');
       stompClientRef.current.deactivate();
       stompClientRef.current = null;
     }

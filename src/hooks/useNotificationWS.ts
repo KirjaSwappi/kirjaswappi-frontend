@@ -141,7 +141,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
             }),
           );
 
-          console.log('[NotificationWS] Notification received:', message.Title);
         }
       } catch (error) {
         console.error('[NotificationWS] Message parsing error:', error);
@@ -155,7 +154,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * Handle WebSocket connection open event
    */
   const handleOpen = useCallback(() => {
-    console.log('[NotificationWS] Connection established');
     setIsConnected(true);
     setReconnectAttempts(0);
     dispatch(setWSConnectionStatus('connected'));
@@ -210,12 +208,8 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * Establish WebSocket connection
    */
   const connect = useCallback(() => {
-    if (!userId) {
-      console.log('[NotificationWS] No user ID available, skipping connection');
-      return;
-    }
+    if (!userId) return;
 
-    // Close existing connection if any
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
@@ -223,7 +217,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
     try {
       const wsUrl = `${WS_URL}?userId=${userId}`;
-      console.log('[NotificationWS] Connecting to:', wsUrl);
 
       dispatch(setWSConnectionStatus('connecting'));
 
@@ -248,7 +241,6 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     clearTimers();
 
     if (wsRef.current) {
-      console.log('[NotificationWS] Disconnecting...');
       wsRef.current.close(1000, 'User logout or component unmount');
       wsRef.current = null;
     }
