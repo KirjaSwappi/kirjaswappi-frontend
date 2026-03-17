@@ -2,13 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { IBook } from '../../../pages/books/types/interface';
 import { clearCookie } from '../../../utility/cookies';
+import { extractApiErrorMessage } from '../../../utility/rtkError';
 import { authApi } from './authApi';
-interface IErrorPayload {
-  error?: {
-    code?: string;
-    message?: string;
-  };
-}
 
 export interface IInitialState {
   loading: boolean;
@@ -59,6 +54,18 @@ export const initialState: IInitialState = {
   userEmail: '',
   isVerify: false,
 };
+
+const setRejected = (
+  state: IInitialState,
+  action: PayloadAction<FetchBaseQueryError | undefined>,
+  clearMessage = false,
+) => {
+  state.loading = false;
+  state.error = extractApiErrorMessage(action.payload);
+  state.success = false;
+  if (clearMessage) state.message = '';
+};
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -83,7 +90,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     setVerify: (state, action) => {
-      state.error = action.payload;
+      state.isVerify = action.payload;
     },
     setAuthMessage: (state, action: PayloadAction<string>) => {
       state.message = action.payload;
@@ -96,6 +103,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // =========== getUserById ===========
     builder.addMatcher(authApi.endpoints.getUserById.matchPending, (state) => {
       state.loading = true;
     });
@@ -105,6 +113,8 @@ const authSlice = createSlice({
     builder.addMatcher(authApi.endpoints.getUserById.matchRejected, (state) => {
       state.loading = false;
     });
+
+    // =========== login ===========
     builder.addMatcher(authApi.endpoints.login.matchPending, (state) => {
       state.loading = true;
       state.error = null;
@@ -118,6 +128,11 @@ const authSlice = createSlice({
       state.userInformation = { ...initialState.userInformation, id, email };
       state.message = 'Login Successfully Done.';
     });
+    builder.addMatcher(authApi.endpoints.login.matchRejected, (state, action) => {
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>);
+    });
+
+    // =========== loginWithGoogle ===========
     builder.addMatcher(authApi.endpoints.loginWithGoogle.matchFulfilled, (state, action) => {
       const { id, email } = action.payload;
       state.loading = false;
@@ -126,22 +141,8 @@ const authSlice = createSlice({
       state.userInformation = { ...initialState.userInformation, id, email };
       state.message = 'Login Successfully Done.';
     });
-    builder.addMatcher(
-      authApi.endpoints.login.matchRejected,
-      (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
-        const error = (action.payload as FetchBaseQueryError)?.data as IErrorPayload;
 
-        let errorMessage: string | undefined;
-
-        if (error && typeof error.error === 'object' && error.error !== null) {
-          errorMessage = error.error.message;
-        }
-        state.loading = false;
-        state.error = errorMessage;
-        state.success = false;
-      },
-    );
-
+    // =========== register ===========
     builder.addMatcher(authApi.endpoints.register.matchPending, (state) => {
       state.loading = true;
       state.error = null;
@@ -154,20 +155,11 @@ const authSlice = createSlice({
       state.success = true;
       state.message = 'OTP has been sent to you email';
     });
-    builder.addMatcher(
-      authApi.endpoints.register.matchRejected,
-      (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
-        const error = (action.payload as FetchBaseQueryError)?.data as unknown as IErrorPayload;
-        let errorMessage: string | undefined;
-        if (typeof error === 'object' && error !== null) {
-          errorMessage = error.error?.message;
-        }
+    builder.addMatcher(authApi.endpoints.register.matchRejected, (state, action) => {
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>);
+    });
 
-        state.loading = false;
-        state.error = errorMessage;
-        state.success = false;
-      },
-    );
+    // =========== sentOTP ===========
     builder.addMatcher(authApi.endpoints.sentOTP.matchPending, (state) => {
       state.loading = true;
       state.error = null;
@@ -180,96 +172,56 @@ const authSlice = createSlice({
       state.message = 'OTP has been sent to email.';
     });
     builder.addMatcher(authApi.endpoints.sentOTP.matchRejected, (state, action) => {
-      const error = (action.payload?.data as IErrorPayload)?.error;
-      let errorMessage: string | undefined;
-      if (typeof error === 'object' && error !== null) {
-        errorMessage = error.message;
-      }
-      state.loading = false;
-      state.error = errorMessage;
-      state.success = false;
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>);
     });
+
+    // =========== verifyEmail ===========
     builder.addMatcher(authApi.endpoints.verifyEmail.matchPending, (state) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
     builder.addMatcher(authApi.endpoints.verifyEmail.matchFulfilled, (state, action) => {
-      const data = action.payload;
       state.loading = false;
       state.error = null;
-      state.message = data?.message;
+      state.message = action.payload?.message;
       state.success = true;
     });
-    builder.addMatcher(
-      authApi.endpoints.verifyEmail.matchRejected,
-      (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
-        const error = (action.payload?.data as unknown as IErrorPayload)?.error;
-        let errorMessage: string | undefined;
-        if (typeof error === 'object' && error !== null) {
-          errorMessage = error.message;
-        }
-        state.loading = false;
-        state.error = errorMessage;
-        state.message = '';
-        state.success = false;
-      },
-    );
+    builder.addMatcher(authApi.endpoints.verifyEmail.matchRejected, (state, action) => {
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>, true);
+    });
+
+    // =========== verifyOTP ===========
     builder.addMatcher(authApi.endpoints.verifyOTP.matchPending, (state) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
     builder.addMatcher(authApi.endpoints.verifyOTP.matchFulfilled, (state, action) => {
-      const data = action.payload;
       state.loading = false;
       state.error = null;
-      state.message = data?.message;
+      state.message = action.payload?.message;
       state.success = true;
     });
-    builder.addMatcher(
-      authApi.endpoints.verifyOTP.matchRejected,
-      (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
-        const error = (action.payload?.data as IErrorPayload)?.error;
-        let errorMessage: string | undefined;
-        if (typeof error === 'object' && error !== null) {
-          errorMessage = error.message;
-        }
+    builder.addMatcher(authApi.endpoints.verifyOTP.matchRejected, (state, action) => {
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>, true);
+    });
 
-        state.loading = false;
-        state.error = errorMessage;
-        state.message = '';
-        state.success = false;
-      },
-    );
+    // =========== resetPassword ===========
     builder.addMatcher(authApi.endpoints.resetPassword.matchPending, (state) => {
       state.loading = true;
       state.error = null;
       state.success = false;
     });
     builder.addMatcher(authApi.endpoints.resetPassword.matchFulfilled, (state, action) => {
-      const data = action.payload;
-
       state.loading = false;
       state.error = null;
-      state.message = data?.message;
+      state.message = action.payload?.message;
       state.success = true;
     });
-    builder.addMatcher(
-      authApi.endpoints.resetPassword.matchRejected,
-      (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
-        const error = (action.payload?.data as IErrorPayload)?.error;
-        let errorMessage: string | undefined;
-
-        if (typeof error === 'object' && error !== null) {
-          errorMessage = error.message;
-        }
-        state.loading = false;
-        state.error = errorMessage;
-        state.message = '';
-        state.success = false;
-      },
-    );
+    builder.addMatcher(authApi.endpoints.resetPassword.matchRejected, (state, action) => {
+      setRejected(state, action as PayloadAction<FetchBaseQueryError | undefined>, true);
+    });
   },
 });
 
