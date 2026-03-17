@@ -119,7 +119,7 @@ describe('useNotificationWS', () => {
     });
   });
 
-  it('should handle ping-pong messages correctly', async () => {
+  it('should ignore non-notification messages', async () => {
     store = setupStoreWithUser();
     renderHook(() => useNotificationWS(), { wrapper: wrapper(store) });
 
@@ -129,17 +129,10 @@ describe('useNotificationWS', () => {
 
     const ws = MockWebSocket.lastInstance!;
 
-    // Simulate server sending ping
     await act(async () => {
       ws.triggerMessage({ type: 'ping' });
     });
 
-    // Should respond with pong
-    await waitFor(() => {
-      expect(ws.send).toHaveBeenCalledWith(JSON.stringify({ type: 'pong' }));
-    });
-
-    // Should not add notification
     const notifications = store.getState().notification.notifications;
     expect(notifications).toHaveLength(0);
   });

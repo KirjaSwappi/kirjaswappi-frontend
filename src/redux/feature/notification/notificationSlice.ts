@@ -18,6 +18,8 @@ export interface INotificationInitialState {
 
 // Session storage key for notifications
 const NOTIFICATIONS_STORAGE_KEY = 'kirjaswappi_notifications';
+const MAX_NOTIFICATIONS = 50;
+const NOTIFICATION_EXPIRY_DAYS = 7;
 
 // Helper function to load notifications from sessionStorage
 const loadNotificationsFromStorage = (): {
@@ -88,9 +90,6 @@ export const initialState: INotificationInitialState = {
   isNotificationPanelOpen: false,
   wsConnectionStatus: 'disconnected',
 };
-
-const MAX_NOTIFICATIONS = 50;
-const NOTIFICATION_EXPIRY_DAYS = 7;
 
 const notificationSlice = createSlice({
   name: 'notification',
