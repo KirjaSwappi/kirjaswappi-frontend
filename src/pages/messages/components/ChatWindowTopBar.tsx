@@ -3,6 +3,7 @@ import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import book3 from '../../../assets/book3.png';
 import locationIcon from '../../../assets/location-icon.png';
+import profileIcon from '../../../assets/profile.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import { resetChat } from '../../../redux/feature/messages/messagesSlice';
@@ -32,6 +33,12 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
     selectedChat.conversationType === 'sent'
       ? selectedChat.receiver?.name
       : selectedChat.sender?.name;
+      
+  const partnerId =
+    selectedChat.conversationType === 'sent'
+      ? selectedChat.receiver?.id
+      : selectedChat.sender?.id;
+
   const bookTitle = selectedChat.bookToSwapWith?.title || 'Unknown Book';
   const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
   const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
@@ -50,9 +57,14 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           >
             <IoIosArrowBack size={20} className="text-black" />
           </Button>
-          <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
+          <h1 
+            className="font-poppins text-sm cursor-pointer hover:underline"
+            onClick={() => navigate(`/profile/user-profile/${partnerId}`)}
+          >
+            {partnerName || 'Chat'}
+          </h1>
           <ChatInfoDropdown
-            onViewProfile={() => alert('View Profile')}
+            onViewProfile={() => navigate(`/profile/user-profile/${partnerId}`)}
             onMute={() => setMuteOpen(true)}
             onBlock={() => setBlockOpen(true)}
             onReport={() => alert('Report')}
@@ -100,14 +112,16 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                   </p>
                   <div className="flex items-center mb-1.5 lg:mb-2">
                     <Image
-                      src={locationIcon}
-                      alt="Location"
-                      className="mr-1 flex-shrink-0 w-4 h-4"
+                      src={profileIcon}
+                      alt="Profile"
+                      className="mr-1 flex-shrink-0 w-4 h-4 rounded-full cursor-pointer"
+                      onClick={() => navigate(`/profile/user-profile/${partnerId}`)}
                     />
-                    <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                      {selectedChat.conversationType === 'sent'
-                        ? selectedChat.receiver?.name
-                        : selectedChat.sender?.name}
+                    <span 
+                      className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 cursor-pointer hover:underline"
+                      onClick={() => navigate(`/profile/user-profile/${partnerId}`)}
+                    >
+                      {partnerName}
                     </span>
                   </div>
                 </div>

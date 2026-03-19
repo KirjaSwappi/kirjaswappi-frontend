@@ -65,7 +65,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
       {/* Bell Icon Button */}
       <button
         onClick={handleBellClick}
-        className="relative p-2 hover:bg-light rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        className="relative p-2 hover:bg-light rounded-full border border-platinumMix transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         aria-label={`Notifications, ${unreadCount} unread`}
         aria-expanded={isNotificationPanelOpen}
         aria-haspopup="true"

@@ -1,11 +1,8 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import SectionWithForm from '../../components/shared/SectionWithForm';
 import BookAddUpdateHeader from '../addUpdateBook/_components/BookAddUpdateHeader';
 import FeedbackForm from './form/FeedbackForm';
-
-import feedbackImage from '../../assets/feedback.jpg';
 
 export default function Feedback() {
   const navigate = useNavigate();
@@ -25,15 +22,15 @@ export default function Feedback() {
             {t('feedback.heading')}
           </h2>
 
-          <p className="w-full block lg:hidden pt-3 pb-6 font-normal text-[10px] leading-[16px] lg:leading-6 tracking-[0px] text-grayDark ">
+          <p className="w-full block pt-3 pb-6 font-normal text-[10px] lg:text-sm leading-[16px] lg:leading-6 tracking-[0px] text-grayDark ">
             {t('feedback.subtitle')}
           </p>
 
-          <SectionWithForm imageSrc={feedbackImage}>
+          <div className="w-full max-w-[600px] mt-8 bg-white lg:p-8 lg:border lg:border-platinumMix lg:rounded-xl lg:shadow-sm">
             <FormProvider {...methods}>
               <FeedbackForm />
             </FormProvider>
-          </SectionWithForm>
+          </div>
         </div>
       </div>
     </div>

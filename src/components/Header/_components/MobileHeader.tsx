@@ -41,13 +41,13 @@ export default function MobileHeader() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2 w-full">
               {!searchToggle && (
-                <Link to="/" aria-label="Go to homepage" className="shrink-0">
+                <a href="/" aria-label="Go to homepage" className="shrink-0">
                   <Image
                     src={!scrolled ? logo : logoIcon}
                     alt="KirjaSwappi Logo"
                     className={`cursor-pointer ${scrolled ? 'w-10 h-10' : 'h-7'}`}
                   />
-                </Link>
+                </a>
               )}
 
               {searchToggle && (

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useChatWS } from '../../hooks/useChatWS';
 import { selectChat } from '../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ChatInboxInput from './components/ChatInboxInput';
@@ -15,8 +14,6 @@ export default function Messages() {
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get('messageId');
-
-  useChatWS();
 
   useEffect(() => {
     if (messageId) {

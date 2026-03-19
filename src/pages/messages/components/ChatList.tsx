@@ -120,7 +120,10 @@ export default function ChatList() {
                 }`}
               >
                 <div className="relative">
-                  <Image src={book} className="w-14 h-14 rounded-full object-cover" />
+                  <Image
+                    src={chat.bookToSwapWith?.coverPhotoUrl || book}
+                    className="w-14 h-14 rounded-full object-cover"
+                  />
                   {hasUnread && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-medium">

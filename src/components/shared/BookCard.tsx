@@ -193,21 +193,19 @@ export default function BookCard({
           <div className={`${isProfile ? 'hidden' : 'block'}`}>
             <div className="flex items-center mb-1.5 lg:mb-2">
               <Image src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
-              <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                Helsinki
+              <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 capitalize">
+                {book?.location?.city || book?.owner?.location?.city || 'Helsinki'}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
-                {ownerProfilePhoto && (
-                  <div className="w-3.5 h-3.5 rounded-full">
-                    <Image
-                      src={ownerProfilePhoto || profile}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
+                <div className="w-3.5 h-3.5 rounded-full">
+                  <Image
+                    src={ownerProfilePhoto || profile}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 {ownerName && (
                   <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
                     {ownerName}
