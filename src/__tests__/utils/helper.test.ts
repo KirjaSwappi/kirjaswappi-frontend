@@ -179,6 +179,13 @@ describe('Helper Utility Functions', () => {
       const result = await urlToDataUrl('   ');
       expect(result).toContain('data:image/png;base64,');
     });
+
+    it('should return trimmed data URL without fetch when input has surrounding whitespace', async () => {
+      const dataUrl = 'data:image/png;base64,AAAA';
+      const result = await urlToDataUrl(`  ${dataUrl}  `);
+      expect(result).toBe(dataUrl);
+      expect(global.fetch).not.toHaveBeenCalled();
+    });
   });
 
   describe('getFileToUrl', () => {

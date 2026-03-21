@@ -14,7 +14,7 @@ export default function ChatWindow() {
 
   const {
     currentData: chatData,
-    isFetching: isChatLoading,
+    isLoading: isChatLoading,
     isSuccess: isChatSuccess,
   } = useGetChatMessagesQuery(
     { swapRequestId: selectedChatId as string, userId: userInformation.id as string },

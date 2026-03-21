@@ -41,11 +41,11 @@ export const convertedURLToFile = async (url: string): Promise<File | undefined>
 };
 
 export async function urlToDataUrl(url: string): Promise<string> {
-  if (url.startsWith('data:')) return url;
   const trimmed = url.trim();
   if (!trimmed) {
     return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
   }
+  if (trimmed.startsWith('data:')) return trimmed;
 
   try {
     const resp = await fetch(trimmed);

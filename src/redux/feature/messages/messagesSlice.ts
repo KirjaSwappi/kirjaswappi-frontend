@@ -221,7 +221,7 @@ const chatSlice = createSlice({
       state,
       action: PayloadAction<{
         chatId: string;
-        messageId: string;
+        messageId: string | number;
         text: string;
         senderId?: string;
         userId?: string;
@@ -233,7 +233,7 @@ const chatSlice = createSlice({
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         // Prevent duplicate messages if already present
-        if (chat.messages.some((m) => m.id === messageId)) {
+        if (chat.messages.some((m) => String(m.id) === String(messageId))) {
           return;
         }
 
@@ -262,8 +262,8 @@ const chatSlice = createSlice({
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         // Merge messages, avoiding duplicates
-        const existingIds = new Set(chat.messages.map((m) => m.id));
-        const newMessages = messages.filter((m) => !existingIds.has(m.id));
+        const existingIds = new Set(chat.messages.map((m) => String(m.id)));
+        const newMessages = messages.filter((m) => !existingIds.has(String(m.id)));
         chat.messages = [...chat.messages, ...newMessages].sort((a, b) => {
           const timeA = new Date(a.time).getTime();
           const timeB = new Date(b.time).getTime();
