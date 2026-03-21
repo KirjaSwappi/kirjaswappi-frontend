@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { buildFormData } from '../../../../src/pages/addUpdateBook/helper';
+import type { IAddUpdateBook } from '../../../../src/pages/addUpdateBook/types/interface';
 import { SwapType } from '../../../../types/enum';
 
 describe('buildFormData helper', () => {
   it('should append genres independently instead of comma-separating', async () => {
-    const mockBookData = {
+    const mockBookData: IAddUpdateBook = {
       title: 'Test Title',
       author: 'Test Author',
       description: 'Test Description',
@@ -18,11 +19,11 @@ describe('buildFormData helper', () => {
       address: null,
     };
 
-    const formData = await buildFormData(mockBookData as any, 'user-123', 'book-456');
+    const formData = await buildFormData(mockBookData, 'user-123', 'book-456');
 
     expect(formData.get('title')).toBe('Test Title');
     expect(formData.get('author')).toBe('Test Author');
-    
+
     // FormData.getAll should return array with two elements for genres
     const appendedGenres = formData.getAll('genres');
     expect(appendedGenres).toEqual(['Fiction', 'Adventure']);

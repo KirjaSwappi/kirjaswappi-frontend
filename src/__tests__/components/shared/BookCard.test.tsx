@@ -296,8 +296,8 @@ describe('BookCard Component', () => {
     const bookWithoutProfile = { ...mockBook, ownerProfilePhoto: '' };
     renderWithProviders(<BookCard book={bookWithoutProfile} />);
 
-    // Should not render profile image when ownerProfilePhoto is empty
-    expect(screen.queryByTestId('image-profile')).not.toBeInTheDocument();
+    const profileImage = screen.getByTestId('image-profile');
+    expect(profileImage).toHaveAttribute('src', expect.stringMatching(/svg/i));
   });
 
   it('shows owner name when available', () => {

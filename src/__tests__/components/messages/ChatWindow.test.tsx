@@ -97,7 +97,7 @@ describe('ChatWindow Component', () => {
   it('should render loading skeleton when fetching messages', () => {
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: undefined,
-      isLoading: true,
+      isFetching: true,
       isSuccess: false,
     });
 
@@ -118,7 +118,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -130,7 +130,7 @@ describe('ChatWindow Component', () => {
   it('should render chat messages correctly', async () => {
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: mockChatMessages,
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -174,7 +174,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -213,7 +213,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -246,7 +246,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -283,7 +283,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -316,7 +316,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -355,7 +355,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: [],
-      isLoading: false,
+      isFetching: false,
       isSuccess: true,
     });
 
@@ -379,7 +379,7 @@ describe('ChatWindow Component', () => {
 
     mockUseGetChatMessagesQuery.mockReturnValue({
       currentData: undefined,
-      isLoading: false,
+      isFetching: false,
       isSuccess: false,
     });
 

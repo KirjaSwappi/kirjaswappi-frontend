@@ -3,7 +3,15 @@ import edition from '../../../assets/edition.png';
 import lng from '../../../assets/EN.png';
 import Image from '../../../components/shared/Image';
 
-export default function BookType({ condition, language, publishedYear }: { condition: string, language?: string, publishedYear?: string }) {
+export default function BookType({
+  condition,
+  language,
+  publishedYear,
+}: {
+  condition: string;
+  language?: string;
+  publishedYear?: string;
+}) {
   if (!condition) return null;
 
   return (
@@ -16,7 +24,9 @@ export default function BookType({ condition, language, publishedYear }: { condi
       <div className="flex flex-col items-center border-r border-platinumDark px-1">
         <p className="text-grayDark text-xs font-poppins font-normal">Language</p>
         <Image src={lng} alt="book" className="mt-2 mb-1" />
-        <h3 className="text-black text-xs font-normal font-poppins capitalize">{language || 'English'}</h3>
+        <h3 className="text-black text-xs font-normal font-poppins capitalize">
+          {language || 'English'}
+        </h3>
       </div>
       <div className="flex flex-col items-center border-r border-platinumDark px-1">
         <p className="text-grayDark text-xs font-poppins font-normal">Edition</p>

@@ -24,11 +24,13 @@ export const convertedURLToFile = async (url: string): Promise<File | undefined>
     const response = await fetch(url);
     const blob = await response.blob();
     const mimeType = blob.type || 'image/jpeg';
-    const fileExtension = mimeType.split('/')[1] || 'jpg';
+    const finalMimeType =
+      mimeType === 'application/octet-stream' || !blob.type ? 'image/jpeg' : mimeType;
+    if (!SUPPORTED_FORMATS.includes(finalMimeType)) {
+      return undefined;
+    }
+    const fileExtension = finalMimeType.split('/')[1] || 'jpg';
     const fileNameWithExtension = `${fileName}.${fileExtension}`;
-
-    // fallback to a generic image if type is generic octet-stream
-    const finalMimeType = mimeType === 'application/octet-stream' ? 'image/jpeg' : mimeType;
 
     const file = new File([blob], fileNameWithExtension, { type: finalMimeType });
     return file;
@@ -40,9 +42,13 @@ export const convertedURLToFile = async (url: string): Promise<File | undefined>
 
 export async function urlToDataUrl(url: string): Promise<string> {
   if (url.startsWith('data:')) return url;
-  
+  const trimmed = url.trim();
+  if (!trimmed) {
+    return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  }
+
   try {
-    const resp = await fetch(url);
+    const resp = await fetch(trimmed);
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     let blob = await resp.blob();
     if (blob.type === 'application/octet-stream' || !blob.type) {

@@ -102,9 +102,14 @@ export default function SwapModal() {
         case SwapType.BYGENRES:
         case SwapType.OPENTOOFFERS:
           if (data.selectedBook) {
-             const message = `I would like to offer my book: ${data.selectedBook.title}`;
-             organizedData.note = organizedData.note ? `${organizedData.note}\n\n${message}` : message;
+            const message = `I would like to offer my book: ${data.selectedBook.title}`;
+            organizedData.note = organizedData.note
+              ? `${organizedData.note}\n\n${message}`
+              : message;
           }
+          break;
+        default:
+          organizedData.swapOffer = { offeredBookId: data.selectedBook?.id };
           break;
       }
 

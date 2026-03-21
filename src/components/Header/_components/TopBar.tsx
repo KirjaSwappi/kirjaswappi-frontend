@@ -41,13 +41,13 @@ export default function TopBar() {
       >
         <div className="container">
           <div id="top-nav-bar" className={`w-full flex items-center justify-between`}>
-            <a href="/" aria-label="Go to homepage">
+            <Link to="/" aria-label="Go to homepage">
               <Image
                 src={logo}
                 alt="Kirja Swappi Logo"
                 className="h-7 cursor-pointer hidden lg:block"
               />
-            </a>
+            </Link>
             <div ref={searchReference} className="relative">
               <div className="flex items-center bg-white rounded-full gap-2 px-2 border border-platinumMix shadow-sm w-full h-14">
                 <div

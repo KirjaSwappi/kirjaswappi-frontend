@@ -159,7 +159,8 @@ describe('Helper Utility Functions', () => {
       expect(result).toContain('data:image/jpeg;base64,');
     });
 
-    it('should throw error for non-ok response', async () => {
+    it('should return fallback data URL for non-ok response', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const mockResponse = {
         ok: false,
         status: 404,
@@ -167,7 +168,16 @@ describe('Helper Utility Functions', () => {
 
       (global.fetch as Mock).mockResolvedValue(mockResponse);
 
-      await expect(urlToDataUrl('https://example.com/missing.jpg')).rejects.toThrow('HTTP 404');
+      const result = await urlToDataUrl('https://example.com/missing.jpg');
+
+      expect(result).toContain('data:image/png;base64,');
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should return fallback data URL for empty URL after trim', async () => {
+      const result = await urlToDataUrl('   ');
+      expect(result).toContain('data:image/png;base64,');
     });
   });
 

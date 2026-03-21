@@ -95,12 +95,12 @@ const appendBasicBookInformation = (formData: FormData, data: IAddUpdateBook) =>
   formData.append('title', data.title);
   formData.append('author', data.author);
   formData.append('description', data.description);
-  
+
   // Append each genre separately so the backend receives it as a list
   data.genres.forEach((genre) => {
     formData.append('genres', genre);
   });
-  
+
   formData.append('language', data.language);
   formData.append('condition', data.condition);
 };

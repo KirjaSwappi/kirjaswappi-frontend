@@ -194,13 +194,18 @@ const chatSlice = createSlice({
     },
     sendMessage: (
       state,
-      action: PayloadAction<{ chatId: string; text: string; images?: string[] }>,
+      action: PayloadAction<{
+        chatId: string;
+        text: string;
+        images?: string[];
+        messageId?: string | number;
+      }>,
     ) => {
-      const { chatId, text, images } = action.payload;
+      const { chatId, text, images, messageId } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         const message = {
-          id: Date.now(),
+          id: messageId ?? Date.now(),
           sender: 'me' as const,
           text,
           images,
@@ -214,7 +219,15 @@ const chatSlice = createSlice({
     },
     receiveMessage: (
       state,
-      action: PayloadAction<{ chatId: string; messageId: string; text: string; senderId?: string; userId?: string; time?: string; images?: string[] }>,
+      action: PayloadAction<{
+        chatId: string;
+        messageId: string;
+        text: string;
+        senderId?: string;
+        userId?: string;
+        time?: string;
+        images?: string[];
+      }>,
     ) => {
       const { chatId, messageId, text, senderId, userId, time, images } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
