@@ -84,12 +84,16 @@ export const useChatWS = (): UseChatWSReturn => {
     try {
       const chatMessage = JSON.parse(message.body);
 
+      // Backend ChatMessageResponse has { id, message, sender: { id, name }, sentAt, imageUrls, ownMessage }
       dispatch(
         receiveMessage({
           chatId: swapRequestId,
+          messageId: chatMessage.id,
           text: chatMessage.message || chatMessage.text || '',
-          senderId: chatMessage.senderId,
+          senderId: chatMessage.sender?.id || chatMessage.senderId,
           userId: userId as string,
+          time: chatMessage.sentAt,
+          images: chatMessage.imageUrls,
         }),
       );
     } catch (error) {

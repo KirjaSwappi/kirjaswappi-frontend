@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import book3 from '../../../assets/book3.png';
-import locationIcon from '../../../assets/location-icon.png';
+import profileIcon from '../../../assets/profile.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import { resetChat } from '../../../redux/feature/messages/messagesSlice';
@@ -32,6 +32,14 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
     selectedChat.conversationType === 'sent'
       ? selectedChat.receiver?.name
       : selectedChat.sender?.name;
+
+  const partnerId =
+    selectedChat.conversationType === 'sent' ? selectedChat.receiver?.id : selectedChat.sender?.id;
+
+  const goPartnerProfile = () => {
+    if (partnerId) navigate(`/profile/user-profile/${partnerId}`);
+  };
+
   const bookTitle = selectedChat.bookToSwapWith?.title || 'Unknown Book';
   const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
   const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
@@ -50,9 +58,19 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           >
             <IoIosArrowBack size={20} className="text-black" />
           </Button>
-          <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
+          {partnerId ? (
+            <button
+              type="button"
+              className="font-poppins text-sm cursor-pointer hover:underline text-left bg-transparent border-0 p-0"
+              onClick={goPartnerProfile}
+            >
+              {partnerName || 'Chat'}
+            </button>
+          ) : (
+            <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
+          )}
           <ChatInfoDropdown
-            onViewProfile={() => alert('View Profile')}
+            onViewProfile={goPartnerProfile}
             onMute={() => setMuteOpen(true)}
             onBlock={() => setBlockOpen(true)}
             onReport={() => alert('Report')}
@@ -99,16 +117,33 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                     </span>
                   </p>
                   <div className="flex items-center mb-1.5 lg:mb-2">
-                    <Image
-                      src={locationIcon}
-                      alt="Location"
-                      className="mr-1 flex-shrink-0 w-4 h-4"
-                    />
-                    <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                      {selectedChat.conversationType === 'sent'
-                        ? selectedChat.receiver?.name
-                        : selectedChat.sender?.name}
-                    </span>
+                    {partnerId ? (
+                      <button
+                        type="button"
+                        className="flex items-center bg-transparent border-0 p-0 cursor-pointer text-left"
+                        onClick={goPartnerProfile}
+                      >
+                        <Image
+                          src={profileIcon}
+                          alt="Profile"
+                          className="mr-1 flex-shrink-0 w-4 h-4 rounded-full"
+                        />
+                        <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 hover:underline">
+                          {partnerName}
+                        </span>
+                      </button>
+                    ) : (
+                      <>
+                        <Image
+                          src={profileIcon}
+                          alt="Profile"
+                          className="mr-1 flex-shrink-0 w-4 h-4 rounded-full"
+                        />
+                        <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
+                          {partnerName}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

@@ -98,7 +98,13 @@ export default function BookDetails() {
                 <VerticalImageSlider images={bookData?.coverPhotoUrls || []} />
               </div>
               <div className="ml-auto -mt-8 xl:mt-5 w-10/12 hidden lg:block">
-                {bookData?.condition && <BookType condition={bookData?.condition} />}
+                {bookData?.condition && (
+                  <BookType
+                    condition={bookData?.condition}
+                    language={bookData?.language}
+                    publishedYear={bookData?.publishedYear}
+                  />
+                )}
               </div>
             </div>
             <div className="w-full lg:w-[53%] z-10">
@@ -171,7 +177,13 @@ export default function BookDetails() {
           </div>
         </div>
         <div className="mt-5 lg:hidden">
-          {bookData?.condition && <BookType condition={bookData?.condition} />}
+          {bookData?.condition && (
+            <BookType
+              condition={bookData?.condition}
+              language={bookData?.language}
+              publishedYear={bookData?.publishedYear}
+            />
+          )}
         </div>
         <div className="container lg:hidden">
           <OfferedBy

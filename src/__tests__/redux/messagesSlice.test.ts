@@ -185,7 +185,7 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        sendMessage({ chatId: 'chat-1', text: 'Hello world' }),
+        sendMessage({ chatId: 'chat-1', messageId: 'msg-123', text: 'Hello world' }),
       );
 
       expect(result.chats[0].messages).toHaveLength(1);
@@ -209,7 +209,12 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        sendMessage({ chatId: 'chat-1', text: 'Check this', images: ['image1.jpg', 'image2.jpg'] }),
+        sendMessage({
+          chatId: 'chat-1',
+          messageId: 'msg-123',
+          text: 'Check this',
+          images: ['image1.jpg', 'image2.jpg'],
+        }),
       );
 
       expect(result.chats[0].messages[0].images).toEqual(['image1.jpg', 'image2.jpg']);
@@ -224,7 +229,10 @@ describe('messagesSlice', () => {
         selectedChatId: '',
       };
 
-      const result = messagesSlice(stateWithChats, sendMessage({ chatId: 'chat-2', text: 'Test' }));
+      const result = messagesSlice(
+        stateWithChats,
+        sendMessage({ chatId: 'chat-2', messageId: 'msg-124', text: 'Test' }),
+      );
 
       expect(result.chats[0].id).toBe('chat-2');
     });
@@ -258,6 +266,7 @@ describe('messagesSlice', () => {
         stateWithChats,
         receiveMessage({
           chatId: 'chat-1',
+          messageId: 'msg-123',
           text: 'Hello from them',
           senderId: 'user-2',
           userId: 'user-1',
@@ -267,6 +276,44 @@ describe('messagesSlice', () => {
       expect(result.chats[0].messages).toHaveLength(1);
       expect(result.chats[0].messages[0].sender).toBe('them');
       expect(result.chats[0].messages[0].unread).toBe(true);
+    });
+
+    it('should avoid adding duplicate messages from receiveMessage', () => {
+      const stateWithChats: ChatState = {
+        chats: [
+          {
+            id: 'chat-1',
+            name: 'Test Chat',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [
+              {
+                id: 'msg-existing',
+                sender: 'them',
+                text: 'Existing message',
+                time: new Date().toISOString(),
+                unread: true,
+              },
+            ],
+          },
+        ],
+        selectedChatId: '',
+      };
+
+      // Try to add a message with the same ID
+      const result = messagesSlice(
+        stateWithChats,
+        receiveMessage({
+          chatId: 'chat-1',
+          messageId: 'msg-existing',
+          text: 'Existing message duplicated',
+          senderId: 'user-2',
+          userId: 'user-1',
+        }),
+      );
+
+      expect(result.chats[0].messages).toHaveLength(1);
+      expect(result.chats[0].messages[0].text).toBe('Existing message');
     });
 
     it('should increment unread count if chat not selected', () => {
@@ -285,7 +332,13 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        receiveMessage({ chatId: 'chat-1', text: 'Test', senderId: 'user-2', userId: 'user-1' }),
+        receiveMessage({
+          chatId: 'chat-1',
+          messageId: 'msg-123',
+          text: 'Test',
+          senderId: 'user-2',
+          userId: 'user-1',
+        }),
       );
 
       expect(result.chats[0].unread).toBe(true);
@@ -308,7 +361,13 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        receiveMessage({ chatId: 'chat-1', text: 'Test', senderId: 'user-2', userId: 'user-1' }),
+        receiveMessage({
+          chatId: 'chat-1',
+          messageId: 'msg-123',
+          text: 'Test',
+          senderId: 'user-2',
+          userId: 'user-1',
+        }),
       );
 
       expect(result.chats[0].unread).toBe(false);
@@ -326,7 +385,13 @@ describe('messagesSlice', () => {
 
       const result = messagesSlice(
         stateWithChats,
-        receiveMessage({ chatId: 'chat-2', text: 'Test', senderId: 'user-2', userId: 'user-1' }),
+        receiveMessage({
+          chatId: 'chat-2',
+          messageId: 'msg-124',
+          text: 'Test',
+          senderId: 'user-2',
+          userId: 'user-1',
+        }),
       );
 
       expect(result.chats[0].id).toBe('chat-2');

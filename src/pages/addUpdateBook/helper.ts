@@ -14,7 +14,7 @@ export const getDefaultValues = (bookData?: IBookData) => ({
   swapType: parseSwapType(bookData?.swapCondition?.swapType),
   swappableBooks: getDefaultSwappableBooks(bookData),
   swappableGenres: getDefaultSwappableGenres(bookData),
-  address: null,
+  address: bookData?.location || null,
 });
 
 // SET DEFAULT SWAP TYPE
@@ -95,7 +95,12 @@ const appendBasicBookInformation = (formData: FormData, data: IAddUpdateBook) =>
   formData.append('title', data.title);
   formData.append('author', data.author);
   formData.append('description', data.description);
-  formData.append('genres', data.genres.join(','));
+
+  // Append each genre separately so the backend receives it as a list
+  data.genres.forEach((genre) => {
+    formData.append('genres', genre);
+  });
+
   formData.append('language', data.language);
   formData.append('condition', data.condition);
 };

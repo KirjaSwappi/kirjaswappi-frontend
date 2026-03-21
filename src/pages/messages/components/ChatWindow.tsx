@@ -13,7 +13,7 @@ export default function ChatWindow() {
   const findChat = chats.find((chat) => chat.id === selectedChatId);
 
   const {
-    data: chatData,
+    currentData: chatData,
     isLoading: isChatLoading,
     isSuccess: isChatSuccess,
   } = useGetChatMessagesQuery(

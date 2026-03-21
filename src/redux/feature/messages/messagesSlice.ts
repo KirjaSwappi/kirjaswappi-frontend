@@ -21,7 +21,13 @@ export interface Chat {
   conversationType?: 'sent' | 'received';
   receiver?: { id: string; name: string };
   sender?: { id: string; name: string };
-  bookToSwapWith?: { id: string; title: string; author: string; condition: string };
+  bookToSwapWith?: {
+    id: string;
+    title: string;
+    author: string;
+    condition: string;
+    coverPhotoUrl?: string;
+  };
   swapStatus?: string;
   swapType?: string;
   note?: string;
@@ -36,6 +42,7 @@ export interface InboxItem {
     condition: string;
     id: string;
     title: string;
+    coverPhotoUrl?: string;
   };
   conversationType: 'sent' | 'received';
   hasNewMessages: boolean;
@@ -187,13 +194,18 @@ const chatSlice = createSlice({
     },
     sendMessage: (
       state,
-      action: PayloadAction<{ chatId: string; text: string; images?: string[] }>,
+      action: PayloadAction<{
+        chatId: string;
+        text: string;
+        images?: string[];
+        messageId?: string | number;
+      }>,
     ) => {
-      const { chatId, text, images } = action.payload;
+      const { chatId, text, images, messageId } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         const message = {
-          id: Date.now(),
+          id: messageId ?? Date.now(),
           sender: 'me' as const,
           text,
           images,
@@ -207,18 +219,32 @@ const chatSlice = createSlice({
     },
     receiveMessage: (
       state,
-      action: PayloadAction<{ chatId: string; text: string; senderId?: string; userId?: string }>,
+      action: PayloadAction<{
+        chatId: string;
+        messageId: string | number;
+        text: string;
+        senderId?: string;
+        userId?: string;
+        time?: string;
+        images?: string[];
+      }>,
     ) => {
-      const { chatId, text, senderId, userId } = action.payload;
+      const { chatId, messageId, text, senderId, userId, time, images } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
+        // Prevent duplicate messages if already present
+        if (chat.messages.some((m) => String(m.id) === String(messageId))) {
+          return;
+        }
+
         const isMe = senderId === userId;
-        const message = {
-          id: Date.now(),
-          sender: isMe ? ('me' as const) : ('them' as const),
+        const message: Message = {
+          id: messageId,
+          sender: isMe ? 'me' : 'them',
           text,
-          time: new Date().toISOString(),
+          time: time || new Date().toISOString(),
           unread: !isMe,
+          images,
         };
         chat.messages.push(message);
         chat.updatedAt = new Date().toISOString();
@@ -236,8 +262,8 @@ const chatSlice = createSlice({
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
         // Merge messages, avoiding duplicates
-        const existingIds = new Set(chat.messages.map((m) => m.id));
-        const newMessages = messages.filter((m) => !existingIds.has(m.id));
+        const existingIds = new Set(chat.messages.map((m) => String(m.id)));
+        const newMessages = messages.filter((m) => !existingIds.has(String(m.id)));
         chat.messages = [...chat.messages, ...newMessages].sort((a, b) => {
           const timeA = new Date(a.time).getTime();
           const timeB = new Date(b.time).getTime();

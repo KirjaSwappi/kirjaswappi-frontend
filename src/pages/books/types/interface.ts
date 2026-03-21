@@ -1,3 +1,7 @@
+export interface IBookLocation {
+  city?: string;
+}
+
 export interface IBook {
   id: string;
   title: string;
@@ -12,9 +16,11 @@ export interface IBook {
   ownerId: string;
   ownerProfilePhoto: string;
   coverPhotoUrls?: string[];
+  location?: IBookLocation;
   owner: {
     id: string;
     name: string;
+    location?: IBookLocation;
   };
 }
 

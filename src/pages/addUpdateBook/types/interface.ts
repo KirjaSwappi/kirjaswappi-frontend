@@ -86,6 +86,15 @@ export interface IBookData {
   genres: string[];
   coverPhotoUrls: (string | File)[];
   swapCondition?: ISwapConditionData;
+  location?: {
+    latitude: number;
+    longitude: number;
+    address: string;
+    city?: string;
+    country?: string;
+    postalCode?: string;
+    radiusKm?: number;
+  };
 }
 
 // Form data interface that extends BookData with form-specific fields
