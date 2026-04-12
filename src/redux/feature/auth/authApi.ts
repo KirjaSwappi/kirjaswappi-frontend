@@ -4,19 +4,25 @@ import { setCookie } from '../../../utility/cookies';
 import { api } from '../../api/apiSlice';
 import { bookApi } from '../book/bookApi';
 
-type LoginResponse = { id: string; email: string };
+type LoginResponse = { id: string; email: string; userToken: string; userRefreshToken: string };
 const handleLoginCookie = async (
   queryFulfilled: Promise<{ data: LoginResponse; meta: FetchBaseQueryMeta | undefined }>,
 ) => {
   try {
     const {
-      data: { id, email },
+      data: { id, email, userToken, userRefreshToken },
     } = await queryFulfilled;
     if (id && email) {
       setCookie('user', { id, email }, 240);
     }
-  } catch (error) {
-    console.error("Can't set data in cookie. failed:", error);
+    if (userToken) {
+      setCookie('userToken', userToken, 200);
+    }
+    if (userRefreshToken) {
+      setCookie('userRefreshToken', userRefreshToken, 10080); // 7 days
+    }
+  } catch {
+    // Login failure is handled by RTK Query matchers in authSlice
   }
 };
 

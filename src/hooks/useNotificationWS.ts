@@ -6,9 +6,11 @@ import {
   setWSConnectionStatus,
 } from '../redux/feature/notification/notificationSlice';
 import { NotificationPayload, UseNotificationWSReturn, WSMessage } from '../types/notification';
+import { getCookie } from '../utility/cookies';
 
 // WebSocket configuration constants
 const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || 'wss://ans.kirjaswappi.fi/ws';
+const WS_API_KEY = import.meta.env.VITE_NOTIFICATION_API_KEY || '';
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY = 1000; // 1 second
 const MAX_RECONNECT_DELAY = 30000; // 30 seconds
@@ -50,6 +52,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const connectRef = useRef<() => void>(() => {});
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -127,6 +130,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
         reconnectTimeoutRef.current = setTimeout(() => {
           setReconnectAttempts((prev) => prev + 1);
+          connectRef.current();
         }, delay);
       } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
         console.error('[NotificationWS] Max reconnection attempts reached');
@@ -162,7 +166,9 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     }
 
     try {
-      const wsUrl = `${WS_URL}?userId=${userId}`;
+      const userToken = getCookie('userToken');
+      const token = userToken || WS_API_KEY;
+      const wsUrl = `${WS_URL}?userId=${userId}${token ? `&token=${token}` : ''}`;
 
       dispatch(setWSConnectionStatus('connecting'));
 
@@ -179,6 +185,9 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
       dispatch(setWSConnectionStatus('error'));
     }
   }, [userId, dispatch, handleOpen, handleMessage, handleClose, handleError]);
+
+  // Keep ref in sync so handleClose can call connect without circular dependency
+  connectRef.current = connect;
 
   /**
    * Close WebSocket connection gracefully
@@ -206,7 +215,8 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     return () => {
       disconnect();
     };
-  }, [userId, reconnectAttempts, connect, disconnect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   // Effect: Clear notifications when user logs out
   useEffect(() => {

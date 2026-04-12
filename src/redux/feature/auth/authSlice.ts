@@ -67,6 +67,10 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       clearCookie('user');
+      clearCookie('jwtToken');
+      clearCookie('refreshToken');
+      clearCookie('userToken');
+      clearCookie('userRefreshToken');
       state.userInformation = initialState.userInformation;
       state.loading = false;
       state.error = null;
@@ -224,6 +228,7 @@ export const {
   setOtp,
   setUserEmail,
   setError,
+  setVerify,
   logout,
   setAuthMessage,
   setAuthSuccess,

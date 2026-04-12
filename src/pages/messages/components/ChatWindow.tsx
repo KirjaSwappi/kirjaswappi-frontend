@@ -17,7 +17,7 @@ export default function ChatWindow() {
     isLoading: isChatLoading,
     isSuccess: isChatSuccess,
   } = useGetChatMessagesQuery(
-    { swapRequestId: selectedChatId as string, userId: userInformation.id as string },
+    { swapRequestId: selectedChatId as string },
     { skip: !selectedChatId || !userInformation.id },
   );
 

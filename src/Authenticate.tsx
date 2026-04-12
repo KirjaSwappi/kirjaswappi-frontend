@@ -18,7 +18,7 @@ export default function Authenticate() {
   );
 
   const { data: inboxData, isSuccess: isInboxSuccess } = useGetInboxQuery(
-    { userId: userInformation.id as string },
+    undefined,
     { skip: !userInformation.id, refetchOnMountOrArgChange: 30 },
   );
 

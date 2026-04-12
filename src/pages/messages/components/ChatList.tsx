@@ -26,7 +26,7 @@ export default function ChatList() {
     isSuccess,
     isError,
   } = useGetInboxQuery(
-    { userId: userInformation.id as string },
+    undefined,
     {
       skip: !userInformation.id,
       refetchOnMountOrArgChange: 30,

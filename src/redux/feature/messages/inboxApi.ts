@@ -36,17 +36,17 @@ export interface ChatMessageApi {
 
 export const inboxApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getInbox: builder.query<InboxItem[], { userId: string }>({
-      query: ({ userId }) => ({
-        url: `/inbox?userId=${userId}`,
+    getInbox: builder.query<InboxItem[], void>({
+      query: () => ({
+        url: '/inbox',
         method: 'GET',
       }),
       providesTags: ['Inbox'],
     }),
 
-    getChatMessages: builder.query<ChatMessageApi[], { swapRequestId: string; userId: string }>({
-      query: ({ swapRequestId, userId }) => ({
-        url: `/swap-requests/${swapRequestId}/chat?userId=${userId}`,
+    getChatMessages: builder.query<ChatMessageApi[], { swapRequestId: string }>({
+      query: ({ swapRequestId }) => ({
+        url: `/swap-requests/${swapRequestId}/chat`,
         method: 'GET',
       }),
       providesTags: (_result, _error, { swapRequestId }) => [
@@ -60,9 +60,9 @@ export const inboxApi = api.injectEndpoints({
 
     sendChatMessage: builder.mutation<
       ChatMessageApi,
-      { swapRequestId: string; userId: string; message?: string; images?: File[] }
+      { swapRequestId: string; message?: string; images?: File[] }
     >({
-      query: ({ swapRequestId, userId, message, images }) => {
+      query: ({ swapRequestId, message, images }) => {
         const formData = new FormData();
         if (message) {
           formData.append('message', message);
@@ -74,7 +74,7 @@ export const inboxApi = api.injectEndpoints({
         }
 
         return {
-          url: `/swap-requests/${swapRequestId}/chat?userId=${userId}`,
+          url: `/swap-requests/${swapRequestId}/chat`,
           method: 'POST',
           body: formData,
         };
