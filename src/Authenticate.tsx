@@ -17,10 +17,10 @@ export default function Authenticate() {
     },
   );
 
-  const { data: inboxData, isSuccess: isInboxSuccess } = useGetInboxQuery(
-    undefined,
-    { skip: !userInformation.id, refetchOnMountOrArgChange: 30 },
-  );
+  const { data: inboxData, isSuccess: isInboxSuccess } = useGetInboxQuery(undefined, {
+    skip: !userInformation.id,
+    refetchOnMountOrArgChange: 30,
+  });
 
   useEffect(() => {
     if (data) {

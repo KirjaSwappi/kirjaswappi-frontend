@@ -62,7 +62,7 @@ export default function UserMenuDropdown() {
             key={`${menu.label}-${index}`}
             onClick={() => {
               dispatch(logout());
-              dispatch(api.util.invalidateTags(['AddProfileImage']));
+              dispatch(api.util.resetApiState());
               showToast('success', 'Logout successfully');
             }}
             className="w-full"

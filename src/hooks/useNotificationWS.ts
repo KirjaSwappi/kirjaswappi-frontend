@@ -168,7 +168,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     try {
       const userToken = getCookie('userToken');
       const token = userToken || WS_API_KEY;
-      const wsUrl = `${WS_URL}?userId=${userId}${token ? `&token=${token}` : ''}`;
+      const wsUrl = `${WS_URL}?userId=${encodeURIComponent(userId)}${token ? `&token=${encodeURIComponent(token)}` : ''}`;
 
       dispatch(setWSConnectionStatus('connecting'));
 

@@ -3,7 +3,7 @@ import { getCookie, isCookieExpired, setCookie } from '../../utility/cookies';
 
 // =========== Platform (Admin) Token ===========
 let isAuthenticating = false;
-let pendingAuthPromise: Promise<string> | null = null;
+let pendingAuthPromise: Promise<string | null> | null = null;
 
 const fetchToken = async () => {
   const data = JSON.stringify({
@@ -98,8 +98,13 @@ const getUserToken = async (): Promise<string | null> => {
   return token;
 };
 
-// Endpoints that require only platform auth (no user token)
-const PLATFORM_ONLY_ENDPOINTS = ['authenticate'];
+// Endpoints that require user auth (must not fall back to platform token)
+const USER_ONLY_ENDPOINTS = [
+  'getInbox',
+  'getChatMessages',
+  'sendChatMessage',
+  'updateSwapRequestStatus',
+];
 
 export const api = createApi({
   reducerPath: 'api',
@@ -110,8 +115,13 @@ export const api = createApi({
 
       // Try user token first (for user-facing endpoints)
       const userToken = await getUserToken();
-      if (userToken && !PLATFORM_ONLY_ENDPOINTS.includes(endpoint)) {
+      if (userToken) {
         headers.set('Authorization', `Bearer ${userToken}`);
+        return headers;
+      }
+
+      // Don't fall back to platform token for user-scoped endpoints
+      if (USER_ONLY_ENDPOINTS.includes(endpoint)) {
         return headers;
       }
 

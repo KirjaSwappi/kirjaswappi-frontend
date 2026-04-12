@@ -228,7 +228,6 @@ export const {
   setOtp,
   setUserEmail,
   setError,
-  setVerify,
   logout,
   setAuthMessage,
   setAuthSuccess,
