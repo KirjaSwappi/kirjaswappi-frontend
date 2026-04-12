@@ -77,7 +77,6 @@ export default function ChatInboxInput() {
     try {
       await sendChatMessage({
         swapRequestId: selectedChatId,
-        userId: userInformation.id,
         message: trimmedMessage || undefined,
         images: imageFiles.length > 0 ? imageFiles : undefined,
       }).unwrap();

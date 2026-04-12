@@ -66,6 +66,9 @@ export const useChatWS = (): UseChatWSReturn => {
   const [reconnectAttempts, setReconnectAttempts] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const subscribedChatsRef = useRef<Set<string>>(new Set());
+  const subscriptionMapRef = useRef<Map<string, { unsubscribe: () => void }>>(new Map());
+  const userIdRef = useRef(userId);
+  userIdRef.current = userId;
 
   /**
    * Clear reconnect timeout
@@ -91,7 +94,7 @@ export const useChatWS = (): UseChatWSReturn => {
           messageId: chatMessage.id,
           text: chatMessage.message || chatMessage.text || '',
           senderId: chatMessage.sender?.id || chatMessage.senderId,
-          userId: userId as string,
+          userId: userIdRef.current as string,
           time: chatMessage.sentAt,
           images: chatMessage.imageUrls,
         }),
@@ -133,11 +136,13 @@ export const useChatWS = (): UseChatWSReturn => {
     if (subscribedChatsRef.current.has(swapRequestId)) return;
 
     try {
-      stompClientRef.current.subscribe(`/user/queue/chat.${swapRequestId}`, (message) =>
-        handleChatMessage(swapRequestId, message),
+      const subscription = stompClientRef.current.subscribe(
+        `/user/queue/chat.${swapRequestId}`,
+        (message) => handleChatMessage(swapRequestId, message),
       );
 
       subscribedChatsRef.current.add(swapRequestId);
+      subscriptionMapRef.current.set(swapRequestId, subscription);
     } catch (error) {
       console.error(`[ChatWS] Error subscribing to chat ${swapRequestId}:`, error);
     }
@@ -147,17 +152,16 @@ export const useChatWS = (): UseChatWSReturn => {
    * Unsubscribe from a specific chat
    */
   const unsubscribeFromChat = (swapRequestId: string) => {
-    if (!stompClientRef.current || !stompClientRef.current.connected) {
-      return;
-    }
-
     if (!subscribedChatsRef.current.has(swapRequestId)) {
       return;
     }
 
     try {
-      // Note: STOMP.js doesn't provide direct unsubscribe by destination
-      // We'll track subscriptions and clean up on disconnect
+      const subscription = subscriptionMapRef.current.get(swapRequestId);
+      if (subscription) {
+        subscription.unsubscribe();
+        subscriptionMapRef.current.delete(swapRequestId);
+      }
       subscribedChatsRef.current.delete(swapRequestId);
     } catch (error) {
       console.error(`[ChatWS] Error unsubscribing from chat ${swapRequestId}:`, error);
@@ -193,16 +197,13 @@ export const useChatWS = (): UseChatWSReturn => {
     }
 
     try {
-      const jwtToken = getCookie('jwtToken');
+      const userToken = getCookie('userToken');
+      const jwtToken = userToken || getCookie('jwtToken');
       if (!jwtToken) return;
 
-      const socket = new SockJS(WS_URL, null, {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-          userId: userId as string,
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);
+      // SockJS does not support custom headers on the HTTP transport.
+      // Auth is handled via STOMP connectHeaders below.
+      const socket = new SockJS(WS_URL);
 
       // Handle SockJS connection errors (e.g., 403 on /info request)
       socket.onerror = (error) => {
@@ -222,7 +223,7 @@ export const useChatWS = (): UseChatWSReturn => {
         heartbeatOutgoing: 4000,
         connectHeaders: {
           Authorization: `Bearer ${jwtToken}`,
-          userId: userId as string,
+          ...(userToken ? {} : { userId: userId as string }),
         },
         debug: (str) => {
           if (import.meta.env.DEV) {
@@ -250,10 +251,11 @@ export const useChatWS = (): UseChatWSReturn => {
           // Subscribe to currently selected chat if any
           if (selectedChatId && !subscribedChatsRef.current.has(selectedChatId)) {
             try {
-              client.subscribe(`/user/queue/chat.${selectedChatId}`, (message) =>
+              const sub = client.subscribe(`/user/queue/chat.${selectedChatId}`, (message) =>
                 handleChatMessage(selectedChatId, message),
               );
               subscribedChatsRef.current.add(selectedChatId);
+              subscriptionMapRef.current.set(selectedChatId, sub);
             } catch (error) {
               console.error(`[ChatWS] Error subscribing to chat ${selectedChatId}:`, error);
             }
@@ -277,6 +279,7 @@ export const useChatWS = (): UseChatWSReturn => {
         onWebSocketClose: (event) => {
           setIsConnected(false);
           subscribedChatsRef.current.clear();
+          subscriptionMapRef.current.clear();
 
           // Don't reconnect if we've hit max attempts or if it was an auth error
           if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
@@ -296,6 +299,7 @@ export const useChatWS = (): UseChatWSReturn => {
         onDisconnect: () => {
           setIsConnected(false);
           subscribedChatsRef.current.clear();
+          subscriptionMapRef.current.clear();
         },
       });
 
@@ -321,6 +325,7 @@ export const useChatWS = (): UseChatWSReturn => {
     setIsConnected(false);
     setReconnectAttempts(0);
     subscribedChatsRef.current.clear();
+    subscriptionMapRef.current.clear();
   };
 
   // Effect: Connect when user ID is available, disconnect when user logs out

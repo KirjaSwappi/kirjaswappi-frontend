@@ -175,7 +175,6 @@ describe('ChatInboxInput Component', () => {
     await waitFor(() => {
       expect(mockSendChatMessage).toHaveBeenCalledWith({
         swapRequestId: 'swap-123',
-        userId: 'user-1',
         message: 'Hello world',
         images: undefined,
       });

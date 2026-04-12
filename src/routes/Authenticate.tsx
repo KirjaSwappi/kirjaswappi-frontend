@@ -7,13 +7,10 @@ const Authenticate = ({ children }: { children: any }) => {
   const { pathname, state } = location;
   const { userInformation } = useAppSelector((state) => state.auth);
 
-  if (!userInformation.email) {
-    return children;
-  }
-
   if (userInformation.email) {
     return <Navigate to="/" state={{ ...state, path: pathname }} />;
   }
+
   return children;
 };
 

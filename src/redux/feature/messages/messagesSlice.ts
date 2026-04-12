@@ -134,7 +134,7 @@ const chatSlice = createSlice({
           note: item.note,
           messages: existingChat?.messages || [
             {
-              id: item.id,
+              id: `inbox-${item.id}`,
               sender: item.conversationType === 'sent' ? 'me' : 'them',
               text: lastText,
               time: item.updatedAt,
@@ -168,7 +168,7 @@ const chatSlice = createSlice({
         note: item.note,
         messages: [
           {
-            id: item.id,
+            id: `inbox-${item.id}`,
             sender: item.conversationType === 'sent' ? 'me' : 'them',
             text: lastText,
             time: item.updatedAt,

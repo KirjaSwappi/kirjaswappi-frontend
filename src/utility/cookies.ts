@@ -40,29 +40,26 @@ export const clearCookie = (name: string) => {
 export const isCookieExpired = (name: string): boolean => {
   const cookie = getCookie(name);
   if (!cookie) {
-    console.log('Cookie has expired or is not set.');
     return true;
+  }
+  if (typeof cookie !== 'string') {
+    // Non-string cookies (e.g., JSON objects) cannot be JWT-decoded
+    return false;
   }
   try {
     const decodedToken: JwtPayload = jwtDecode<JwtPayload>(cookie);
     const currentTime = Date.now() / 1000;
     if (!decodedToken.exp) {
-      console.log('Token does not have an expiration field.');
       return true;
     }
     return decodedToken.exp < currentTime;
-  } catch (error) {
-    console.log('isCookieExpired', error);
+  } catch {
     return true;
   }
 };
 
-// Function to handle cookie expiration (remove expired cookies)
 export const handleExpiredCookie = (name: string) => {
   if (isCookieExpired(name)) {
     clearCookie(name);
-    console.log(`Cookie ${name} has expired. It has been removed.`);
-  } else {
-    console.log(`Cookie ${name} is still valid.`);
   }
 };

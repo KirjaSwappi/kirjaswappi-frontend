@@ -176,7 +176,7 @@ describe('Chat Messaging Flow (Functional)', () => {
     renderMessages();
 
     await waitFor(() => {
-      expect(mockUseGetInboxQuery).toHaveBeenCalledWith({ userId: 'user-1' }, expect.any(Object));
+      expect(mockUseGetInboxQuery).toHaveBeenCalledWith(undefined, expect.any(Object));
     });
   });
 
@@ -200,7 +200,6 @@ describe('Chat Messaging Flow (Functional)', () => {
       expect(mockUseGetChatMessagesQuery).toHaveBeenCalledWith(
         expect.objectContaining({
           swapRequestId: 'swap-1',
-          userId: 'user-1',
         }),
         expect.any(Object),
       );

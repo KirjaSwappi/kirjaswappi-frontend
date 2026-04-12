@@ -25,13 +25,10 @@ export default function ChatList() {
     isLoading,
     isSuccess,
     isError,
-  } = useGetInboxQuery(
-    { userId: userInformation.id as string },
-    {
-      skip: !userInformation.id,
-      refetchOnMountOrArgChange: 30,
-    },
-  );
+  } = useGetInboxQuery(undefined, {
+    skip: !userInformation.id,
+    refetchOnMountOrArgChange: 30,
+  });
 
   useEffect(() => {
     if (!isSuccess || !Array.isArray(inboxData) || inboxData.length === 0) return;
