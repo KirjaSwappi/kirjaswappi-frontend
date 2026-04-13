@@ -10,7 +10,7 @@ export default function About() {
   const { id: userId } = useParams();
   const { data } = useGetUserByIdQuery({ userId: userId as string }, { skip: !userId });
   const { data: booksData } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
-  const booksCount = booksData?._embedded?.books?.length ?? 0;
+  const booksCount = booksData?.page?.totalElements ?? 0;
   return (
     <div>
       {data?.aboutMe && (
