@@ -53,7 +53,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const connectRef = useRef<() => void>(() => {});
-  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const reconnectAttemptsRef = useRef(0);
   const [isConnected, setIsConnected] = useState(false);
 
   const clearReconnectTimeout = useCallback(() => {
@@ -111,7 +111,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    */
   const handleOpen = useCallback(() => {
     setIsConnected(true);
-    setReconnectAttempts(0);
+    reconnectAttemptsRef.current = 0;
     dispatch(setWSConnectionStatus('connected'));
   }, [dispatch]);
 
@@ -124,22 +124,22 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
       setIsConnected(false);
       clearReconnectTimeout();
 
-      if (userId && !event.wasClean && reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-        const delay = getReconnectDelay(reconnectAttempts);
+      if (userId && !event.wasClean && reconnectAttemptsRef.current < MAX_RECONNECT_ATTEMPTS) {
+        const delay = getReconnectDelay(reconnectAttemptsRef.current);
         dispatch(setWSConnectionStatus('connecting'));
 
         reconnectTimeoutRef.current = setTimeout(() => {
-          setReconnectAttempts((prev) => prev + 1);
+          reconnectAttemptsRef.current += 1;
           connectRef.current();
         }, delay);
-      } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+      } else if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
         console.error('[NotificationWS] Max reconnection attempts reached');
         dispatch(setWSConnectionStatus('error'));
       } else {
         dispatch(setWSConnectionStatus('disconnected'));
       }
     },
-    [userId, reconnectAttempts, dispatch, clearReconnectTimeout],
+    [userId, dispatch, clearReconnectTimeout],
   );
 
   /**
@@ -201,7 +201,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     }
 
     setIsConnected(false);
-    setReconnectAttempts(0);
+    reconnectAttemptsRef.current = 0;
     dispatch(setWSConnectionStatus('disconnected'));
   }, [dispatch, clearReconnectTimeout]);
 
@@ -231,6 +231,5 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
   return {
     isConnected,
     connectionStatus,
-    reconnectAttempts,
   };
 };

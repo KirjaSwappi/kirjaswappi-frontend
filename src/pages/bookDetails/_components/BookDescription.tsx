@@ -19,7 +19,7 @@ export default function BookDescription({ description }: { description: string }
             onClick={toggleReadMore}
             className="text-primary ml-1 text-sm font-normal font-poppins"
           >
-            {isExpanded ? ' More Less' : ' More'}
+            {isExpanded ? ' Show Less' : ' More'}
           </button>
         )}
       </p>

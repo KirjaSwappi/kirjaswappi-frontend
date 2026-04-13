@@ -13,8 +13,6 @@ interface IErrorPayload {
 const initialState: ISwapBookInitialInformation = {
   errorMessage: '',
   swapModalOpen: false,
-  clearStateOfSwapRequest: false,
-  isSwapBookDetailsOrBookHomePage: false,
   bookIdToSwapWith: '',
   swapFilterGenre: [],
   swapBookInformation: {
@@ -52,9 +50,6 @@ const swapSlice = createSlice({
       state.bookIdToSwapWith = '';
       state.swapFilterGenre = [];
     },
-    setSwapBookDetailsOrBookHomePage: (state, action: PayloadAction<boolean>) => {
-      state.isSwapBookDetailsOrBookHomePage = action.payload;
-    },
     setSwapModal: (state, action: PayloadAction<boolean>) => {
       state.swapModalOpen = action.payload;
     },
@@ -69,24 +64,16 @@ const swapSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(swapApi.endpoints.swapRequest.matchPending, (state) => {
-      state.clearStateOfSwapRequest = false;
-    });
-    builder.addMatcher(swapApi.endpoints.swapRequest.matchFulfilled, (state) => {
-      state.clearStateOfSwapRequest = true;
-    });
     builder.addMatcher(
       swapApi.endpoints.swapRequest.matchRejected,
       (state, action: PayloadAction<FetchBaseQueryError | undefined>) => {
         const error = (action.payload as FetchBaseQueryError)?.data as IErrorPayload;
 
         let errorMessage: string | undefined;
-        // console.log(error?.error?.message);
         if (error && typeof error.error === 'object' && error.error !== null) {
           errorMessage = error.error.message;
         }
         state.errorMessage = errorMessage;
-        state.clearStateOfSwapRequest = true;
       },
     );
   },
@@ -96,7 +83,6 @@ export const {
   setSwapModal,
   setSwapBook,
   setResetSwapBook,
-  setSwapBookDetailsOrBookHomePage,
   setBookIdToSwapWith,
   setClearErrorMessage,
   setSwapFilterGenre,

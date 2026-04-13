@@ -7,7 +7,6 @@ export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: bool
       className={`${isSuccess ? 'block' : 'hidden'} bg-black bg-opacity-50 inset-0 w-full h-screen fixed -top-0 left-0 z-[999999999] flex items-center justify-center`}
     >
       <AnimatePresence>
-        (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -32,12 +31,11 @@ export default function RequestSuccessAnimation({ isSuccess }: { isSuccess: bool
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.3 }}
-            className="font-poppins text-sx text-[#6F6E77] font-light"
+            className="font-poppins text-xs text-[#6F6E77] font-light"
           >
             Thank you for your swap
           </motion.p>
         </motion.div>
-        )
       </AnimatePresence>
     </div>
   );

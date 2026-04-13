@@ -35,11 +35,7 @@ export default function OfferedBy({
               className="flex items-center gap-1 bg-transparent border-none p-0 cursor-pointer"
               style={{ background: 'none', border: 'none' }}
             >
-              <Image
-                className="w-4 h-4 rounded-full"
-                src={(imageUrl && imageUrl) || profileIcon}
-                alt="profile"
-              />
+              <Image className="w-4 h-4 rounded-full" src={imageUrl || profileIcon} alt="profile" />
               <p className="text-xs font-normal font-poppins text-black">{ownerName}</p>
             </Button>
           </div>

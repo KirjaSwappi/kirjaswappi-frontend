@@ -52,7 +52,7 @@ const Stepper = ({ steps }: { steps: IStep[] }) => {
                 </p>
                 <p className="hidden lg:block text-xs text-[#808080]">Add your book details here</p>
                 {step.isCompleted && (
-                  <p className="text-[#3FBA49] font-poppins font-semibold text-sx hidden lg:block">
+                  <p className="text-[#3FBA49] font-poppins font-semibold text-xs hidden lg:block">
                     Completed
                   </p>
                 )}

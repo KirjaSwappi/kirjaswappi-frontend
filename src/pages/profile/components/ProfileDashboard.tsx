@@ -114,7 +114,7 @@ export default function ProfileDashboard() {
               )}
             </div>
             <div className="mt-5 pb-32">
-              {tabs.map((tab, index) => (
+              {filteredTabs.map((tab, index) => (
                 <div
                   key={index}
                   className={`${activeTab === index ? 'block' : 'hidden'} ${

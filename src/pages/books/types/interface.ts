@@ -12,15 +12,14 @@ export interface IBook {
   description: string;
   condition: string;
   coverPhotoUrl: string;
-  ownerName: string;
+  offeredBy?: string;
   ownerId: string;
-  ownerProfilePhoto: string;
   coverPhotoUrls?: string[];
   location?: IBookLocation;
-  owner: {
+  bookLocation?: string;
+  owner?: {
     id: string;
     name: string;
-    location?: IBookLocation;
   };
 }
 

@@ -324,7 +324,7 @@ export default function ResetPassword() {
             >
               {step === 1 && (
                 <div className="text-center py-6 border-b border-[#E6E6E6] lg:hidden">
-                  <h1>Confirm you Email</h1>
+                  <h1>Confirm your Email</h1>
                 </div>
               )}
               <div className={`${step === 1 && 'px-6'}`}>

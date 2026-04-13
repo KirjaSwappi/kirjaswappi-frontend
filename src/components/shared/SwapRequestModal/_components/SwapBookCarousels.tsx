@@ -5,9 +5,9 @@ import Image from '../../Image';
 import { ISwapBook } from '../types/interface';
 
 export default function SwapBookCarousels({ swapBook }: { swapBook: ISwapBook[] | [] }) {
-  if (!swapBook) return null;
   const { setValue, watch } = useFormContext();
   const selectedBook = watch('selectedBook');
+  if (!swapBook) return null;
   return (
     <Carousel
       opts={{
@@ -28,7 +28,7 @@ export default function SwapBookCarousels({ swapBook }: { swapBook: ISwapBook[] 
                 className={`max-w-[120px] w-[120px] rounded-[8px] p-2 relative ${selectedBook?.id === item.id ? 'border border-primary' : ''}`}
               >
                 {selectedBook?.id === item.id && (
-                  <div className="absolute -right-2 -top-2  rounded-full flex items-center justify-center border border-white bg-white z ">
+                  <div className="absolute -right-2 -top-2 rounded-full flex items-center justify-center border border-white bg-white z-10">
                     <Image src={TicMark} alt="ticmark" className="w-[18px]" />
                   </div>
                 )}

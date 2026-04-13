@@ -28,7 +28,7 @@ export default function BookType({
           {language || 'English'}
         </h3>
       </div>
-      <div className="flex flex-col items-center border-r border-platinumDark px-1">
+      <div className="flex flex-col items-center px-1">
         <p className="text-grayDark text-xs font-poppins font-normal">Edition</p>
         <Image src={edition} alt="book" className="mt-2 mb-1 h-[18px]" />
         <h3 className="text-black text-xs font-normal font-poppins flex items-center gap-1">

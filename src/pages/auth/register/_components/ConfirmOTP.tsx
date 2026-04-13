@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/shared/Button';
 import MessageToastify from '../../../../components/shared/MessageToastify';
 import { ERROR, SUCCESS } from '../../../../constant/MESSAGETYPE';
-import { useVerifyEmailMutation } from '../../../../redux/feature/auth/authApi';
+import { useSentOTPMutation, useVerifyEmailMutation } from '../../../../redux/feature/auth/authApi';
 import { setOtp } from '../../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../../redux/feature/notification/notificationSlice';
 import { setStep } from '../../../../redux/feature/step/stepSlice';
@@ -19,6 +19,7 @@ export default function ConfirmOTP() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
+  const [sentOTP] = useSentOTPMutation();
   const { userEmail, otp } = useAppSelector((state) => state.auth);
   const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
 
@@ -122,7 +123,9 @@ export default function ConfirmOTP() {
         </form>
         <div className="flex items-center justify-center mt-10 gap-2 text-grayDark text-sm font-poppins">
           <p>Haven&apos;t received a code?</p>
-          <Button className="underline text-sm">Send again</Button>
+          <Button className="underline text-sm" onClick={() => sentOTP({ email: userEmail })}>
+            Send again
+          </Button>
         </div>
       </div>
     </div>

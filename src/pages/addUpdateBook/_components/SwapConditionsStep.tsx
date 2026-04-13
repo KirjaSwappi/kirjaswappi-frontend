@@ -28,7 +28,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
   const { control, getValues, watch, setValue, trigger } = useFormContext();
   const { reference, setClicked, clicked } = useMouseClick();
   const swapType = watch('swapType');
-  const swappableGenres = getValues('swappableGenres');
+  const swappableGenres = watch('swappableGenres');
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'swappableBooks',

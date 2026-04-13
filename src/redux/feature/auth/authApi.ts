@@ -156,7 +156,7 @@ export const authApi = api.injectEndpoints({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['DeleteProfileImage'],
+      invalidatesTags: ['AddProfileImage'],
     }),
     getUserCoverImage: builder.query({
       query: ({ userId }) => {
@@ -184,7 +184,7 @@ export const authApi = api.injectEndpoints({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['DeleteCoverImage'],
+      invalidatesTags: ['AddCoverImage'],
     }),
   }),
 });

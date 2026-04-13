@@ -13,6 +13,7 @@ import AlertModal from '../../../components/shared/AlertModal';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
+import { showToast } from '../../../components/shared/toast';
 import InputLabel from '../../../components/shared/InputLabel';
 import Spinner from '../../../components/shared/Spinner';
 import TextArea from '../../../components/shared/TextArea';
@@ -174,9 +175,9 @@ export default function EditProfile() {
 
       clearProfileState();
       clearCoverState();
-      navigate('/profile/user-profile');
+      navigate(`/profile/user-profile/${userInformation.id}`);
     } catch (error) {
-      console.log(error);
+      showToast('error', 'Failed to update profile.');
     }
   };
 
@@ -476,7 +477,10 @@ export default function EditProfile() {
           </div>
           <div>
             <p className="flex items-center font-poppins font-normal text-xs gap-1">
-              <Image src={locationIcon} alt="location" /> Dhaka bangladesh
+              <Image src={locationIcon} alt="location" />{' '}
+              {editInfo.city
+                ? `${editInfo.city}${editInfo.country ? `, ${editInfo.country}` : ''}`
+                : 'No location set'}
             </p>
           </div>
         </div>

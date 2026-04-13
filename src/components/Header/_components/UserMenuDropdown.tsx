@@ -3,7 +3,7 @@ import { IoLogOut } from 'react-icons/io5';
 import { MdContactPage, MdFeedback, MdLock } from 'react-icons/md';
 import { TbUserCircle } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
 import { useAppSelector } from '../../../redux/hooks';
@@ -13,6 +13,7 @@ import DropdownItem from './DropdownItem';
 
 export default function UserMenuDropdown() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
@@ -64,6 +65,7 @@ export default function UserMenuDropdown() {
               dispatch(logout());
               dispatch(api.util.resetApiState());
               showToast('success', 'Logout successfully');
+              navigate('/');
             }}
             className="w-full"
           >

@@ -49,7 +49,7 @@ export default function Login() {
       }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {
-      console.log('login error', error);
+      // Login error handled by RTK Query
     }
   };
 

@@ -19,7 +19,7 @@ export default function Footer() {
   const isFooterBarShow = ignorePath.includes(pathname);
   return (
     <footer
-      className={`${isFooterBarShow || (selectedChatId && 'hidden') || (loginModalOpen && 'hidden')} bg-white lg:hidden relative`}
+      className={`${isFooterBarShow || selectedChatId || loginModalOpen ? 'hidden' : ''} bg-white lg:hidden relative`}
     >
       <Button
         type="button"

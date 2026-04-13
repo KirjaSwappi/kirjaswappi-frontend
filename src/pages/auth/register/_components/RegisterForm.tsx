@@ -77,7 +77,7 @@ export default function RegisterForm() {
         }
       });
     } catch (error) {
-      console.log('register error', error);
+      // Registration error handled by RTK Query
     }
   };
   useEffect(() => {
