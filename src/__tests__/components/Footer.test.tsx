@@ -9,6 +9,10 @@ vi.mock('../../components/Footer/_components/BottomNav', () => ({
   default: () => <div data-testid="bottom-nav">BottomNav</div>,
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 function renderFooter(route = '/') {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const store = setupTestStore({} as any);
@@ -24,14 +28,14 @@ function renderFooter(route = '/') {
 describe('Footer', () => {
   it('renders desktop footer with copyright', () => {
     renderFooter();
-    expect(screen.getByText(/KirjaSwappi. All rights reserved/)).toBeInTheDocument();
+    expect(screen.getByText('footer.copyright')).toBeInTheDocument();
   });
 
   it('renders legal links in desktop footer', () => {
     renderFooter();
-    expect(screen.getByText('Privacy Policy')).toBeInTheDocument();
-    expect(screen.getByText('Terms of Service')).toBeInTheDocument();
-    expect(screen.getByText('Contact Us')).toBeInTheDocument();
+    expect(screen.getByText('footer.privacyPolicy')).toBeInTheDocument();
+    expect(screen.getByText('footer.termsOfService')).toBeInTheDocument();
+    expect(screen.getByText('footer.contactUs')).toBeInTheDocument();
   });
 
   it('renders mobile bottom nav', () => {

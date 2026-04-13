@@ -90,6 +90,10 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: '/contact',
+        element: <Navigate to="/contact-us" replace />,
+      },
+      {
         path: '/collaboration',
         element: (
           <LazyRoute>

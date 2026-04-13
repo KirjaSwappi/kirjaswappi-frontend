@@ -123,7 +123,7 @@ export default function SwapModal() {
   );
 
   // =========== DERIVED VALUES ===========
-  const disableSentRequest = useMemo(
+  const isSendDisabled = useMemo(
     () => !selectedBook && currentSwapType !== SwapType.GIVEAWAY,
     [selectedBook, currentSwapType],
   );
@@ -215,7 +215,7 @@ export default function SwapModal() {
                       <MessageToastify isShow={true} type={ERROR} value={errorMessage} />
                     </div>
                   )}
-                  <SubmitButton disabled={disableSentRequest} />
+                  <SubmitButton disabled={isSendDisabled} />
                 </form>
               </FormProvider>
             </div>

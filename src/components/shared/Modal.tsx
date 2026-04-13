@@ -23,24 +23,41 @@ export default function Modal({
   // Focus trap
   useEffect(() => {
     if (!open || !modalRef.current) return;
-    modalRef.current.focus();
 
     const handleTab = (e: KeyboardEvent) => {
       if (e.key !== 'Tab' || !modalRef.current) return;
       const focusable = modalRef.current.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), textarea, input:not([disabled]), select, [tabindex]:not([tabindex="-1"])',
       );
-      if (focusable.length === 0) return;
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
+      const active = document.activeElement;
+      if (e.shiftKey) {
+        if (active === first || active === modalRef.current) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (active === last || active === modalRef.current) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     };
+
+    // Move initial focus to first focusable element
+    const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea, input:not([disabled]), select, [tabindex]:not([tabindex="-1"])',
+    );
+    if (focusable.length > 0) {
+      focusable[0].focus();
+    } else {
+      modalRef.current.focus();
+    }
 
     document.addEventListener('keydown', handleTab);
     return () => document.removeEventListener('keydown', handleTab);

@@ -49,7 +49,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`;
       const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'User-Agent': 'KirjaSwappi/1.0' },
+        headers: { Accept: 'application/json' },
       });
       if (!res.ok) return null;
       const data = await res.json();
@@ -69,7 +69,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
       const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'User-Agent': 'KirjaSwappi/1.0' },
+        headers: { Accept: 'application/json' },
       });
       if (!res.ok) return [];
       const data = await res.json();

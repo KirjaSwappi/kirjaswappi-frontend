@@ -4,7 +4,7 @@ import ControlledInputField from '../../../components/shared/ControllerField';
 import InputLabel from '../../../components/shared/InputLabel';
 
 interface VolunteerFormProps {
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
   isLoading: boolean;
 }
 

@@ -1,10 +1,12 @@
 import { FaPlus } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../redux/hooks';
 import Button from '../shared/Button';
 import BottomNav from './_components/BottomNav';
 
 export default function Footer() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedChatId } = useAppSelector((state) => state.chat);
@@ -24,26 +26,26 @@ export default function Footer() {
         <div className="container py-6">
           <div className="flex items-center justify-between">
             <p className="font-poppins text-xs text-grayDark">
-              &copy; {new Date().getFullYear()} KirjaSwappi. All rights reserved.
+              {t('footer.copyright', { year: new Date().getFullYear() })}
             </p>
             <div className="flex items-center gap-6">
               <Link
                 to="/privacy-policy"
                 className="font-poppins text-xs text-grayDark hover:text-black hover:underline"
               >
-                Privacy Policy
+                {t('footer.privacyPolicy')}
               </Link>
               <Link
                 to="/terms-of-service"
                 className="font-poppins text-xs text-grayDark hover:text-black hover:underline"
               >
-                Terms of Service
+                {t('footer.termsOfService')}
               </Link>
               <Link
                 to="/contact-us"
                 className="font-poppins text-xs text-grayDark hover:text-black hover:underline"
               >
-                Contact Us
+                {t('footer.contactUs')}
               </Link>
             </div>
           </div>
