@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { ILoginForm } from '../../../pages/auth/login/interface';
 import { loginSchema } from '../../../pages/auth/login/Schema';
@@ -20,7 +19,6 @@ import { showToast } from '../toast';
 
 export default function LoginModal() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { error: authError, message: authMessage } = useAppSelector((state) => state.auth);
   const { loginModalOpen } = useAppSelector((state) => state.open);
   const [login, { isLoading }] = useLoginMutation();
@@ -128,7 +126,7 @@ export default function LoginModal() {
               className="text-primary text-sm font-light underline"
               onClick={() => {
                 dispatch(setLoginModalOpen(false));
-                navigate('/auth/register');
+                window.location.href = '/auth/register';
               }}
             >
               Sign up
