@@ -8,9 +8,11 @@ interface FormSubmissionRequest {
   amount?: string;
 }
 
+type FormType = 'contact' | 'volunteer' | 'donation' | 'collaboration' | 'feedback';
+
 const formApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    submitForm: builder.mutation<void, { type: string; data: FormSubmissionRequest }>({
+    submitForm: builder.mutation<void, { type: FormType; data: FormSubmissionRequest }>({
       query: ({ type, data }) => ({
         url: `/forms/${type}`,
         method: 'POST',

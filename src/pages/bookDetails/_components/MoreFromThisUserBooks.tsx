@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import BookCard from '../../../components/shared/BookCard';
 import Button from '../../../components/shared/Button';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
@@ -15,7 +16,7 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
     isFetching,
     isLoading,
     data: moreBooks,
-  } = useGetMoreBooksByBookIdQuery({ id: bookId! }, { skip: !bookId });
+  } = useGetMoreBooksByBookIdQuery(bookId ? { id: bookId } : skipToken);
   const isInitialLoading = isFetching || isLoading;
 
   if (!bookId) return null;

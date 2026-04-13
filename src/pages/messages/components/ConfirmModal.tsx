@@ -20,6 +20,7 @@ export default function ConfirmModal({
   description,
   btnValue = 'Yes',
 }: ConfirmModalProps) {
+  const { t } = useTranslation();
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,7 +39,6 @@ export default function ConfirmModal({
   }, [open]);
 
   if (!open) return null;
-  const { t } = useTranslation();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div

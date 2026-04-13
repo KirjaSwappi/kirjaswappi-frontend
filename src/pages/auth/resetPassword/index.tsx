@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
@@ -28,6 +29,7 @@ interface INewPassForm {
 }
 
 export default function ResetPassword() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [sentOTP] = useSentOTPMutation();
   const [verifyOTP] = useVerifyOTPMutation();
@@ -155,7 +157,7 @@ export default function ResetPassword() {
         return () => clearTimeout(timer);
       }
     } catch (error) {
-      showToast('error', 'Failed to send OTP. Please try again.');
+      showToast('error', t('resetPassword.otpFailed'));
     }
   };
 
@@ -172,7 +174,7 @@ export default function ResetPassword() {
           return () => clearTimeout(timer);
         }
       } catch (error) {
-        showToast('error', 'Failed to verify OTP. Please try again.');
+        showToast('error', t('resetPassword.verifyFailed'));
       }
     } else {
       dispatch(
@@ -204,7 +206,7 @@ export default function ResetPassword() {
         return () => clearTimeout(timer);
       }
     } catch (error) {
-      showToast('error', 'Failed to reset password. Please try again.');
+      showToast('error', t('resetPassword.resetFailed'));
     }
   };
 

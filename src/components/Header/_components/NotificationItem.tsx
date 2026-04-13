@@ -37,7 +37,7 @@ export function formatNotificationTime(time: string, t: TFunction): string {
         ? t('notification.dayAgo', { count: diffInDays })
         : t('notification.daysAgo', { count: diffInDays });
     } else {
-      return notificationDate.toLocaleDateString('en-US', {
+      return notificationDate.toLocaleDateString(undefined, {
         month: 'short',
         day: 'numeric',
         year: notificationDate.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
