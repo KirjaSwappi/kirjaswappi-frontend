@@ -60,9 +60,10 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
   const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
 
-  const swapStatus = selectedChat.swapStatus || 'Pending';
+  const rawStatus = selectedChat.swapStatus || 'PENDING';
+  const swapStatus = rawStatus.toUpperCase();
   const isReceiver = selectedChat.conversationType === 'received';
-  const canRespondToSwap = isReceiver && swapStatus === 'Pending';
+  const canRespondToSwap = isReceiver && swapStatus === 'PENDING';
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
@@ -75,12 +76,21 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   };
 
   const statusBadgeStyles: Record<string, string> = {
-    Pending: 'bg-yellow-100 text-yellow-800',
-    Accepted: 'bg-green-100 text-green-800',
-    Rejected: 'bg-red-100 text-red-800',
-    Completed: 'bg-blue-100 text-blue-800',
-    Cancelled: 'bg-gray-100 text-gray-800',
-    Expired: 'bg-gray-100 text-gray-500',
+    PENDING: 'bg-amber-100 text-amber-700',
+    ACCEPTED: 'bg-green-100 text-green-700',
+    REJECTED: 'bg-rose-100 text-rose-700',
+    COMPLETED: 'bg-blue-100 text-blue-700',
+    CANCELLED: 'bg-stone-100 text-stone-500',
+    EXPIRED: 'bg-stone-100 text-stone-500',
+  };
+
+  const statusDisplayLabels: Record<string, string> = {
+    PENDING: 'Pending',
+    ACCEPTED: 'Accepted',
+    REJECTED: 'Rejected',
+    COMPLETED: 'Completed',
+    CANCELLED: 'Cancelled',
+    EXPIRED: 'Expired',
   };
 
   return (
@@ -142,7 +152,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               <span
                 className={`font-poppins text-[10px] font-medium px-2 py-0.5 rounded-full ${statusBadgeStyles[swapStatus] || 'bg-gray-100 text-gray-600'}`}
               >
-                {swapStatus}
+                {statusDisplayLabels[swapStatus] || swapStatus}
               </span>
             </div>
             <Button
@@ -158,7 +168,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                 type="button"
                 disabled={isUpdatingStatus}
                 onClick={() => setAcceptOpen(true)}
-                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-primary rounded-lg hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
               >
                 {t('chat.accept')}
               </button>
@@ -166,7 +176,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                 type="button"
                 disabled={isUpdatingStatus}
                 onClick={() => setRejectOpen(true)}
-                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-red rounded-lg hover:bg-red/90 disabled:opacity-50 cursor-pointer"
               >
                 {t('chat.reject')}
               </button>
