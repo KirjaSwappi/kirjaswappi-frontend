@@ -60,9 +60,10 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
   const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
 
-  const swapStatus = selectedChat.swapStatus || 'Pending';
+  const rawStatus = selectedChat.swapStatus || 'PENDING';
+  const swapStatus = rawStatus.toUpperCase();
   const isReceiver = selectedChat.conversationType === 'received';
-  const canRespondToSwap = isReceiver && swapStatus === 'Pending';
+  const canRespondToSwap = isReceiver && swapStatus === 'PENDING';
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
@@ -75,12 +76,21 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   };
 
   const statusBadgeStyles: Record<string, string> = {
-    Pending: 'bg-amber-100 text-amber-700',
-    Accepted: 'bg-green-100 text-green-700',
-    Rejected: 'bg-rose-100 text-rose-700',
-    Completed: 'bg-blue-100 text-blue-700',
-    Cancelled: 'bg-stone-100 text-stone-500',
-    Expired: 'bg-stone-100 text-stone-500',
+    PENDING: 'bg-amber-100 text-amber-700',
+    ACCEPTED: 'bg-green-100 text-green-700',
+    REJECTED: 'bg-rose-100 text-rose-700',
+    COMPLETED: 'bg-blue-100 text-blue-700',
+    CANCELLED: 'bg-stone-100 text-stone-500',
+    EXPIRED: 'bg-stone-100 text-stone-500',
+  };
+
+  const statusDisplayLabels: Record<string, string> = {
+    PENDING: 'Pending',
+    ACCEPTED: 'Accepted',
+    REJECTED: 'Rejected',
+    COMPLETED: 'Completed',
+    CANCELLED: 'Cancelled',
+    EXPIRED: 'Expired',
   };
 
   return (
@@ -142,7 +152,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               <span
                 className={`font-poppins text-[10px] font-medium px-2 py-0.5 rounded-full ${statusBadgeStyles[swapStatus] || 'bg-gray-100 text-gray-600'}`}
               >
-                {swapStatus}
+                {statusDisplayLabels[swapStatus] || swapStatus}
               </span>
             </div>
             <Button
