@@ -9,6 +9,7 @@ import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
+import PageTitle from '../../components/shared/PageTitle';
 import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
@@ -31,7 +32,11 @@ export default function BookDetails() {
   const { handleLoginOrSwap } = useLoginModalOrSwapRequest();
   const { userInformation } = useAppSelector((state) => state.auth);
   const { loginModalOpen } = useAppSelector((state) => state.open);
-  const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
+  const {
+    data: bookData,
+    isLoading: bookLoading,
+    isError,
+  } = useGetBookByIdQuery({ id: id }, { skip: !id });
   const { data: userProfile } = useGetUserProfileImageQuery(
     { userId: bookData?.owner?.id },
     {
@@ -60,14 +65,31 @@ export default function BookDetails() {
 
   if (bookLoading) return <Loader />;
 
+  if (isError)
+    return (
+      <div className="container min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="font-poppins text-grayDark text-sm mb-4">{t('bookDetails.errorMessage')}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="font-poppins text-sm text-white bg-primary px-4 py-2 rounded-lg cursor-pointer"
+          >
+            {t('bookDetails.tryAgain')}
+          </button>
+        </div>
+      </div>
+    );
+
   return (
     <div className="bg-light lg:bg-white min-h-screen pb-20">
+      <PageTitle title={bookData?.title || t('bookDetails.title')} />
       {!loginModalOpen && (
         <div className="lg:hidden left-0 top-0 w-full flex justify-between px-4 bg-white h-14 z-50 fixed">
           <div className="flex items-center gap-4">
             <Image
               src={leftArrowIcon}
-              alt="icon"
+              alt="Go back"
               className="cursor-pointer"
               onClick={() => navigate(-1)}
             />
@@ -76,10 +98,10 @@ export default function BookDetails() {
             </h2>
           </div>
           <div className="flex items-center gap-3">
-            <Image src={shareIcon} alt="icon" className="h-5" />
+            <Image src={shareIcon} alt="Share" className="h-5" />
             <Image
               src={isProfile ? editIcon : bookmarkIcon}
-              alt="icon"
+              alt={isProfile ? 'Edit book' : 'Bookmark'}
               onClick={navigateToEditBook}
               className="w-6 h-6"
             />
@@ -119,7 +141,7 @@ export default function BookDetails() {
                 {bookData?.author && (
                   <p className="text-blackOlive text-sm font-poppins font-normal">
                     {' '}
-                    by {bookData?.author}
+                    {t('bookDetails.byAuthor', { author: bookData?.author })}
                   </p>
                 )}
                 <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
@@ -141,7 +163,7 @@ export default function BookDetails() {
                 <div className="flex flex-col-reverse lg:flex-col">
                   <div>
                     <h3 className="text-sm font-normal font-poppins text-smokyBlack mt-8 lg:mt-5 mb-2 text-left ">
-                      Book Description
+                      {t('bookDetails.bookDescription')}
                     </h3>
                     <BookDescription description={bookData?.description} />
                   </div>
@@ -152,9 +174,11 @@ export default function BookDetails() {
                       </div>
                       <div>
                         <h3 className="font-poppins font-normal text-sm text-blackOlive">
-                          Exchange Condition
+                          {t('bookDetails.exchangeCondition')}
                         </h3>
-                        <p className="text-[10px] text-blackOlive">Either one of these</p>
+                        <p className="text-[10px] text-blackOlive">
+                          {t('bookDetails.eitherOneOfThese')}
+                        </p>
                       </div>
                     </div>
                     <div className="lg:mt-5">
@@ -173,7 +197,7 @@ export default function BookDetails() {
               </div>
               <div className="mt-5 hidden lg:block">
                 <BookActionButton
-                  btnValue={isProfile ? 'Edit Book' : 'Request Swap'}
+                  btnValue={isProfile ? t('books.editBook') : t('bookDetails.requestSwap')}
                   onClick={isEditBookOrSwapRequestFn}
                 />
               </div>

@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import cameraIcon from '../../../assets/cameraIcon.svg';
 import sendIcon from '../../../assets/sendIcon.png';
 import Button from '../../../components/shared/Button';
@@ -15,6 +16,7 @@ import FilesUpload from './FilesUpload';
 
 export default function ChatInboxInput() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const { userInformation } = useAppSelector((state) => state.auth);
@@ -122,7 +124,7 @@ export default function ChatInboxInput() {
               className={`border-none !bg-transparent ${
                 imageFiles && imageFiles?.length <= 0 ? 'px-14' : ''
               }`}
-              placeholder="Write here..."
+              placeholder={t('chat.writeHere')}
               autoComplete="off"
               disabled={isLoading}
             />

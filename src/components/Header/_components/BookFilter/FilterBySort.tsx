@@ -1,16 +1,18 @@
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SortByEnum } from '../../../../utility/enum';
 import Button from '../../../shared/Button';
 import Line from '../../../shared/Line';
 
-const sortLabels: Record<SortByEnum, string> = {
-  [SortByEnum.title]: 'A-Z (Title)',
-  [SortByEnum.author]: 'Author (A-Z)',
-  [SortByEnum.language]: 'Language (A-Z)',
-  [SortByEnum.condition]: 'Condition (A-Z)',
+const sortLabelKeys: Record<SortByEnum, string> = {
+  [SortByEnum.title]: 'filter.sortTitleAZ',
+  [SortByEnum.author]: 'filter.sortAuthorAZ',
+  [SortByEnum.language]: 'filter.sortLanguageAZ',
+  [SortByEnum.condition]: 'filter.sortConditionAZ',
 };
 
 export default function FilterBySort() {
+  const { t } = useTranslation();
   const { control } = useFormContext();
 
   return (
@@ -21,10 +23,10 @@ export default function FilterBySort() {
         render={({ field }) => (
           <div className="py-2">
             <div className="mt-2 space-y-0.5">
-              <span className="font-poppins font-normal text-sm px-4">Sort By</span>
+              <span className="font-poppins font-normal text-sm px-4">{t('filter.sortBy')}</span>
               <Line className="mt-6 mb-10" />
               <div>
-                {Object.entries(sortLabels).map(([value, label]) => {
+                {Object.entries(sortLabelKeys).map(([value, labelKey]) => {
                   const isChecked = field.value?.includes(value);
                   return (
                     <Button
@@ -41,7 +43,7 @@ export default function FilterBySort() {
                         isChecked ? 'bg-primary text-white font-medium' : ''
                       } px-4`}
                     >
-                      <span className="pl-2">{label}</span>
+                      <span className="pl-2">{t(labelKey)}</span>
                     </Button>
                   );
                 })}

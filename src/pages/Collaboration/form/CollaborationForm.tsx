@@ -3,11 +3,16 @@ import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import InputLabel from '../../../components/shared/InputLabel';
 
-export default function CollaborationForm() {
+interface CollaborationFormProps {
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isLoading: boolean;
+}
+
+export default function CollaborationForm({ onSubmit, isLoading }: CollaborationFormProps) {
   const { t } = useTranslation();
 
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <div className=" mb-6 ">
         <InputLabel label={t('name')} />
         <ControlledInputField
@@ -56,9 +61,10 @@ export default function CollaborationForm() {
       </div>
       <Button
         type="submit"
-        className="w-full lg:w-[99px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-3 px-6 rounded-lg mb-14 lg:mb-0 "
+        className="w-full lg:w-[99px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-3 px-6 rounded-lg mb-14 lg:mb-0 disabled:opacity-50"
+        disabled={isLoading}
       >
-        {t('collaboration.submit')}
+        {isLoading ? t('loading') : t('collaboration.submit')}
       </Button>
     </form>
   );

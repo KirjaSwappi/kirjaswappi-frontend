@@ -48,7 +48,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   const reverseGeocode = async (latitude: number, longitude: number) => {
     try {
       const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`;
-      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      const res = await fetch(url, {
+        headers: { Accept: 'application/json' },
+      });
       if (!res.ok) return null;
       const data = await res.json();
       const displayName: string = data?.display_name || '';
@@ -66,7 +68,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   const forwardGeocode = async (query: string): Promise<ISearchResult[]> => {
     try {
       const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=5`;
-      const res = await fetch(url, { headers: { Accept: 'application/json' } });
+      const res = await fetch(url, {
+        headers: { Accept: 'application/json' },
+      });
       if (!res.ok) return [];
       const data = await res.json();
       return data || [];
@@ -165,7 +169,6 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
       // Reverse geocode in background to get better address details
       try {
         const geo = await reverseGeocode(latitude, longitude);
-        // console.log({ geo });
         if (geo) {
           const updatedAddress = {
             ...immediateAddress,
@@ -264,7 +267,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   <Image src={addGenreIcon} alt="genre" className="w-[68px] h-[60px]" />
                   <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
                 </div>
-                <p className="text-xs text-grayDark font-poppins">Click ‘Here’ to add genre</p>
+                <p className="text-xs text-grayDark font-poppins">
+                  Click &apos;Here&apos; to add genre
+                </p>
               </div>
             )}
             {errors && errors['genres'] && (
@@ -387,7 +392,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   <Image src={addmapIcon} alt="genre" className="w-[68px] h-[60px]" />
                   <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
                 </div>
-                <p className="text-xs text-grayDark font-poppins">Click ‘Here’ to add location</p>
+                <p className="text-xs text-grayDark font-poppins">
+                  Click &apos;Here&apos; to add location
+                </p>
               </div>
             )}
             {errors && errors['address'] && (

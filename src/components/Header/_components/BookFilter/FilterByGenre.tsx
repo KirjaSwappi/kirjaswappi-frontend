@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import plusIcon from '../../../../assets/plus.png';
 import tickmarkIcon from '../../../../assets/tickmark.png';
@@ -8,10 +9,11 @@ import { useGetGenreQuery } from '../../../../redux/feature/genre/genreApi';
 import Button from '../../../shared/Button';
 import Image from '../../../shared/Image';
 import { IGenreWithIcon } from '../../types/interface';
-import { genreIcons } from './genreIcons';
+import { defaultGenreIcon, genreIcons } from './genreIcons';
 import GenreSkelton from './GenreSkelton';
 
 export default function FilterByGenre() {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const { data: genreData = [], isLoading: isGenreLoading } = useGetGenreQuery(undefined);
@@ -27,7 +29,7 @@ export default function FilterByGenre() {
     if (!genres) return [];
     return Object.values(genres)?.map((parent) => ({
       ...parent,
-      icon: genreIcons[parent.name] ?? undefined,
+      icon: genreIcons[parent.name] ?? defaultGenreIcon,
     }));
   }
   const genres = mergeGenresWithIcons(genreData?.parentGenres);
@@ -46,7 +48,7 @@ export default function FilterByGenre() {
           control={control}
           render={({ field }) => (
             <div>
-              <span className="font-poppins font-normal text-sm">Genre</span>
+              <span className="font-poppins font-normal text-sm">{t('editProfile.genre')}</span>
               <div className="pl-2">
                 {genres.map((parent) => (
                   <div key={parent.id} className="py-2">

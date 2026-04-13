@@ -1,0 +1,16 @@
+{
+  "name": "KirjaSwappi",
+  "short_name": "KirjaSwappi",
+  "description": "Swap books with readers near you.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3879E9",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

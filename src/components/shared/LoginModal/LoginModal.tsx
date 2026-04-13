@@ -1,5 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png';
 import { ILoginForm } from '../../../pages/auth/login/interface';
 import { loginSchema } from '../../../pages/auth/login/Schema';
@@ -19,6 +21,8 @@ import { showToast } from '../toast';
 
 export default function LoginModal() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { error: authError, message: authMessage } = useAppSelector((state) => state.auth);
   const { loginModalOpen } = useAppSelector((state) => state.open);
   const [login, { isLoading }] = useLoginMutation();
@@ -73,24 +77,24 @@ export default function LoginModal() {
 
         <div className="p-4 lg:p-6 lg:mt-4">
           <h2 className="text-[#1A1A1A] text-base font-medium text-left mb-2 lg:mb-4 font-poppins">
-            Log In your account
+            {t('loginModal.title')}
           </h2>
           <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-3">
               <div>
-                <InputLabel label="Email" className="mb-1 text-arsenic" />
+                <InputLabel label={t('loginModal.email')} className="mb-1 text-arsenic" />
                 <ControlledInputField
                   name="email"
-                  placeholder="Email"
+                  placeholder={t('loginModal.emailPlaceholder')}
                   showErrorMessage
                   className="!bg-transparent rounded-xl"
                 />
               </div>
               <div>
-                <InputLabel label="Password" className="mb-1 text-arsenic" />
+                <InputLabel label={t('loginModal.password')} className="mb-1 text-arsenic" />
                 <ControlledPasswordField
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder={t('loginModal.passwordPlaceholder')}
                   showErrorMessage
                   className="!bg-transparent rounded-xl"
                 />
@@ -107,7 +111,7 @@ export default function LoginModal() {
                 disabled={isLoading}
                 className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-2"
               >
-                {isLoading ? 'Loading...' : 'Log In'}
+                {isLoading ? t('loginModal.loading') : t('loginModal.logIn')}
               </button>
             </form>
           </FormProvider>
@@ -116,20 +120,20 @@ export default function LoginModal() {
               <div className="w-full border-t border-platinum"></div>
             </div>
             <div className="relative flex justify-center text-xs font-poppins">
-              <span className="bg-light lg:bg-white px-2 text-grayDark">Or</span>
+              <span className="bg-light lg:bg-white px-2 text-grayDark">{t('loginModal.or')}</span>
             </div>
           </div>
           <GoogleLoginButton />
           <div className="flex items-center justify-center gap-1 mt-4">
-            <p className="text-black text-sm font-light">Don’t have an account yet ?</p>
+            <p className="text-black text-sm font-light">{t('loginModal.noAccount')}</p>
             <button
               className="text-primary text-sm font-light underline"
               onClick={() => {
                 dispatch(setLoginModalOpen(false));
-                window.location.href = '/auth/register';
+                navigate('/auth/register');
               }}
             >
-              Sign up
+              {t('loginModal.signUp')}
             </button>
           </div>
         </div>

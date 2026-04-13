@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
@@ -9,6 +10,7 @@ import Image from '../../../components/shared/Image';
 import MessageToastify from '../../../components/shared/MessageToastify';
 import OTP from '../../../components/shared/OTP';
 import { ERROR, SUCCESS } from '../../../constant/MESSAGETYPE';
+import { showToast } from '../../../components/shared/toast';
 import {
   useSentOTPMutation,
   useVerifyOTPMutation,
@@ -27,6 +29,7 @@ interface INewPassForm {
 }
 
 export default function ResetPassword() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const [sentOTP] = useSentOTPMutation();
   const [verifyOTP] = useVerifyOTPMutation();
@@ -154,7 +157,7 @@ export default function ResetPassword() {
         return () => clearTimeout(timer);
       }
     } catch (error) {
-      console.error('Error sending OTP:', error);
+      showToast('error', t('resetPassword.otpFailed'));
     }
   };
 
@@ -171,7 +174,7 @@ export default function ResetPassword() {
           return () => clearTimeout(timer);
         }
       } catch (error) {
-        console.error('Error verifying OTP:', error);
+        showToast('error', t('resetPassword.verifyFailed'));
       }
     } else {
       dispatch(
@@ -203,7 +206,7 @@ export default function ResetPassword() {
         return () => clearTimeout(timer);
       }
     } catch (error) {
-      console.error('Error resetting password:', error);
+      showToast('error', t('resetPassword.resetFailed'));
     }
   };
 
@@ -291,8 +294,7 @@ export default function ResetPassword() {
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
           <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
           </p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">
@@ -330,7 +332,7 @@ export default function ResetPassword() {
               <div className={`${step === 1 && 'px-6'}`}>
                 {step === 1 && (
                   <p className="text-sm font-light font-poppins text-center pt-8 pb-10">
-                    Enter the code we’ve sent to your Email
+                    Enter the code we&apos;ve sent to your Email
                   </p>
                 )}
                 {renderStepContent()}

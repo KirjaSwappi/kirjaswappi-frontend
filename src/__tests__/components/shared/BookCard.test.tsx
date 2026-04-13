@@ -163,7 +163,7 @@ describe('BookCard Component', () => {
   it('renders with cover photo from coverPhotoUrls array', () => {
     renderWithProviders(<BookCard book={mockBook} />);
 
-    const image = screen.getByTestId("image-test-book-||-'your-favorite-book'");
+    const image = screen.getByTestId('image-test-book');
     expect(image).toHaveAttribute('src', 'https://example.com/cover1.jpg');
   });
 
@@ -171,7 +171,7 @@ describe('BookCard Component', () => {
     const bookWithoutArray = { ...mockBook, coverPhotoUrls: undefined };
     renderWithProviders(<BookCard book={bookWithoutArray} />);
 
-    const image = screen.getByTestId("image-test-book-||-'your-favorite-book'");
+    const image = screen.getByTestId('image-test-book');
     expect(image).toHaveAttribute('src', 'https://example.com/cover.jpg');
   });
 

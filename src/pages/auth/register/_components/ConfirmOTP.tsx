@@ -61,7 +61,6 @@ export default function ConfirmOTP() {
         }, 3000);
       }
     } catch (err) {
-      console.error('Verification error:', err);
       dispatch(
         setMessages({
           type: ERROR,

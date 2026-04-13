@@ -285,6 +285,15 @@ const chatSlice = createSlice({
         chat.unreadMessageCount = 0;
       }
     },
+    updateChatSwapStatus: (
+      state,
+      action: PayloadAction<{ chatId: string; swapStatus: string }>,
+    ) => {
+      const chat = state.chats.find((c) => c.id === action.payload.chatId);
+      if (chat) {
+        chat.swapStatus = action.payload.swapStatus;
+      }
+    },
   },
 });
 
@@ -310,5 +319,6 @@ export const {
   addChatMessages,
   removeTempMessages,
   markChatRead,
+  updateChatSwapStatus,
 } = chatSlice.actions;
 export default chatSlice.reducer;

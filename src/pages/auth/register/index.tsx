@@ -6,6 +6,7 @@ import leftArrowIcon from '../../../assets/leftArrow.png';
 import logo from '../../../assets/logo.png';
 import GoogleLoginButton from '../../../components/shared/GoogleLoginButton';
 import Image from '../../../components/shared/Image';
+import PageTitle from '../../../components/shared/PageTitle';
 import { setError } from '../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
 import { setStep } from '../../../redux/feature/step/stepSlice';
@@ -33,13 +34,13 @@ export default function Register() {
   }, [location.pathname, dispatch]);
   return (
     <div>
+      <PageTitle title="Register" />
       <div className="container lg:bg-white min-h-svh lg:min-h-[calc(100vh-128px)] relative lg:rounded-lg lg:grid lg:grid-cols-2 lg:mt-5 overflow-hidden">
         <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
           <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
           </p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import { SwapType } from '../../../../types/enum';
 import closeIcon from '../../../assets/close.svg';
@@ -23,6 +24,7 @@ import SwappableBookCard from './SwappableBookCard';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SwapConditionsStep({ errors }: { errors: any }) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [swappableBookIndex, setSwappableBookIndex] = useState<number | null>(null);
   const { open } = useAppSelector((state) => state.open);
   const { control, getValues, watch, setValue, trigger } = useFormContext();
@@ -92,7 +94,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-20">
         <div className="flex flex-col gap-2">
           <Separator className="lg:hidden" />
-          <InputLabel className="mb-0 lg:text-smokyBlack" label="Swap Type" required />
+          <InputLabel className="mb-0 lg:text-smokyBlack" label={t('addBook.swapType')} required />
           {SWAP_TYPES.map(({ value, label }) => (
             <Controller
               key={value}
@@ -147,7 +149,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                     <div>
                       <div className="flex items-center justify-between">
                         <InputLabel
-                          label="Cover Photo"
+                          label={t('addBook.coverPhoto')}
                           required
                           className="lg:mb-3 lg:text-smokyBlack"
                         />
@@ -166,12 +168,12 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                     <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
                       <InputLabel
                         className="lg:text-smokyBlack lg:mb-1 lg:mt-2"
-                        label="Book Title"
+                        label={t('addBook.bookTitle')}
                         required
                       />
                       <ControlledInputField
                         name={`swappableBooks.${index}.title`}
-                        placeholder="Enter book title"
+                        placeholder={t('addBook.bookTitlePlaceholder')}
                         className="rounded-md lg:border-gray"
                         showErrorMessage
                       />
@@ -179,12 +181,12 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
                     <div className="mt-4 lg:mt-3 pb-4 lg:pb-0 border-b lg:border-none border-[#E4E4E4]">
                       <InputLabel
                         className="lg:text-smokyBlack lg:mb-2 lg:mt-2"
-                        label="Author Name"
+                        label={t('addBook.authorName')}
                         required
                       />
                       <ControlledInputField
                         name={`swappableBooks.${index}.author`}
-                        placeholder="Enter author name"
+                        placeholder={t('addBook.enterAuthor')}
                         className="rounded-md lg:border-gray"
                         showErrorMessage
                       />
@@ -198,13 +200,17 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
           {swapType === SwapType.BYGENRES && (
             <div>
               <div className="flex items-center justify-between py-4 lg:py-0 lg:pb-2">
-                <InputLabel className="lg:mb-0 leading-none" label="Genre To Swap With" required />
+                <InputLabel
+                  className="lg:mb-0 leading-none"
+                  label={t('addBook.genreToSwap')}
+                  required
+                />
                 <Button
                   type="button"
                   onClick={() => dispatch(setOpen(!open))}
                   className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
                 >
-                  Add
+                  {t('add')}
                 </Button>
               </div>
               {swappableGenres && swappableGenres.length > 0 ? (

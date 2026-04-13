@@ -3,11 +3,16 @@ import Button from '../../../components/shared/Button';
 import ControlledInputField from '../../../components/shared/ControllerField';
 import InputLabel from '../../../components/shared/InputLabel';
 
-export default function VolunteerForm() {
+interface VolunteerFormProps {
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  isLoading: boolean;
+}
+
+export default function VolunteerForm({ onSubmit, isLoading }: VolunteerFormProps) {
   const { t } = useTranslation();
 
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <div className=" mb-6 ">
         <InputLabel label={t('name')} />
         <ControlledInputField
@@ -48,9 +53,10 @@ export default function VolunteerForm() {
       </div>
       <Button
         type="submit"
-        className="w-full lg:w-[99px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-3 px-6 rounded-lg mb-14 lg:mb-0 "
+        className="w-full lg:w-[99px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-3 px-6 rounded-lg mb-14 lg:mb-0 disabled:opacity-50"
+        disabled={isLoading}
       >
-        {t('volunteer.submit')}
+        {isLoading ? t('loading') : t('volunteer.submit')}
       </Button>
     </form>
   );

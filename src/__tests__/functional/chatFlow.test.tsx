@@ -6,6 +6,10 @@ import { renderWithProviders } from '../utils/test-utils';
 import Messages from '../../pages/messages/Messages';
 import { RootState } from '../../redux/store';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('../../hooks/useChatWS', () => ({
   useChatWS: vi.fn(() => ({
     isConnected: true,
@@ -163,7 +167,7 @@ describe('Chat Messaging Flow (Functional)', () => {
     });
 
     // Step 3: Type and send a message
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'New message from test');
 
     // Step 4: Verify input has value
@@ -285,7 +289,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       { preloadedState: stateWithChat },
     );
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Test message');
 
     const initialCount = store.getState().chat.chats[0].messages.length;

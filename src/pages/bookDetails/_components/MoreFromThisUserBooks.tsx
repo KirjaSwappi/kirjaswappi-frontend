@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+import { skipToken } from '@reduxjs/toolkit/query/react';
 import BookCard from '../../../components/shared/BookCard';
 import Button from '../../../components/shared/Button';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
@@ -6,20 +8,28 @@ import { useAppSelector } from '../../../redux/hooks';
 import { IBook } from '../../books/types/interface';
 
 export default function MoreFromThisUserBooks({ bookId }: { bookId: string | undefined }) {
+  const { t } = useTranslation();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
-  if (!bookId) return null;
-  const { isFetching, isLoading, data: moreBooks } = useGetMoreBooksByBookIdQuery({ id: bookId });
+  const {
+    isFetching,
+    isLoading,
+    data: moreBooks,
+  } = useGetMoreBooksByBookIdQuery(bookId ? { id: bookId } : skipToken);
   const isInitialLoading = isFetching || isLoading;
+
+  if (!bookId) return null;
 
   return (
     <div>
       <span className="bg-[#E4E4E4] w-full h-[1px] my-5 block lg:hidden"></span>
       <div className="flex items-center justify-between mt-5 lg:mt-14 mb-4 lg:mb-6">
-        <h1 className="text-base text-blackOlive font-medium font-poppins">More from this user</h1>
+        <h1 className="text-base text-blackOlive font-medium font-poppins">
+          {t('bookDetails.moreFromThisUser')}
+        </h1>
         <Button className="text-primary underline font-poppins font-normal text-sm lg:hidden">
-          See all
+          {t('bookDetails.seeAll')}
         </Button>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6">

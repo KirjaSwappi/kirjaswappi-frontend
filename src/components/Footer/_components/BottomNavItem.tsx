@@ -16,7 +16,7 @@ export default function BottomNavItem({
   value,
   badgeCount,
 }: IBottomNavItem) {
-  const showBadge = badgeCount && badgeCount > 0;
+  const showBadge = !!badgeCount && badgeCount > 0;
 
   return (
     <Link

@@ -10,8 +10,6 @@ import { Link } from 'react-router-dom';
 
 // React.FC<PrivacyPolicySectionProps>
 const PrivacyPolicySection = ({ category, item }: any) => {
-  // console.log(item);
-
   return (
     <div className=" lg:pt-0">
       <div className="block lg:hidden bg-white py-3  ">
