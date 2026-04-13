@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Button from '../../../components/shared/Button';
+import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
 import About from './About';
 import BooksListed from './BooksListed';
@@ -14,26 +15,32 @@ export default function ProfileDashboard() {
   const { t } = useTranslation();
   const { userInformation, loading } = useAppSelector((state) => state.auth);
   const [activeTab, setActiveTab] = useState(1);
+  const { data: booksData } = useGetAllBooksQuery({ ownerId: id }, { skip: !id });
+  const booksCount = booksData?.page?.totalElements ?? 0;
   const tabs = [
     {
       label: t('about'),
       content: <About />,
       hideOnLg: true,
+      hideCount: true,
     },
     {
       label: t('profile.booksListed'),
       content: <BooksListed />,
+      count: booksCount,
     },
     {
       label: 'Pending Swaps',
       content: <BooksListed />,
       permission: false,
+      count: 0,
     },
     {
       label: 'Bookmarked',
       content: <BooksListed />,
       hideOnMobile: true,
       permission: false,
+      count: 0,
     },
   ];
   // IF ID AND USER ID DON'T MATCH, HIDE THE TABS THAT USER RELATED TAB
@@ -94,15 +101,17 @@ export default function ProfileDashboard() {
                       ${tab.hideOnMobile ? 'lg:flex hidden' : ''}`}
                     >
                       {tab.label}
-                      <div
-                        className={`${
-                          index === activeTab
-                            ? 'bg-white text-primary'
-                            : 'text-white border bg-grayDark'
-                        } w-4 h-4 flex items-center justify-center rounded-full font-semibold leading-none`}
-                      >
-                        <p className="leading-none text-[8px] mt-0.5">0</p>
-                      </div>
+                      {!tab.hideCount && (
+                        <div
+                          className={`${
+                            index === activeTab
+                              ? 'bg-white text-primary'
+                              : 'text-white border bg-grayDark'
+                          } w-4 h-4 flex items-center justify-center rounded-full font-semibold leading-none`}
+                        >
+                          <p className="leading-none text-[8px] mt-0.5">{tab.count ?? 0}</p>
+                        </div>
+                      )}
                     </Button>
                   ))
                 )}

@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import deleteIcon from '../../assets/deleteIconRed.png';
 import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
-import profile from '../../assets/profile.svg';
 import { useMouseClick } from '../../hooks/useMouse';
 import { IBook } from '../../pages/books/types/interface';
 import {
@@ -21,6 +20,7 @@ import BookCardSwapButton from './BookCardSwapButton';
 import Button from './Button';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import Image from './Image';
+import OwnerAvatar from './OwnerAvatar';
 import { showToast } from './toast';
 
 export default function BookCard({
@@ -200,7 +200,7 @@ export default function BookCard({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <div className="w-3.5 h-3.5 rounded-full">
-                  <Image src={profile} alt="Profile" className="w-full h-full object-cover" />
+                  <OwnerAvatar ownerId={book.ownerId} />
                 </div>
                 {offeredBy && (
                   <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">

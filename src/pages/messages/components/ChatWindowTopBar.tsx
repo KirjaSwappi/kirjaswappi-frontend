@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import book3 from '../../../assets/book3.png';
-import profileIcon from '../../../assets/profile.svg';
+import OwnerAvatar from '../../../components/shared/OwnerAvatar';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import { resetChat } from '../../../redux/feature/messages/messagesSlice';
@@ -131,22 +131,18 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                         className="flex items-center bg-transparent border-0 p-0 cursor-pointer text-left"
                         onClick={goPartnerProfile}
                       >
-                        <Image
-                          src={profileIcon}
-                          alt="Profile"
-                          className="mr-1 flex-shrink-0 w-4 h-4 rounded-full"
-                        />
+                        <div className="mr-1 flex-shrink-0 w-4 h-4">
+                          <OwnerAvatar ownerId={partnerId} className="w-4 h-4" iconSize={12} />
+                        </div>
                         <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 hover:underline">
                           {partnerName}
                         </span>
                       </button>
                     ) : (
                       <>
-                        <Image
-                          src={profileIcon}
-                          alt="Profile"
-                          className="mr-1 flex-shrink-0 w-4 h-4 rounded-full"
-                        />
+                        <div className="mr-1 flex-shrink-0 w-4 h-4">
+                          <OwnerAvatar ownerId="" className="w-4 h-4" iconSize={12} />
+                        </div>
                         <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
                           {partnerName}
                         </span>

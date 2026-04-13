@@ -6,6 +6,7 @@ import {
   useGetUserByIdQuery,
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
+import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
 
 export default function UserProfile() {
@@ -27,6 +28,9 @@ export default function UserProfile() {
     { userId: partnerId as string },
     { skip: !partnerId },
   );
+
+  const { data: booksData } = useGetAllBooksQuery({ ownerId: partnerId }, { skip: !partnerId });
+  const booksCount = booksData?.page?.totalElements ?? 0;
 
   if (!selectedChat || !partnerId) {
     return (
@@ -98,7 +102,7 @@ export default function UserProfile() {
           <span className="h-12 w-[1px] block bg-platinumMix"></span>
           <div className="flex flex-col gap-1 items-center">
             <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
-            <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
+            <p className="font-poppins text-xs font-medium text-smokyBlack">{booksCount}</p>
           </div>
         </div>
       </div>
