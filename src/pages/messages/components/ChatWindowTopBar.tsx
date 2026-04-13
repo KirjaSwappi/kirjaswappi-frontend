@@ -75,12 +75,12 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   };
 
   const statusBadgeStyles: Record<string, string> = {
-    Pending: 'bg-yellow-100 text-yellow-800',
-    Accepted: 'bg-green-100 text-green-800',
-    Rejected: 'bg-red-100 text-red-800',
-    Completed: 'bg-blue-100 text-blue-800',
-    Cancelled: 'bg-gray-100 text-gray-800',
-    Expired: 'bg-gray-100 text-gray-500',
+    Pending: 'bg-amber-100 text-amber-700',
+    Accepted: 'bg-green-100 text-green-700',
+    Rejected: 'bg-rose-100 text-rose-700',
+    Completed: 'bg-blue-100 text-blue-700',
+    Cancelled: 'bg-stone-100 text-stone-500',
+    Expired: 'bg-stone-100 text-stone-500',
   };
 
   return (
@@ -158,7 +158,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                 type="button"
                 disabled={isUpdatingStatus}
                 onClick={() => setAcceptOpen(true)}
-                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-primary rounded-lg hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
               >
                 {t('chat.accept')}
               </button>
@@ -166,7 +166,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                 type="button"
                 disabled={isUpdatingStatus}
                 onClick={() => setRejectOpen(true)}
-                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-red rounded-lg hover:bg-red/90 disabled:opacity-50 cursor-pointer"
               >
                 {t('chat.reject')}
               </button>
