@@ -17,6 +17,10 @@ vi.mock('../../components/shared/SwapRequestModal/SwapRequestModal', () => ({
   default: () => <div data-testid="swap-modal" />,
 }));
 
+vi.mock('../../components/shared/LoginModal/LoginModal', () => ({
+  default: () => <div data-testid="login-modal" />,
+}));
+
 vi.mock('../../hooks/useNotificationWS', () => ({
   useNotificationWS: vi.fn(),
 }));
