@@ -1,11 +1,19 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import book3 from '../../../assets/book3.png';
 import OwnerAvatar from '../../../components/shared/OwnerAvatar';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
-import { resetChat } from '../../../redux/feature/messages/messagesSlice';
+import { showToast } from '../../../components/shared/toast';
+import {
+  useBlockUserMutation,
+  useMuteUserMutation,
+  useReportUserMutation,
+} from '../../../redux/feature/auth/userInteractionApi';
+import { resetChat, updateChatSwapStatus } from '../../../redux/feature/messages/messagesSlice';
+import { useUpdateSwapRequestStatusMutation } from '../../../redux/feature/swap/swapApi';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import ChatInfoDropdown from './ChatInfoDropdown';
 import ConfirmModal from './ConfirmModal';
@@ -18,9 +26,17 @@ type IChatWindowTopBarProps = {
 export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowTopBarProps) {
   const [muteOpen, setMuteOpen] = useState<boolean>(false);
   const [blockOpen, setBlockOpen] = useState<boolean>(false);
+  const [reportOpen, setReportOpen] = useState<boolean>(false);
+  const [acceptOpen, setAcceptOpen] = useState<boolean>(false);
+  const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+  const [updateStatus, { isLoading: isUpdatingStatus }] = useUpdateSwapRequestStatusMutation();
+  const [blockUser] = useBlockUserMutation();
+  const [muteUser] = useMuteUserMutation();
+  const [reportUser] = useReportUserMutation();
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId);
 
@@ -44,12 +60,36 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
   const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
 
+  const swapStatus = selectedChat.swapStatus || 'Pending';
+  const isReceiver = selectedChat.conversationType === 'received';
+  const canRespondToSwap = isReceiver && swapStatus === 'Pending';
+
+  const handleStatusUpdate = async (newStatus: string) => {
+    try {
+      await updateStatus({ id: selectedChat.id, status: newStatus }).unwrap();
+      dispatch(updateChatSwapStatus({ chatId: selectedChat.id, swapStatus: newStatus }));
+      showToast('success', `Swap request ${newStatus.toLowerCase()}.`);
+    } catch {
+      showToast('error', `Failed to ${newStatus.toLowerCase()} swap request.`);
+    }
+  };
+
+  const statusBadgeStyles: Record<string, string> = {
+    Pending: 'bg-yellow-100 text-yellow-800',
+    Accepted: 'bg-green-100 text-green-800',
+    Rejected: 'bg-red-100 text-red-800',
+    Completed: 'bg-blue-100 text-blue-800',
+    Cancelled: 'bg-gray-100 text-gray-800',
+    Expired: 'bg-gray-100 text-gray-500',
+  };
+
   return (
     <div className="bg-white">
       <div>
         <div id="topChatHeader" className="px-4 py-3 xl:py-4 flex items-center justify-between">
           <Button
             className="block xl:hidden"
+            aria-label="Back to messages"
             onClick={() => {
               dispatch(resetChat());
               navigate('/user/messages');
@@ -73,7 +113,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             onViewProfile={goPartnerProfile}
             onMute={() => setMuteOpen(true)}
             onBlock={() => setBlockOpen(true)}
-            onReport={() => alert('Report')}
+            onReport={() => setReportOpen(true)}
           />
         </div>
         <div className="border-t border-platinumMix">
@@ -93,11 +133,18 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         </div>
         <div className="bg-[#DEE7F5] px-4 py-3">
           <div className="flex items-center justify-between">
-            <h3 className="font-poppins text-xs text-grayDark font-normal">
-              {selectedChat.conversationType === 'sent'
-                ? `You want to swap with this book`
-                : `${partnerName} wants to swap with this book`}
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="font-poppins text-xs text-grayDark font-normal">
+                {selectedChat.conversationType === 'sent'
+                  ? t('chat.youWantToSwap')
+                  : t('chat.wantsToSwap', { name: partnerName })}
+              </h3>
+              <span
+                className={`font-poppins text-[10px] font-medium px-2 py-0.5 rounded-full ${statusBadgeStyles[swapStatus] || 'bg-gray-100 text-gray-600'}`}
+              >
+                {swapStatus}
+              </span>
+            </div>
             <Button
               onClick={() => setBookOpen(!bookOpen)}
               className="w-6 h-6 flex items-center justify-center bg-white rounded-full text-grayDark"
@@ -105,6 +152,26 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               <IoIosArrowDown className={`transition-transform ${bookOpen ? 'rotate-180' : ''}`} />
             </Button>
           </div>
+          {canRespondToSwap && (
+            <div className="flex gap-2 mt-2">
+              <button
+                type="button"
+                disabled={isUpdatingStatus}
+                onClick={() => setAcceptOpen(true)}
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 disabled:opacity-50 cursor-pointer"
+              >
+                {t('chat.accept')}
+              </button>
+              <button
+                type="button"
+                disabled={isUpdatingStatus}
+                onClick={() => setRejectOpen(true)}
+                className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 disabled:opacity-50 cursor-pointer"
+              >
+                {t('chat.reject')}
+              </button>
+            </div>
+          )}
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
@@ -119,7 +186,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                     by {bookAuthor}
                   </p>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
-                    Book Condition:{' '}
+                    {t('chat.bookCondition')}:{' '}
                     <span className="text-[#3FBA49] bg-[#3FBA4914] py-0.5 px-1.5 rounded-md capitalize">
                       {bookCondition.toLowerCase().replace('_', ' ')}
                     </span>
@@ -157,25 +224,76 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
       </div>
       <ConfirmModal
         open={muteOpen}
-        onConfirm={() => {
+        onConfirm={async () => {
           setMuteOpen(false);
-          alert('Muted!');
+          if (!partnerId) return;
+          try {
+            await muteUser({ id: partnerId }).unwrap();
+            showToast('success', t('chat.userMuted'));
+          } catch {
+            showToast('error', t('chat.userMuted'));
+          }
         }}
         onCancel={() => setMuteOpen(false)}
-        header="Are You Sure?"
-        description="Are you sure you want to mute this person"
-        btnValue={'Mute'}
+        header={t('chat.areYouSure')}
+        description={t('chat.muteConfirm')}
+        btnValue={t('chat.mute')}
       />
       <ConfirmModal
         open={blockOpen}
-        onConfirm={() => {
+        onConfirm={async () => {
           setBlockOpen(false);
-          alert('Blocked!');
+          if (!partnerId) return;
+          try {
+            await blockUser({ id: partnerId }).unwrap();
+            showToast('success', t('chat.userBlocked'));
+          } catch {
+            showToast('error', t('chat.userBlocked'));
+          }
         }}
-        btnValue="Block"
+        btnValue={t('chat.block')}
         onCancel={() => setBlockOpen(false)}
-        header="Are You Sure?"
-        description="Are you sure you want to block this person"
+        header={t('chat.areYouSure')}
+        description={t('chat.blockConfirm')}
+      />
+      <ConfirmModal
+        open={acceptOpen}
+        onConfirm={() => {
+          setAcceptOpen(false);
+          handleStatusUpdate('Accepted');
+        }}
+        btnValue={t('chat.accept')}
+        onCancel={() => setAcceptOpen(false)}
+        header={t('chat.acceptSwap')}
+        description={t('chat.acceptConfirm')}
+      />
+      <ConfirmModal
+        open={rejectOpen}
+        onConfirm={() => {
+          setRejectOpen(false);
+          handleStatusUpdate('Rejected');
+        }}
+        btnValue={t('chat.reject')}
+        onCancel={() => setRejectOpen(false)}
+        header={t('chat.rejectSwap')}
+        description={t('chat.rejectConfirm')}
+      />
+      <ConfirmModal
+        open={reportOpen}
+        onConfirm={async () => {
+          setReportOpen(false);
+          if (!partnerId) return;
+          try {
+            await reportUser({ reportedUserId: partnerId, reason: 'Reported from chat' }).unwrap();
+            showToast('success', t('chat.userReported'));
+          } catch {
+            showToast('error', t('chat.userReported'));
+          }
+        }}
+        btnValue={t('chat.report')}
+        onCancel={() => setReportOpen(false)}
+        header={t('chat.reportUser')}
+        description={t('chat.reportConfirm')}
       />
     </div>
   );

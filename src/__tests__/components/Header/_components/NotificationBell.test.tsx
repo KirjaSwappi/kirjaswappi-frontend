@@ -8,6 +8,9 @@ import { initialState as notificationInitialState } from '../../../../redux/feat
 // Mock the image assets
 vi.mock('../../../assets/notification.svg', () => ({ default: 'mock-bell-icon' }));
 vi.mock('../../../assets/image/notification.png', () => ({ default: 'mock-no-notif-img' }));
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
 
 describe('NotificationBell', () => {
   beforeEach(() => {
@@ -77,7 +80,7 @@ describe('NotificationBell', () => {
     };
 
     renderWithProviders(<NotificationBell />, { preloadedState });
-    expect(screen.getByText(/no notifications yet/i)).toBeInTheDocument();
+    expect(screen.getByText('notification.noNotifications')).toBeInTheDocument();
   });
 
   it('marks notifications as read when the panel is opened', async () => {

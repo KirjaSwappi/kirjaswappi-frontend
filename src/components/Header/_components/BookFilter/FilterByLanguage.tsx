@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import plusIcon from '../../../../assets/plus.png';
 import tickmarkIcon from '../../../../assets/tickmark.png';
@@ -9,6 +10,7 @@ import Image from '../../../shared/Image';
 import GenreSkelton from './GenreSkelton';
 
 export default function FilterByLanguage() {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [languageExpanded, setLanguageExpanded] = useState(true);
   const { data: languageDataOptions, isLoading: languageLoading } =
@@ -35,7 +37,7 @@ export default function FilterByLanguage() {
                 onClick={toggleLanguageExpand}
                 className="flex items-center justify-between w-full pr-2"
               >
-                <span className="font-poppins font-normal text-sm">Language</span>
+                <span className="font-poppins font-normal text-sm">{t('filter.language')}</span>
                 <span>{languageExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
               </Button>
 

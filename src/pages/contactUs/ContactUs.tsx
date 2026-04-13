@@ -6,12 +6,15 @@ import contactFrame from '../../assets/contactFrame.png';
 import Button from '../../components/shared/Button';
 import ControlledInputField from '../../components/shared/ControllerField';
 import InputLabel from '../../components/shared/InputLabel';
+import { showToast } from '../../components/shared/toast';
+import { useSubmitFormMutation } from '../../redux/feature/form/formApi';
 import BookAddUpdateHeader from '../addUpdateBook/_components/BookAddUpdateHeader';
 import contactUsSchema from './schema/index';
 
 export default function ContactUs() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [submitForm, { isLoading }] = useSubmitFormMutation();
   const methods = useForm({
     mode: 'onChange',
     resolver: yupResolver(contactUsSchema),
@@ -19,8 +22,27 @@ export default function ContactUs() {
 
   const { handleSubmit } = methods;
 
-  const onSubmit = () => {
-    // TODO: Handle form submission
+  const onSubmit = async (data: {
+    name: string;
+    email: string;
+    subject: string;
+    description: string;
+  }) => {
+    try {
+      await submitForm({
+        type: 'contact',
+        data: {
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: data.description,
+        },
+      }).unwrap();
+      showToast('success', t('contactus.success'));
+      methods.reset();
+    } catch {
+      showToast('error', t('contactus.error'));
+    }
   };
 
   return (
@@ -81,9 +103,10 @@ export default function ContactUs() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full lg:w-[151px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-4 px-6 rounded-lg mb-14 lg:mb-0 "
+                  className="w-full lg:w-[151px] lg:h-[48px] text-[16px] lg:text-[14px] leading-5 font-medium bg-primary text-white py-4 px-6 rounded-lg mb-14 lg:mb-0 disabled:opacity-50"
+                  disabled={isLoading}
                 >
-                  {t('contactus.submit')}
+                  {isLoading ? t('loading') : t('contactus.submit')}
                 </Button>
               </form>
             </FormProvider>

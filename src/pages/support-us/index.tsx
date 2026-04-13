@@ -1,5 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import supportImg1 from '../../assets/images/supportUs/img1.jpg';
+import supportImg2 from '../../assets/images/supportUs/img2.jpg';
+import supportImg3 from '../../assets/images/supportUs/img3.jpg';
 import SupportUsCard from './components/SupportUsCard';
 import SupportUsHeader from './components/SupportUsHeader';
 
@@ -26,7 +29,7 @@ const SupportUs = () => {
 
       buttonText: t('supportUs.sectionBtn1'),
 
-      image: '/src/assets/images/supportUs/img1.jpg',
+      image: supportImg1,
       textOrder: 1,
       pageLink: '/donation',
     },
@@ -36,7 +39,7 @@ const SupportUs = () => {
       description: t('supportUs.sectionDescription2'),
       buttonText: t('supportUs.sectionBtn2'),
 
-      image: '/src/assets/images/supportUs/img2.jpg',
+      image: supportImg2,
       textOrder: 2,
       pageLink: '/collaboration',
     },
@@ -47,7 +50,7 @@ const SupportUs = () => {
       description: t('supportUs.sectionDescription3'),
       buttonText: t('supportUs.sectionBtn3'),
 
-      image: '/src/assets/images/supportUs/img3.jpg',
+      image: supportImg3,
       textOrder: 1,
       pageLink: '/volunteer',
     },

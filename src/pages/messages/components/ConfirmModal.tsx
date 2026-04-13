@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
 import Button from '../../../components/shared/Button';
 
@@ -18,14 +20,39 @@ export default function ConfirmModal({
   description,
   btnValue = 'Yes',
 }: ConfirmModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, onCancel]);
+
+  useEffect(() => {
+    if (open && modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, [open]);
+
   if (!open) return null;
+  const { t } = useTranslation();
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-sm md:max-w-[30%]">
+      <div
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={header}
+        tabIndex={-1}
+        className="bg-white rounded-lg shadow-lg w-11/12 max-w-sm md:max-w-md outline-none"
+      >
         <div className="p-4">
           <div className="flex items-center justify-between ">
             <h3 className="text-xl font-semibold ">{header}</h3>
-            <Button onClick={onCancel}>
+            <Button onClick={onCancel} aria-label="Close">
               <IoCloseOutline className="text-2xl text-[#6B6B6B]" />
             </Button>
           </div>
@@ -36,7 +63,7 @@ export default function ConfirmModal({
             onClick={onCancel}
             className="px-5 border border-[#CDCDCD] rounded-md transition-colors text-[#0D121F] font-poppins text-sm font-medium w-[91px] h-[42px]"
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             onClick={onConfirm}

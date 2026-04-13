@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import plusIcon from '../../../../assets/plus.png';
 import tickmarkIcon from '../../../../assets/tickmark.png';
@@ -9,6 +10,7 @@ import Image from '../../../shared/Image';
 import GenreSkelton from './GenreSkelton';
 
 export default function FilterByCondition() {
+  const { t } = useTranslation();
   const { control } = useFormContext();
   const [conditionExpanded, setConditionExpanded] = useState(true);
   const { data: conditionDataOptions, isLoading: conditionLoading } =
@@ -35,7 +37,9 @@ export default function FilterByCondition() {
                 onClick={toggleConditionExpand}
                 className="flex items-center justify-between w-full pr-2"
               >
-                <span className="font-poppins font-normal text-sm">Swap Condition</span>
+                <span className="font-poppins font-normal text-sm">
+                  {t('filter.swapCondition')}
+                </span>
                 <span>{conditionExpanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
               </Button>
 

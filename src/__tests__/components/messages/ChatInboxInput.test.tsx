@@ -5,6 +5,10 @@ import { renderWithProviders } from '../../utils/test-utils';
 import ChatInboxInput from '../../../pages/messages/components/ChatInboxInput';
 import { RootState } from '../../../redux/store';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('../../../redux/feature/messages/inboxApi', () => ({
   useSendChatMessageMutation: vi.fn(),
 }));
@@ -72,7 +76,7 @@ describe('ChatInboxInput Component', () => {
 
   it('should render input field', () => {
     renderWithProviders(<ChatInboxInput />, { preloadedState });
-    expect(screen.getByPlaceholderText('Write here...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('chat.writeHere')).toBeInTheDocument();
   });
 
   it('should return null when no chat is selected', () => {
@@ -96,7 +100,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Hello world');
 
     expect(input).toHaveValue('Hello world');
@@ -107,7 +111,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Test message{Enter}');
 
     await waitFor(() => {
@@ -120,7 +124,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, '   {Enter}');
 
     expect(mockSendChatMessage).not.toHaveBeenCalled();
@@ -131,7 +135,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...') as HTMLInputElement;
+    const input = screen.getByPlaceholderText('chat.writeHere') as HTMLInputElement;
     await user.type(input, 'Test message{Enter}');
 
     await waitFor(() => {
@@ -144,7 +148,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     expect(input).toBeDisabled();
   });
 
@@ -156,7 +160,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Test message{Enter}');
 
     await waitFor(() => {
@@ -169,7 +173,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Hello world{Enter}');
 
     await waitFor(() => {
@@ -186,7 +190,7 @@ describe('ChatInboxInput Component', () => {
 
     renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, '  Test message  {Enter}');
 
     await waitFor(() => {
@@ -212,7 +216,7 @@ describe('ChatInboxInput Component', () => {
 
     const { store } = renderWithProviders(<ChatInboxInput />, { preloadedState });
 
-    const input = screen.getByPlaceholderText('Write here...');
+    const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Optimistic message');
 
     // Submit the form

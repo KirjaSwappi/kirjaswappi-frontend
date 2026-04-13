@@ -1,0 +1,87 @@
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter } from 'react-router-dom';
+
+vi.mock('react-icons/bi', () => ({ BiSupport: () => <span>support</span> }));
+vi.mock('react-icons/io5', () => ({ IoLogOut: () => <span>logout</span> }));
+vi.mock('react-icons/md', () => ({
+  MdContactPage: () => <span>contact</span>,
+  MdFeedback: () => <span>feedback</span>,
+  MdLock: () => <span>lock</span>,
+}));
+vi.mock('react-icons/tb', () => ({ TbUserCircle: () => <span>user</span> }));
+
+vi.mock('../../../redux/api/apiSlice', () => ({
+  api: { util: { resetApiState: () => ({ type: 'api/resetApiState' }) } },
+}));
+
+vi.mock('../../../redux/feature/auth/authSlice', () => ({
+  logout: () => ({ type: 'auth/logout' }),
+}));
+
+vi.mock('../../../components/shared/Button', () => ({
+  default: ({
+    children,
+    onClick,
+    className,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+  }) => (
+    <button onClick={onClick} className={className}>
+      {children}
+    </button>
+  ),
+}));
+
+vi.mock('../../../components/shared/toast', () => ({
+  showToast: vi.fn(),
+}));
+
+vi.mock('../../../components/Header/_components/DropdownItem', () => ({
+  default: ({ label, icon }: { label: string; icon: React.ReactNode }) => (
+    <div data-testid={`item-${label}`}>
+      {icon}
+      {label}
+    </div>
+  ),
+}));
+
+import UserMenuDropdown from '../../../components/Header/_components/UserMenuDropdown';
+
+describe('UserMenuDropdown', () => {
+  const createStore = () =>
+    configureStore({
+      reducer: {
+        auth: (state = { userInformation: { id: 'user-1' } }) => state,
+      },
+    });
+
+  const renderComponent = () =>
+    render(
+      <Provider store={createStore()}>
+        <MemoryRouter>
+          <UserMenuDropdown />
+        </MemoryRouter>
+      </Provider>,
+    );
+
+  it('renders all menu items', () => {
+    renderComponent();
+    expect(screen.getByTestId('item-View Profile')).toBeInTheDocument();
+    expect(screen.getByTestId('item-Privacy Center')).toBeInTheDocument();
+    expect(screen.getByTestId('item-Support Us')).toBeInTheDocument();
+    expect(screen.getByTestId('item-Contact Us')).toBeInTheDocument();
+    expect(screen.getByTestId('item-Feedback')).toBeInTheDocument();
+    expect(screen.getByTestId('item-Log Out')).toBeInTheDocument();
+  });
+
+  it('renders logout as a button', () => {
+    renderComponent();
+    const logoutItem = screen.getByTestId('item-Log Out');
+    expect(logoutItem.closest('button')).toBeTruthy();
+  });
+});

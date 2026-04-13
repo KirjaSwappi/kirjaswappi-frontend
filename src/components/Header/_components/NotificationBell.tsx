@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import notificationIcon from '../../../assets/notification.svg';
 import { useMouseClick } from '../../../hooks/useMouse';
 import {
@@ -24,6 +25,7 @@ interface NotificationBellProps {
  * Integrates with WebSocket notifications and Redux state management
  */
 const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const notifications = useAppSelector(selectSortedNotifications);
   const unreadCount = useAppSelector(selectUnreadCount);
@@ -59,6 +61,23 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
       dispatch(markAllAsRead());
     }
   }, [isNotificationPanelOpen, unreadCount, dispatch]);
+
+  // Close panel on Escape key
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isNotificationPanelOpen) {
+        dispatch(toggleNotificationPanel(false));
+      }
+    },
+    [isNotificationPanelOpen, dispatch],
+  );
+
+  useEffect(() => {
+    if (isNotificationPanelOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isNotificationPanelOpen, handleKeyDown]);
 
   return (
     <div ref={reference} className={cn('relative', className)}>
@@ -101,7 +120,9 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
         >
           {/* Header */}
           <div className="px-4 py-3 border-b border-platinum bg-light">
-            <h3 className="text-base font-semibold font-poppins text-blackOlive">Notifications</h3>
+            <h3 className="text-base font-semibold font-poppins text-blackOlive">
+              {t('notification.title')}
+            </h3>
           </div>
 
           {/* Notification List */}
@@ -126,9 +147,11 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
                     alt="No notifications"
                     className="w-12 h-12 opacity-30"
                   />
-                  <p className="text-sm font-normal font-poppins text-gray">No notifications yet</p>
+                  <p className="text-sm font-normal font-poppins text-gray">
+                    {t('notification.noNotifications')}
+                  </p>
                   <p className="text-xs font-normal font-poppins text-gray">
-                    You&apos;ll see notifications here when you receive them
+                    {t('notification.emptyHint')}
                   </p>
                 </div>
               </div>
@@ -139,7 +162,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
           {wsConnectionStatus === 'error' && notifications.length > 0 && (
             <div className="px-4 py-2 bg-yellow-light border-t border-platinum">
               <p className="text-xs font-normal font-poppins text-grayDark text-center">
-                Connection issue - notifications may be delayed
+                {t('notification.connectionError')}
               </p>
             </div>
           )}

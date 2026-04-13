@@ -124,7 +124,7 @@ export default function SwapModal() {
 
   // =========== DERIVED VALUES ===========
   const disableSentRequest = useMemo(
-    () => !!selectedBook || currentSwapType === SwapType.GIVEAWAY,
+    () => !selectedBook && currentSwapType !== SwapType.GIVEAWAY,
     [selectedBook, currentSwapType],
   );
 

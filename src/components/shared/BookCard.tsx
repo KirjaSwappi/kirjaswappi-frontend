@@ -152,7 +152,7 @@ export default function BookCard({
               <Image
                 className="w-full h-full object-cover rounded-t-md"
                 src={imageUrl}
-                alt={`${title} || 'Your favorite book'`}
+                alt={title || 'Book cover'}
               />
             </div>
             {!hasPermission && (

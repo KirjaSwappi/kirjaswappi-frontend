@@ -29,6 +29,10 @@ const PrivacyPolicyDetail = lazy(
 );
 const ProfileDashboard = lazy(() => import('../pages/profile/components/ProfileDashboard'));
 const SupportUs = lazy(() => import('../pages/support-us'));
+const TermsOfService = lazy(() => import('../pages/termsOfService'));
+const TermsOfServiceDetail = lazy(
+  () => import('../pages/termsOfService/components/TermsOfServiceDetail'),
+);
 const Volunteer = lazy(() => import('../pages/volunteer'));
 
 function LazyRoute({ children }: { children: React.ReactNode }) {
@@ -52,14 +56,6 @@ const routes = createBrowserRouter([
       {
         path: '/book-details/:id',
         element: <BookDetails />,
-      },
-      {
-        path: '/contact',
-        element: (
-          <LazyRoute>
-            <ContactUs />
-          </LazyRoute>
-        ),
       },
       {
         path: '/map',
@@ -130,6 +126,22 @@ const routes = createBrowserRouter([
         element: (
           <LazyRoute>
             <PrivacyPolicyDetail />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: '/terms-of-service',
+        element: (
+          <LazyRoute>
+            <TermsOfService />
+          </LazyRoute>
+        ),
+      },
+      {
+        path: '/terms-of-service/:sectionKey',
+        element: (
+          <LazyRoute>
+            <TermsOfServiceDetail />
           </LazyRoute>
         ),
       },

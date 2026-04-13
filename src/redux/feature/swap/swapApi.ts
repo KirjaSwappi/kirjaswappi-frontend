@@ -11,9 +11,17 @@ export const swapApi = api.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ['SwapRequest'],
+      invalidatesTags: ['SwapRequest', 'Inbox'],
+    }),
+    updateSwapRequestStatus: builder.mutation<unknown, { id: string; status: string }>({
+      query: ({ id, status }) => ({
+        url: `/swap-requests/${id}/status`,
+        method: 'PUT',
+        body: { status },
+      }),
+      invalidatesTags: ['Inbox', 'SwapRequest'],
     }),
   }),
 });
 
-export const { useSwapRequestMutation } = swapApi;
+export const { useSwapRequestMutation, useUpdateSwapRequestStatusMutation } = swapApi;

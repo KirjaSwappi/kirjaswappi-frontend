@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiPlus } from 'react-icons/fi';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
@@ -20,6 +21,7 @@ import { FilterItemEnum } from '../../../utility/enum';
 import CategorySlider from './CategorySlider';
 
 export default function Filter() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userInformation } = useAppSelector((state) => state.auth);
@@ -107,7 +109,7 @@ export default function Filter() {
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.CATEGORY)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={CategoryIcon} alt="category" /> Category
+              <Image src={CategoryIcon} alt="category" /> {t('books.category')}
             </Button>
             <Button
               className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
@@ -120,7 +122,7 @@ export default function Filter() {
               }}
             >
               <FiPlus />
-              Add Book
+              {t('books.addBook')}
             </Button>
           </div>
           <div className=" flex-1 min-w-0 max-w-[48%] ">
@@ -132,19 +134,19 @@ export default function Filter() {
               onClick={() => navigate('/map')}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={mapIcon} alt="map" className="w-[18px] h-[18px]" /> Map
+              <Image src={mapIcon} alt="map" className="w-[18px] h-[18px]" /> {t('books.map')}
             </Button>
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={filtergrayIcon} alt="category" /> Filter
+              <Image src={filtergrayIcon} alt="category" /> {t('books.filter')}
             </Button>
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.SORTBY)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={sortByIcon} alt="category" /> Sort
+              <Image src={sortByIcon} alt="category" /> {t('books.sort')}
               <MdKeyboardArrowDown />
             </Button>
           </div>

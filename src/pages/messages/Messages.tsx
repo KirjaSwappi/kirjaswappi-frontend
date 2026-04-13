@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import PageTitle from '../../components/shared/PageTitle';
 import { selectChat } from '../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ChatInboxInput from './components/ChatInboxInput';
@@ -23,8 +24,9 @@ export default function Messages() {
 
   return (
     <div className="lg:container flex gap-3 lg:gap-5 lg:mt-3 xl:mt-6">
+      <PageTitle title="Messages" />
       <aside
-        className={`h-screen lg:h-[85vh] xl:h-[82vh] custom-scrollbar overflow-hidden w-full lg:w-[40%] xl:w-[25%] lg:bg-white rounded-xl py-5 xl:py-[30px] ${
+        className={`h-[calc(100dvh-134px)] lg:h-[85vh] xl:h-[82vh] custom-scrollbar overflow-hidden w-full lg:w-[40%] xl:w-[25%] lg:bg-white rounded-xl py-5 xl:py-[30px] ${
           selectedChatId || messageId ? 'hidden' : 'block'
         } lg:block`}
         style={{ scrollbarWidth: 'none' }}
@@ -33,7 +35,7 @@ export default function Messages() {
       </aside>
 
       <main
-        className={`h-screen lg:h-[85vh] xl:h-[82vh] w-full lg:w-[60%] xl:w-[50%] lg:bg-white lg:rounded-xl overflow-hidden ${
+        className={`h-[calc(100dvh-64px)] lg:h-[85vh] xl:h-[82vh] w-full lg:w-[60%] xl:w-[50%] lg:bg-white lg:rounded-xl overflow-hidden ${
           selectedChatId || messageId ? 'block' : 'hidden'
         } lg:block relative`}
       >

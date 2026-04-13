@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
 import { FaRegUser } from 'react-icons/fa';
 import { IoCamera } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
@@ -128,7 +129,21 @@ export default function EditProfile() {
     else return false;
   };
 
+  const editProfileSchema = yup.object({
+    firstName: yup.string().trim().required(t('editProfile.firstNameRequired')),
+    lastName: yup.string().trim().required(t('editProfile.lastNameRequired')),
+  });
+
   const handleEditSaveFn = async () => {
+    try {
+      await editProfileSchema.validate(editInfo, { abortEarly: false });
+    } catch (err) {
+      if (err instanceof yup.ValidationError) {
+        showToast('error', err.errors[0]);
+      }
+      return;
+    }
+
     try {
       const requests = [];
       // 1. if image is not empty then hit the image an api
@@ -167,9 +182,9 @@ export default function EditProfile() {
       }
       const results = await Promise.allSettled(requests);
 
-      results.forEach((result, index) => {
+      results.forEach((result) => {
         if (result.status === 'rejected') {
-          console.error(`Request ${index} failed:`, result.reason);
+          showToast('error', t('editProfile.saveFailed'));
         }
       });
 
@@ -177,7 +192,7 @@ export default function EditProfile() {
       clearCoverState();
       navigate(`/profile/user-profile/${userInformation.id}`);
     } catch (error) {
-      showToast('error', 'Failed to update profile.');
+      showToast('error', t('editProfile.updateFailed'));
     }
   };
 
@@ -480,7 +495,7 @@ export default function EditProfile() {
               <Image src={locationIcon} alt="location" />{' '}
               {editInfo.city
                 ? `${editInfo.city}${editInfo.country ? `, ${editInfo.country}` : ''}`
-                : 'No location set'}
+                : t('editProfile.noLocation')}
             </p>
           </div>
         </div>

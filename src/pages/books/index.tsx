@@ -1,15 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import BookCard from '../../components/shared/BookCard';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
+import PageTitle from '../../components/shared/PageTitle';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
-import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
+import {
+  clearAllFilters,
+  setFilterOpen,
+  setIsCategoryOrFilterOrSortBy,
+  setPageNumber,
+} from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { FilterItemEnum } from '../../utility/enum';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
 import NoBooksAvailable from './_components/NoBooksAvailable';
 import { IBook } from './types/interface';
 
 export default function Books() {
+  const { t } = useTranslation();
   const observer = useRef<IntersectionObserver>();
   const [books, setBooks] = useState<IBook[]>([]);
   const { filter } = useAppSelector((state) => state.filter);
@@ -51,6 +60,7 @@ export default function Books() {
     condition: filter.condition.join(','),
     language: filter.language.join(','),
     city: filter.city,
+    sortBy: filter.sortBy.join(','),
   });
 
   useEffect(() => {
@@ -60,6 +70,7 @@ export default function Books() {
       condition: filter.condition.join(','),
       language: filter.language.join(','),
       city: filter.city,
+      sortBy: filter.sortBy.join(','),
     };
 
     const prevFilter = prevFilterRef.current;
@@ -69,14 +80,23 @@ export default function Books() {
       prevFilter.genre !== currentFilter.genre ||
       prevFilter.condition !== currentFilter.condition ||
       prevFilter.language !== currentFilter.language ||
-      prevFilter.city !== currentFilter.city;
+      prevFilter.city !== currentFilter.city ||
+      prevFilter.sortBy !== currentFilter.sortBy;
 
     if (isFilterChanged) {
       // goToTop();
       dispatch(setPageNumber(0));
       prevFilterRef.current = currentFilter;
     }
-  }, [filter.search, filter.genre, filter.condition, filter.language, filter.city, dispatch]);
+  }, [
+    filter.search,
+    filter.genre,
+    filter.condition,
+    filter.language,
+    filter.city,
+    filter.sortBy,
+    dispatch,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -107,12 +127,59 @@ export default function Books() {
 
   const isInitialLoading = isFetching || isLoading;
 
-  if (isError) return <p>Something went wrong</p>;
+  if (isError)
+    return (
+      <div className="container min-h-[60vh] flex items-center justify-center">
+        <div className="text-center">
+          <p className="font-poppins text-grayDark text-sm mb-4">{t('books.errorMessage')}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="font-poppins text-sm text-white bg-primary px-4 py-2 rounded-lg cursor-pointer"
+          >
+            {t('books.tryAgain')}
+          </button>
+        </div>
+      </div>
+    );
 
   return (
     <section>
+      <PageTitle title={t('books')} />
       <div className="container min-h-[80vh] pb-24 lg:py-6">
         <HeroSection />
+        <div className="flex items-center gap-2 mb-4 lg:hidden">
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.FILTER));
+              dispatch(setFilterOpen(true));
+            }}
+            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
+          >
+            {t('books.filter')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.SORTBY));
+              dispatch(setFilterOpen(true));
+            }}
+            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
+          >
+            {t('books.sort')}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.CATEGORY));
+              dispatch(setFilterOpen(true));
+            }}
+            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
+          >
+            {t('books.category')}
+          </button>
+        </div>
         <div className="relative hidden lg:block">
           <Filter />
         </div>

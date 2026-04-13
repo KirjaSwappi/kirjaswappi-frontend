@@ -12,6 +12,7 @@ import ControlledPasswordField from '../../../components/shared/ControllerFieldP
 import GoogleLoginButton from '../../../components/shared/GoogleLoginButton';
 import Image from '../../../components/shared/Image';
 import MessageToastify from '../../../components/shared/MessageToastify';
+import PageTitle from '../../../components/shared/PageTitle';
 import { showToast } from '../../../components/shared/toast';
 import { useLoginMutation } from '../../../redux/feature/auth/authApi';
 import { setAuthMessage, setAuthSuccess, setError } from '../../../redux/feature/auth/authSlice';
@@ -67,6 +68,7 @@ export default function Login() {
 
   return (
     <div className=" relative font-poppins">
+      <PageTitle title="Login" />
       <div className="lg:hidden absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center">
         <Image src={profileIcon || '/placeholder.svg'} />
       </div>
@@ -78,8 +80,7 @@ export default function Login() {
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
           <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
           </p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">
@@ -102,21 +103,7 @@ export default function Login() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between my-4">
-                  <div className="flex items-center gap-2 text-grayDark">
-                    <input
-                      type="checkbox"
-                      name="remember"
-                      id="remember"
-                      className="cursor-pointer"
-                    />
-                    <label
-                      htmlFor="remember"
-                      className="cursor-pointer text-sm font-light text-grayDark"
-                    >
-                      Remember me
-                    </label>
-                  </div>
+                <div className="flex items-center justify-end my-4">
                   <Link to="/password/reset" className="text-black font-light text-sm underline">
                     Forgot Password?
                   </Link>

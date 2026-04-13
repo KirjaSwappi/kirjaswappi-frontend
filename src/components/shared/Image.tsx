@@ -30,7 +30,7 @@ const Image: React.FC<IImageProps> = (props) => {
         onLoad={() => setIsLoaded(true)}
         loading="lazy"
         decoding="async"
-        alt={props?.alt ? props?.alt : 'kirja'}
+        alt={props?.alt || 'image'}
         style={style}
         className={cn(
           `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`,

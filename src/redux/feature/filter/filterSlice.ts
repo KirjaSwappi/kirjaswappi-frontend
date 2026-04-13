@@ -31,7 +31,7 @@ const initialState: IFilterInitialState = {
   isCategoryOrFilterOrSortBy: null,
 };
 const filterSlice = createSlice({
-  name: 'book',
+  name: 'filter',
   initialState,
   reducers: {
     setSearch: (state, action) => {
@@ -68,6 +68,7 @@ const filterSlice = createSlice({
       state.filter.genre = [];
       state.filter.language = [];
       state.filter.condition = [];
+      state.filter.city = '';
       state.filter.pageNumber = 0;
       state.filter.search = '';
       state.filter.sortBy = [];

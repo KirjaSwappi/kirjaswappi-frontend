@@ -1,4 +1,5 @@
 import { IoIosInformationCircleOutline } from 'react-icons/io';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../components/shared/Button';
 import { useMouseClick } from '../../../hooks/useMouse';
 
@@ -15,11 +16,12 @@ export default function ChatInfoDropdown({
   onBlock,
   onReport,
 }: ChatInfoDropdownProps) {
+  const { t } = useTranslation();
   const { reference, clicked, setClicked } = useMouseClick<HTMLDivElement>();
 
   return (
     <div className="relative" ref={reference}>
-      <Button type="button" onClick={() => setClicked((v) => !v)}>
+      <Button type="button" onClick={() => setClicked((v) => !v)} aria-label="Chat options">
         <IoIosInformationCircleOutline size={20} className="text-black" />
       </Button>
       {clicked && (
@@ -28,22 +30,22 @@ export default function ChatInfoDropdown({
             className="block w-full text-left px-4 py-3 border-b border-gray"
             onClick={onViewProfile}
           >
-            View Profile
+            {t('chat.viewProfile')}
           </Button>
           <Button
             className="block w-full text-left px-4 py-3  border-b border-gray"
             onClick={onMute}
           >
-            Mute
+            {t('chat.mute')}
           </Button>
           <Button
             className="block w-full text-left px-4 py-3  border-b border-gray"
             onClick={onBlock}
           >
-            Block
+            {t('chat.block')}
           </Button>
           <Button className="block w-full text-left px-4 py-3" onClick={onReport}>
-            Report
+            {t('chat.report')}
           </Button>
         </div>
       )}
