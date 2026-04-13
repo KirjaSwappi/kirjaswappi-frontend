@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { IoIosSearch } from 'react-icons/io';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import book from '../../../assets/book3.png';
 import Button from '../../../components/shared/Button';
-import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
 import ChatListSkeleton from '../../../components/shared/skeleton/ChatListSkeleton';
 import { useGetInboxQuery } from '../../../redux/feature/messages/inboxApi';
 import { selectChat, setInboxList } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
+import ChatListAvatar from './ChatListAvatar';
 
 export default function ChatList() {
   const navigate = useNavigate();
@@ -117,10 +116,7 @@ export default function ChatList() {
                 }`}
               >
                 <div className="relative">
-                  <Image
-                    src={chat.bookToSwapWith?.coverPhotoUrl || book}
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
+                  <ChatListAvatar chat={chat} />
                   {hasUnread && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                       <span className="text-white text-xs font-medium">

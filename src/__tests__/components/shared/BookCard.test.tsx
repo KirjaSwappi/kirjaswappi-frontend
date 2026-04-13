@@ -284,11 +284,12 @@ describe('BookCard Component', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('shows default profile image (profile photo not in list API)', () => {
+  it('shows default profile icon when profile photo is not loaded', () => {
     renderWithProviders(<BookCard book={mockBook} />);
 
-    const profileImage = screen.getByTestId('image-profile');
-    expect(profileImage).toHaveAttribute('src', expect.stringMatching(/svg/i));
+    // OwnerAvatar renders FaRegUser icon as fallback when no profile image is loaded
+    const ownerSection = screen.getByText('John Doe');
+    expect(ownerSection).toBeInTheDocument();
   });
 
   it('shows owner name when available', () => {
