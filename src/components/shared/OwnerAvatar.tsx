@@ -11,12 +11,12 @@ export default function OwnerAvatar({
   className?: string;
   iconSize?: number;
 }) {
-  const { data } = useGetUserProfileImageQuery({ userId: ownerId }, { skip: !ownerId });
+  const { currentData } = useGetUserProfileImageQuery({ userId: ownerId }, { skip: !ownerId });
 
-  if (data?.imageUrl) {
+  if (currentData?.imageUrl) {
     return (
       <Image
-        src={data.imageUrl as string}
+        src={currentData.imageUrl as string}
         alt="Profile"
         className={`rounded-full object-cover ${className}`}
       />

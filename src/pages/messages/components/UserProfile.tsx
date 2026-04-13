@@ -19,10 +19,11 @@ export default function UserProfile() {
       ? selectedChat.receiver?.id
       : selectedChat?.sender?.id;
 
-  const { data: imageData, isLoading } = useGetUserProfileImageQuery(
-    { userId: partnerId as string },
-    { skip: !partnerId },
-  );
+  const {
+    currentData: imageData,
+    isLoading,
+    isFetching: isImageFetching,
+  } = useGetUserProfileImageQuery({ userId: partnerId as string }, { skip: !partnerId });
 
   const { data, isLoading: isUserLoading } = useGetUserByIdQuery(
     { userId: partnerId as string },
@@ -43,7 +44,7 @@ export default function UserProfile() {
   return (
     <div className="relative pt-6 2xl:pt-10 w-full h-full">
       <div className="mx-auto w-[80px] h-[80px] rounded-full bg-white border-2 border-white mb-3">
-        {isLoading ? (
+        {isLoading || isImageFetching ? (
           <div className="w-full h-full bg-platinum animate-pulse rounded-full shadow-sm"></div>
         ) : (
           <div className="w-full h-full flex items-center justify-center">
