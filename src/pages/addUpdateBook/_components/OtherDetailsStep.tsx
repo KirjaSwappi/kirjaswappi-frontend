@@ -26,7 +26,6 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
   const { getValues, setValue, watch } = useFormContext();
   const genres = getValues('genres');
   const formAddress = watch('address');
-  console.log(formAddress);
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -145,11 +144,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
       const { latitude, longitude } = position.coords;
 
       // Validate coordinates
-      if (!latitude || !longitude) {
+      if (latitude == null || longitude == null) {
         throw new Error('Invalid coordinates received');
       }
-
-      console.log('Successfully got location:', latitude, longitude);
 
       // Set basic address immediately
       const immediateAddress = {
@@ -177,12 +174,11 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
             country: geo.country,
             postalCode: geo.postalCode,
           };
-          console.log({ updatedAddress });
           setValue('address', updatedAddress);
           setSearchQuery(geo.displayName);
         }
       } catch (reverseError) {
-        console.log('Reverse geocoding failed, but we have coordinates:', reverseError);
+        // Reverse geocoding failed, but we have coordinates
       }
     } catch (error) {
       console.error('Geolocation failed:', error);
@@ -384,7 +380,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                 role="button"
                 tabIndex={0}
                 onClick={handleCurrentLocation}
-                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCurrentLocation}
+                onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleCurrentLocation()}
                 className="h-40 lg:h-56 bg-[#F1F8FF] mt-3 flex items-center justify-center rounded-md border border-[#8CBEF2] border-dashed flex-col"
               >
                 <div className="flex items-end mb-2">

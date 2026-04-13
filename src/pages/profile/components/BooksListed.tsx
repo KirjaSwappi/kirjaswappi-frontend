@@ -11,7 +11,7 @@ export default function BooksListed() {
   const { showSkeleton } = useSkeleton();
   const params = useParams();
   const {
-    userInformation: { email, id, books },
+    userInformation: { email, id },
   } = useAppSelector((state) => state.auth);
   const userId = params.id;
   const { data, isLoading } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
@@ -19,7 +19,7 @@ export default function BooksListed() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
       {id === params.id && !isLoading && (
-        <div className={`${!email && 'hidden'} ${books.length <= 0 && 'hidden'}`}>
+        <div className={`${!email && 'hidden'}`}>
           <AddBookComponent />
         </div>
       )}

@@ -136,9 +136,8 @@ describe('BookCard Component', () => {
     description: 'A test book description',
     condition: 'Good',
     coverPhotoUrl: 'https://example.com/cover.jpg',
-    ownerName: 'John Doe',
+    offeredBy: 'John Doe',
     ownerId: 'owner-1',
-    ownerProfilePhoto: 'https://example.com/profile.jpg',
     coverPhotoUrls: ['https://example.com/cover1.jpg', 'https://example.com/cover2.jpg'],
     offeredAgo: '29 mins. ago',
     owner: {
@@ -157,7 +156,7 @@ describe('BookCard Component', () => {
     expect(screen.getByText('Test Book')).toBeInTheDocument();
     expect(screen.getByText('by Test Author')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Helsinki')).toBeInTheDocument();
+    expect(screen.getByText('Unknown')).toBeInTheDocument();
     expect(screen.getByText('29 mins. ago')).toBeInTheDocument();
   });
 
@@ -268,14 +267,14 @@ describe('BookCard Component', () => {
     renderWithProviders(<BookCard book={mockBook} isProfile={true} />);
 
     // In profile view, the location/owner section should be hidden
-    const locationSection = screen.getByText('Helsinki').parentElement?.parentElement;
+    const locationSection = screen.getByText('Unknown').parentElement?.parentElement;
     expect(locationSection).toHaveClass('hidden');
   });
 
   it('shows location and owner info in regular view', () => {
     renderWithProviders(<BookCard book={mockBook} isProfile={false} />);
 
-    expect(screen.getByText('Helsinki')).toBeInTheDocument();
+    expect(screen.getByText('Unknown')).toBeInTheDocument();
     expect(screen.getByText('29 mins. ago')).toBeInTheDocument();
   });
 
@@ -285,16 +284,8 @@ describe('BookCard Component', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('shows owner profile photo when available', () => {
+  it('shows default profile image (profile photo not in list API)', () => {
     renderWithProviders(<BookCard book={mockBook} />);
-
-    const profileImage = screen.getByTestId('image-profile');
-    expect(profileImage).toHaveAttribute('src', 'https://example.com/profile.jpg');
-  });
-
-  it('shows default profile image when ownerProfilePhoto is not available', () => {
-    const bookWithoutProfile = { ...mockBook, ownerProfilePhoto: '' };
-    renderWithProviders(<BookCard book={bookWithoutProfile} />);
 
     const profileImage = screen.getByTestId('image-profile');
     expect(profileImage).toHaveAttribute('src', expect.stringMatching(/svg/i));

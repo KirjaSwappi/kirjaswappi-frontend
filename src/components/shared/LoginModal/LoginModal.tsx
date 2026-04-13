@@ -6,7 +6,7 @@ import { loginSchema } from '../../../pages/auth/login/Schema';
 import { useLoginMutation } from '../../../redux/feature/auth/authApi';
 import { setAuthMessage, setAuthSuccess } from '../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
-import { setLoginModalOpen, setOpen } from '../../../redux/feature/open/openSlice';
+import { setLoginModalOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import Button from '../Button';
 import ControlledInputField from '../ControllerField';
@@ -47,7 +47,7 @@ export default function LoginModal() {
       }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {
-      console.log('login error', error);
+      // Login error handled by RTK Query
     }
   };
   const formErrors = methods.formState.errors;
@@ -125,7 +125,8 @@ export default function LoginModal() {
             <button
               className="text-primary text-sm font-light underline"
               onClick={() => {
-                dispatch(setOpen(false));
+                dispatch(setLoginModalOpen(false));
+                window.location.href = '/register';
               }}
             >
               Sign up

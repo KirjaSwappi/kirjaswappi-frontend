@@ -36,8 +36,8 @@ const otherDetails = yup.object().shape({
     .min(1, 'Please select at least one genre.')
     .required('Genres are required.'),
   address: yup.object().shape({
-    latitude: yup.string().required(),
-    longitude: yup.string().required(),
+    latitude: yup.number().required(),
+    longitude: yup.number().required(),
     address: yup.string().required(),
     city: yup.string().required(),
     country: yup.string().required(),

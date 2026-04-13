@@ -45,6 +45,10 @@ export default function BookDetails() {
     else setProfile(false);
   }, [bookData?.owner?.id, userInformation.id]);
 
+  useEffect(() => {
+    goToTop();
+  }, [id]);
+
   const navigateToEditBook = () => {
     if (isProfile) navigate(`/profile/update-book/${id}`);
   };
@@ -55,7 +59,7 @@ export default function BookDetails() {
   };
 
   if (bookLoading) return <Loader />;
-  goToTop();
+
   return (
     <div className="bg-light lg:bg-white min-h-screen pb-20">
       {!loginModalOpen && (
@@ -119,7 +123,7 @@ export default function BookDetails() {
                   </p>
                 )}
                 <div className="flex items-center justify-center lg:justify-start flex-wrap  gap-2 mt-3">
-                  {bookData?.genres?.map((favItem: string[], index: number) => (
+                  {bookData?.genres?.map((favItem: string, index: number) => (
                     <div key={index} className="flex items-center">
                       <div className="lg:border border-[#BADBFD] px-2 py-1.5 rounded-md text-smokyBlack lg:bg-[#DBEDFF] lg:text-primary">
                         <p className="font-light text-xs font-poppins">{favItem}</p>

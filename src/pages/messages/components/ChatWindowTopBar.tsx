@@ -78,7 +78,11 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         </div>
         <div className="border-t border-platinumMix">
           <div className="flex gap-4 py-[11px] px-4">
-            <Image src={book3} alt="Book" className="w-[37px] h-[37px] object-cover rounded" />
+            <Image
+              src={selectedChat.bookToSwapWith?.coverPhotoUrl || book3}
+              alt="Book"
+              className="w-[37px] h-[37px] object-cover rounded"
+            />
             <div className="flex flex-col gap-1">
               <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
               <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
@@ -104,7 +108,11 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
-                <Image src={book3} alt="Book" className="w-[71px] h-[71px] object-cover rounded" />
+                <Image
+                  src={selectedChat.bookToSwapWith?.coverPhotoUrl || book3}
+                  alt="Book"
+                  className="w-[71px] h-[71px] object-cover rounded"
+                />
                 <div className="flex flex-col gap-1">
                   <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">

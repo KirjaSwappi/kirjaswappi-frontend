@@ -87,7 +87,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onCli
         <p className="text-xs font-normal font-poppins text-grayDark line-clamp-2">
           {notification.message}
         </p>
-        <span className="text-sx font-normal font-poppins text-gray mt-0.5">{formattedTime}</span>
+        <span className="text-xs font-normal font-poppins text-gray mt-0.5">{formattedTime}</span>
       </div>
     </div>
   );

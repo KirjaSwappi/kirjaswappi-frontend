@@ -21,7 +21,7 @@ export default function ConfirmModal({
   if (!open) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg max-w-[30%]">
+      <div className="bg-white rounded-lg shadow-lg w-11/12 max-w-sm md:max-w-[30%]">
         <div className="p-4">
           <div className="flex items-center justify-between ">
             <h3 className="text-xl font-semibold ">{header}</h3>

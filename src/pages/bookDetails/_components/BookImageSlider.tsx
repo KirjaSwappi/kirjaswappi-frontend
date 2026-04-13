@@ -63,7 +63,7 @@ const BookImageSlider: React.FC<BookImageSliderProps> = ({ images, className }) 
           </div>
         ))}
 
-        {total > 2 && (
+        {total > 1 && (
           <Button
             onClick={() => goTo(current - 1)}
             aria-label="Previous image"

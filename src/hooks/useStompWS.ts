@@ -94,7 +94,6 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
       onConnect: () => {
-        console.log('[StompWS] Connected to broker');
         setIsConnected(true);
 
         // Set up any subscriptions passed initially
@@ -106,7 +105,6 @@ export const useStompWS = (subscriptions?: StompSubscriptionConfig[]): UseStompW
         }
       },
       onDisconnect: () => {
-        console.log('[StompWS] Disconnected from broker');
         setIsConnected(false);
       },
       onStompError: (frame) => {

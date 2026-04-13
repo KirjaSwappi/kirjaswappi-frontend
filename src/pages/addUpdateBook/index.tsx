@@ -109,6 +109,7 @@ export default function AddUpdateBook() {
   };
 
   const handlePrev = () => {
+    if (active === 0) return;
     setSteps((prevStep) =>
       prevStep.map((step, index) => {
         if (index === active) {
@@ -119,12 +120,10 @@ export default function AddUpdateBook() {
         return { ...step, isActive: false };
       }),
     );
-    if (active === 0) return;
     setActive((prev) => prev - 1);
   };
 
   const handleAddUpdateBookFn = async <T extends IAddUpdateBookData>(data: T) => {
-    console.log(data.address);
     const formData = await buildFormData(data, userInformation.id, bookData?.id);
     try {
       const mutation = bookData?.id
@@ -132,10 +131,10 @@ export default function AddUpdateBook() {
         : addBook(formData);
 
       await mutation.unwrap();
-      toast.success('Book created successfully done.');
+      toast.success(bookData?.id ? 'Book updated successfully!' : 'Book created successfully!');
       navigate(`/profile/user-profile/${userInformation.id}`);
     } catch (error) {
-      console.error('Submission failed:', error);
+      toast.error('Failed to save book. Please try again.');
     }
   };
 
@@ -154,7 +153,7 @@ export default function AddUpdateBook() {
         <div className="w-full">
           <BookAddUpdateHeader
             title={`${id ? t('update') : t('add')} Book`}
-            onBack={() => navigate('/profile/user-profile')}
+            onBack={() => navigate(`/profile/user-profile/${userInformation.id}`)}
           />
           <div className="pt-7 lg:pt-0">
             <div>
@@ -185,7 +184,7 @@ export default function AddUpdateBook() {
                     </h1>
                     <AddGenre
                       genresValue={active === 1 ? watch('genres') : watch('swappableGenres')}
-                      setEditValuesChanged={() => console.log('Genres updated')}
+                      setEditValuesChanged={() => {}}
                       setValue={setValue}
                       trigger={trigger}
                       addGenreName={active === 1 ? 'genres' : 'swappableGenres'}

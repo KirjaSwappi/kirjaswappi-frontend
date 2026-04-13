@@ -21,7 +21,7 @@ export default function SwapBookInformation() {
                   {genre}
                 </p>
                 <span
-                  className={`lg:hidden bg- ${
+                  className={`lg:hidden ${
                     genres.length - 1 === index ? 'hidden' : 'block'
                   } inline-block mx-2 font-poppins font-light text-sm`}
                 >

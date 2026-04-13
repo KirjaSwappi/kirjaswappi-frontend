@@ -6,10 +6,10 @@ import { useAppSelector } from '../../../redux/hooks';
 import { IBook } from '../../books/types/interface';
 
 export default function MoreFromThisUserBooks({ bookId }: { bookId: string | undefined }) {
-  if (!bookId) return;
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
+  if (!bookId) return null;
   const { isFetching, isLoading, data: moreBooks } = useGetMoreBooksByBookIdQuery({ id: bookId });
   const isInitialLoading = isFetching || isLoading;
 
@@ -28,11 +28,11 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
             if (idx === moreBooks.length - 1) {
               return (
                 <div key={idx}>
-                  <BookCard book={book} hasPermission={book.owner.id === id} />
+                  <BookCard book={book} hasPermission={book.owner?.id === id} />
                 </div>
               );
             }
-            return <BookCard book={book} key={idx} hasPermission={book.owner.id === id} />;
+            return <BookCard book={book} key={idx} hasPermission={book.owner?.id === id} />;
           })}
         {isInitialLoading && Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}
       </div>

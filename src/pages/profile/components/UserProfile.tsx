@@ -8,6 +8,7 @@ import {
   useGetUserCoverImageQuery,
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
+import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { isFetchBaseQueryError } from '../../../utility/rtkError';
 export default function UserProfile() {
@@ -38,6 +39,8 @@ export default function UserProfile() {
       skip: !userId,
     },
   );
+  const { data: booksData } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
+  const booksCount = booksData?._embedded?.books?.length ?? 0;
 
   return (
     <div>
@@ -115,22 +118,22 @@ export default function UserProfile() {
           <div className="flex items-center py-2 px-4 justify-evenly">
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
-              <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
+              <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
             </div>
             <span className="h-12 w-[1px] block bg-platinumMix"></span>
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
-              <p className="font-poppins text-xs font-medium text-smokyBlack">3</p>
+              <p className="font-poppins text-xs font-medium text-smokyBlack">{booksCount}</p>
             </div>
           </div>
         </div>
         <div className="hidden lg:block border-b border-AntiFlashWhite px-4 py-5">
-          <div className="flex flex-row gap-1 items-center">
-            <Image src={locationIcon} alt="edit" className="w-4" />
-            <p className="font-poppins text-xs font-light text-blackOlive">
-              Senate Square, Helsinki
-            </p>
-          </div>
+          {data?.city && (
+            <div className="flex flex-row gap-1 items-center">
+              <Image src={locationIcon} alt="edit" className="w-4" />
+              <p className="font-poppins text-xs font-light text-blackOlive">{data.city}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

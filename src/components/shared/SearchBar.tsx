@@ -69,7 +69,7 @@ export default function SearchBar({
         {/* <div className="flex items-center justify-between gap-1 rounded-full bg-primary-light w-[106px] h-[26px] px-2 text-primary py-1">
           {' '}
           <FaLocationDot className="text-xs md:text-sm" />{' '}
-          <p className="font-normal text-sx md:text-sm font-poppins">Helsinki</p>{' '}
+          <p className="font-normal text-xs md:text-sm font-poppins">Helsinki</p>{' '}
           <MdKeyboardArrowDown />{' '}
         </div> */}
       </div>

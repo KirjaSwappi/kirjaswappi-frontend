@@ -66,7 +66,7 @@ const ImageFileInput = ({ name }: { name: string }) => {
                 </div>
               ) : (
                 <label
-                  htmlFor="file"
+                  htmlFor={`file-${name}`}
                   className="flex flex-col items-center justify-center h-full lg:flex-row lg:gap-2"
                 >
                   <span className="text-grayDark lg:text-[#A6A6A6] text-3xl font-poppins font-extralight">
@@ -77,7 +77,7 @@ const ImageFileInput = ({ name }: { name: string }) => {
                   </span>
 
                   <input
-                    id="file"
+                    id={`file-${name}`}
                     type="file"
                     className="hidden"
                     onChange={(e) => handleFileChange(e, field)}

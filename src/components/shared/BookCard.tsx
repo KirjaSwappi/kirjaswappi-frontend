@@ -39,7 +39,7 @@ export default function BookCard({
   const [open, setOpen] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
   const userId = useAppSelector((state) => state.auth.userInformation.id);
-  const { title, author, coverPhotoUrl, id, ownerName, ownerProfilePhoto, coverPhotoUrls } = book;
+  const { title, author, coverPhotoUrl, id, offeredBy, coverPhotoUrls } = book;
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
   const [trigger, { isLoading: bookLoading }] = useLazyGetBookByIdQuery();
@@ -94,7 +94,16 @@ export default function BookCard({
     >
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
-          <DeleteConfirmModal title="Are You Sure?" open={open} onClose={() => setOpen(false)} />
+          <DeleteConfirmModal
+            title="Are You Sure?"
+            open={open}
+            onClose={(e) => {
+              e?.stopPropagation();
+              setOpen(false);
+            }}
+            onDelete={(e) => handleBookDeleteById(e)}
+            isLoading={isLoading}
+          />
           {hasPermission && (
             <div className="absolute right-2 top-2 cursor-pointer z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm">
               <PiDotsThreeBold
@@ -138,15 +147,6 @@ export default function BookCard({
               </Button>
             </div>
           )}
-          <DeleteConfirmModal
-            open={open}
-            onClose={(e) => {
-              e?.stopPropagation();
-              setOpen(false);
-            }}
-            onDelete={(e) => handleBookDeleteById(e)}
-            isLoading={isLoading}
-          />
           <div className="relative">
             <div className={`${isProfile ? 'h-[156px] lg:h-[174px]' : 'h-[156px] lg:h-[214px]'} `}>
               <Image
@@ -194,27 +194,23 @@ export default function BookCard({
             <div className="flex items-center mb-1.5 lg:mb-2">
               <Image src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
               <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 capitalize">
-                {book?.location?.city || book?.owner?.location?.city || 'Helsinki'}
+                {book?.location?.city || book?.bookLocation || 'Unknown'}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <div className="w-3.5 h-3.5 rounded-full">
-                  <Image
-                    src={ownerProfilePhoto || profile}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
+                  <Image src={profile} alt="Profile" className="w-full h-full object-cover" />
                 </div>
-                {ownerName && (
+                {offeredBy && (
                   <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700">
-                    {ownerName}
+                    {offeredBy}
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-1">
-                <FaRegClock className="text-sx text-grayDark" />
-                <p className="font-poppins font-normal text-sx text-grayDark">{book?.offeredAgo}</p>
+                <FaRegClock className="text-xs text-grayDark" />
+                <p className="font-poppins font-normal text-xs text-grayDark">{book?.offeredAgo}</p>
               </div>
             </div>
           </div>

@@ -7,8 +7,8 @@ import Image from '../../../components/shared/Image';
 import { IExchange, ISwapConditionData } from '../types/interface';
 
 export default function Exchanges({ swapCondition }: { swapCondition: ISwapConditionData }) {
-  if (!swapCondition) return null;
   const { t } = useTranslation();
+  if (!swapCondition) return null;
   const getSwapTypeTitle = (swapType: SwapType): string => {
     switch (swapType) {
       case SwapType.BYBOOKS:

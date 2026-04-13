@@ -17,7 +17,7 @@ import InputLabel from '../InputLabel';
 import Line from '../Line';
 import MessageToastify from '../MessageToastify';
 import RequestFailedAnimation from './_components/RequestErrorAnimation';
-import RequestProcessingAnimation from './_components/RequestProcesingAnimation';
+import RequestProcessingAnimation from './_components/RequestProcessingAnimation';
 import RequestSuccessAnimation from './_components/RequestSuccessAnimation';
 import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';

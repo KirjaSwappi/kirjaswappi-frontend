@@ -2,15 +2,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { InferType } from 'yup';
 import contactFrame from '../../assets/contactFrame.png';
 import Button from '../../components/shared/Button';
 import ControlledInputField from '../../components/shared/ControllerField';
 import InputLabel from '../../components/shared/InputLabel';
 import BookAddUpdateHeader from '../addUpdateBook/_components/BookAddUpdateHeader';
 import contactUsSchema from './schema/index';
-
-type ContactFormData = InferType<typeof contactUsSchema>;
 
 export default function ContactUs() {
   const navigate = useNavigate();
@@ -22,9 +19,8 @@ export default function ContactUs() {
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (data: ContactFormData) => {
-    // Handle form submission
-    console.log(data);
+  const onSubmit = () => {
+    // TODO: Handle form submission
   };
 
   return (

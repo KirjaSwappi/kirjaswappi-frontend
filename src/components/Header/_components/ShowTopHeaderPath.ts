@@ -10,7 +10,7 @@ function getTopHeaderPaths(params: string | undefined) {
     '/auth/register',
     '/password/reset',
     '/user/messages',
-    `/user/messages/${params}/isMessage=True`,
+    `/user/messages/${params}`,
     '/map',
     '/privacy-policy',
     '/support-us',

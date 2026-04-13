@@ -63,7 +63,7 @@ export const useChatWS = (): UseChatWSReturn => {
 
   const stompClientRef = useRef<Client | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [reconnectAttempts, setReconnectAttempts] = useState(0);
+  const reconnectAttemptsRef = useRef(0);
   const [isConnected, setIsConnected] = useState(false);
   const subscribedChatsRef = useRef<Set<string>>(new Set());
   const subscriptionMapRef = useRef<Map<string, { unsubscribe: () => void }>>(new Map());
@@ -211,7 +211,7 @@ export const useChatWS = (): UseChatWSReturn => {
         if (errorEvent?.type === 'error') {
           console.error('[ChatWS] SockJS connection error:', error);
           setIsConnected(false);
-          setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
+          reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS;
         }
       };
 
@@ -232,7 +232,7 @@ export const useChatWS = (): UseChatWSReturn => {
         },
         onConnect: () => {
           setIsConnected(true);
-          setReconnectAttempts(0);
+          reconnectAttemptsRef.current = 0;
           clearReconnectTimeout();
 
           // Subscribe to inbox updates
@@ -272,7 +272,7 @@ export const useChatWS = (): UseChatWSReturn => {
             frame.headers?.['message']?.includes('Forbidden') ||
             frame.headers?.['message']?.includes('Unauthorized')
           ) {
-            setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
+            reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS;
             return;
           }
         },
@@ -282,17 +282,17 @@ export const useChatWS = (): UseChatWSReturn => {
           subscriptionMapRef.current.clear();
 
           // Don't reconnect if we've hit max attempts or if it was an auth error
-          if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) return;
+          if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) return;
 
           if (event.code === 1008 || event.code === 1002) {
-            setReconnectAttempts(MAX_RECONNECT_ATTEMPTS);
+            reconnectAttemptsRef.current = MAX_RECONNECT_ATTEMPTS;
             return;
           }
 
           // Attempt reconnection
-          const delay = getReconnectDelay(reconnectAttempts);
+          const delay = getReconnectDelay(reconnectAttemptsRef.current);
           reconnectTimeoutRef.current = setTimeout(() => {
-            setReconnectAttempts((prev) => prev + 1);
+            reconnectAttemptsRef.current += 1;
             connect();
           }, delay);
         },
@@ -323,7 +323,7 @@ export const useChatWS = (): UseChatWSReturn => {
     }
 
     setIsConnected(false);
-    setReconnectAttempts(0);
+    reconnectAttemptsRef.current = 0;
     subscribedChatsRef.current.clear();
     subscriptionMapRef.current.clear();
   };

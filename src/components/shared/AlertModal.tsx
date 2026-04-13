@@ -16,8 +16,8 @@ export default function AlertModal({
   alertTitle = 'Leave Page?',
   yes,
   no,
-  yesBtnValue = 'Stay Page',
-  noBtnValue = 'Leave Page',
+  yesBtnValue = 'Yes',
+  noBtnValue = 'No',
   loading = false,
 }: IAlert) {
   const { showAlert, message } = useAppSelector((state) => state.notification);

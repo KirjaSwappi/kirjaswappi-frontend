@@ -53,5 +53,4 @@ export type WSConnectionStatus = 'connecting' | 'connected' | 'disconnected' | '
 export interface UseNotificationWSReturn {
   isConnected: boolean;
   connectionStatus: WSConnectionStatus;
-  reconnectAttempts: number;
 }
