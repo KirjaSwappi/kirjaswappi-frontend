@@ -30,9 +30,7 @@ export default function PendingSwaps() {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <p className="text-gray-500 font-medium">No pending swaps</p>
-        <p className="text-xs text-gray-400 mt-1">
-          Your pending swap requests will appear here
-        </p>
+        <p className="text-xs text-gray-400 mt-1">Your pending swap requests will appear here</p>
       </div>
     );
   }
@@ -70,9 +68,7 @@ export default function PendingSwaps() {
                 <span className="text-xs text-gray-500">{item.swapStatus}</span>
               </div>
               {item.note && (
-                <p className="text-xs text-gray-400 mt-1 truncate">
-                  {truncateText(item.note, 40)}
-                </p>
+                <p className="text-xs text-gray-400 mt-1 truncate">{truncateText(item.note, 40)}</p>
               )}
             </div>
           </Button>

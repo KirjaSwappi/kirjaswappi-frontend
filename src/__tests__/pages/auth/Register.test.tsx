@@ -10,6 +10,7 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => mockNavigate,
+    useLocation: () => ({ pathname: '/auth/register', search: '', hash: '', state: null, key: '' }),
   };
 });
 

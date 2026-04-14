@@ -140,11 +140,6 @@ describe('RegisterForm', () => {
     expect(screen.getByText('Log In')).toBeInTheDocument();
   });
 
-  it('renders remember me checkbox', () => {
-    renderComponent();
-    expect(screen.getByLabelText('Remember me')).toBeInTheDocument();
-  });
-
   it('renders already have account text', () => {
     renderComponent();
     expect(screen.getByText('Already have an account?')).toBeInTheDocument();

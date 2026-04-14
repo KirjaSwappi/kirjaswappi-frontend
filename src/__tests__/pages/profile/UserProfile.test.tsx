@@ -47,6 +47,9 @@ vi.mock('../../../redux/feature/book/bookApi', () => ({
     data: { page: { totalElements: 5 } },
   }),
 }));
+vi.mock('../../../redux/feature/messages/inboxApi', () => ({
+  useGetInboxByStatusQuery: () => ({ data: [], isLoading: false }),
+}));
 
 vi.mock('../../../utility/rtkError', () => ({
   isFetchBaseQueryError: () => false,

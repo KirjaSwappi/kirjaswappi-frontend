@@ -29,6 +29,12 @@ vi.mock('../../../redux/feature/book/bookApi', () => ({
     data: { page: { totalElements: 3 } },
   }),
 }));
+vi.mock('../../../redux/feature/auth/authApi', () => ({
+  useGetUserByIdQuery: () => ({ data: { favBooks: [] }, isLoading: false }),
+}));
+vi.mock('../../../redux/feature/messages/inboxApi', () => ({
+  useGetInboxByStatusQuery: () => ({ data: [], isLoading: false }),
+}));
 
 vi.mock('../../../pages/profile/components/About', () => ({
   default: () => <div data-testid="about">About</div>,
@@ -36,6 +42,14 @@ vi.mock('../../../pages/profile/components/About', () => ({
 
 vi.mock('../../../pages/profile/components/BooksListed', () => ({
   default: () => <div data-testid="books-listed">BooksListed</div>,
+}));
+
+vi.mock('../../../pages/profile/components/PendingSwaps', () => ({
+  default: () => <div data-testid="pending-swaps">PendingSwaps</div>,
+}));
+
+vi.mock('../../../pages/profile/components/BookmarkedBooks', () => ({
+  default: () => <div data-testid="bookmarked-books">BookmarkedBooks</div>,
 }));
 
 vi.mock('../../../pages/profile/components/Skeletons/TabsSkeleton', () => ({
@@ -109,6 +123,6 @@ describe('ProfileDashboard', () => {
         </MemoryRouter>
       </Provider>,
     );
-    expect(screen.queryByText('Pending Swaps')).not.toBeInTheDocument();
+    expect(screen.queryByText('profile.pendingSwaps')).not.toBeInTheDocument();
   });
 });

@@ -7,7 +7,10 @@ export const registerSchema = Yup.object().shape({
   email: Yup.string().email('Please enter a valid email.').required('Please enter email.'),
   password: Yup.string()
     .required('Please enter password.')
-    .min(MIN_PASSWORD, `Password must be at least ${MIN_PASSWORD} characters long`),
+    .min(MIN_PASSWORD, `Password must be at least ${MIN_PASSWORD} characters long`)
+    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    .matches(/[0-9]/, 'Password must contain at least one digit'),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match.')
     .required('Please confirm your password.'),

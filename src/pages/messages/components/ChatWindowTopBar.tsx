@@ -326,7 +326,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await reportUser({ reportedUserId: partnerId, reason: 'Reported from chat' }).unwrap();
             showToast('success', t('chat.userReported'));
           } catch {
-            showToast('error', t('chat.userReported'));
+            showToast('error', t('chat.reportFailed'));
           }
         }}
         btnValue={t('chat.report')}

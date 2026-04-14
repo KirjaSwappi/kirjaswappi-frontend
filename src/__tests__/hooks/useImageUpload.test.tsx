@@ -40,6 +40,7 @@ describe('useImageUpload', () => {
   beforeEach(() => {
     // Clear any URL.createObjectURL mocks
     URL.createObjectURL = vi.fn(() => 'mock-url');
+    URL.revokeObjectURL = vi.fn();
   });
 
   afterEach(() => {
