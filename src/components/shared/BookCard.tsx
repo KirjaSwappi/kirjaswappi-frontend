@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaRegClock } from 'react-icons/fa6';
 import { PiDotsThreeBold } from 'react-icons/pi';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import bookmarkIcon from '../../assets/icon_bookmark.png';
 import deleteIcon from '../../assets/deleteIconRed.png';
 import editIcon from '../../assets/editBlack.png';
 import locationIcon from '../../assets/location-icon.png';
@@ -12,6 +14,7 @@ import {
   useDeleteBookByIdMutation,
   useLazyGetBookByIdQuery,
 } from '../../redux/feature/book/bookApi';
+import { useAddFavouriteBookMutation, useGetUserByIdQuery } from '../../redux/feature/auth/authApi';
 import { setBookLoading } from '../../redux/feature/book/bookSlice';
 import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { setBookIdToSwapWith, setSwapBook, setSwapModal } from '../../redux/feature/swap/swapSlice';
@@ -35,6 +38,7 @@ export default function BookCard({
   if (!book) return null;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   // =========== EDIT/DELETE POPUP CONTROL ===========
   const [open, setOpen] = useState<boolean>(false);
   const { clicked, setClicked, reference } = useMouseClick();
@@ -43,6 +47,9 @@ export default function BookCard({
   // =========== API -> QUERY | MUTATION  ===========
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
   const [trigger, { isLoading: bookLoading }] = useLazyGetBookByIdQuery();
+  const [addFavouriteBook] = useAddFavouriteBookMutation();
+  const { data: userData } = useGetUserByIdQuery({ userId: userId! }, { skip: !userId });
+  const isBookmarked = (userData?.favBooks ?? []).some((fav: { id: string }) => fav.id === id);
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {
     navigate(`/book-details/${id}`, {
@@ -60,6 +67,21 @@ export default function BookCard({
       setOpen(false);
     } catch (error) {
       showToast('error', 'Failed to delete book.');
+    }
+  };
+
+  // =========== BOOKMARK HANDLER ===========
+  const handleBookmark = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!userId) {
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+    try {
+      await addFavouriteBook({ userId, bookId: id }).unwrap();
+      showToast('success', t('bookmark.added'));
+    } catch {
+      showToast('error', t('bookmark.failed'));
     }
   };
 
@@ -115,6 +137,16 @@ export default function BookCard({
                 }}
               />
             </div>
+          )}
+          {!hasPermission && userId && !isBookmarked && (
+            <button
+              type="button"
+              className="absolute left-2 top-2 z-10 bg-white rounded-[4px] w-6 h-6 flex items-center justify-center shadow-sm cursor-pointer border-0 p-0"
+              onClick={handleBookmark}
+              aria-label={t('bookmark.added')}
+            >
+              <Image src={bookmarkIcon} alt="bookmark" className="w-4 h-4" />
+            </button>
           )}
           {hasPermission && clicked && (
             <div

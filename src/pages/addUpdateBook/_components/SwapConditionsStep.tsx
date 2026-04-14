@@ -13,6 +13,7 @@ import Separator from '../../../components/shared/Separator';
 import { useMouseClick } from '../../../hooks/useMouse';
 import { setOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useGetSupportedSwapTypesQuery } from '../../../redux/feature/book/bookApi';
 import { getFileToUrl } from '../../../utility/helper';
 import { SWAP_TYPES } from '../helper';
 import { ISwappableBook } from '../types/interface';
@@ -35,6 +36,21 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
     control,
     name: 'swappableBooks',
   });
+
+  // =========== SWAP TYPES FROM API ===========
+  const SWAP_TYPE_LABELS: Record<string, string> = {
+    OpenForOffers: 'Open To Offers',
+    ByBooks: 'By Books',
+    ByGenres: 'By Genres',
+    GiveAway: 'Give Away',
+  };
+  const { data: apiSwapTypes } = useGetSupportedSwapTypesQuery();
+  const swapTypes = apiSwapTypes
+    ? apiSwapTypes.map((value: string) => ({
+        value,
+        label: SWAP_TYPE_LABELS[value] || value,
+      }))
+    : SWAP_TYPES;
 
   //  INITIALIZE WITH ONE BOOK IF EMPTY
   useEffect(() => {
@@ -95,7 +111,7 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
         <div className="flex flex-col gap-2">
           <Separator className="lg:hidden" />
           <InputLabel className="mb-0 lg:text-smokyBlack" label={t('addBook.swapType')} required />
-          {SWAP_TYPES.map(({ value, label }) => (
+          {swapTypes.map(({ value, label }: { value: string; label: string }) => (
             <Controller
               key={value}
               name="swapType"

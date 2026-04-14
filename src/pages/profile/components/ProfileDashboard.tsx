@@ -2,10 +2,14 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import Button from '../../../components/shared/Button';
+import { useGetUserByIdQuery } from '../../../redux/feature/auth/authApi';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
+import { useGetInboxByStatusQuery } from '../../../redux/feature/messages/inboxApi';
 import { useAppSelector } from '../../../redux/hooks';
 import About from './About';
+import BookmarkedBooks from './BookmarkedBooks';
 import BooksListed from './BooksListed';
+import PendingSwaps from './PendingSwaps';
 import TabsSkeleton from './Skeletons/TabsSkeleton';
 import UserActionNavigation from './UserActionNavigation';
 import UserProfile from './UserProfile';
@@ -17,6 +21,17 @@ export default function ProfileDashboard() {
   const [activeTab, setActiveTab] = useState(1);
   const { data: booksData } = useGetAllBooksQuery({ ownerId: id }, { skip: !id });
   const booksCount = booksData?.page?.totalElements ?? 0;
+  const isOwnProfile = String(userInformation?.id) === String(id);
+  const { data: pendingSwapsData } = useGetInboxByStatusQuery(
+    { status: 'Pending' },
+    { skip: !isOwnProfile || !userInformation.id },
+  );
+  const pendingSwapsCount = pendingSwapsData?.length ?? 0;
+  const { data: userData } = useGetUserByIdQuery(
+    { userId: id as string },
+    { skip: !id || !isOwnProfile },
+  );
+  const bookmarkedCount = userData?.favBooks?.length ?? 0;
   const tabs = [
     {
       label: t('about'),
@@ -30,17 +45,17 @@ export default function ProfileDashboard() {
       count: booksCount,
     },
     {
-      label: 'Pending Swaps',
-      content: <BooksListed />,
+      label: t('profile.pendingSwaps'),
+      content: <PendingSwaps />,
       permission: false,
-      count: 0,
+      count: pendingSwapsCount,
     },
     {
-      label: 'Bookmarked',
-      content: <BooksListed />,
+      label: t('profile.bookmarked'),
+      content: <BookmarkedBooks />,
       hideOnMobile: true,
       permission: false,
-      count: 0,
+      count: bookmarkedCount,
     },
   ];
   // IF ID AND USER ID DON'T MATCH, HIDE THE TABS THAT USER RELATED TAB

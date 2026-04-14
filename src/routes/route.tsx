@@ -17,6 +17,7 @@ import Spinner from '../components/shared/Spinner';
 
 const AddUpdateBook = lazy(() => import('../pages/addUpdateBook'));
 const EditProfile = lazy(() => import('../pages/profile/components/EditProfile'));
+const ChangePassword = lazy(() => import('../pages/profile/components/ChangePassword'));
 const Map = lazy(() => import('../pages/map'));
 const Messages = lazy(() => import('../pages/messages/Messages'));
 const Collaboration = lazy(() => import('../pages/Collaboration'));
@@ -168,6 +169,16 @@ const routes = createBrowserRouter([
               <PrivateRoute>
                 <LazyRoute>
                   <EditProfile />
+                </LazyRoute>
+              </PrivateRoute>
+            ),
+          },
+          {
+            path: 'change-password',
+            element: (
+              <PrivateRoute>
+                <LazyRoute>
+                  <ChangePassword />
                 </LazyRoute>
               </PrivateRoute>
             ),

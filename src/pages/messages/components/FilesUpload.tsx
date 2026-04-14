@@ -18,16 +18,17 @@ import UploadPicture from '../../addUpdateBook/_components/UploadPicture';
 interface IFilesProps {
   name: string;
   errors: FieldErrors<FieldValues>;
+  triggerRef?: React.RefObject<HTMLButtonElement | null> | null;
 }
 
-const FilesUpload = ({ name, errors }: IFilesProps) => {
+const FilesUpload = ({ name, errors, triggerRef }: IFilesProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { control, setValue, trigger, watch } = useFormContext();
   const [previews, setPreviews] = useState<string[]>([]);
   const imageFiles = watch('files');
 
   useEffect(() => {
-    const triggerButton = document.getElementById('files');
+    const triggerButton = triggerRef?.current;
     const openFileDialog = () => {
       fileInputRef.current?.click();
     };
@@ -35,7 +36,7 @@ const FilesUpload = ({ name, errors }: IFilesProps) => {
     return () => {
       triggerButton?.removeEventListener('click', openFileDialog);
     };
-  }, []);
+  }, [triggerRef]);
 
   // Reset Previous state
   useEffect(() => {

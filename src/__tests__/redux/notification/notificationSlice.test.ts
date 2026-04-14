@@ -1,8 +1,8 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 
-// Mock sessionStorage BEFORE importing the slice
-// This is critical because the slice reads from sessionStorage at module import time
-const sessionStorageMock = vi.hoisted(() => {
+// Mock localStorage BEFORE importing the slice
+// This is critical because the slice reads from localStorage at module import time
+const localStorageMock = vi.hoisted(() => {
   let store: Record<string, string> = {};
   return {
     getItem: vi.fn((key: string) => store[key] || null),
@@ -18,8 +18,8 @@ const sessionStorageMock = vi.hoisted(() => {
   };
 });
 
-Object.defineProperty(globalThis, 'sessionStorage', {
-  value: sessionStorageMock,
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
   writable: true,
   configurable: true,
 });
@@ -42,7 +42,7 @@ import type { RootState } from '../../../redux/store';
 
 describe('notificationSlice', () => {
   beforeEach(() => {
-    sessionStorageMock.clear();
+    localStorageMock.clear();
     vi.clearAllMocks();
   });
 
@@ -113,7 +113,7 @@ describe('notificationSlice', () => {
       const state = notificationReducer(initialState, addNotification(mockNotification));
 
       expect(state.notifications[0].id).toContain('user-123');
-      expect(state.notifications[0].id).toMatch(/^user-123-\d+$/);
+      expect(state.notifications[0].id).toMatch(/^user-123-\d+-[a-z0-9]+$/);
     });
 
     it('should increment unread count', () => {
@@ -159,10 +159,10 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist notifications to sessionStorage', () => {
+    it('should persist notifications to localStorage', () => {
       notificationReducer(initialState, addNotification(mockNotification));
 
-      expect(sessionStorageMock.setItem).toHaveBeenCalledWith(
+      expect(localStorageMock.setItem).toHaveBeenCalledWith(
         'kirjaswappi_notifications',
         expect.any(String),
       );
@@ -233,7 +233,7 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist changes to sessionStorage', () => {
+    it('should persist changes to localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
@@ -242,7 +242,7 @@ describe('notificationSlice', () => {
 
       notificationReducer(stateWithNotifications, markNotificationsAsRead(['1']));
 
-      expect(sessionStorageMock.setItem).toHaveBeenCalled();
+      expect(localStorageMock.setItem).toHaveBeenCalled();
     });
   });
 
@@ -280,7 +280,7 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist changes to sessionStorage', () => {
+    it('should persist changes to localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
@@ -289,7 +289,7 @@ describe('notificationSlice', () => {
 
       notificationReducer(stateWithNotifications, markAllAsRead());
 
-      expect(sessionStorageMock.setItem).toHaveBeenCalled();
+      expect(localStorageMock.setItem).toHaveBeenCalled();
     });
   });
 
@@ -355,7 +355,7 @@ describe('notificationSlice', () => {
       expect(state.isNotificationPanelOpen).toBe(false);
     });
 
-    it('should remove notifications from sessionStorage', () => {
+    it('should remove notifications from localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
@@ -364,7 +364,7 @@ describe('notificationSlice', () => {
 
       notificationReducer(stateWithNotifications, clearNotifications());
 
-      expect(sessionStorageMock.removeItem).toHaveBeenCalledWith('kirjaswappi_notifications');
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('kirjaswappi_notifications');
     });
   });
 

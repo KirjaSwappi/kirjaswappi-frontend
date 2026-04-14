@@ -113,18 +113,25 @@ export default function SwapModal() {
           break;
       }
 
-      swapRequest(organizedData).then((res) => {
-        if (res.data) {
-          handleCloseModal();
-        }
-      });
+      swapRequest(organizedData)
+        .then((res) => {
+          if (res.data) {
+            handleCloseModal();
+          }
+        })
+        .catch(() => {
+          // Error is handled by RTK Query and displayed via errorMessage state
+        });
     },
     [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal],
   );
 
   // =========== DERIVED VALUES ===========
   const isSendDisabled = useMemo(
-    () => !selectedBook && currentSwapType !== SwapType.GIVEAWAY,
+    () =>
+      !selectedBook &&
+      currentSwapType !== SwapType.GIVEAWAY &&
+      currentSwapType !== SwapType.OPENTOOFFERS,
     [selectedBook, currentSwapType],
   );
 

@@ -95,6 +95,7 @@ export const authApi = api.injectEndpoints({
         const reset_password_data = {
           newPassword: data?.newPassword,
           confirmPassword: data?.confirmPassword,
+          resetToken: data?.resetToken,
         };
         return {
           url: `/users/reset-password/${email}`,
@@ -152,7 +153,7 @@ export const authApi = api.injectEndpoints({
     deleteProfileImage: builder.mutation({
       query: ({ id }) => {
         return {
-          url: `/photos/profile?userId=${id}`,
+          url: `/photos/profile/${id}`,
           method: 'DELETE',
         };
       },
@@ -180,11 +181,36 @@ export const authApi = api.injectEndpoints({
     deleteCoverImage: builder.mutation({
       query: ({ id }) => {
         return {
-          url: `/photos/cover?userId=${id}`,
+          url: `/photos/cover/${id}`,
           method: 'DELETE',
         };
       },
       invalidatesTags: ['AddCoverImage'],
+    }),
+    addFavouriteBook: builder.mutation({
+      query: ({ userId, bookId }: { userId: string; bookId: string }) => ({
+        url: '/users/favourite-books',
+        method: 'POST',
+        body: { userId, bookId },
+      }),
+      invalidatesTags: ['UpdateUser'],
+    }),
+    changePassword: builder.mutation({
+      query: ({
+        email,
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      }: {
+        email: string;
+        currentPassword: string;
+        newPassword: string;
+        confirmPassword: string;
+      }) => ({
+        url: `/users/change-password/${email}`,
+        method: 'POST',
+        body: { currentPassword, newPassword, confirmPassword },
+      }),
     }),
   }),
 });
@@ -206,4 +232,6 @@ export const {
   useUploadCoverImageMutation,
   useDeleteCoverImageMutation,
   useLoginWithGoogleMutation,
+  useAddFavouriteBookMutation,
+  useChangePasswordMutation,
 } = authApi;

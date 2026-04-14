@@ -45,6 +45,7 @@ export default function ResetPassword() {
     password: '',
     confirmPassword: '',
   });
+  const [resetToken, setResetToken] = useState<string>('');
   const [errors, setErrors] = useState<{
     [key: string]: string | null | undefined;
   }>({});
@@ -61,6 +62,14 @@ export default function ResetPassword() {
     // validateInput(e);
     dispatch(setError(''));
     dispatch(setMessages({ message: '', type: '', isShow: false }));
+  };
+
+  const validatePasswordStrength = (value: string): string | null => {
+    if (value.length < 8) return 'Password must be at least 8 characters long.';
+    if (!/[A-Z]/.test(value)) return 'Password must contain at least one uppercase letter.';
+    if (!/[a-z]/.test(value)) return 'Password must contain at least one lowercase letter.';
+    if (!/[0-9]/.test(value)) return 'Password must contain at least one digit.';
+    return null;
   };
 
   // Handle Input validation (onBlur)
@@ -81,10 +90,15 @@ export default function ResetPassword() {
         if (name === 'password') {
           if (!value) {
             stateObj[name] = 'Please enter Password.';
-          } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
-            stateObj['confirmPassword'] = 'Password and Confirm Password do not match.';
           } else {
-            stateObj['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
+            const strengthError = validatePasswordStrength(value);
+            if (strengthError) {
+              stateObj[name] = strengthError;
+            } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
+              stateObj['confirmPassword'] = 'Password and Confirm Password do not match.';
+            } else {
+              stateObj['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
+            }
           }
         } else if (name === 'confirmPassword') {
           if (!value) {
@@ -122,11 +136,17 @@ export default function ResetPassword() {
           if (!value) {
             newErrors[typedKey] = 'Please enter Password.';
             allValid = false;
-          } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
-            newErrors['confirmPassword'] = 'Password and Confirm Password do not match.';
-            allValid = false;
           } else {
-            newErrors['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
+            const strengthError = validatePasswordStrength(value);
+            if (strengthError) {
+              newErrors[typedKey] = strengthError;
+              allValid = false;
+            } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
+              newErrors['confirmPassword'] = 'Password and Confirm Password do not match.';
+              allValid = false;
+            } else {
+              newErrors['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
+            }
           }
         }
         if (typedKey === 'confirmPassword') {
@@ -166,6 +186,9 @@ export default function ResetPassword() {
       try {
         const res = await verifyOTP({ email: userPass.email, otp: otp.join('') });
         if (res?.data) {
+          if (res.data.resetToken) {
+            setResetToken(res.data.resetToken);
+          }
           const timer = setTimeout(() => {
             dispatch(setMessages({ type: '', isShow: false, message: '' }));
             dispatch(setAuthMessage(''));
@@ -192,6 +215,7 @@ export default function ResetPassword() {
       newPassword: userPass.password,
       confirmPassword: userPass.confirmPassword,
       email: userPass.email,
+      resetToken,
     };
     try {
       const res = await resetPassword(resetObj);

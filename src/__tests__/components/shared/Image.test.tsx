@@ -30,11 +30,13 @@ describe('Image Component', () => {
     expect(container.querySelector('img')).toHaveAttribute('alt', 'image');
   });
 
-  it('applies className to the img element', () => {
+  it('applies className to the img element after load', () => {
     const { container } = render(
       <Image src="https://example.com/photo.jpg" className="rounded-full" />,
     );
-    expect(container.querySelector('img')).toHaveClass('rounded-full');
+    const img = container.querySelector('img')!;
+    fireEvent.load(img);
+    expect(img).toHaveClass('rounded-full');
   });
 
   it('starts with opacity-0 and transitions to opacity-100 on load', () => {

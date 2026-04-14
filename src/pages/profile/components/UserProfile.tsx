@@ -9,6 +9,7 @@ import {
   useGetUserProfileImageQuery,
 } from '../../../redux/feature/auth/authApi';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
+import { useGetInboxByStatusQuery } from '../../../redux/feature/messages/inboxApi';
 import { useAppSelector } from '../../../redux/hooks';
 import { isFetchBaseQueryError } from '../../../utility/rtkError';
 export default function UserProfile() {
@@ -40,7 +41,13 @@ export default function UserProfile() {
     },
   );
   const { data: booksData } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
+  const isOwnProfile = userId === id;
+  const { data: completedSwaps } = useGetInboxByStatusQuery(
+    { status: 'Completed' },
+    { skip: !isOwnProfile },
+  );
   const booksCount = booksData?.page?.totalElements ?? 0;
+  const swapsCount = isOwnProfile ? (completedSwaps?.length ?? 0) : '-';
 
   return (
     <div>
@@ -118,7 +125,7 @@ export default function UserProfile() {
           <div className="flex items-center py-2 px-4 justify-evenly">
             <div className="flex flex-col gap-1 items-center">
               <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
-              <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
+              <p className="font-poppins text-xs font-medium text-smokyBlack">{swapsCount}</p>
             </div>
             <span className="h-12 w-[1px] block bg-platinumMix"></span>
             <div className="flex flex-col gap-1 items-center">

@@ -23,6 +23,9 @@ const Image: React.FC<IImageProps> = (props) => {
   };
   return (
     <picture>
+      {!isLoaded && (
+        <div className={cn('bg-platinum animate-pulse', className)} aria-hidden="true" />
+      )}
       <img
         {...props}
         src={!src ? NotFoundImg : src}
@@ -33,8 +36,8 @@ const Image: React.FC<IImageProps> = (props) => {
         alt={props?.alt || 'image'}
         style={style}
         className={cn(
-          `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`,
-          className,
+          `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`,
+          isLoaded && className,
         )}
       />
     </picture>

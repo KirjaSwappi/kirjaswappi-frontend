@@ -29,6 +29,8 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const [reportOpen, setReportOpen] = useState<boolean>(false);
   const [acceptOpen, setAcceptOpen] = useState<boolean>(false);
   const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const [completeOpen, setCompleteOpen] = useState<boolean>(false);
+  const [cancelOpen, setCancelOpen] = useState<boolean>(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -64,6 +66,9 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const swapStatus = rawStatus.toUpperCase();
   const isReceiver = selectedChat.conversationType === 'received';
   const canRespondToSwap = isReceiver && swapStatus === 'PENDING';
+  const canComplete = swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
+  const canCancel =
+    swapStatus === 'PENDING' || swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
@@ -182,6 +187,30 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               </button>
             </div>
           )}
+          {!canRespondToSwap && (canComplete || canCancel) && (
+            <div className="flex gap-2 mt-2">
+              {canComplete && (
+                <button
+                  type="button"
+                  disabled={isUpdatingStatus}
+                  onClick={() => setCompleteOpen(true)}
+                  className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-primary rounded-lg hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
+                >
+                  {t('chat.markComplete')}
+                </button>
+              )}
+              {canCancel && (
+                <button
+                  type="button"
+                  disabled={isUpdatingStatus}
+                  onClick={() => setCancelOpen(true)}
+                  className="flex-1 py-1.5 text-xs font-poppins font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50 cursor-pointer"
+                >
+                  {t('chat.cancel')}
+                </button>
+              )}
+            </div>
+          )}
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
@@ -241,7 +270,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await muteUser({ id: partnerId }).unwrap();
             showToast('success', t('chat.userMuted'));
           } catch {
-            showToast('error', t('chat.userMuted'));
+            showToast('error', t('chat.muteFailed'));
           }
         }}
         onCancel={() => setMuteOpen(false)}
@@ -258,7 +287,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await blockUser({ id: partnerId }).unwrap();
             showToast('success', t('chat.userBlocked'));
           } catch {
-            showToast('error', t('chat.userBlocked'));
+            showToast('error', t('chat.blockFailed'));
           }
         }}
         btnValue={t('chat.block')}
@@ -297,13 +326,35 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await reportUser({ reportedUserId: partnerId, reason: 'Reported from chat' }).unwrap();
             showToast('success', t('chat.userReported'));
           } catch {
-            showToast('error', t('chat.userReported'));
+            showToast('error', t('chat.reportFailed'));
           }
         }}
         btnValue={t('chat.report')}
         onCancel={() => setReportOpen(false)}
         header={t('chat.reportUser')}
         description={t('chat.reportConfirm')}
+      />
+      <ConfirmModal
+        open={completeOpen}
+        onConfirm={() => {
+          setCompleteOpen(false);
+          handleStatusUpdate('Completed');
+        }}
+        btnValue={t('chat.complete')}
+        onCancel={() => setCompleteOpen(false)}
+        header={t('chat.completeSwap')}
+        description={t('chat.completeConfirm')}
+      />
+      <ConfirmModal
+        open={cancelOpen}
+        onConfirm={() => {
+          setCancelOpen(false);
+          handleStatusUpdate('Cancelled');
+        }}
+        btnValue={t('chat.cancelSwap')}
+        onCancel={() => setCancelOpen(false)}
+        header={t('chat.cancelSwap')}
+        description={t('chat.cancelConfirm')}
       />
     </div>
   );

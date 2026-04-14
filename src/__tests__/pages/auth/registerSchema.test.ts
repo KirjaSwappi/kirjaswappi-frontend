@@ -38,7 +38,7 @@ describe('registerSchema', () => {
         firstName: 'A',
         lastName: 'B',
         email: 'a@b.com',
-        password: 'password123',
+        password: 'Password123',
         confirmPassword: 'different',
       }),
     ).rejects.toThrow('Passwords must match.');
@@ -49,8 +49,8 @@ describe('registerSchema', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
-      password: 'password123',
-      confirmPassword: 'password123',
+      password: 'Password123',
+      confirmPassword: 'Password123',
     });
     expect(result.firstName).toBe('John');
   });

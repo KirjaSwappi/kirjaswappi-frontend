@@ -24,6 +24,9 @@ vi.mock('../../../redux/feature/book/bookApi', () => ({
     data: { page: { totalElements: 5 }, _embedded: { books: [] } },
   }),
 }));
+vi.mock('../../../redux/feature/messages/inboxApi', () => ({
+  useGetInboxByStatusQuery: () => ({ data: [], isLoading: false }),
+}));
 vi.mock('../../../pages/profile/components/BookList', () => ({
   default: () => <div data-testid="book-list">BookList</div>,
 }));

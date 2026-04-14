@@ -133,15 +133,6 @@ export default function RegisterForm() {
             </div>
           )}
 
-          <div className="flex items-center gap-2 text-grayDark my-4">
-            <input type="checkbox" name="remember" id="remember" className="cursor-pointer" />
-            <label
-              htmlFor="remember"
-              className="cursor-pointer text-sm font-light font-poppins text-grayDark"
-            >
-              Remember me
-            </label>
-          </div>
           <Button
             type="submit"
             disabled={isLoading}

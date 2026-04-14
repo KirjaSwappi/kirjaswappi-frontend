@@ -33,6 +33,8 @@ vi.mock('../../../redux/feature/auth/authApi', async (importActual) => {
   return {
     ...actual,
     useGetUserProfileImageQuery: () => ({ data: { imageUrl: 'https://example.com/img.jpg' } }),
+    useAddFavouriteBookMutation: () => [vi.fn(), { isLoading: false }],
+    useGetUserByIdQuery: () => ({ data: { favBooks: [] } }),
   };
 });
 

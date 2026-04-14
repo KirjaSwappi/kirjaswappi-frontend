@@ -14,7 +14,6 @@ import authSlice, { IInitialState, initialState } from './feature/auth/authSlice
 import bookSlice, { IBookInitialState } from './feature/book/bookSlice';
 import filterSlice, { IFilterInitialState } from './feature/filter/filterSlice';
 import messagesSlice, { ChatState } from './feature/messages/messagesSlice';
-import chatMessageReducer, { ChatState as ChatMessageState } from './feature/chat/chatMessageSlice';
 import notificationSlice, {
   INotificationInitialState,
 } from './feature/notification/notificationSlice';
@@ -45,7 +44,6 @@ const store: EnhancedStore<
     filter: IFilterInitialState;
     swapBook: ISwapBookInitialInformation;
     chat: ChatState;
-    chatMessages: ChatMessageState;
     book: IBookInitialState;
   },
   UnknownAction,
@@ -74,7 +72,6 @@ const store: EnhancedStore<
     filter: filterSlice,
     swapBook: swapSlice,
     chat: messagesSlice,
-    chatMessages: chatMessageReducer,
     book: bookSlice,
   },
   preloadedState,

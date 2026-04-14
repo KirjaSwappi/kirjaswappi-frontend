@@ -10,7 +10,7 @@ export const setCookie = (name: string, value: unknown, time: number) => {
   const date = new Date();
   date.setTime(date.getTime() + time * 60 * 1000);
   const expires = 'expires=' + date.toUTCString();
-  document.cookie = `${name}=${encryptedValue}; ${expires}; path=/; Secure`;
+  document.cookie = `${name}=${encryptedValue}; ${expires}; path=/; Secure; SameSite=Strict`;
 };
 
 export const getCookie = (name: string) => {

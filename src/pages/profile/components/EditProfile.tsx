@@ -182,11 +182,11 @@ export default function EditProfile() {
       }
       const results = await Promise.allSettled(requests);
 
-      results.forEach((result) => {
-        if (result.status === 'rejected') {
-          showToast('error', t('editProfile.saveFailed'));
-        }
-      });
+      const failures = results.filter((result) => result.status === 'rejected');
+      if (failures.length > 0) {
+        showToast('error', t('editProfile.saveFailed'));
+        return;
+      }
 
       clearProfileState();
       clearCoverState();
@@ -486,9 +486,6 @@ export default function EditProfile() {
             <h1 className="font-poppins text-sm font-medium leading-none">
               {t('editProfile.location')}
             </h1>
-            <Button className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline">
-              {t('change')}
-            </Button>
           </div>
           <div>
             <p className="flex items-center font-poppins font-normal text-xs gap-1">
@@ -498,6 +495,14 @@ export default function EditProfile() {
                 : t('editProfile.noLocation')}
             </p>
           </div>
+        </div>
+        <div className="pb-8 border-t border-[#E4E4E4] pt-4">
+          <Button
+            onClick={() => navigate('/profile/change-password')}
+            className="w-full h-[48px] px-4 font-normal text-primary border border-primary rounded-2xl text-sm"
+          >
+            {t('changePassword.title')}
+          </Button>
         </div>
       </div>
     </div>
