@@ -11,10 +11,15 @@ import Image from '../../components/shared/Image';
 import Loader from '../../components/shared/Loader';
 import PageTitle from '../../components/shared/PageTitle';
 import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
-import { useGetUserProfileImageQuery } from '../../redux/feature/auth/authApi';
+import {
+  useGetUserProfileImageQuery,
+  useAddFavouriteBookMutation,
+  useGetUserByIdQuery,
+} from '../../redux/feature/auth/authApi';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
+import { showToast } from '../../components/shared/toast';
 import BookActionButton from './_components/BookActionButton';
 import BookDescription from './_components/BookDescription';
 import BookImageSlider from './_components/BookImageSlider';
@@ -44,6 +49,24 @@ export default function BookDetails() {
     },
   );
   const { t } = useTranslation();
+  const [addFavouriteBook] = useAddFavouriteBookMutation();
+  const { data: currentUserData } = useGetUserByIdQuery(
+    { userId: userInformation?.id },
+    { skip: !userInformation?.id },
+  );
+  const isBookmarked = (currentUserData?.favBooks ?? []).some(
+    (fav: { id: string }) => fav.id === id,
+  );
+
+  const handleBookmark = async () => {
+    if (!userInformation?.id) return;
+    try {
+      await addFavouriteBook({ userId: userInformation.id, bookId: id }).unwrap();
+      showToast('success', t('bookmark.added'));
+    } catch {
+      showToast('error', t('bookmark.failed'));
+    }
+  };
 
   useEffect(() => {
     if (userInformation?.id === bookData?.owner?.id) setProfile(true);
@@ -102,8 +125,8 @@ export default function BookDetails() {
             <Image
               src={isProfile ? editIcon : bookmarkIcon}
               alt={isProfile ? 'Edit book' : 'Bookmark'}
-              onClick={navigateToEditBook}
-              className="w-6 h-6"
+              onClick={isProfile ? navigateToEditBook : handleBookmark}
+              className={`w-6 h-6 cursor-pointer ${!isProfile && isBookmarked ? 'opacity-40' : ''}`}
             />
           </div>
         </div>

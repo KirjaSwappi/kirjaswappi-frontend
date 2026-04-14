@@ -105,6 +105,8 @@ const USER_ONLY_ENDPOINTS = [
   'getChatMessages',
   'sendChatMessage',
   'updateSwapRequestStatus',
+  'addFavouriteBook',
+  'changePassword',
 ];
 
 export const api = createApi({

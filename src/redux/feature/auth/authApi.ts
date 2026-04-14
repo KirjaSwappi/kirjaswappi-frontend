@@ -187,6 +187,31 @@ export const authApi = api.injectEndpoints({
       },
       invalidatesTags: ['AddCoverImage'],
     }),
+    addFavouriteBook: builder.mutation({
+      query: ({ userId, bookId }: { userId: string; bookId: string }) => ({
+        url: '/users/favourite-books',
+        method: 'POST',
+        body: { userId, bookId },
+      }),
+      invalidatesTags: ['UpdateUser'],
+    }),
+    changePassword: builder.mutation({
+      query: ({
+        email,
+        currentPassword,
+        newPassword,
+        confirmPassword,
+      }: {
+        email: string;
+        currentPassword: string;
+        newPassword: string;
+        confirmPassword: string;
+      }) => ({
+        url: `/users/change-password/${email}`,
+        method: 'POST',
+        body: { currentPassword, newPassword, confirmPassword },
+      }),
+    }),
   }),
 });
 
@@ -207,4 +232,6 @@ export const {
   useUploadCoverImageMutation,
   useDeleteCoverImageMutation,
   useLoginWithGoogleMutation,
+  useAddFavouriteBookMutation,
+  useChangePasswordMutation,
 } = authApi;

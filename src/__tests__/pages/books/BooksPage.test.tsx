@@ -22,6 +22,12 @@ vi.mock('react-router-dom', async () => {
 const mockUseGetAllBooksQuery = vi.fn();
 vi.mock('../../../redux/feature/book/bookApi', () => ({
   useGetAllBooksQuery: (...args: unknown[]) => mockUseGetAllBooksQuery(...args),
+  useGetBooksNearLocationQuery: () => ({
+    data: null,
+    isError: false,
+    isLoading: false,
+    isFetching: false,
+  }),
   useDeleteBookByIdMutation: () => [vi.fn(), { isLoading: false }],
   useLazyGetBookByIdQuery: () => [vi.fn(), { isLoading: false }],
 }));

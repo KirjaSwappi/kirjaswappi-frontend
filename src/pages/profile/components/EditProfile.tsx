@@ -496,6 +496,14 @@ export default function EditProfile() {
             </p>
           </div>
         </div>
+        <div className="pb-8 border-t border-[#E4E4E4] pt-4">
+          <Button
+            onClick={() => navigate('/profile/change-password')}
+            className="w-full h-[48px] px-4 font-normal text-primary border border-primary rounded-2xl text-sm"
+          >
+            {t('changePassword.title')}
+          </Button>
+        </div>
       </div>
     </div>
   );

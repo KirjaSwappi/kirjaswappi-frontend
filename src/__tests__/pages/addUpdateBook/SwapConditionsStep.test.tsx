@@ -86,6 +86,10 @@ vi.mock('../../../pages/addUpdateBook/helper', () => ({
   ],
 }));
 
+vi.mock('../../../redux/feature/book/bookApi', () => ({
+  useGetSupportedSwapTypesQuery: () => ({ data: undefined }),
+}));
+
 vi.mock('../../../pages/addUpdateBook/_components/AddAnotherBookButton', () => ({
   default: () => <button data-testid="add-book-btn">Add Another Book</button>,
 }));

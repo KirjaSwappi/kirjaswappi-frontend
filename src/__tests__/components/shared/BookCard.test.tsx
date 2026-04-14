@@ -43,6 +43,15 @@ vi.mock('../../../redux/feature/book/bookApi', () => ({
   useLazyGetBookByIdQuery: () => [vi.fn(), { isLoading: false }],
 }));
 
+vi.mock('../../../redux/feature/auth/authApi', async (importActual) => {
+  const actual = await importActual<typeof import('../../../redux/feature/auth/authApi')>();
+  return {
+    ...actual,
+    useAddFavouriteBookMutation: () => [vi.fn(), { isLoading: false }],
+    useGetUserByIdQuery: () => ({ data: { favBooks: [] } }),
+  };
+});
+
 // Mock toast
 vi.mock('../../../components/shared/toast', () => ({
   showToast: vi.fn(),

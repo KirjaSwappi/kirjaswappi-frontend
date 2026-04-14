@@ -144,6 +144,63 @@ export const bookApi = api.injectEndpoints({
       },
       providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
     }),
+
+    getSupportedSwapTypes: builder.query<string[], void>({
+      query: () => ({
+        url: '/books/supported-swap-types',
+        method: 'GET',
+      }),
+    }),
+
+    getBooksNearLocation: builder.query({
+      query: ({
+        latitude,
+        longitude,
+        radiusKm = 50,
+        page = 0,
+        size = 20,
+      }: {
+        latitude: number;
+        longitude: number;
+        radiusKm?: number;
+        page?: number;
+        size?: number;
+      }) => {
+        const params = new URLSearchParams();
+        params.append('latitude', String(latitude));
+        params.append('longitude', String(longitude));
+        if (radiusKm) params.append('radiusKm', String(radiusKm));
+        appendPaginationParams(params, page, size);
+        return { url: `/books/near?${params.toString()}`, method: 'GET' };
+      },
+      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
+    }),
+
+    getBooksByCity: builder.query({
+      query: ({ city, page = 0, size = 20 }: { city: string; page?: number; size?: number }) => {
+        const params = new URLSearchParams();
+        appendPaginationParams(params, page, size);
+        return { url: `/books/city/${city}?${params.toString()}`, method: 'GET' };
+      },
+      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
+    }),
+
+    getBooksByCountry: builder.query({
+      query: ({
+        country,
+        page = 0,
+        size = 20,
+      }: {
+        country: string;
+        page?: number;
+        size?: number;
+      }) => {
+        const params = new URLSearchParams();
+        appendPaginationParams(params, page, size);
+        return { url: `/books/country/${country}?${params.toString()}`, method: 'GET' };
+      },
+      providesTags: ['AddBook', 'UpdateBook', 'DeleteBook'],
+    }),
   }),
 });
 
@@ -160,4 +217,8 @@ export const {
   useDeleteBookByIdMutation,
   useGetBooksListedByIdQuery,
   useGetBooksWithLocationQuery,
+  useGetSupportedSwapTypesQuery,
+  useGetBooksNearLocationQuery,
+  useGetBooksByCityQuery,
+  useGetBooksByCountryQuery,
 } = bookApi;
