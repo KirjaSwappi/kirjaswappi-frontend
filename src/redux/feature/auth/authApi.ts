@@ -195,6 +195,13 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ['UpdateUser'],
     }),
+    removeFavouriteBook: builder.mutation({
+      query: ({ bookId }: { bookId: string }) => ({
+        url: `/users/favourite-books/${bookId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['UpdateUser'],
+    }),
     changePassword: builder.mutation({
       query: ({
         email,
@@ -233,5 +240,6 @@ export const {
   useDeleteCoverImageMutation,
   useLoginWithGoogleMutation,
   useAddFavouriteBookMutation,
+  useRemoveFavouriteBookMutation,
   useChangePasswordMutation,
 } = authApi;

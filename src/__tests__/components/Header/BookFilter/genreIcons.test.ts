@@ -1,21 +1,24 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
-vi.mock('../../../../assets/Adventure.svg', () => ({ default: 'adventure.svg' }));
-vi.mock('../../../../assets/FictionIcon.svg', () => ({ default: 'fiction.svg' }));
-vi.mock('../../../../assets/Non-Fiction.svg', () => ({ default: 'nonfiction.svg' }));
+import { getGenreIcon, defaultGenreIcon } from '../../../../components/Header/_components/BookFilter/genreIcons';
 
-import { genreIcons } from '../../../../components/Header/_components/BookFilter/genreIcons';
-
-describe('genreIcons', () => {
-  it('has Fiction icon', () => {
-    expect(genreIcons['Fiction']).toBeDefined();
+describe('getGenreIcon', () => {
+  it('returns an icon for Fiction', () => {
+    expect(getGenreIcon('Fiction')).toBeDefined();
+    expect(getGenreIcon('Fiction')).not.toBe(defaultGenreIcon);
   });
 
-  it('has Adventure icon', () => {
-    expect(genreIcons['Adventure']).toBeDefined();
+  it('returns an icon for Adventure', () => {
+    expect(getGenreIcon('Adventure')).toBeDefined();
+    expect(getGenreIcon('Adventure')).not.toBe(defaultGenreIcon);
   });
 
-  it('has Non-Fiction icon', () => {
-    expect(genreIcons['Non-Fiction']).toBeDefined();
+  it('returns an icon for Non-Fiction', () => {
+    expect(getGenreIcon('Non-Fiction')).toBeDefined();
+    expect(getGenreIcon('Non-Fiction')).not.toBe(defaultGenreIcon);
+  });
+
+  it('returns default icon for unknown genre', () => {
+    expect(getGenreIcon('UnknownGenre')).toBe(defaultGenreIcon);
   });
 });
