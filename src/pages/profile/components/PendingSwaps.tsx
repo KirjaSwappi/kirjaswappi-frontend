@@ -29,8 +29,8 @@ export default function PendingSwaps() {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-gray-500 font-medium">No pending swaps</p>
-        <p className="text-xs text-gray-400 mt-1">Your pending swap requests will appear here</p>
+        <p className="text-grayDark font-medium">No pending swaps</p>
+        <p className="text-xs text-gray mt-1">Your pending swap requests will appear here</p>
       </div>
     );
   }
@@ -50,7 +50,7 @@ export default function PendingSwaps() {
                 search: `?${createSearchParams({ messageId: item.id })}`,
               });
             }}
-            className="flex gap-3 p-3 bg-white rounded-lg border border-gray-100 hover:border-primary/30 transition-colors text-left"
+            className="flex gap-3 p-3 bg-white rounded-lg border border-platinum hover:border-primary/30 transition-colors text-left"
           >
             <Image
               src={item.bookToSwapWith?.coverPhotoUrl || book}
@@ -60,15 +60,15 @@ export default function PendingSwaps() {
               <p className="font-medium text-sm truncate">
                 {truncateText(item.bookToSwapWith?.title || 'Unknown Book', 30)}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-grayDark mt-0.5">
                 {isSent ? `Sent to ${partnerName}` : `From ${partnerName}`}
               </p>
               <div className="flex items-center gap-1.5 mt-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
-                <span className="text-xs text-gray-500">{item.swapStatus}</span>
+                <span className="inline-block w-2 h-2 rounded-full bg-yellow" />
+                <span className="text-xs text-grayDark">{item.swapStatus}</span>
               </div>
               {item.note && (
-                <p className="text-xs text-gray-400 mt-1 truncate">{truncateText(item.note, 40)}</p>
+                <p className="text-xs text-gray mt-1 truncate">{truncateText(item.note, 40)}</p>
               )}
             </div>
           </Button>

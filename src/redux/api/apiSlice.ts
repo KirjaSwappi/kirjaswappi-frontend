@@ -106,6 +106,7 @@ const USER_ONLY_ENDPOINTS = [
   'sendChatMessage',
   'updateSwapRequestStatus',
   'addFavouriteBook',
+  'removeFavouriteBook',
   'changePassword',
 ];
 

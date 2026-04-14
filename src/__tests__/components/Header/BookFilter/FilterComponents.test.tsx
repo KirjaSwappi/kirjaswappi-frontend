@@ -64,10 +64,13 @@ vi.mock('../../../../redux/feature/genre/genreApi', () => ({
   }),
 }));
 
-vi.mock('../../../../components/Header/_components/BookFilter/genreIcons', () => ({
-  genreIcons: {},
-  defaultGenreIcon: 'default-icon.svg',
-}));
+vi.mock('../../../../components/Header/_components/BookFilter/genreIcons', () => {
+  const MockIcon = (props: Record<string, unknown>) => <span data-testid="genre-icon" {...props} />;
+  return {
+    getGenreIcon: () => MockIcon,
+    defaultGenreIcon: MockIcon,
+  };
+});
 
 vi.mock('../../../../components/Header/_components/BookFilter/GenreSkelton', () => ({
   default: () => <div data-testid="skeleton">...</div>,

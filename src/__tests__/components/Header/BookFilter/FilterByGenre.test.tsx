@@ -24,16 +24,24 @@ vi.mock('../../../../redux/feature/genre/genreApi', () => ({
           name: 'Non-Fiction',
           childGenres: [{ id: 'c3', name: 'Biography' }],
         },
+        {
+          id: 'p3',
+          name: 'Thriller',
+          childGenres: [],
+        },
       ],
     },
     isLoading: false,
   })),
 }));
 
-vi.mock('../../../../components/Header/_components/BookFilter/genreIcons', () => ({
-  genreIcons: {},
-  defaultGenreIcon: 'default-icon.svg',
-}));
+vi.mock('../../../../components/Header/_components/BookFilter/genreIcons', () => {
+  const MockIcon = (props: Record<string, unknown>) => <span data-testid="genre-icon" {...props} />;
+  return {
+    getGenreIcon: () => MockIcon,
+    defaultGenreIcon: MockIcon,
+  };
+});
 
 vi.mock('../../../../components/shared/Button', () => ({
   default: ({
@@ -124,5 +132,17 @@ describe('FilterByGenre', () => {
     fireEvent.click(screen.getByText('Fiction').closest('button')!);
     fireEvent.click(screen.getByText('Fantasy').closest('button')!);
     expect(screen.getByText('Fantasy').closest('button')).toHaveClass('bg-AntiFlashWhite');
+  });
+
+  it('directly selects a parent genre without children', () => {
+    render(
+      <Wrapper>
+        <FilterByGenre />
+      </Wrapper>,
+    );
+
+    const thrillerButton = screen.getByText('Thriller').closest('button')!;
+    fireEvent.click(thrillerButton);
+    expect(thrillerButton).toHaveClass('bg-AntiFlashWhite');
   });
 });
