@@ -18,13 +18,14 @@ import NotificationItem from './NotificationItem';
 
 interface NotificationBellProps {
   className?: string;
+  variant?: 'header' | 'bottom-nav';
 }
 
 /**
  * NotificationBell component displays a notification icon with badge and dropdown panel
  * Integrates with WebSocket notifications and Redux state management
  */
-const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
+const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant = 'header' }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const notifications = useAppSelector(selectSortedNotifications);
@@ -79,30 +80,69 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
     }
   }, [isNotificationPanelOpen, handleKeyDown]);
 
+  const isBottomNav = variant === 'bottom-nav';
+
   return (
     <div ref={reference} className={cn('relative', className)}>
       {/* Bell Icon Button */}
       <button
         onClick={handleBellClick}
-        className="relative p-2 hover:bg-light rounded-full border border-platinumMix transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        className={cn(
+          'relative focus:outline-none transition-colors',
+          isBottomNav
+            ? 'p-0 flex flex-col items-center gap-1'
+            : 'p-2 hover:bg-light rounded-full border border-platinumMix focus:ring-2 focus:ring-primary focus:ring-offset-2',
+        )}
         aria-label={`Notifications, ${unreadCount} unread`}
         aria-expanded={isNotificationPanelOpen}
         aria-haspopup="true"
       >
-        <img src={notificationIcon} alt="Notifications" className="w-6 h-6" />
+        <div className="relative h-7 flex items-center justify-center">
+          <img
+            src={notificationIcon}
+            alt="Notifications"
+            className={isBottomNav ? 'w-5 h-5' : 'w-6 h-6'}
+            style={
+              isBottomNav
+                ? {
+                    filter: isNotificationPanelOpen
+                      ? 'brightness(0) saturate(100%) invert(43%) sepia(98%) saturate(2375%) hue-rotate(185deg) brightness(93%) contrast(98%)'
+                      : 'none',
+                    transition: 'filter 0.2s ease-in-out',
+                  }
+                : undefined
+            }
+          />
 
-        {/* Unread Count Badge */}
-        {unreadCount > 0 && (
-          <span
-            className="absolute -top-1 -right-1 bg-red text-white text-xs font-semibold font-poppins rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5"
-            aria-label={`${unreadCount} unread notifications`}
+          {/* Unread Count Badge */}
+          {unreadCount > 0 && (
+            <span
+              className={cn(
+                'absolute flex items-center justify-center rounded-full font-semibold font-poppins leading-none shadow-sm',
+                isBottomNav
+                  ? '-top-2 -right-3 bg-red text-white text-[10px] min-w-[18px] h-[18px] px-1'
+                  : '-top-3 -right-3 bg-red text-white text-xs min-w-[20px] h-5 px-1.5',
+              )}
+              aria-label={`${unreadCount} unread notifications`}
+            >
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
+        </div>
+
+        {/* Bottom nav label */}
+        {isBottomNav && (
+          <p
+            className={`leading-none text-xs font-poppins ${
+              isNotificationPanelOpen ? 'font-medium text-primary' : 'font-light text-grayDark'
+            }`}
           >
-            {unreadCount > 99 ? '99+' : unreadCount}
-          </span>
+            {t('notification.alerts')}
+          </p>
         )}
 
         {/* Connection Status Indicator (only shown on error) */}
-        {wsConnectionStatus === 'error' && (
+        {!isBottomNav && wsConnectionStatus === 'error' && (
           <span
             className="absolute bottom-0 right-0 w-3 h-3 bg-yellow border-2 border-white rounded-full"
             aria-label="Connection error"
@@ -114,7 +154,12 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
       {/* Notification Dropdown Panel */}
       {isNotificationPanelOpen && (
         <div
-          className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-lg shadow-lg border border-platinum overflow-hidden z-50 animate-fadeIn"
+          className={cn(
+            'absolute w-80 sm:w-96 bg-white rounded-lg shadow-lg border border-platinum overflow-hidden z-50',
+            isBottomNav
+              ? 'bottom-full mb-2 right-0 animate-slideUp'
+              : 'right-0 mt-2 animate-fadeIn',
+          )}
           role="menu"
           aria-label="Notification list"
         >
@@ -174,6 +219,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className }) => {
 
 NotificationBell.propTypes = {
   className: PropTypes.string,
+  variant: PropTypes.oneOf(['header', 'bottom-nav']),
 };
 
 export default NotificationBell;

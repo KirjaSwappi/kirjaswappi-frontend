@@ -14,14 +14,12 @@ import SearchBar from '../../shared/SearchBar';
 import HeaderUserProfile from './HeaderUserProfile';
 import LanguageFlagButton from './LanguageFlagButton';
 import LanguageMenuDropdown from './LanguageMenuDropdown';
-import NotificationBell from './NotificationBell';
 
 export default function MobileHeader() {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const { scrolled } = useScroll();
   const { clicked, setClicked, reference } = useMouseClick();
-  const { userInformation } = useAppSelector((state) => state.auth);
   const { searchToggle } = useAppSelector((state) => state.open);
   const pathname = location.pathname;
   const shouldCollapse = scrolled || searchToggle;
@@ -85,7 +83,6 @@ export default function MobileHeader() {
               >
                 <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
                 {clicked && <LanguageMenuDropdown />}
-                {userInformation.id && <NotificationBell />}
                 <HeaderUserProfile />
               </div>
             </div>

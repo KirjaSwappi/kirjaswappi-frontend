@@ -5,9 +5,7 @@ import { FiPlus } from 'react-icons/fi';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import CategoryIcon from '../../../assets/categoryIcon.svg';
 import filtergrayIcon from '../../../assets/filtergray.svg';
-import mapIcon from '../../../assets/uiw_map.svg';
 import sortByIcon from '../../../assets/sortBy.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
@@ -106,12 +104,6 @@ export default function Filter() {
         >
           <div className="flex items-center gap-2  ">
             <Button
-              onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.CATEGORY)}
-              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
-            >
-              <Image src={CategoryIcon} alt="category" /> {t('books.category')}
-            </Button>
-            <Button
               className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
               onClick={() => {
                 if (userInformation.id) {
@@ -130,12 +122,6 @@ export default function Filter() {
           </div>
 
           <div className="flex items-center gap-2 ">
-            <Button
-              onClick={() => navigate('/map')}
-              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
-            >
-              <Image src={mapIcon} alt="map" className="w-[18px] h-[18px]" /> {t('books.map')}
-            </Button>
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
               className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"

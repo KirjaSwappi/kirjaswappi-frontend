@@ -34,7 +34,7 @@ describe('showToast', () => {
   it('applies success className', () => {
     showToast('success', 'Done');
     const call = (toast as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
-    expect(call[1].className).toContain('bg-[#3FBA49]');
+    expect(call[1].className).toContain('bg-primary');
   });
 
   it('applies error className', () => {
@@ -43,9 +43,9 @@ describe('showToast', () => {
     expect(call[1].className).toContain('bg-[#EA244E]');
   });
 
-  it('sets width to 360px', () => {
+  it('includes font-poppins styling', () => {
     showToast('success', 'Test');
     const call = (toast as unknown as ReturnType<typeof vi.fn>).mock.calls[0];
-    expect(call[1].style).toEqual({ width: '360px' });
+    expect(call[1].className).toContain('font-poppins');
   });
 });

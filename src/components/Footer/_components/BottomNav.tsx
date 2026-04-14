@@ -3,12 +3,14 @@ import { useLocation } from 'react-router-dom';
 import { menu } from '../../../data/menu';
 import { selectTotalUnreadCount } from '../../../redux/feature/messages/messagesSlice';
 import { useAppSelector } from '../../../redux/hooks';
+import NotificationBell from '../../Header/_components/NotificationBell';
 import BottomNavItem from './BottomNavItem';
 
 export default function BottomNav() {
   const { t } = useTranslation();
   const location = useLocation();
   const totalUnreadCount = useAppSelector(selectTotalUnreadCount);
+  const { userInformation } = useAppSelector((state) => state.auth);
   const pathname = location.pathname;
   const ignorePath: string[] = [`/book-details/${pathname?.split('/').reverse()[0]}`];
   const isFooterBarShow = ignorePath.includes(pathname);
@@ -38,6 +40,7 @@ export default function BottomNav() {
               </div>
             );
           })}
+        {userInformation?.id && <NotificationBell variant="bottom-nav" />}
       </div>
     </div>
   );

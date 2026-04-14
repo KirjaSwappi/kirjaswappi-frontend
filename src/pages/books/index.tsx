@@ -3,18 +3,9 @@ import { useTranslation } from 'react-i18next';
 import BookCard from '../../components/shared/BookCard';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import PageTitle from '../../components/shared/PageTitle';
-import {
-  useGetAllBooksQuery,
-  useGetBooksNearLocationQuery,
-} from '../../redux/feature/book/bookApi';
-import {
-  clearAllFilters,
-  setFilterOpen,
-  setIsCategoryOrFilterOrSortBy,
-  setPageNumber,
-} from '../../redux/feature/filter/filterSlice';
+import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
+import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { FilterItemEnum } from '../../utility/enum';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
 import NoBooksAvailable from './_components/NoBooksAvailable';
@@ -30,66 +21,17 @@ export default function Books() {
   } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  // =========== NEAR ME STATE ===========
-  const [nearMe, setNearMe] = useState(false);
-  const [userCoords, setUserCoords] = useState<{ latitude: number; longitude: number } | null>(
-    null,
-  );
-
-  const handleNearMe = () => {
-    if (nearMe) {
-      setNearMe(false);
-      setUserCoords(null);
-      dispatch(setPageNumber(0));
-      return;
-    }
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserCoords({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-          setNearMe(true);
-          dispatch(setPageNumber(0));
-        },
-        () => {
-          setNearMe(false);
-        },
-      );
-    }
-  };
-
   // Fetch books
   const { data, isError, isLoading, isFetching } = useGetAllBooksQuery(
     { filter, notOwnerId: id },
-    { refetchOnMountOrArgChange: false, skip: nearMe },
+    { refetchOnMountOrArgChange: false },
   );
-
-  const {
-    data: nearData,
-    isError: nearError,
-    isLoading: nearLoading,
-    isFetching: nearFetching,
-  } = useGetBooksNearLocationQuery(
-    {
-      latitude: userCoords?.latitude ?? 0,
-      longitude: userCoords?.longitude ?? 0,
-      page: filter.pageNumber,
-    },
-    { skip: !nearMe || !userCoords },
-  );
-
-  const activeData = nearMe ? nearData : data;
-  const activeIsError = nearMe ? nearError : isError;
-  const activeIsFetching = nearMe ? nearFetching : isFetching;
-  const activeIsLoading = nearMe ? nearLoading : isLoading;
 
   // Merge & paginate data
   useEffect(() => {
-    if (activeData?._embedded?.books?.length > 0) {
+    if (data?._embedded?.books?.length > 0) {
       setBooks((prevBooks) => {
-        const newBooks = activeData._embedded.books;
+        const newBooks = data._embedded.books;
         const allBooks = filter.pageNumber === 0 ? newBooks : [...prevBooks, ...newBooks];
         const uniqueBooks = Array.from(
           new Map<string, IBook>(allBooks.map((book: IBook) => [book.id, book])).values(),
@@ -100,10 +42,10 @@ export default function Books() {
     }
 
     // If no books returned for first page, reset state
-    if (activeData && (!activeData._embedded?.books || activeData._embedded.books.length === 0)) {
+    if (data && (!data._embedded?.books || data._embedded.books.length === 0)) {
       if (filter.pageNumber === 0) setBooks([]);
     }
-  }, [activeData, filter.pageNumber]);
+  }, [data, filter.pageNumber]);
 
   // Infinite scroll: detect filter changes
   const prevFilterRef = useRef({
@@ -154,34 +96,32 @@ export default function Books() {
     return () => {
       dispatch(setPageNumber(0));
       dispatch(clearAllFilters());
-      setNearMe(false);
-      setUserCoords(null);
     };
   }, [dispatch]);
 
   // Intersection Observer for infinite scroll
   const lastBookRef = useCallback(
     (node: HTMLDivElement) => {
-      if (activeIsFetching) return;
+      if (isFetching) return;
 
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (
           entries[0].isIntersecting &&
-          activeData != null &&
-          filter.pageNumber + 1 < activeData.page.totalPages
+          data != null &&
+          filter.pageNumber + 1 < data.page.totalPages
         ) {
           dispatch(setPageNumber(filter.pageNumber + 1));
         }
       });
       if (node) observer.current.observe(node);
     },
-    [activeIsFetching, activeData, filter.pageNumber, dispatch],
+    [isFetching, data, filter.pageNumber, dispatch],
   );
 
-  const isInitialLoading = activeIsFetching || activeIsLoading;
+  const isInitialLoading = isFetching || isLoading;
 
-  if (activeIsError)
+  if (isError)
     return (
       <div className="container min-h-[60vh] flex items-center justify-center">
         <div className="text-center">
@@ -202,49 +142,6 @@ export default function Books() {
       <PageTitle title={t('books')} />
       <div className="container min-h-[80vh] pb-24 lg:py-6">
         <HeroSection />
-        <div className="flex items-center gap-2 mb-4 lg:hidden">
-          <button
-            type="button"
-            onClick={handleNearMe}
-            className={`flex-1 border flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-poppins text-xs font-medium ${
-              nearMe
-                ? 'bg-primary text-white border-primary'
-                : 'border-platinum bg-white text-blackOlive'
-            }`}
-          >
-            {t('books.nearMe')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.FILTER));
-              dispatch(setFilterOpen(true));
-            }}
-            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
-          >
-            {t('books.filter')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.SORTBY));
-              dispatch(setFilterOpen(true));
-            }}
-            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
-          >
-            {t('books.sort')}
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(setIsCategoryOrFilterOrSortBy(FilterItemEnum.CATEGORY));
-              dispatch(setFilterOpen(true));
-            }}
-            className="flex-1 border border-platinum bg-white flex items-center justify-center gap-2 text-blackOlive px-3 py-2 rounded-lg font-poppins text-xs font-medium"
-          >
-            {t('books.category')}
-          </button>
-        </div>
         <div className="relative hidden lg:block">
           <Filter />
         </div>
