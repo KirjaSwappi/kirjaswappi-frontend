@@ -48,7 +48,7 @@ export default function BookCard({
   const [deleteBookById, { isLoading }] = useDeleteBookByIdMutation();
   const [trigger, { isLoading: bookLoading }] = useLazyGetBookByIdQuery();
   const [addFavouriteBook] = useAddFavouriteBookMutation();
-  const { data: userData } = useGetUserByIdQuery({ userId }, { skip: !userId });
+  const { data: userData } = useGetUserByIdQuery({ userId: userId! }, { skip: !userId });
   const isBookmarked = (userData?.favBooks ?? []).some((fav: { id: string }) => fav.id === id);
   // =========== NAVIGATE TO BOOK DETAILS PAGE ===========
   const handleNavigate = (): void => {

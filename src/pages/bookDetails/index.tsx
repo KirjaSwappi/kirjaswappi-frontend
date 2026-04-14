@@ -51,7 +51,7 @@ export default function BookDetails() {
   const { t } = useTranslation();
   const [addFavouriteBook] = useAddFavouriteBookMutation();
   const { data: currentUserData } = useGetUserByIdQuery(
-    { userId: userInformation?.id },
+    { userId: userInformation?.id ?? '' },
     { skip: !userInformation?.id },
   );
   const isBookmarked = (currentUserData?.favBooks ?? []).some(
@@ -59,7 +59,7 @@ export default function BookDetails() {
   );
 
   const handleBookmark = async () => {
-    if (!userInformation?.id) return;
+    if (!userInformation?.id || !id) return;
     try {
       await addFavouriteBook({ userId: userInformation.id, bookId: id }).unwrap();
       showToast('success', t('bookmark.added'));

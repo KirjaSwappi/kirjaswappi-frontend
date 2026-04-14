@@ -98,7 +98,7 @@ export default function ChangePassword() {
 
     try {
       await changePassword({
-        email: userInformation.email,
+        email: userInformation.email!,
         currentPassword: form.currentPassword,
         newPassword: form.newPassword,
         confirmPassword: form.confirmPassword,
