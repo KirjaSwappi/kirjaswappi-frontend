@@ -32,10 +32,10 @@ import { IAddUpdateBookData } from './types/interface';
 
 export default function AddUpdateBook() {
   const { t } = useTranslation();
-  useGeolocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const [active, setActive] = useState<number>(0);
+  useGeolocation({ enabled: active >= 1 });
   const { userInformation } = useAppSelector((state) => state.auth);
 
   const { data: languageDataOptions, isLoading: languageLoading } =

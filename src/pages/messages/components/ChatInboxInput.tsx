@@ -18,6 +18,7 @@ export default function ChatInboxInput() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
+  const cameraButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const { userInformation } = useAppSelector((state) => state.auth);
 
@@ -59,13 +60,17 @@ export default function ChatInboxInput() {
     const imageFiles = files?.filter((file): file is File => file instanceof File) || [];
 
     // Optimistic update
+    const objectUrls: string[] = [];
     if (trimmedMessage || imageFiles.length > 0) {
+      const urls =
+        imageFiles.length > 0 ? imageFiles.map((f) => URL.createObjectURL(f)) : undefined;
+      if (urls) objectUrls.push(...urls);
       const optimisticMessage = {
         id: `temp-${Date.now()}`,
         sender: 'me' as const,
         text: trimmedMessage || '',
         time: new Date().toISOString(),
-        images: imageFiles.length > 0 ? imageFiles.map((f) => URL.createObjectURL(f)) : undefined,
+        images: urls,
       };
 
       dispatch(
@@ -85,6 +90,7 @@ export default function ChatInboxInput() {
 
       // Remove temp optimistic messages after successful send
       dispatch(removeTempMessages({ chatId: selectedChatId }));
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
       reset();
     } catch (error) {
       showToast('error', 'Failed to send message');
@@ -106,11 +112,11 @@ export default function ChatInboxInput() {
           } border border-platinumMix !bg-white`}
         >
           <div className={`${imageFiles && imageFiles?.length > 0 ? 'ml-4 mt-3' : ''}`}>
-            <FilesUpload name="files" errors={errors} />
+            <FilesUpload name="files" errors={errors} triggerRef={cameraButtonRef} />
           </div>
           <div className="relative">
             <Button
-              id="files"
+              ref={cameraButtonRef}
               type="button"
               className={`w-[36px] h-[36px] rounded-full absolute left-2 top-1/2 -translate-y-1/2 bg-smokyBlack hover:bg-blackOlive flex items-center justify-center ${
                 imageFiles && imageFiles?.length <= 0 ? 'block' : 'hidden'

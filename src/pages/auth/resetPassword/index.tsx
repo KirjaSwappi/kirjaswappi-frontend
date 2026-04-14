@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
 import leftArrowIcon from '../../../assets/leftArrow.png';
 import logo from '../../../assets/logo.png';
@@ -35,6 +35,7 @@ export default function ResetPassword() {
   const [verifyOTP] = useVerifyOTPMutation();
   const [resetPassword] = useResetPasswordMutation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { messageType, message: msg, isShow } = useAppSelector((state) => state.notification);
   const { loading, error, message, otp } = useAppSelector((state) => state.auth);
@@ -45,6 +46,7 @@ export default function ResetPassword() {
     password: '',
     confirmPassword: '',
   });
+  const [resetToken, setResetToken] = useState<string>('');
   const [errors, setErrors] = useState<{
     [key: string]: string | null | undefined;
   }>({});
@@ -166,6 +168,9 @@ export default function ResetPassword() {
       try {
         const res = await verifyOTP({ email: userPass.email, otp: otp.join('') });
         if (res?.data) {
+          if (res.data.resetToken) {
+            setResetToken(res.data.resetToken);
+          }
           const timer = setTimeout(() => {
             dispatch(setMessages({ type: '', isShow: false, message: '' }));
             dispatch(setAuthMessage(''));
@@ -192,6 +197,7 @@ export default function ResetPassword() {
       newPassword: userPass.password,
       confirmPassword: userPass.confirmPassword,
       email: userPass.email,
+      resetToken,
     };
     try {
       const res = await resetPassword(resetObj);

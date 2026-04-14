@@ -8,6 +8,7 @@ type Coords = {
 
 type UseGeolocationOptions = {
   watch?: boolean;
+  enabled?: boolean;
   fallback?: {
     latitude: number;
     longitude: number;
@@ -20,7 +21,7 @@ const DEFAULT_FALLBACK = {
 };
 
 export const useGeolocation = (options: UseGeolocationOptions = {}) => {
-  const { watch = false, fallback = DEFAULT_FALLBACK } = options;
+  const { watch = false, enabled = true, fallback = DEFAULT_FALLBACK } = options;
 
   const [coords, setCoords] = useState<Coords>({
     latitude: null,
@@ -31,6 +32,8 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
   const watchIdRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
+
     if (!('geolocation' in navigator)) {
       setCoords(fallback);
       setPermissionChecked(true);
@@ -78,7 +81,7 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
         navigator.geolocation.clearWatch(watchIdRef.current);
       }
     };
-  }, [watch, fallback]);
+  }, [watch, enabled, fallback]);
 
   return {
     coords,

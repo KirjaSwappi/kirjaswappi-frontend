@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { skipToken } from '@reduxjs/toolkit/query/react';
+import { useNavigate } from 'react-router-dom';
 import BookCard from '../../../components/shared/BookCard';
 import Button from '../../../components/shared/Button';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
@@ -9,6 +10,7 @@ import { IBook } from '../../books/types/interface';
 
 export default function MoreFromThisUserBooks({ bookId }: { bookId: string | undefined }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
@@ -21,6 +23,9 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
 
   if (!bookId) return null;
 
+  // Get owner ID from the first book in the list
+  const ownerId = moreBooks?.[0]?.owner?.id;
+
   return (
     <div>
       <span className="bg-[#E4E4E4] w-full h-[1px] my-5 block lg:hidden"></span>
@@ -28,9 +33,14 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
         <h1 className="text-base text-blackOlive font-medium font-poppins">
           {t('bookDetails.moreFromThisUser')}
         </h1>
-        <Button className="text-primary underline font-poppins font-normal text-sm lg:hidden">
-          {t('bookDetails.seeAll')}
-        </Button>
+        {ownerId && (
+          <Button
+            onClick={() => navigate(`/profile/user-profile/${ownerId}`)}
+            className="text-primary underline font-poppins font-normal text-sm lg:hidden"
+          >
+            {t('bookDetails.seeAll')}
+          </Button>
+        )}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-6">
         {moreBooks &&

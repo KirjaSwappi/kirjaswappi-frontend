@@ -52,10 +52,14 @@ export const inboxApi = api.injectEndpoints({
       providesTags: (_result, _error, { swapRequestId }) => [
         { type: 'ChatMessages', id: swapRequestId },
       ],
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        await queryFulfilled;
-        dispatch(api.util.invalidateTags(['Inbox']));
-      },
+    }),
+
+    getInboxByStatus: builder.query<InboxItem[], { status: string }>({
+      query: ({ status }) => ({
+        url: `/inbox?status=${status}`,
+        method: 'GET',
+      }),
+      providesTags: ['Inbox'],
     }),
 
     sendChatMessage: builder.mutation<
@@ -87,4 +91,9 @@ export const inboxApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetInboxQuery, useGetChatMessagesQuery, useSendChatMessageMutation } = inboxApi;
+export const {
+  useGetInboxQuery,
+  useGetInboxByStatusQuery,
+  useGetChatMessagesQuery,
+  useSendChatMessageMutation,
+} = inboxApi;

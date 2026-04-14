@@ -11,12 +11,16 @@ export default function GoogleLoginButton() {
   const handleGoogleLogin = (credentialResponse: CredentialResponse): void => {
     const idToken = credentialResponse.credential;
     if (idToken) {
-      loginWithGoogle({ idToken }).then((res) => {
-        if (res.data) {
-          showToast('success', 'Login successful');
-          dispatch(setLoginModalOpen(false));
-        }
-      });
+      loginWithGoogle({ idToken })
+        .then((res) => {
+          if (res.data) {
+            showToast('success', 'Login successful');
+            dispatch(setLoginModalOpen(false));
+          }
+        })
+        .catch(() => {
+          showToast('error', 'Google login failed. Please try again.');
+        });
     } else {
       showToast('error', 'Something went wrong! Please try again.');
     }

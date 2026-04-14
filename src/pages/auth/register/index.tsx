@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
 import leftArrowIcon from '../../../assets/leftArrow.png';
 import logo from '../../../assets/logo.png';
@@ -17,6 +17,7 @@ export default function Register() {
   const { step } = useAppSelector((state) => state.step);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const renderStepsContent = () => {
     switch (step) {
       case 0:

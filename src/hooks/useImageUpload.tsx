@@ -29,6 +29,9 @@ export function useImageUpload() {
     }
     setError('');
 
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage);
+    }
     const previewUrl = URL.createObjectURL(file);
     setPreviewImage(previewUrl);
     setImageFile(file);
@@ -40,6 +43,9 @@ export function useImageUpload() {
   };
 
   const handleRemove = () => {
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage);
+    }
     setPreviewImage('');
   };
 

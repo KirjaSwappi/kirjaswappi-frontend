@@ -29,6 +29,8 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const [reportOpen, setReportOpen] = useState<boolean>(false);
   const [acceptOpen, setAcceptOpen] = useState<boolean>(false);
   const [rejectOpen, setRejectOpen] = useState<boolean>(false);
+  const [completeOpen, setCompleteOpen] = useState<boolean>(false);
+  const [cancelOpen, setCancelOpen] = useState<boolean>(false);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -64,6 +66,8 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const swapStatus = rawStatus.toUpperCase();
   const isReceiver = selectedChat.conversationType === 'received';
   const canRespondToSwap = isReceiver && swapStatus === 'PENDING';
+  const canComplete = swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
+  const canCancel = swapStatus === 'PENDING' || swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
@@ -182,6 +186,30 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               </button>
             </div>
           )}
+          {!canRespondToSwap && (canComplete || canCancel) && (
+            <div className="flex gap-2 mt-2">
+              {canComplete && (
+                <button
+                  type="button"
+                  disabled={isUpdatingStatus}
+                  onClick={() => setCompleteOpen(true)}
+                  className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-primary rounded-lg hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
+                >
+                  Mark Complete
+                </button>
+              )}
+              {canCancel && (
+                <button
+                  type="button"
+                  disabled={isUpdatingStatus}
+                  onClick={() => setCancelOpen(true)}
+                  className="flex-1 py-1.5 text-xs font-poppins font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50 cursor-pointer"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          )}
           {bookOpen && (
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
@@ -241,7 +269,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await muteUser({ id: partnerId }).unwrap();
             showToast('success', t('chat.userMuted'));
           } catch {
-            showToast('error', t('chat.userMuted'));
+            showToast('error', t('chat.muteFailed'));
           }
         }}
         onCancel={() => setMuteOpen(false)}
@@ -258,7 +286,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             await blockUser({ id: partnerId }).unwrap();
             showToast('success', t('chat.userBlocked'));
           } catch {
-            showToast('error', t('chat.userBlocked'));
+            showToast('error', t('chat.blockFailed'));
           }
         }}
         btnValue={t('chat.block')}
@@ -304,6 +332,28 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         onCancel={() => setReportOpen(false)}
         header={t('chat.reportUser')}
         description={t('chat.reportConfirm')}
+      />
+      <ConfirmModal
+        open={completeOpen}
+        onConfirm={() => {
+          setCompleteOpen(false);
+          handleStatusUpdate('Completed');
+        }}
+        btnValue="Complete"
+        onCancel={() => setCompleteOpen(false)}
+        header="Complete Swap"
+        description="Mark this swap as completed? This confirms the book exchange has been finalized."
+      />
+      <ConfirmModal
+        open={cancelOpen}
+        onConfirm={() => {
+          setCancelOpen(false);
+          handleStatusUpdate('Cancelled');
+        }}
+        btnValue="Cancel Swap"
+        onCancel={() => setCancelOpen(false)}
+        header="Cancel Swap"
+        description="Are you sure you want to cancel this swap request? This action cannot be undone."
       />
     </div>
   );

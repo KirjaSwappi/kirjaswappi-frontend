@@ -9,7 +9,7 @@ import { NotificationPayload, UseNotificationWSReturn, WSMessage } from '../type
 import { getCookie } from '../utility/cookies';
 
 // WebSocket configuration constants
-const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || 'wss://ans.kirjaswappi.fi/ws';
+const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || '';
 const WS_API_KEY = import.meta.env.VITE_NOTIFICATION_API_KEY || '';
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY = 1000; // 1 second
@@ -158,7 +158,7 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
    * Establish WebSocket connection
    */
   const connect = useCallback(() => {
-    if (!userId) return;
+    if (!userId || !WS_URL) return;
 
     if (wsRef.current) {
       wsRef.current.close();
@@ -168,11 +168,11 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     try {
       const userToken = getCookie('userToken');
       const token = userToken || WS_API_KEY;
-      const wsUrl = `${WS_URL}?userId=${encodeURIComponent(userId)}${token ? `&token=${encodeURIComponent(token)}` : ''}`;
+      const wsUrl = `${WS_URL}?userId=${encodeURIComponent(userId)}`;
 
       dispatch(setWSConnectionStatus('connecting'));
 
-      const ws = new WebSocket(wsUrl);
+      const ws = new WebSocket(wsUrl, token ? [token] : []);
 
       ws.onopen = handleOpen;
       ws.onmessage = handleMessage;

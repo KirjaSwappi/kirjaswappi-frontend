@@ -33,7 +33,7 @@ const Image: React.FC<IImageProps> = (props) => {
         alt={props?.alt || 'image'}
         style={style}
         className={cn(
-          `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`,
+          `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0 bg-platinum animate-pulse'}`,
           className,
         )}
       />

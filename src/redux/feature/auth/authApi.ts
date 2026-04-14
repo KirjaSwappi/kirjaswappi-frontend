@@ -95,6 +95,7 @@ export const authApi = api.injectEndpoints({
         const reset_password_data = {
           newPassword: data?.newPassword,
           confirmPassword: data?.confirmPassword,
+          resetToken: data?.resetToken,
         };
         return {
           url: `/users/reset-password/${email}`,
@@ -152,7 +153,7 @@ export const authApi = api.injectEndpoints({
     deleteProfileImage: builder.mutation({
       query: ({ id }) => {
         return {
-          url: `/photos/profile?userId=${id}`,
+          url: `/photos/profile/${id}`,
           method: 'DELETE',
         };
       },
@@ -180,7 +181,7 @@ export const authApi = api.injectEndpoints({
     deleteCoverImage: builder.mutation({
       query: ({ id }) => {
         return {
-          url: `/photos/cover?userId=${id}`,
+          url: `/photos/cover/${id}`,
           method: 'DELETE',
         };
       },

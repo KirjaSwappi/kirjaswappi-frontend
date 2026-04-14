@@ -4,13 +4,22 @@ import locationIcon from '../../../assets/location-icon.png';
 import Image from '../../../components/shared/Image';
 import { useGetUserByIdQuery } from '../../../redux/feature/auth/authApi';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
+import { useGetInboxByStatusQuery } from '../../../redux/feature/messages/inboxApi';
+import { useAppSelector } from '../../../redux/hooks';
 import BookList from './BookList';
 export default function About() {
   const { t } = useTranslation();
   const { id: userId } = useParams();
+  const { userInformation } = useAppSelector((state) => state.auth);
+  const isOwnProfile = userId === userInformation.id;
   const { data } = useGetUserByIdQuery({ userId: userId as string }, { skip: !userId });
   const { data: booksData } = useGetAllBooksQuery({ ownerId: userId }, { skip: !userId });
+  const { data: completedSwaps } = useGetInboxByStatusQuery(
+    { status: 'Completed' },
+    { skip: !isOwnProfile },
+  );
   const booksCount = booksData?.page?.totalElements ?? 0;
+  const swapsCount = isOwnProfile ? (completedSwaps?.length ?? 0) : '-';
   return (
     <div>
       {data?.aboutMe && (
@@ -22,7 +31,7 @@ export default function About() {
             <p className="text-grayDark text-xs font-poppins font-normal">
               {t('profile.totalSwaps')}
             </p>
-            <h3 className="text-black text-xs font-normal font-poppins">-</h3>
+            <h3 className="text-black text-xs font-normal font-poppins">{swapsCount}</h3>
           </div>
         </div>
 

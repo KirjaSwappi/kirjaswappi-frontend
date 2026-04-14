@@ -19,7 +19,7 @@ export const swapApi = api.injectEndpoints({
         method: 'PUT',
         body: { status },
       }),
-      invalidatesTags: ['Inbox', 'SwapRequest'],
+      invalidatesTags: ['Inbox', 'SwapRequest', 'AddBook', 'UpdateBook', 'DeleteBook'],
     }),
   }),
 });

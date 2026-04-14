@@ -29,10 +29,6 @@ vi.mock('../../feature/messages/messagesSlice', () => ({
   default: (state = {}) => state,
 }));
 
-vi.mock('../../feature/chat/chatMessageSlice', () => ({
-  default: (state = {}) => state,
-}));
-
 vi.mock('../../feature/notification/notificationSlice', () => ({
   default: (state = {}) => state,
 }));
