@@ -109,9 +109,9 @@ describe('MobileHeader', () => {
     expect(screen.getByTestId('lang-flag')).toBeInTheDocument();
   });
 
-  it('renders notification bell when logged in', () => {
+  it('does not render notification bell (moved to bottom nav)', () => {
     renderComponent('user-1');
-    expect(screen.getByTestId('bell')).toBeInTheDocument();
+    expect(screen.queryByTestId('bell')).not.toBeInTheDocument();
   });
 
   it('renders search bar on home page', () => {

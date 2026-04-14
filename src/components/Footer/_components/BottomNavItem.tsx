@@ -27,7 +27,7 @@ export default function BottomNavItem({
       }}
     >
       {showBadge && (
-        <span className="absolute top-0 right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+        <span className="absolute -top-1 right-1 bg-red text-white text-[10px] font-semibold font-poppins rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 leading-none shadow-sm">
           {badgeCount > 9 ? '9+' : badgeCount}
         </span>
       )}

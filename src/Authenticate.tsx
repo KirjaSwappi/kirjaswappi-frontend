@@ -25,7 +25,7 @@ export default function Authenticate() {
     <React.Fragment>
       <div className="px-4">
         <ToastContainer
-          autoClose={3000}
+          autoClose={2000}
           hideProgressBar
           newestOnTop
           closeOnClick

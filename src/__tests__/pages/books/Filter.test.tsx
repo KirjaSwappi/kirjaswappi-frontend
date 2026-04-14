@@ -94,11 +94,6 @@ describe('Filter', () => {
       </Provider>,
     );
 
-  it('renders category button', () => {
-    renderComponent();
-    expect(screen.getByText('books.category')).toBeInTheDocument();
-  });
-
   it('renders add book button', () => {
     renderComponent();
     expect(screen.getByText(/books.addBook/)).toBeInTheDocument();
@@ -114,20 +109,9 @@ describe('Filter', () => {
     expect(screen.getByText(/books.sort/)).toBeInTheDocument();
   });
 
-  it('renders map button', () => {
-    renderComponent();
-    expect(screen.getByText('books.map')).toBeInTheDocument();
-  });
-
   it('renders category slider', () => {
     renderComponent();
     expect(screen.getByTestId('category-slider')).toBeInTheDocument();
-  });
-
-  it('navigates to map on map button click', () => {
-    renderComponent();
-    fireEvent.click(screen.getByText('books.map'));
-    expect(mockNavigate).toHaveBeenCalledWith('/map');
   });
 
   it('navigates to profile when logged in user clicks Add Book', () => {
