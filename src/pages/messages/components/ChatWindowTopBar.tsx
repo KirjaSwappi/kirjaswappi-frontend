@@ -67,7 +67,8 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const isReceiver = selectedChat.conversationType === 'received';
   const canRespondToSwap = isReceiver && swapStatus === 'PENDING';
   const canComplete = swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
-  const canCancel = swapStatus === 'PENDING' || swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
+  const canCancel =
+    swapStatus === 'PENDING' || swapStatus === 'ACCEPTED' || swapStatus === 'RESERVED';
 
   const handleStatusUpdate = async (newStatus: string) => {
     try {
@@ -195,7 +196,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                   onClick={() => setCompleteOpen(true)}
                   className="flex-1 py-1.5 text-xs font-poppins font-medium text-white bg-primary rounded-lg hover:bg-primary/90 disabled:opacity-50 cursor-pointer"
                 >
-                  Mark Complete
+                  {t('chat.markComplete')}
                 </button>
               )}
               {canCancel && (
@@ -205,7 +206,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                   onClick={() => setCancelOpen(true)}
                   className="flex-1 py-1.5 text-xs font-poppins font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 disabled:opacity-50 cursor-pointer"
                 >
-                  Cancel
+                  {t('chat.cancel')}
                 </button>
               )}
             </div>
@@ -339,10 +340,10 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           setCompleteOpen(false);
           handleStatusUpdate('Completed');
         }}
-        btnValue="Complete"
+        btnValue={t('chat.complete')}
         onCancel={() => setCompleteOpen(false)}
-        header="Complete Swap"
-        description="Mark this swap as completed? This confirms the book exchange has been finalized."
+        header={t('chat.completeSwap')}
+        description={t('chat.completeConfirm')}
       />
       <ConfirmModal
         open={cancelOpen}
@@ -350,10 +351,10 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
           setCancelOpen(false);
           handleStatusUpdate('Cancelled');
         }}
-        btnValue="Cancel Swap"
+        btnValue={t('chat.cancelSwap')}
         onCancel={() => setCancelOpen(false)}
-        header="Cancel Swap"
-        description="Are you sure you want to cancel this swap request? This action cannot be undone."
+        header={t('chat.cancelSwap')}
+        description={t('chat.cancelConfirm')}
       />
     </div>
   );

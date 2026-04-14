@@ -18,7 +18,7 @@ import UploadPicture from '../../addUpdateBook/_components/UploadPicture';
 interface IFilesProps {
   name: string;
   errors: FieldErrors<FieldValues>;
-  triggerRef?: React.RefObject<HTMLButtonElement | null>;
+  triggerRef?: React.RefObject<HTMLButtonElement | null> | null;
 }
 
 const FilesUpload = ({ name, errors, triggerRef }: IFilesProps) => {

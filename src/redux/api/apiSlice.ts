@@ -101,6 +101,7 @@ const getUserToken = async (): Promise<string | null> => {
 // Endpoints that require user auth (must not fall back to platform token)
 const USER_ONLY_ENDPOINTS = [
   'getInbox',
+  'getInboxByStatus',
   'getChatMessages',
   'sendChatMessage',
   'updateSwapRequestStatus',

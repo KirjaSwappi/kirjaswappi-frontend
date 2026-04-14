@@ -184,7 +184,7 @@ export default function EditProfile() {
 
       const failures = results.filter((result) => result.status === 'rejected');
       if (failures.length > 0) {
-        failures.forEach(() => showToast('error', t('editProfile.saveFailed')));
+        showToast('error', t('editProfile.saveFailed'));
         return;
       }
 

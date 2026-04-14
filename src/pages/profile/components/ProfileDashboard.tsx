@@ -45,13 +45,13 @@ export default function ProfileDashboard() {
       count: booksCount,
     },
     {
-      label: 'Pending Swaps',
+      label: t('profile.pendingSwaps'),
       content: <PendingSwaps />,
       permission: false,
       count: pendingSwapsCount,
     },
     {
-      label: 'Bookmarked',
+      label: t('profile.bookmarked'),
       content: <BookmarkedBooks />,
       hideOnMobile: true,
       permission: false,

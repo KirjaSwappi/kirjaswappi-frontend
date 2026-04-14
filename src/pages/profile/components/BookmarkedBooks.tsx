@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import BookCard from '../../../components/shared/BookCard';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
+import { IBook } from '../../books/types/interface';
 import { useGetUserByIdQuery } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
 
@@ -10,12 +11,9 @@ export default function BookmarkedBooks() {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
 
-  const { data, isLoading } = useGetUserByIdQuery(
-    { userId: userId as string },
-    { skip: !userId },
-  );
+  const { data, isLoading } = useGetUserByIdQuery({ userId: userId as string }, { skip: !userId });
 
-  const favBooks = data?.favBooks ?? [];
+  const favBooks = (data?.favBooks ?? []) as IBook[];
 
   if (isLoading) {
     return (
@@ -31,17 +29,15 @@ export default function BookmarkedBooks() {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
         <p className="text-gray-500 font-medium">No bookmarked books</p>
-        <p className="text-xs text-gray-400 mt-1">
-          Books you bookmark will appear here
-        </p>
+        <p className="text-xs text-gray-400 mt-1">Books you bookmark will appear here</p>
       </div>
     );
   }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
-      {favBooks.map((book: { id: string; ownerId?: string }, index: number) => (
-        <BookCard key={index} book={book} hasPermission={id === book.ownerId} />
+      {favBooks.map((book) => (
+        <BookCard key={book.id} book={book} hasPermission={id === book.ownerId} />
       ))}
     </div>
   );

@@ -93,6 +93,7 @@ export default function ChatInboxInput() {
       objectUrls.forEach((url) => URL.revokeObjectURL(url));
       reset();
     } catch (error) {
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
       showToast('error', 'Failed to send message');
       console.error('Failed to send message:', error);
     }

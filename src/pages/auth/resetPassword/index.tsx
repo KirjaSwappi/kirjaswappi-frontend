@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
 import leftArrowIcon from '../../../assets/leftArrow.png';
 import logo from '../../../assets/logo.png';
@@ -35,7 +35,6 @@ export default function ResetPassword() {
   const [verifyOTP] = useVerifyOTPMutation();
   const [resetPassword] = useResetPasswordMutation();
   const navigate = useNavigate();
-  const location = useLocation();
 
   const { messageType, message: msg, isShow } = useAppSelector((state) => state.notification);
   const { loading, error, message, otp } = useAppSelector((state) => state.auth);
