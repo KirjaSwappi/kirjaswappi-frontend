@@ -62,11 +62,11 @@ export default function FilterByLanguage() {
                         {isChecked ? (
                           <Image
                             src={tickmarkIcon}
-                            alt="tickmarkIcon icon"
-                            className="h-4 w-full"
+                            alt="selected"
+                            className="h-4 w-4 flex-shrink-0"
                           />
                         ) : (
-                          <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
+                          <Image src={plusIcon} alt="add" className="h-4 w-4 flex-shrink-0" />
                         )}
                       </Button>
                     );

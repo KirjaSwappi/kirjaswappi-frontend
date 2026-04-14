@@ -29,34 +29,28 @@ export default function Filter() {
 
   useEffect(() => {
     const headerHeight = 80;
+    let ticking = false;
+
     const handleScroll = () => {
-      if (!filterRef.current || !placeholderRef.current) return;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        if (!placeholderRef.current || !filterRef.current) return;
 
-      const rect = placeholderRef.current.getBoundingClientRect();
-      const shouldBeFixed = rect.top <= headerHeight;
+        const rect = placeholderRef.current.getBoundingClientRect();
+        const shouldBeFixed = rect.top <= headerHeight;
 
-      if (shouldBeFixed && !isFixed) {
-        // measure before taking out of document flow
-        const height = filterRef.current.getBoundingClientRect().height;
-        placeholderRef.current.style.height = `${height}px`;
-        setIsFixed(true);
-      } else if (!shouldBeFixed && isFixed) {
-        // play slide-out animation while keeping the element fixed,
-        // then switch back to relative after animation completes to avoid jump
-        const el = filterRef.current;
-        if (!el) return;
-        const onAnimationEnd = (ev: AnimationEvent) => {
-          if (ev.animationName === 'filterSlideOut') {
-            el.classList.remove('filter-slide-out');
-            setIsFixed(false);
-            placeholderRef.current!.style.height = 'auto';
-            el.removeEventListener('animationend', onAnimationEnd as any);
+        if (shouldBeFixed !== isFixed) {
+          if (shouldBeFixed) {
+            const height = filterRef.current.getBoundingClientRect().height;
+            placeholderRef.current.style.height = `${height}px`;
+          } else {
+            placeholderRef.current.style.height = 'auto';
           }
-        };
-
-        el.addEventListener('animationend', onAnimationEnd as any);
-        el.classList.add('filter-slide-out');
-      }
+          setIsFixed(shouldBeFixed);
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -64,47 +58,27 @@ export default function Filter() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isFixed]);
 
-  const slideStyle = `
-.filter-slide-in {
-  animation: filterSlideIn 220ms cubic-bezier(.25,.8,.25,1) both;
-  will-change: transform;
-}
-@keyframes filterSlideIn {
-  from { transform: translateY(-12px); }
-  to { transform: translateY(0); }
-}
-.filter-slide-out {
-  animation: filterSlideOut 180ms cubic-bezier(.4,0,.2,1) both;
-  will-change: transform;
-}
-@keyframes filterSlideOut {
-  from { transform: translateY(0); }
-  to { transform: translateY(-12px); }
-}
-`;
-
   const isFilterOrCategoryOrSortByFn = (value: FilterItemEnum | null) => {
     dispatch(setIsCategoryOrFilterOrSortBy(value));
     dispatch(setFilterOpen(true));
   };
 
   return (
-    <div ref={placeholderRef} className="w-full  ">
-      <style>{slideStyle}</style>
+    <div ref={placeholderRef} className="w-full">
       <div
         ref={filterRef}
-        className={`z-10 ${
+        className={`z-10 transition-[transform,box-shadow,background-color] duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)] ${
           isFixed
-            ? 'fixed top-[80px] left-0 right-0 bg-white shadow-md border-t border-platinumMix filter-slide-in'
-            : 'relative bg-transparent border-none'
+            ? 'fixed top-[80px] left-0 right-0 bg-white shadow-md border-t border-platinumMix translate-y-0'
+            : 'relative bg-transparent border-none translate-y-0'
         }`}
       >
         <div
-          className={`${isFixed ? 'container py-3' : 'pb-6 pt-5 '}  flex items-center justify-between`}
+          className={`${isFixed ? 'container py-3' : 'pb-6 pt-5'} flex items-center justify-between`}
         >
-          <div className="flex items-center gap-2  ">
+          <div className="flex items-center gap-2">
             <Button
-              className=" bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+              className="bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
               onClick={() => {
                 if (userInformation.id) {
                   navigate(`/profile/user-profile/${userInformation.id}`);
@@ -117,22 +91,22 @@ export default function Filter() {
               {t('books.addBook')}
             </Button>
           </div>
-          <div className=" flex-1 min-w-0 max-w-[48%] ">
+          <div className="flex-1 min-w-0 max-w-[48%]">
             <CategorySlider isFixed={isFixed} />
           </div>
 
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2">
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.FILTER)}
-              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+              className="border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={filtergrayIcon} alt="category" /> {t('books.filter')}
+              <Image src={filtergrayIcon} alt="filter" /> {t('books.filter')}
             </Button>
             <Button
               onClick={() => isFilterOrCategoryOrSortByFn(FilterItemEnum.SORTBY)}
-              className=" border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
+              className="border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
-              <Image src={sortByIcon} alt="category" /> {t('books.sort')}
+              <Image src={sortByIcon} alt="sort" /> {t('books.sort')}
               <MdKeyboardArrowDown />
             </Button>
           </div>
