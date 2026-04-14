@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { SortByEnum } from '../../../../utility/enum';
 import Button from '../../../shared/Button';
-import Line from '../../../shared/Line';
 
 const sortLabelKeys: Record<SortByEnum, string> = {
   [SortByEnum.title]: 'filter.sortTitleAZ',
@@ -14,18 +15,26 @@ const sortLabelKeys: Record<SortByEnum, string> = {
 export default function FilterBySort() {
   const { t } = useTranslation();
   const { control } = useFormContext();
+  const [expanded, setExpanded] = useState(true);
 
   return (
-    <div>
+    <div className="px-4">
       <Controller
         name="sortBy"
         control={control}
         render={({ field }) => (
           <div className="py-2">
-            <div className="mt-2 space-y-0.5">
-              <span className="font-poppins font-normal text-sm px-4">{t('filter.sortBy')}</span>
-              <Line className="mt-6 mb-10" />
-              <div>
+            <Button
+              type="button"
+              onClick={() => setExpanded((prev) => !prev)}
+              className="flex items-center justify-between w-full pr-2"
+            >
+              <span className="font-poppins font-normal text-sm">{t('filter.sortBy')}</span>
+              <span>{expanded ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+            </Button>
+
+            {expanded && (
+              <div className="mt-2 space-y-2">
                 {Object.entries(sortLabelKeys).map(([value, labelKey]) => {
                   const isChecked = field.value?.includes(value);
                   return (
@@ -33,22 +42,21 @@ export default function FilterBySort() {
                       key={value}
                       type="button"
                       onClick={() => {
-                        if (isChecked) {
-                          field.onChange(field.value.filter((v: string) => v !== value));
-                        } else {
-                          field.onChange([...(field.value || []), value]);
-                        }
+                        field.onChange(isChecked ? [] : [value]);
                       }}
-                      className={`flex items-center justify-between gap-1 cursor-pointer w-full text-blackOlive font-poppins font-normal h-8 text-sm ${
-                        isChecked ? 'bg-primary text-white font-medium' : ''
-                      } px-4`}
+                      className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
                     >
-                      <span className="pl-2">{t(labelKey)}</span>
+                      <span className="text-sm">{t(labelKey)}</span>
+                      <span
+                        className={`w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${isChecked ? 'border-primary' : 'border-grayDark'}`}
+                      >
+                        {isChecked && <span className="w-2 h-2 rounded-full bg-primary" />}
+                      </span>
                     </Button>
                   );
                 })}
               </div>
-            </div>
+            )}
           </div>
         )}
       />

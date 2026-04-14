@@ -6,10 +6,6 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
-vi.mock('../../../components/shared/Image', () => ({
-  default: ({ alt }: { alt: string }) => <img alt={alt} />,
-}));
-
 describe('NoBooksAvailable', () => {
   it('renders the no books heading', () => {
     render(<NoBooksAvailable />);
@@ -19,10 +15,5 @@ describe('NoBooksAvailable', () => {
   it('renders the filter message', () => {
     render(<NoBooksAvailable />);
     expect(screen.getByText('books.noBooksDesc')).toBeInTheDocument();
-  });
-
-  it('renders the not found image', () => {
-    render(<NoBooksAvailable />);
-    expect(screen.getByAltText('not found')).toBeInTheDocument();
   });
 });

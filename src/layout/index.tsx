@@ -13,9 +13,9 @@ export default function Layout() {
   useChatWS();
 
   return (
-    <div className="bg-light min-h-screen overflow-auto ">
+    <div className="bg-light min-h-screen overflow-auto flex flex-col">
       <Header />
-      <main>
+      <main className="flex-1">
         <LoginModal />
         <SwapModal />
         <Outlet />

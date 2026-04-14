@@ -23,10 +23,6 @@ vi.mock('../../../../components/shared/Button', () => ({
   ),
 }));
 
-vi.mock('../../../../components/shared/Line', () => ({
-  default: () => <hr />,
-}));
-
 function Wrapper({ children }: { children: React.ReactNode }) {
   const methods = useForm({ defaultValues: { sortBy: [] } });
   return <FormProvider {...methods}>{children}</FormProvider>;
@@ -65,7 +61,7 @@ describe('FilterBySort', () => {
 
     const titleOption = screen.getByText('filter.sortTitleAZ').closest('button')!;
     fireEvent.click(titleOption);
-    expect(titleOption).toHaveClass('bg-primary');
+    expect(titleOption).toHaveClass('bg-AntiFlashWhite');
   });
 
   it('deselects a sort option on second click', () => {
@@ -77,13 +73,13 @@ describe('FilterBySort', () => {
 
     const titleOption = screen.getByText('filter.sortTitleAZ').closest('button')!;
     fireEvent.click(titleOption);
-    expect(titleOption).toHaveClass('bg-primary');
+    expect(titleOption).toHaveClass('bg-AntiFlashWhite');
 
     fireEvent.click(titleOption);
-    expect(titleOption).not.toHaveClass('bg-primary');
+    expect(titleOption).not.toHaveClass('bg-AntiFlashWhite');
   });
 
-  it('allows multiple selections', () => {
+  it('allows only one selection at a time', () => {
     render(
       <Wrapper>
         <FilterBySort />
@@ -93,7 +89,27 @@ describe('FilterBySort', () => {
     fireEvent.click(screen.getByText('filter.sortTitleAZ').closest('button')!);
     fireEvent.click(screen.getByText('filter.sortAuthorAZ').closest('button')!);
 
-    expect(screen.getByText('filter.sortTitleAZ').closest('button')).toHaveClass('bg-primary');
-    expect(screen.getByText('filter.sortAuthorAZ').closest('button')).toHaveClass('bg-primary');
+    expect(screen.getByText('filter.sortTitleAZ').closest('button')).not.toHaveClass(
+      'bg-AntiFlashWhite',
+    );
+    expect(screen.getByText('filter.sortAuthorAZ').closest('button')).toHaveClass(
+      'bg-AntiFlashWhite',
+    );
+  });
+
+  it('collapses and expands the sort options', () => {
+    render(
+      <Wrapper>
+        <FilterBySort />
+      </Wrapper>,
+    );
+
+    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('filter.sortBy').closest('button')!);
+    expect(screen.queryByText('filter.sortTitleAZ')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('filter.sortBy').closest('button')!);
+    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
   });
 });

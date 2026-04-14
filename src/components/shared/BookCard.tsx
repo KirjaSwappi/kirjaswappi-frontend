@@ -84,7 +84,7 @@ export default function BookCard({
     }
     try {
       if (isBookmarked) {
-        await removeFavouriteBook({ bookId: id }).unwrap();
+        await removeFavouriteBook({ userId, bookId: id }).unwrap();
         showToast('success', t('bookmark.removed'));
       } else {
         await addFavouriteBook({ userId, bookId: id }).unwrap();

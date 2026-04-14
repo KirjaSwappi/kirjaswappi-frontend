@@ -194,13 +194,46 @@ export const authApi = api.injectEndpoints({
         body: { userId, bookId },
       }),
       invalidatesTags: ['UpdateUser'],
+      async onQueryStarted({ userId, bookId }, { dispatch, queryFulfilled }) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const updateQueryData = (api as any).util.updateQueryData;
+        const patchResult = dispatch(
+          updateQueryData('getUserById', { userId }, (draft: any) => {
+            if (!draft.favBooks) draft.favBooks = [];
+            draft.favBooks.push({ id: bookId });
+          }),
+        );
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     removeFavouriteBook: builder.mutation({
-      query: ({ bookId }: { bookId: string }) => ({
+      query: ({ bookId }: { userId: string; bookId: string }) => ({
         url: `/users/favourite-books/${bookId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['UpdateUser'],
+      async onQueryStarted({ userId, bookId }, { dispatch, queryFulfilled }) {
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const updateQueryData = (api as any).util.updateQueryData;
+        const patchResult = dispatch(
+          updateQueryData('getUserById', { userId }, (draft: any) => {
+            if (draft.favBooks) {
+              draft.favBooks = draft.favBooks.filter((fav: { id: string }) => fav.id !== bookId);
+            }
+          }),
+        );
+        /* eslint-enable @typescript-eslint/no-explicit-any */
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
     }),
     changePassword: builder.mutation({
       query: ({

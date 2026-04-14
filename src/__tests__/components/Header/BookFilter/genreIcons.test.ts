@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 
-import { getGenreIcon, defaultGenreIcon } from '../../../../components/Header/_components/BookFilter/genreIcons';
+import {
+  getGenreIcon,
+  defaultGenreIcon,
+} from '../../../../components/Header/_components/BookFilter/genreIcons';
 
 describe('getGenreIcon', () => {
   it('returns an icon for Fiction', () => {

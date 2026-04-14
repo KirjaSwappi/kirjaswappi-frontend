@@ -14,6 +14,14 @@ import GenreSkelton from './GenreSkelton';
 type TChildGenre = { id: string; name: string };
 type TParentGenre = { id: string; name: string; childGenres: TChildGenre[] };
 
+function SelectIcon({ isChecked }: { isChecked: boolean }) {
+  return isChecked ? (
+    <Image src={tickmarkIcon} alt="selected" className="h-4 w-4 flex-shrink-0" />
+  ) : (
+    <Image src={plusIcon} alt="add" className="h-4 w-4 flex-shrink-0" />
+  );
+}
+
 export default function FilterByGenre() {
   const { t } = useTranslation();
   const { control } = useFormContext();
@@ -32,7 +40,7 @@ export default function FilterByGenre() {
     : [];
 
   return (
-    <div className="px-4  ">
+    <div className="px-4">
       {isGenreLoading ? (
         <div className="flex flex-col gap-2">
           {Array.from({ length: 6 }, (_, index) => (
@@ -46,7 +54,7 @@ export default function FilterByGenre() {
           render={({ field }) => (
             <div>
               <span className="font-poppins font-normal text-sm">{t('editProfile.genre')}</span>
-              <div className="pl-2">
+              <div className="mt-2 space-y-0.5">
                 {genres.map((parent) => {
                   const hasChildren = parent.childGenres?.length > 0;
                   const Icon = getGenreIcon(parent.name);
@@ -54,56 +62,47 @@ export default function FilterByGenre() {
 
                   if (!hasChildren) {
                     return (
-                      <div key={parent.id} className="py-2">
-                        <Button
-                          type="button"
-                          onClick={() => {
-                            if (isParentSelected) {
-                              field.onChange(field.value.filter((v: string) => v !== parent.name));
-                            } else {
-                              field.onChange([...field.value, parent.name]);
-                            }
-                          }}
-                          className={`flex items-center justify-between w-full ${isParentSelected ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <Icon
-                              className="w-5 h-5"
-                              style={{
-                                color: isParentSelected ? '#3879E9' : '#808080',
-                                transition: 'color 0.2s ease-in-out',
-                              }}
-                            />
-                            <span
-                              className={`${isParentSelected ? 'text-primary' : 'text-blackOlive'} font-poppins font-normal text-sm`}
-                            >
-                              {parent.name}
-                            </span>
-                          </div>
-                          {isParentSelected ? (
-                            <Image
-                              src={tickmarkIcon}
-                              alt="tickmarkIcon icon"
-                              className="h-4 w-full"
-                            />
-                          ) : (
-                            <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
-                          )}
-                        </Button>
-                      </div>
+                      <Button
+                        key={parent.id}
+                        type="button"
+                        onClick={() => {
+                          if (isParentSelected) {
+                            field.onChange(field.value.filter((v: string) => v !== parent.name));
+                          } else {
+                            field.onChange([...field.value, parent.name]);
+                          }
+                        }}
+                        className={`flex items-center justify-between w-full h-[28px] ${isParentSelected ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Icon
+                            className="w-5 h-5 flex-shrink-0"
+                            style={{
+                              color: isParentSelected ? '#3879E9' : '#808080',
+                              transition: 'color 0.2s ease-in-out',
+                            }}
+                          />
+                          <span
+                            className={`${isParentSelected ? 'text-primary' : 'text-blackOlive'} font-poppins font-normal text-sm`}
+                          >
+                            {parent.name}
+                          </span>
+                        </div>
+                        <SelectIcon isChecked={isParentSelected} />
+                      </Button>
                     );
                   }
 
                   return (
-                    <div key={parent.id} className="py-2">
+                    <div key={parent.id}>
                       <Button
                         type="button"
                         onClick={() => toggleExpand(parent.id)}
-                        className="flex items-center justify-between w-full"
+                        className="flex items-center justify-between w-full h-[28px] px-2.5 rounded-sm"
                       >
                         <div className="flex items-center gap-2">
                           <Icon
-                            className="w-5 h-5"
+                            className="w-5 h-5 flex-shrink-0"
                             style={{
                               color: expanded[parent.id] ? '#3879E9' : '#808080',
                               transition: 'color 0.2s ease-in-out',
@@ -115,11 +114,13 @@ export default function FilterByGenre() {
                             {parent.name}
                           </span>
                         </div>
-                        <span>{expanded[parent.id] ? <IoIosArrowUp /> : <IoIosArrowDown />}</span>
+                        <span className="w-4 flex-shrink-0 flex items-center justify-center">
+                          {expanded[parent.id] ? <IoIosArrowUp /> : <IoIosArrowDown />}
+                        </span>
                       </Button>
 
                       {expanded[parent.id] && (
-                        <div className="ml-3 mt-2 space-y-2 border-l border-platinumMix pl-4">
+                        <div className="ml-7 mt-1 space-y-0.5 border-l border-platinumMix pl-4">
                           {parent.childGenres.map((child) => {
                             const isChecked = field.value.includes(child.name);
                             return (
@@ -135,18 +136,12 @@ export default function FilterByGenre() {
                                     field.onChange([...field.value, child.name]);
                                   }
                                 }}
-                                className={`flex items-center justify-between gap-2 cursor-pointer w-full text-blackOlive font-poppins font-normal h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
+                                className={`flex items-center justify-between w-full h-[28px] ${isChecked ? 'bg-AntiFlashWhite' : ''} px-2.5 rounded-sm`}
                               >
-                                <span className="text-sm">{child.name}</span>
-                                {isChecked ? (
-                                  <Image
-                                    src={tickmarkIcon}
-                                    alt="tickmarkIcon icon"
-                                    className="h-4 w-full"
-                                  />
-                                ) : (
-                                  <Image src={plusIcon} alt="plus icon" className="h-4 w-full" />
-                                )}
+                                <span className="text-blackOlive font-poppins font-normal text-sm">
+                                  {child.name}
+                                </span>
+                                <SelectIcon isChecked={isChecked} />
                               </Button>
                             );
                           })}
