@@ -9,20 +9,19 @@ import {
 } from 'react-leaflet';
 import { userLocationIcon } from '../../../hooks/userLocationIcon';
 import { getDistanceInMeters } from '../../../utility/distance';
-import { useGeolocation } from '../hooks/useGeolocation';
 import { IBookWithLocation } from '../types/interface';
 import BookMarker from './BookMarker';
 import MapControls from './MapControls';
 
 interface MapContainerProps {
   books: IBookWithLocation[];
+  userCoords: { latitude: number | null; longitude: number | null };
 }
 
 const normalize = (num: number, precision = 4) => Number(num.toFixed(precision));
 
-export default function MapContainer({ books }: MapContainerProps) {
-  const { coords, permissionChecked } = useGeolocation();
-  const { latitude, longitude } = coords;
+export default function MapContainer({ books, userCoords }: MapContainerProps) {
+  const { latitude, longitude } = userCoords;
 
   /* =========================
      GROUP BOOKS BY LOCATION
@@ -68,7 +67,7 @@ export default function MapContainer({ books }: MapContainerProps) {
     }, null);
   }, [books, latitude, longitude]);
 
-  if (!permissionChecked || !latitude || !longitude) {
+  if (!latitude || !longitude) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-100">
         <p>Loading map…</p>

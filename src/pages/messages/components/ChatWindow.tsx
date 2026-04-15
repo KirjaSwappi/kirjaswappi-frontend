@@ -1,10 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 import Image from '../../../components/shared/Image';
 import { api } from '../../../redux/api/apiSlice';
 import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
-import { addChatMessages, markChatRead } from '../../../redux/feature/messages/messagesSlice';
+import {
+  addChatMessages,
+  markChatRead,
+  makeSelectChatById,
+} from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 export default function ChatWindow() {
@@ -13,10 +17,11 @@ export default function ChatWindow() {
   const bottomRef = useRef<HTMLDivElement>(null);
   const isInitialScroll = useRef(true);
   const scrollRafId = useRef<number>();
-  const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+  const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
   const { userInformation } = useAppSelector((state) => state.auth);
 
-  const findChat = chats.find((chat) => chat.id === selectedChatId);
+  const selectChatById = useMemo(makeSelectChatById, []);
+  const findChat = useAppSelector((state) => selectChatById(state, selectedChatId));
 
   const {
     currentData: chatData,

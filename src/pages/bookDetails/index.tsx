@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { IoShareSocialOutline } from 'react-icons/io5';
 import { useNavigate, useParams } from 'react-router-dom';
 import editIcon from '../../assets/editBlack.png';
 import exchangeIcon from '../../assets/exchangeIcon.png';
-import bookmarkIcon from '../../assets/icon_bookmark.png';
 import leftArrowIcon from '../../assets/leftArrow.png';
-import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
 import ErrorState from '../../components/shared/ErrorState';
 import Image from '../../components/shared/Image';
@@ -15,10 +15,12 @@ import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import {
   useGetUserProfileImageQuery,
   useAddFavouriteBookMutation,
+  useRemoveFavouriteBookMutation,
   useGetUserByIdQuery,
 } from '../../redux/feature/auth/authApi';
+import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { useGetBookByIdQuery } from '../../redux/feature/book/bookApi';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { goToTop } from '../../utility/helper';
 import { showToast } from '../../components/shared/toast';
 import BookActionButton from './_components/BookActionButton';
@@ -34,6 +36,7 @@ import VerticalImageSlider from './_components/VerticalImageSlider';
 export default function BookDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [isProfile, setProfile] = useState(false);
   const { handleLoginOrSwap } = useLoginModalOrSwapRequest();
   const { userInformation } = useAppSelector((state) => state.auth);
@@ -51,6 +54,7 @@ export default function BookDetails() {
   );
   const { t } = useTranslation();
   const [addFavouriteBook] = useAddFavouriteBookMutation();
+  const [removeFavouriteBook] = useRemoveFavouriteBookMutation();
   const { data: currentUserData } = useGetUserByIdQuery(
     { userId: userInformation?.id ?? '' },
     { skip: !userInformation?.id },
@@ -59,13 +63,38 @@ export default function BookDetails() {
     (fav: { id: string }) => fav.id === id,
   );
 
+  // =========== HANDLERS ===========
   const handleBookmark = async () => {
-    if (!userInformation?.id || !id) return;
+    if (!userInformation?.id) {
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+    if (!id) return;
     try {
-      await addFavouriteBook({ userId: userInformation.id, bookId: id }).unwrap();
-      showToast('success', t('bookmark.added'));
+      if (isBookmarked) {
+        await removeFavouriteBook({ userId: userInformation.id, bookId: id }).unwrap();
+        showToast('success', t('bookmark.removed'));
+      } else {
+        await addFavouriteBook({ userId: userInformation.id, bookId: id }).unwrap();
+        showToast('success', t('bookmark.added'));
+      }
     } catch {
       showToast('error', t('bookmark.failed'));
+    }
+  };
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/book-details/${id}`;
+    const shareData = { title: bookData?.title || 'KirjaSwappi', url };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        showToast('success', t('share.linkCopied'));
+      }
+    } catch {
+      // User cancelled the share dialog — ignore
     }
   };
 
@@ -115,13 +144,35 @@ export default function BookDetails() {
             </h2>
           </div>
           <div className="flex items-center gap-3">
-            <Image src={shareIcon} alt="Share" className="h-5" />
-            <Image
-              src={isProfile ? editIcon : bookmarkIcon}
-              alt={isProfile ? 'Edit book' : 'Bookmark'}
-              onClick={isProfile ? navigateToEditBook : handleBookmark}
-              className={`w-6 h-6 cursor-pointer ${!isProfile && isBookmarked ? 'opacity-40' : ''}`}
-            />
+            <button
+              type="button"
+              onClick={handleShare}
+              title="Share"
+              className="cursor-pointer bg-transparent border-0 p-0"
+            >
+              <IoShareSocialOutline className="w-5 h-5 text-black" />
+            </button>
+            {isProfile ? (
+              <Image
+                src={editIcon}
+                alt="Edit book"
+                onClick={navigateToEditBook}
+                className="w-6 h-6 cursor-pointer"
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={handleBookmark}
+                title="Bookmark"
+                className="cursor-pointer bg-transparent border-0 p-0"
+              >
+                {isBookmarked ? (
+                  <BsBookmarkFill className="w-5 h-5 text-primary" />
+                ) : (
+                  <BsBookmark className="w-5 h-5 text-black" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -216,6 +267,10 @@ export default function BookDetails() {
                 <BookActionButton
                   btnValue={isProfile ? t('books.editBook') : t('bookDetails.requestSwap')}
                   onClick={isEditBookOrSwapRequestFn}
+                  onShare={handleShare}
+                  onBookmark={handleBookmark}
+                  isBookmarked={isBookmarked}
+                  isOwner={isProfile}
                 />
               </div>
             </div>

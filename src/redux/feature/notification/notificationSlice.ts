@@ -17,7 +17,7 @@ export interface INotificationInitialState {
 }
 
 // Session storage key for notifications
-const NOTIFICATIONS_STORAGE_KEY = 'kirjaswappi_notifications';
+export const NOTIFICATIONS_STORAGE_KEY = 'kirjaswappi_notifications';
 const MAX_NOTIFICATIONS = 50;
 const NOTIFICATION_EXPIRY_DAYS = 7;
 
@@ -57,21 +57,6 @@ const loadNotificationsFromStorage = (): {
     notifications: [],
     unreadCount: 0,
   };
-};
-
-// Helper function to save notifications to localStorage
-const saveNotificationsToStorage = (notifications: INotification[], unreadCount: number): void => {
-  try {
-    localStorage.setItem(
-      NOTIFICATIONS_STORAGE_KEY,
-      JSON.stringify({
-        notifications,
-        unreadCount,
-      }),
-    );
-  } catch (error) {
-    console.error('[NotificationSlice] Error saving notifications to storage:', error);
-  }
 };
 
 // Load persisted notifications
@@ -153,9 +138,6 @@ const notificationSlice = createSlice({
 
       // Recalculate unread count after cleanup
       state.unreadCount = state.notifications.filter((n) => !n.isRead).length;
-
-      // Persist to localStorage
-      saveNotificationsToStorage(state.notifications, state.unreadCount);
     },
     // Mark specific notifications as read
     markNotificationsAsRead: (state, action: PayloadAction<string[]>) => {
@@ -168,9 +150,6 @@ const notificationSlice = createSlice({
           state.unreadCount = Math.max(0, state.unreadCount - 1);
         }
       });
-
-      // Persist to localStorage
-      saveNotificationsToStorage(state.notifications, state.unreadCount);
     },
     // Mark all notifications as read
     markAllAsRead: (state) => {
@@ -178,9 +157,6 @@ const notificationSlice = createSlice({
         notification.isRead = true;
       });
       state.unreadCount = 0;
-
-      // Persist to localStorage
-      saveNotificationsToStorage(state.notifications, state.unreadCount);
     },
     // Toggle notification panel visibility
     toggleNotificationPanel: (state, action: PayloadAction<boolean>) => {
@@ -195,13 +171,6 @@ const notificationSlice = createSlice({
       state.notifications = [];
       state.unreadCount = 0;
       state.isNotificationPanelOpen = false;
-
-      // Clear from localStorage
-      try {
-        localStorage.removeItem(NOTIFICATIONS_STORAGE_KEY);
-      } catch (error) {
-        console.error('[NotificationSlice] Error clearing notifications from storage:', error);
-      }
     },
   },
 });

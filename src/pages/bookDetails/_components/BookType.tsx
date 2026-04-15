@@ -1,6 +1,6 @@
 import bookIcon2 from '../../../assets/bookIcon2.png';
 import edition from '../../../assets/edition.png';
-import lng from '../../../assets/EN.png';
+import lng from '../../../assets/language.png';
 import Image from '../../../components/shared/Image';
 
 export default function BookType({
@@ -25,7 +25,7 @@ export default function BookType({
         <p className="text-grayDark text-xs font-poppins font-normal">Language</p>
         <Image src={lng} alt="book" className="mt-2 mb-1" />
         <h3 className="text-black text-xs font-normal font-poppins capitalize">
-          {language || 'English'}
+          {language || '-'}
         </h3>
       </div>
       <div className="flex flex-col items-center px-1">
