@@ -163,9 +163,8 @@ describe('Chat Messaging Flow (Functional)', () => {
 
     // Step 2: Click a chat to select it
     const chatButton = screen.getAllByText('Test Book')[0].closest('button');
-    if (chatButton) {
-      await user.click(chatButton);
-    }
+    expect(chatButton).not.toBeNull();
+    await user.click(chatButton as HTMLButtonElement);
 
     // Step 3: Chat messages load after selection
     await waitFor(() => {
