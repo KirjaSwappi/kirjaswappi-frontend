@@ -67,7 +67,7 @@ export default function MapContainer({ books, userCoords }: MapContainerProps) {
     }, null);
   }, [books, latitude, longitude]);
 
-  if (!latitude || !longitude) {
+  if (latitude == null || longitude == null) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-100">
         <p>Loading map…</p>

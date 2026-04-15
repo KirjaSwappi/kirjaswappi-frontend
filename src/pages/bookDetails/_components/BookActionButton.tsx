@@ -27,6 +27,7 @@ export default function BookActionButton({
       </Button>
       <Button
         onClick={onShare}
+        aria-label="Share"
         className="bg-[#F2F4F5] w-[44px] h-[44px] rounded-md flex items-center justify-center"
       >
         <IoShareSocialOutline className="w-5 h-5 text-grayDark" />
@@ -34,6 +35,7 @@ export default function BookActionButton({
       {!isOwner && (
         <Button
           onClick={onBookmark}
+          aria-label={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
           className="bg-[#F2F4F5] w-[44px] h-[44px] rounded-md flex items-center justify-center"
         >
           {isBookmarked ? (

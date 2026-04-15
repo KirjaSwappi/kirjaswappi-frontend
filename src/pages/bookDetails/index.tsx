@@ -84,6 +84,7 @@ export default function BookDetails() {
   };
 
   const handleShare = async () => {
+    if (!id) return;
     const url = `${window.location.origin}/book-details/${id}`;
     const shareData = { title: bookData?.title || 'KirjaSwappi', url };
     try {
@@ -93,8 +94,9 @@ export default function BookDetails() {
         await navigator.clipboard.writeText(url);
         showToast('success', t('share.linkCopied'));
       }
-    } catch {
-      // User cancelled the share dialog — ignore
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      showToast('error', t('share.failed'));
     }
   };
 

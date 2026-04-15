@@ -16,7 +16,7 @@ export interface INotificationInitialState {
   wsConnectionStatus: WSConnectionStatus;
 }
 
-// Session storage key for notifications
+// Local storage key for notifications
 export const NOTIFICATIONS_STORAGE_KEY = 'kirjaswappi_notifications';
 const MAX_NOTIFICATIONS = 50;
 const NOTIFICATION_EXPIRY_DAYS = 7;
