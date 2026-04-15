@@ -12,6 +12,7 @@ export default function ChatWindow() {
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
   const isInitialScroll = useRef(true);
+  const scrollRafId = useRef<number>();
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
   const { userInformation } = useAppSelector((state) => state.auth);
 
@@ -44,10 +45,15 @@ export default function ChatWindow() {
 
   useEffect(() => {
     if (!findChat?.messages?.length) return;
-    bottomRef.current?.scrollIntoView({
-      behavior: isInitialScroll.current ? 'instant' : 'smooth',
+    scrollRafId.current = requestAnimationFrame(() => {
+      bottomRef.current?.scrollIntoView({
+        behavior: isInitialScroll.current ? 'instant' : 'smooth',
+      });
+      isInitialScroll.current = false;
     });
-    isInitialScroll.current = false;
+    return () => {
+      if (scrollRafId.current) cancelAnimationFrame(scrollRafId.current);
+    };
   }, [findChat?.messages]);
 
   useEffect(() => {

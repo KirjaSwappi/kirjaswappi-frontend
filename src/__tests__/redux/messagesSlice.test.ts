@@ -120,6 +120,47 @@ describe('messagesSlice', () => {
 
       expect(result.chats).toEqual([]);
     });
+
+    it('should preserve local read state for selected chat', () => {
+      const stateWithReadChat: ChatState = {
+        chats: [
+          {
+            id: 'swap-123',
+            name: 'Test Book',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [{ id: 'msg-1', sender: 'them', text: 'Hello', time: '2024-01-01' }],
+          },
+        ],
+        selectedChatId: 'swap-123',
+      };
+
+      // Server still reports unread, but local state should be preserved
+      const result = messagesSlice(stateWithReadChat, setInboxList([mockInboxItem]));
+
+      expect(result.chats[0].unread).toBe(false);
+      expect(result.chats[0].unreadMessageCount).toBe(0);
+    });
+
+    it('should not preserve read state for non-selected chat', () => {
+      const stateWithReadChat: ChatState = {
+        chats: [
+          {
+            id: 'swap-123',
+            name: 'Test Book',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [{ id: 'msg-1', sender: 'them', text: 'Hello', time: '2024-01-01' }],
+          },
+        ],
+        selectedChatId: 'other-chat',
+      };
+
+      const result = messagesSlice(stateWithReadChat, setInboxList([mockInboxItem]));
+
+      expect(result.chats[0].unread).toBe(true);
+      expect(result.chats[0].unreadMessageCount).toBe(2);
+    });
   });
 
   describe('updateInboxItem', () => {
@@ -165,6 +206,26 @@ describe('messagesSlice', () => {
       const result = messagesSlice(stateWithChats, updateInboxItem(mockInboxItem));
 
       expect(result.chats[0].id).toBe('swap-123');
+    });
+
+    it('should preserve local read state for selected chat', () => {
+      const stateWithReadChat: ChatState = {
+        chats: [
+          {
+            id: 'swap-123',
+            name: 'Test Book',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [{ id: 'msg-1', sender: 'me', text: 'Test', time: '2024-01-01' }],
+          },
+        ],
+        selectedChatId: 'swap-123',
+      };
+
+      const result = messagesSlice(stateWithReadChat, updateInboxItem(mockInboxItem));
+
+      expect(result.chats[0].unread).toBe(false);
+      expect(result.chats[0].unreadMessageCount).toBe(0);
     });
   });
 

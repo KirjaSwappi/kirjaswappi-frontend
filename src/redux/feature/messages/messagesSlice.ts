@@ -116,11 +116,16 @@ const chatSlice = createSlice({
         // Find existing chat to preserve loaded messages
         const existingChat = state.chats.find((c) => c.id === item.id);
 
+        // Preserve local read state for the currently selected chat
+        const isCurrentlySelected = state.selectedChatId === item.id;
+        const wasLocallyRead = existingChat && !existingChat.unread;
+
         return {
           id: item.id,
           name: bookTitle,
-          unread: item.unread,
-          unreadMessageCount: item.unreadMessageCount || 0,
+          unread: isCurrentlySelected && wasLocallyRead ? false : item.unread,
+          unreadMessageCount:
+            isCurrentlySelected && wasLocallyRead ? 0 : item.unreadMessageCount || 0,
           senderName: partnerName,
           updatedAt: item.updatedAt,
           conversationType: item.conversationType,
@@ -150,11 +155,17 @@ const chatSlice = createSlice({
       const bookTitle = item.bookToSwapWith?.title || 'Unknown Book';
       const lastText = item.note || `${item.sender.name} sent a message`;
 
+      // Preserve local read state for the currently selected chat
+      const existingChat = existingChatIndex !== -1 ? state.chats[existingChatIndex] : null;
+      const isCurrentlySelected = state.selectedChatId === item.id;
+      const wasLocallyRead = existingChat && !existingChat.unread;
+
       const updatedChat: Chat = {
         id: item.id,
         name: bookTitle,
-        unread: item.unread,
-        unreadMessageCount: item.unreadMessageCount || 0,
+        unread: isCurrentlySelected && wasLocallyRead ? false : item.unread,
+        unreadMessageCount:
+          isCurrentlySelected && wasLocallyRead ? 0 : item.unreadMessageCount || 0,
         senderName: partnerName,
         updatedAt: item.updatedAt,
         conversationType: item.conversationType,
@@ -170,7 +181,7 @@ const chatSlice = createSlice({
             sender: item.conversationType === 'sent' ? 'me' : 'them',
             text: lastText,
             time: item.updatedAt,
-            unread: item.unread,
+            unread: isCurrentlySelected && wasLocallyRead ? false : item.unread,
           },
         ],
       };
