@@ -116,11 +116,16 @@ const chatSlice = createSlice({
         // Find existing chat to preserve loaded messages
         const existingChat = state.chats.find((c) => c.id === item.id);
 
+        // Preserve local read state for the currently selected chat
+        const isCurrentlySelected = state.selectedChatId === item.id;
+        const wasLocallyRead = existingChat && !existingChat.unread;
+
         return {
           id: item.id,
           name: bookTitle,
-          unread: item.unread,
-          unreadMessageCount: item.unreadMessageCount || 0,
+          unread: isCurrentlySelected && wasLocallyRead ? false : item.unread,
+          unreadMessageCount:
+            isCurrentlySelected && wasLocallyRead ? 0 : item.unreadMessageCount || 0,
           senderName: partnerName,
           updatedAt: item.updatedAt,
           conversationType: item.conversationType,

@@ -1,4 +1,4 @@
-import React, { CSSProperties, RefObject, useState } from 'react';
+import React, { CSSProperties, RefObject, useEffect, useState } from 'react';
 import NotFoundImg from '../../assets/notFoundIcon.png';
 import { cn } from '../../utility/cn';
 
@@ -16,6 +16,10 @@ interface IImageProps {
 const Image: React.FC<IImageProps> = (props) => {
   const { src, style, className } = props;
   const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(false);
+  }, [src]);
   // Image Error Handling Function
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.target as HTMLImageElement;

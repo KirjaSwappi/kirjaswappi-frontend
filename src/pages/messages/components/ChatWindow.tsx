@@ -44,10 +44,12 @@ export default function ChatWindow() {
 
   useEffect(() => {
     if (!findChat?.messages?.length) return;
-    bottomRef.current?.scrollIntoView({
-      behavior: isInitialScroll.current ? 'instant' : 'smooth',
+    requestAnimationFrame(() => {
+      bottomRef.current?.scrollIntoView({
+        behavior: isInitialScroll.current ? 'instant' : 'smooth',
+      });
+      isInitialScroll.current = false;
     });
-    isInitialScroll.current = false;
   }, [findChat?.messages]);
 
   useEffect(() => {
