@@ -44,8 +44,11 @@ const mockChatMessages = [
   },
 ];
 
+const mockMarkAsRead = vi.fn();
+
 vi.mock('../../../redux/feature/messages/inboxApi', () => ({
   useGetChatMessagesQuery: vi.fn(),
+  useMarkChatAsReadMutation: () => [mockMarkAsRead],
 }));
 
 import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
