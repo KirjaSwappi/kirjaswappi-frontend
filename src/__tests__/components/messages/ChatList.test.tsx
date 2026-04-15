@@ -140,8 +140,8 @@ describe('ChatList Component', () => {
 
     renderChatList();
 
-    expect(screen.getByText('No conversations yet')).toBeInTheDocument();
-    expect(screen.getByText('Start a swap request to begin chatting')).toBeInTheDocument();
+    expect(screen.getByText('chat.noConversations')).toBeInTheDocument();
+    expect(screen.getByText('chat.startSwap')).toBeInTheDocument();
   });
 
   it('should render chat list items', () => {

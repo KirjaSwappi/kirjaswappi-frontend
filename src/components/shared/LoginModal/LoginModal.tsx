@@ -10,6 +10,7 @@ import { setAuthMessage, setAuthSuccess } from '../../../redux/feature/auth/auth
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
 import { setLoginModalOpen } from '../../../redux/feature/open/openSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useModal } from '../../../hooks/useModal';
 import Button from '../Button';
 import ControlledInputField from '../ControllerField';
 import ControlledPasswordField from '../ControllerFieldPassword';
@@ -26,6 +27,14 @@ export default function LoginModal() {
   const { error: authError, message: authMessage } = useAppSelector((state) => state.auth);
   const { loginModalOpen } = useAppSelector((state) => state.open);
   const [login, { isLoading }] = useLoginMutation();
+
+  const handleClose = () => dispatch(setLoginModalOpen(false));
+
+  const { modalRef, modalProps, backdropProps } = useModal({
+    open: loginModalOpen,
+    onClose: handleClose,
+  });
+
   const methods = useForm<ILoginForm>({
     resolver: yupResolver(loginSchema),
     mode: 'onBlur',
@@ -62,21 +71,28 @@ export default function LoginModal() {
 
   if (!loginModalOpen) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="bg-white rounded-xl shadow-lg w-10/12 lg:max-w-[486px] relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+      {...backdropProps}
+    >
+      <div
+        ref={modalRef}
+        {...modalProps}
+        className="bg-white rounded-xl shadow-lg w-10/12 lg:max-w-[486px] relative outline-none"
+      >
         <div className="flex flex-row items-center justify-between p-4 lg:p-6 border-b border-platinum">
           <Image src={logo} alt="KirjaSwappi" className="h-6 lg:h-8 lg:mb-2" />
           <Button
-            className="absolute right-6 lg:top-5 text-2xl w-8 h-8 border border-platinum rounded-full text-[#1A1A1A]"
-            onClick={() => dispatch(setLoginModalOpen(false))}
-            aria-label="Close"
+            className="absolute right-6 lg:top-5 text-2xl w-8 h-8 border border-platinum rounded-full text-richBlack"
+            onClick={handleClose}
+            aria-label={t('close')}
           >
             &times;
           </Button>
         </div>
 
         <div className="p-4 lg:p-6 lg:mt-4">
-          <h2 className="text-[#1A1A1A] text-base font-medium text-left mb-2 lg:mb-4 font-poppins">
+          <h2 className="text-richBlack text-base font-medium text-left mb-2 lg:mb-4 font-poppins">
             {t('loginModal.title')}
           </h2>
           <FormProvider {...methods}>
@@ -106,13 +122,13 @@ export default function LoginModal() {
                 </div>
               )}
 
-              <button
+              <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-2"
+                className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-lg text-sm mt-2"
               >
-                {isLoading ? t('loginModal.loading') : t('loginModal.logIn')}
-              </button>
+                {isLoading ? t('common.loadingEllipsis') : t('loginModal.logIn')}
+              </Button>
             </form>
           </FormProvider>
           <div className="relative my-4">
@@ -127,6 +143,7 @@ export default function LoginModal() {
           <div className="flex items-center justify-center gap-1 mt-4">
             <p className="text-black text-sm font-light">{t('loginModal.noAccount')}</p>
             <button
+              type="button"
               className="text-primary text-sm font-light underline"
               onClick={() => {
                 dispatch(setLoginModalOpen(false));

@@ -6,7 +6,7 @@ import { IChildGenre, IGenresResponse } from '../../pages/profile/interface/inte
 import { useGetGenreQuery } from '../../redux/feature/genre/genreApi';
 import Button from './Button';
 import Image from './Image';
-import Loader from './Loader';
+import Spinner from './Spinner';
 
 export default function AddGenre({
   setEditValuesChanged,
@@ -35,7 +35,7 @@ export default function AddGenre({
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <Spinner variant="overlay" />;
 
   const childGenres: IChildGenre[] = Object.values(data?.parentGenres || {}).flatMap(
     (parent) => parent.childGenres,
@@ -50,7 +50,7 @@ export default function AddGenre({
           return (
             <div
               key={genreItem.id}
-              className="flex items-center justify-between px-4 py-4 bg-white border border-[#E6E6E6] rounded-lg"
+              className="flex items-center justify-between px-4 py-4 bg-white border border-platinum rounded-lg"
             >
               <h3 className="font-poppins text-sm font-light">{genreItem.name}</h3>
 

@@ -282,7 +282,7 @@ export default function EditProfile() {
           }))
         }
       />
-      <div className="fixed left-0 top-0 w-full h-[48px] flex items-center justify-between px-4 border-b border-[#E4E4E4] bg-light z-30 ">
+      <div className="fixed left-0 top-0 w-full h-[48px] flex items-center justify-between px-4 border-b border-platinumDark bg-light z-30 lg:hidden">
         <div className="flex items-center gap-2">
           <button
             className="w-5"
@@ -302,7 +302,7 @@ export default function EditProfile() {
           <Button
             disabled={!isSaveActive}
             className={` ${
-              isSaveActive ? ' text-[#3879E9] cursor-pointer' : 'text-[#3879e985]'
+              isSaveActive ? ' text-primary cursor-pointer' : 'text-primary/50'
             } font-poppins font-medium text-base`}
             onClick={handleEditSaveFn}
           >
@@ -311,8 +311,20 @@ export default function EditProfile() {
         </div>
       </div>
 
-      <div className="container pt-16">
-        <div className="border-b border-[#E4E4E4]">
+      <div className="container pt-16 lg:pt-6">
+        <div className="hidden lg:flex items-center justify-between mb-6">
+          <h1 className="font-poppins text-2xl font-bold text-black">{t('editProfile.title')}</h1>
+          <Button
+            disabled={!isSaveActive}
+            className={`${
+              isSaveActive ? 'text-white bg-primary cursor-pointer' : 'text-white bg-primary/50'
+            } font-poppins font-medium text-sm px-6 py-2 rounded-lg`}
+            onClick={handleEditSaveFn}
+          >
+            {t('save')}
+          </Button>
+        </div>
+        <div className="border-b border-platinumDark">
           <h1 className="font-medium font-poppins text-sm leading-none">
             {t('editProfile.profilePicture')}
           </h1>
@@ -371,7 +383,7 @@ export default function EditProfile() {
           </div>
           {error && <p className="text-center text-sm font-poppins text-rose-600 mb-2">{error}</p>}
         </div>
-        <div className="border-b border-[#E4E4E4] pb-4">
+        <div className="border-b border-platinumDark pb-4">
           <div className="flex items-center justify-between py-4 relative">
             <h1 className="font-poppins text-sm font-medium leading-none">
               {t('editProfile.coverPicture')}
@@ -381,7 +393,7 @@ export default function EditProfile() {
                 handleCoverToggle();
                 setProfileToggle(false);
               }}
-              className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline relative"
+              className="text-primary font-poppins font-medium text-sm leading-none underline relative"
             >
               {t('change')}
             </Button>
@@ -422,7 +434,7 @@ export default function EditProfile() {
             <p className="text-center text-sm font-poppins text-rose-600 mb-2">{coverError}</p>
           )}
         </div>
-        <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
+        <div className="mt-4 pb-4 border-b border-platinumDark">
           <InputLabel label={t('editProfile.firstName')} />
           <Input
             type="text"
@@ -433,7 +445,7 @@ export default function EditProfile() {
             onChange={handleChange}
           />
         </div>
-        <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
+        <div className="mt-4 pb-4 border-b border-platinumDark">
           <InputLabel label={t('editProfile.lastName')} />
           <Input
             type="text"
@@ -444,7 +456,7 @@ export default function EditProfile() {
             onChange={handleChange}
           />
         </div>
-        <div className="mt-4 pb-4 border-b border-[#E4E4E4]">
+        <div className="mt-4 pb-4 border-b border-platinumDark">
           <InputLabel label={t('editProfile.bio')} />
           <TextArea
             name="aboutMe"
@@ -460,7 +472,7 @@ export default function EditProfile() {
             </h1>
             <Button
               onClick={() => dispatch(setOpen(!open))}
-              className="text-[#3879E9] font-poppins font-medium text-sm leading-none underline"
+              className="text-primary font-poppins font-medium text-sm leading-none underline"
             >
               {t('add')}
             </Button>
@@ -470,7 +482,7 @@ export default function EditProfile() {
               {editInfo.favGenres.map((favItem, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between px-4 py-4 bg-white border border-[#E6E6E6] rounded-lg"
+                  className="flex items-center justify-between px-4 py-4 bg-white border border-platinum rounded-lg"
                 >
                   <h3 className="font-poppins text-sm font-light">{favItem}</h3>
                   <Button onClick={() => handleRemoveGenre(favItem)}>
@@ -496,10 +508,10 @@ export default function EditProfile() {
             </p>
           </div>
         </div>
-        <div className="pb-8 border-t border-[#E4E4E4] pt-4">
+        <div className="pb-8 border-t border-platinumDark pt-4">
           <Button
             onClick={() => navigate('/profile/change-password')}
-            className="w-full h-[48px] px-4 font-normal text-primary border border-primary rounded-2xl text-sm"
+            className="w-full h-[48px] px-4 font-normal text-primary border border-primary rounded-lg text-sm"
           >
             {t('changePassword.title')}
           </Button>

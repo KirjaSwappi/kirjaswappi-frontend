@@ -7,8 +7,9 @@ import bookmarkIcon from '../../assets/icon_bookmark.png';
 import leftArrowIcon from '../../assets/leftArrow.png';
 import shareIcon from '../../assets/share.png';
 import Breadcrumb from '../../components/shared/Breadcrumb';
+import ErrorState from '../../components/shared/ErrorState';
 import Image from '../../components/shared/Image';
-import Loader from '../../components/shared/Loader';
+import Spinner from '../../components/shared/Spinner';
 import PageTitle from '../../components/shared/PageTitle';
 import { useLoginModalOrSwapRequest } from '../../hooks/useLoginOrSwapRequest';
 import {
@@ -86,22 +87,15 @@ export default function BookDetails() {
     else handleLoginOrSwap(bookData, id);
   };
 
-  if (bookLoading) return <Loader />;
+  if (bookLoading) return <Spinner variant="overlay" />;
 
   if (isError)
     return (
-      <div className="container min-h-[60vh] flex items-center justify-center">
-        <div className="text-center">
-          <p className="font-poppins text-grayDark text-sm mb-4">{t('bookDetails.errorMessage')}</p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="font-poppins text-sm text-white bg-primary px-4 py-2 rounded-lg cursor-pointer"
-          >
-            {t('bookDetails.tryAgain')}
-          </button>
-        </div>
-      </div>
+      <ErrorState
+        message={t('bookDetails.errorMessage')}
+        onRetry={() => window.location.reload()}
+        retryLabel={t('bookDetails.tryAgain')}
+      />
     );
 
   return (

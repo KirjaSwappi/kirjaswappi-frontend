@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import OTPInput from 'react-otp-input';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../../components/shared/Button';
 import MessageToastify from '../../../../components/shared/MessageToastify';
 import { ERROR, SUCCESS } from '../../../../constant/MESSAGETYPE';
@@ -18,6 +19,7 @@ import { OTPSchemaType } from '../interface';
 export default function ConfirmOTP() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
   const [sentOTP] = useSentOTPMutation();
   const { userEmail, otp } = useAppSelector((state) => state.auth);
@@ -115,9 +117,9 @@ export default function ConfirmOTP() {
           <Button
             type="submit"
             disabled={isLoading || isAutoSubmitting}
-            className="text-white font-medium text-sm w-full bg-primary py-2 mt-3 rounded-2xl"
+            className="text-white font-medium text-sm w-full bg-primary py-2 mt-3 rounded-lg"
           >
-            {isLoading || isAutoSubmitting ? 'Loading...' : 'OTP Verify'}
+            {isLoading || isAutoSubmitting ? t('common.loadingEllipsis') : t('auth.otpVerify')}
           </Button>
         </form>
         <div className="flex items-center justify-center mt-10 gap-2 text-grayDark text-sm font-poppins">

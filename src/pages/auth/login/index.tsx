@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
@@ -21,6 +22,7 @@ import { useAppSelector } from '../../../redux/hooks';
 import { ILoginForm } from './interface';
 import { loginSchema } from './Schema';
 export default function Login() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
@@ -79,21 +81,23 @@ export default function Login() {
         <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
-          <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
-          </p>
+          <p className="text-center text-grayDark text-xs px-20 mt-5">{t('auth.tagline')}</p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">
           <div>
             <h2 className="text-black text-base font-normal text-center mt-24 lg:mt-0 mb-4">
-              Sign In
+              {t('auth.signIn')}
             </h2>
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col">
-                <ControlledInputField name="email" placeholder="E-mail" className="rounded-t-lg" />
+                <ControlledInputField
+                  name="email"
+                  placeholder={t('auth.email')}
+                  className="rounded-t-lg"
+                />
                 <ControlledPasswordField
                   name="password"
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                   className="rounded-b-lg border-t-0"
                 />
 
@@ -105,28 +109,29 @@ export default function Login() {
 
                 <div className="flex items-center justify-end my-4">
                   <Link to="/password/reset" className="text-black font-light text-sm underline">
-                    Forgot Password?
+                    {t('auth.forgotPassword')}
                   </Link>
                 </div>
 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm"
+                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-lg text-sm"
                 >
-                  {isLoading ? 'Loading...' : 'Continue'}
+                  {isLoading ? t('common.loadingEllipsis') : t('auth.continue')}
                 </button>
 
                 <div className="flex items-center justify-center gap-1 mt-4">
-                  <p className="text-black text-sm font-light">Don&apos;t have an account?</p>
+                  <p className="text-black text-sm font-light">{t('auth.noAccount')}</p>
                   <button
+                    type="button"
                     className="text-black text-sm font-light underline"
                     onClick={(e) => {
                       e.preventDefault();
                       navigate('/auth/register');
                     }}
                   >
-                    Create an account
+                    {t('auth.createAccount')}
                   </button>
                 </div>
               </form>
@@ -137,7 +142,7 @@ export default function Login() {
               <div className="w-full border-t border-platinum"></div>
             </div>
             <div className="relative flex justify-center text-xs font-poppins">
-              <span className="bg-light lg:bg-white px-2 text-grayDark">Or</span>
+              <span className="bg-light lg:bg-white px-2 text-grayDark">{t('auth.or')}</span>
             </div>
           </div>
           <GoogleLoginButton />

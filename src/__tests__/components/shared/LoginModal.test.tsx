@@ -197,7 +197,7 @@ describe('LoginModal Component', () => {
   it('closes modal when close button is clicked', () => {
     const { store } = renderWithProviders(<LoginModal />, { preloadedState: openModalState });
 
-    const closeBtn = screen.getByLabelText('Close');
+    const closeBtn = screen.getByLabelText('close');
     fireEvent.click(closeBtn);
 
     expect(store.getState().open.loginModalOpen).toBe(false);

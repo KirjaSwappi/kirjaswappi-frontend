@@ -2,6 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import DeleteConfirmModal from '../../../components/shared/DeleteConfirmModal';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 describe('DeleteConfirmModal', () => {
   const mockOnClose = vi.fn();
   const mockOnDelete = vi.fn();
@@ -19,8 +23,8 @@ describe('DeleteConfirmModal', () => {
 
   it('renders modal when open is true', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
-    expect(screen.getByText('Are You Sure?')).toBeInTheDocument();
-    expect(screen.getByText('Are you sure you want to delete this book')).toBeInTheDocument();
+    expect(screen.getByText('chat.areYouSure')).toBeInTheDocument();
+    expect(screen.getAllByText('delete').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders custom title and message', () => {
@@ -53,20 +57,20 @@ describe('DeleteConfirmModal', () => {
 
   it('calls onClose when close button is clicked', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
-    const closeBtn = screen.getByLabelText('Close');
+    const closeBtn = screen.getByLabelText('close');
     fireEvent.click(closeBtn);
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('calls onClose when cancel button is clicked', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByText('cancel'));
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
   it('calls onDelete when delete button is clicked', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
-    fireEvent.click(screen.getByText('Delete'));
+    fireEvent.click(screen.getAllByText('delete')[1]);
     expect(mockOnDelete).toHaveBeenCalledTimes(1);
   });
 
@@ -79,7 +83,7 @@ describe('DeleteConfirmModal', () => {
         onDelete={mockOnDelete}
       />,
     );
-    expect(screen.getByText('Deleting...')).toBeInTheDocument();
+    expect(screen.getByText('common.deleting')).toBeInTheDocument();
   });
 
   it('disables buttons when loading', () => {
@@ -91,8 +95,8 @@ describe('DeleteConfirmModal', () => {
         onDelete={mockOnDelete}
       />,
     );
-    const cancelBtn = screen.getByText('Cancel').closest('button');
-    const deleteBtn = screen.getByText('Deleting...').closest('button');
+    const cancelBtn = screen.getByText('cancel').closest('button');
+    const deleteBtn = screen.getByText('common.deleting').closest('button');
     expect(cancelBtn).toBeDisabled();
     expect(deleteBtn).toBeDisabled();
   });

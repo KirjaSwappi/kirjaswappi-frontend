@@ -51,7 +51,7 @@ export default function ContactUs() {
         <BookAddUpdateHeader onBack={() => navigate(-1)} title={t('contactus.header')} />
       </div>
 
-      <div className="bg-lightGray container  pt-12 lg:pt-[4.5rem] min-h-[86vh]font-poppins lg:bg-white rounded-lg ">
+      <div className="bg-lightGray container  pt-12 lg:pt-[4.5rem] min-h-[86vh] font-poppins lg:bg-white rounded-lg ">
         <div className="w-full lg:w-[70%] mx-auto  ">
           <h2 className="text-[16px] lg:text-[32px] font-medium lg:font-semibold  leading-[40px]  ">
             {t('contactus.header')}
@@ -69,7 +69,7 @@ export default function ContactUs() {
                   <ControlledInputField
                     name="name"
                     placeholder={t('contactus.namePlaceholder')}
-                    className="rounded-md border-[#CCCCCC] text-[14px] leading-[20px]  hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+                    className="rounded-md border-gray text-[14px] leading-[20px]  hover:border-blue-500 focus:border-blue-500 focus:outline-none"
                     showErrorMessage
                   />
                 </div>
@@ -78,7 +78,7 @@ export default function ContactUs() {
                   <ControlledInputField
                     name="email"
                     placeholder={t('contactus.emailPlaceholder')}
-                    className="rounded-md border-[#CCCCCC] text-[14px] leading-[20px] hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+                    className="rounded-md border-gray text-[14px] leading-[20px] hover:border-blue-500 focus:border-blue-500 focus:outline-none"
                     showErrorMessage
                   />
                 </div>
@@ -87,7 +87,7 @@ export default function ContactUs() {
                   <ControlledInputField
                     name="subject"
                     placeholder={t('contactus.subjectPlaceholder')}
-                    className="rounded-md border-[#CCCCCC] text-[14px] leading-[20px] hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+                    className="rounded-md border-gray text-[14px] leading-[20px] hover:border-blue-500 focus:border-blue-500 focus:outline-none"
                     showErrorMessage
                   />
                 </div>
@@ -97,7 +97,7 @@ export default function ContactUs() {
                     type="textarea"
                     name="description"
                     placeholder={t('contactus.messagePlaceholder')}
-                    className="rounded-md min-h-[122px] border-[#CCCCCC] hover:border-blue-500 focus:border-blue-500 focus:outline-none"
+                    className="rounded-md min-h-[122px] border-gray hover:border-blue-500 focus:border-blue-500 focus:outline-none"
                     showErrorMessage
                   />
                 </div>
@@ -118,17 +118,17 @@ export default function ContactUs() {
                 {t('contactus.contactInfo')}
               </h3>
 
-              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-[Poppins] mr-2">
+              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-poppins mr-2">
                 Address: {t('contactus.address')}
               </p>
 
-              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-[Poppins] mr-2">
+              <p className="font-normal text-[16px] leading-[24px] mb-4 tracking-[0px] font-poppins mr-2">
                 {t('contactus.phone')}:{' '}
                 <a href="tel:+358408536161" className="">
                   +358408536161
                 </a>
               </p>
-              <p className="font-normal text-[16px] leading-[24px] mb-6 tracking-[0px] font-[Poppins] mr-2">
+              <p className="font-normal text-[16px] leading-[24px] mb-6 tracking-[0px] font-poppins mr-2">
                 {t('email')}:{' '}
                 <a href="mailto:info@kirjaswappi.fi" className="">
                   info@kirjaswappi.fi

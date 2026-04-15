@@ -73,7 +73,7 @@ export default function HeroSection() {
           {SLIDE_KEYS.map((slide, index) => (
             <CarouselItem
               key={index}
-              className="w-full flex bg-[#BEC6D2] h-[140px] md:h-[210px] lg:h-[312px]"
+              className="w-full flex bg-heroBg h-[140px] md:h-[210px] lg:h-[312px]"
             >
               <div className="w-7/12 pl-10 md:pl-16 lg:pl-32 pt-4 md:pt-10 lg:pt-20">
                 <h2 className="text-base md:text-2xl lg:text-[40px] font-semibold text-[#262626] font-poppins lg:leading-10">
@@ -107,7 +107,7 @@ export default function HeroSection() {
             <div
               key={index}
               className={cn(
-                'h-2 rounded-full transition-all duration-300 bg-[#3B82F6]',
+                'h-2 rounded-full transition-all duration-300 bg-primary',
                 selectedIndex === index ? 'w-4 lg:w-6' : 'w-2 opacity-50',
               )}
             />

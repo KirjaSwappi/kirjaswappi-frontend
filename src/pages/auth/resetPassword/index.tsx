@@ -204,7 +204,7 @@ export default function ResetPassword() {
         setMessages({
           type: ERROR,
           isShow: true,
-          message: 'OTP is required! Insert your OTP code.',
+          message: t('resetPassword.otpRequired'),
         }),
       );
     }
@@ -317,9 +317,7 @@ export default function ResetPassword() {
         <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
-          <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
-          </p>
+          <p className="text-center text-grayDark text-xs px-20 mt-5">{t('auth.tagline')}</p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">
           <div className="lg:hidden pt-4 pb-6 flex items-center gap-2">
@@ -337,7 +335,7 @@ export default function ResetPassword() {
             >
               <Image src={leftArrowIcon} alt="left" />
             </button>
-            <h3 className="font-poppins text-base font-medium ">Forget Password</h3>
+            <h3 className="font-poppins text-base font-medium ">{t('resetPassword.title')}</h3>
           </div>
           {
             <form
@@ -350,13 +348,13 @@ export default function ResetPassword() {
             >
               {step === 1 && (
                 <div className="text-center py-6 border-b border-[#E6E6E6] lg:hidden">
-                  <h1>Confirm your Email</h1>
+                  <h1>{t('resetPassword.confirmEmail')}</h1>
                 </div>
               )}
               <div className={`${step === 1 && 'px-6'}`}>
                 {step === 1 && (
                   <p className="text-sm font-light font-poppins text-center pt-8 pb-10">
-                    Enter the code we&apos;ve sent to your Email
+                    {t('resetPassword.enterCode')}
                   </p>
                 )}
                 {renderStepContent()}
@@ -368,9 +366,9 @@ export default function ResetPassword() {
                 )}
                 <Button
                   type="submit"
-                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm mt-4"
+                  className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-lg text-sm mt-4"
                 >
-                  {loading ? 'Loading...' : 'Continue'}
+                  {loading ? t('common.loadingEllipsis') : t('auth.continue')}
                 </Button>
               </div>
             </form>

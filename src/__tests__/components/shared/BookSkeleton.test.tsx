@@ -9,10 +9,11 @@ describe('BookSkeleton', () => {
     expect(pulseElements.length).toBeGreaterThanOrEqual(4);
   });
 
-  it('renders with correct height classes', () => {
+  it('renders with correct wrapper classes', () => {
     const { container } = render(<BookSkeleton />);
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper).toHaveClass('h-[156px]');
-    expect(wrapper).toHaveClass('lg:h-[214px]');
+    expect(wrapper).toHaveClass('w-full');
+    expect(wrapper).toHaveClass('flex');
+    expect(wrapper).toHaveClass('flex-col');
   });
 });

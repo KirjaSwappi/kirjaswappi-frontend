@@ -8,7 +8,7 @@ import NextArrowIcon from '../../assets/arrow1.png';
 import PrevArrowIcon from '../../assets/arrow2.png';
 import prevArrowIcon_3 from '../../assets/arrow_3.svg';
 import Image from '../../components/shared/Image';
-import Loader from '../../components/shared/Loader';
+import Spinner from '../../components/shared/Spinner';
 import {
   useAddBookMutation,
   useGetBookByIdQuery,
@@ -145,7 +145,7 @@ export default function AddUpdateBook() {
     else return false;
   };
 
-  if (loading()) return <Loader />;
+  if (loading()) return <Spinner variant="overlay" />;
 
   return (
     <div className="lg:px-6 pb-6 lg:pt-6">
@@ -221,7 +221,7 @@ export default function AddUpdateBook() {
                             type="submit"
                             className="bg-primary text-white w-full lg:w-[112px] py-4 rounded-lg"
                           >
-                            {isLoading ? 'Loading...' : 'Save'}
+                            {isLoading ? t('common.loadingEllipsis') : t('addBook.save')}
                           </Button>
                         )}
                       </div>

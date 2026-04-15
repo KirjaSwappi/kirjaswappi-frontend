@@ -59,7 +59,7 @@ export default function Footer() {
         <Button
           type="button"
           onClick={() => navigate('/profile/add-book')}
-          className={`w-14 h-14 bg-[#999999] hover:bg-primary rounded-full fixed z-10 left-1/2 bottom-12 -translate-x-1/2   items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary ${pathname === '/' ? 'flex' : 'hidden '} `}
+          className={`w-14 h-14 bg-primary hover:bg-primary rounded-full fixed z-10 left-1/2 bottom-12 -translate-x-1/2   items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary ${pathname === '/' ? 'flex' : 'hidden '} `}
           aria-label="Add book"
         >
           <FaPlus className="text-white text-2xl" />

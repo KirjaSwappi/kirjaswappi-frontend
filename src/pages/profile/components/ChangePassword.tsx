@@ -129,7 +129,10 @@ export default function ChangePassword() {
       <div className="container pt-16 max-w-md">
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="font-poppins text-sm font-medium block mb-1">
+            <label
+              htmlFor="currentPassword"
+              className="font-poppins text-sm font-medium block mb-1"
+            >
               {t('changePassword.currentPassword')}
             </label>
             <PasswordInput
@@ -144,7 +147,7 @@ export default function ChangePassword() {
             />
           </div>
           <div className="mb-4">
-            <label className="font-poppins text-sm font-medium block mb-1">
+            <label htmlFor="newPassword" className="font-poppins text-sm font-medium block mb-1">
               {t('changePassword.newPassword')}
             </label>
             <PasswordInput
@@ -159,7 +162,10 @@ export default function ChangePassword() {
             />
           </div>
           <div className="mb-6">
-            <label className="font-poppins text-sm font-medium block mb-1">
+            <label
+              htmlFor="confirmPassword"
+              className="font-poppins text-sm font-medium block mb-1"
+            >
               {t('changePassword.confirmPassword')}
             </label>
             <PasswordInput
@@ -175,9 +181,9 @@ export default function ChangePassword() {
           </div>
           <Button
             type="submit"
-            className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm"
+            className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-lg text-sm"
           >
-            {isLoading ? 'Loading...' : t('changePassword.title')}
+            {isLoading ? t('common.loadingEllipsis') : t('changePassword.title')}
           </Button>
         </form>
       </div>

@@ -3,6 +3,11 @@ import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/test-utils';
 import Login from '../../../pages/auth/login/index';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 // Mock react-router-dom
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -75,7 +80,7 @@ describe('Login Page', () => {
   it('renders sign in heading', () => {
     renderWithProviders(<Login />);
 
-    expect(screen.getByText('Sign In')).toBeInTheDocument();
+    expect(screen.getByText('auth.signIn')).toBeInTheDocument();
   });
 
   it('renders email input field', () => {
@@ -93,19 +98,19 @@ describe('Login Page', () => {
   it('renders Continue button', () => {
     renderWithProviders(<Login />);
 
-    expect(screen.getByText('Continue')).toBeInTheDocument();
+    expect(screen.getByText('auth.continue')).toBeInTheDocument();
   });
 
   it('renders Forgot Password link', () => {
     renderWithProviders(<Login />);
 
-    expect(screen.getByText('Forgot Password?')).toBeInTheDocument();
+    expect(screen.getByText('auth.forgotPassword')).toBeInTheDocument();
   });
 
   it('renders Create an account button', () => {
     renderWithProviders(<Login />);
 
-    expect(screen.getByText('Create an account')).toBeInTheDocument();
+    expect(screen.getByText('auth.createAccount')).toBeInTheDocument();
   });
 
   it('renders Google login button', () => {
@@ -117,7 +122,7 @@ describe('Login Page', () => {
   it('navigates to register on Create an account click', () => {
     renderWithProviders(<Login />);
 
-    const createAccountBtn = screen.getByText('Create an account');
+    const createAccountBtn = screen.getByText('auth.createAccount');
     fireEvent.click(createAccountBtn);
 
     expect(mockNavigate).toHaveBeenCalledWith('/auth/register');
@@ -133,7 +138,7 @@ describe('Login Page', () => {
   it('renders submit button', () => {
     renderWithProviders(<Login />);
 
-    const submitButton = screen.getByRole('button', { name: /continue/i });
+    const submitButton = screen.getByRole('button', { name: /auth\.continue/i });
     expect(submitButton).toBeInTheDocument();
   });
 });
