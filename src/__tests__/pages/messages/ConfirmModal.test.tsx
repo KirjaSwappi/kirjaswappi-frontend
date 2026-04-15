@@ -49,7 +49,7 @@ describe('ConfirmModal', () => {
 
   it('renders default "Yes" button value', () => {
     render(<ConfirmModal {...defaultProps} />);
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(screen.getByText('yes')).toBeInTheDocument();
   });
 
   it('renders custom button value', () => {
@@ -64,7 +64,7 @@ describe('ConfirmModal', () => {
 
   it('calls onConfirm when Yes button clicked', () => {
     render(<ConfirmModal {...defaultProps} />);
-    fireEvent.click(screen.getByText('Yes'));
+    fireEvent.click(screen.getByText('yes'));
     expect(defaultProps.onConfirm).toHaveBeenCalled();
   });
 

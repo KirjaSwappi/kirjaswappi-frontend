@@ -24,7 +24,8 @@ describe('DeleteConfirmModal', () => {
   it('renders modal when open is true', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
     expect(screen.getByText('chat.areYouSure')).toBeInTheDocument();
-    expect(screen.getAllByText('delete').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('deleteConfirm.defaultMessage')).toBeInTheDocument();
+    expect(screen.getByText('delete')).toBeInTheDocument();
   });
 
   it('renders custom title and message', () => {
@@ -70,7 +71,7 @@ describe('DeleteConfirmModal', () => {
 
   it('calls onDelete when delete button is clicked', () => {
     render(<DeleteConfirmModal open={true} onClose={mockOnClose} onDelete={mockOnDelete} />);
-    fireEvent.click(screen.getAllByText('delete')[1]);
+    fireEvent.click(screen.getByText('delete'));
     expect(mockOnDelete).toHaveBeenCalledTimes(1);
   });
 

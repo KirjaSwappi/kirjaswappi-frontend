@@ -30,6 +30,7 @@ export default function AlertModal({
   const { modalRef, modalProps, backdropProps } = useModal({
     open: showAlert,
     onClose: handleClose,
+    ariaLabelledBy: 'alert-modal-title',
   });
 
   if (!showAlert) return null;
@@ -41,7 +42,10 @@ export default function AlertModal({
     >
       <div ref={modalRef} {...modalProps} className="w-11/12 bg-white rounded-md outline-none">
         <div className="border-b border-platinum flex items-center justify-between px-4 py-2 relative">
-          <h3 className="font-poppins font-normal text-base text-center leading-none">
+          <h3
+            id="alert-modal-title"
+            className="font-poppins font-normal text-base text-center leading-none"
+          >
             {alertTitle}
           </h3>
           <Button onClick={handleClose} className="border border-platinum rounded-full p-2">

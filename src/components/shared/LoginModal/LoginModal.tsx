@@ -33,6 +33,7 @@ export default function LoginModal() {
   const { modalRef, modalProps, backdropProps } = useModal({
     open: loginModalOpen,
     onClose: handleClose,
+    ariaLabelledBy: 'login-modal-title',
   });
 
   const methods = useForm<ILoginForm>({
@@ -92,7 +93,10 @@ export default function LoginModal() {
         </div>
 
         <div className="p-4 lg:p-6 lg:mt-4">
-          <h2 className="text-richBlack text-base font-medium text-left mb-2 lg:mb-4 font-poppins">
+          <h2
+            id="login-modal-title"
+            className="text-richBlack text-base font-medium text-left mb-2 lg:mb-4 font-poppins"
+          >
             {t('loginModal.title')}
           </h2>
           <FormProvider {...methods}>

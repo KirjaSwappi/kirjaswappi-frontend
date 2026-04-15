@@ -28,6 +28,7 @@ const DeleteConfirmModal = ({
   const { modalRef, modalProps, backdropProps } = useModal({
     open,
     onClose: () => onClose?.(),
+    ariaLabelledBy: 'delete-confirm-title',
   });
 
   if (!open) return null;
@@ -42,7 +43,10 @@ const DeleteConfirmModal = ({
         className="bg-white rounded-lg w-[95%] max-w-sm relative animate-fadeIn outline-none"
       >
         <div className="flex items-center justify-between px-5 py-4">
-          <h2 className="text-lg font-medium text-textPrimary font-poppins">
+          <h2
+            id="delete-confirm-title"
+            className="text-lg font-medium text-textPrimary font-poppins"
+          >
             {title || t('chat.areYouSure')}
           </h2>
           <Button
@@ -55,7 +59,7 @@ const DeleteConfirmModal = ({
         </div>
         <div className="mt-4">
           <p className="text-sm text-textSecondary mb-6 lg:mb-10 px-5 font-poppins font-normal">
-            {message || t('delete')}
+            {message || t('deleteConfirm.defaultMessage')}
           </p>
           <div className="flex justify-end gap-3 border-t border-borderLight py-2 lg:py-4 px-2 lg:px-4 font-poppins text-sm">
             <Button

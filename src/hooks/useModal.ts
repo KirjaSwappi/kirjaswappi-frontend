@@ -3,9 +3,10 @@ import { useCallback, useEffect, useRef } from 'react';
 interface UseModalOptions {
   open: boolean;
   onClose: () => void;
+  ariaLabelledBy?: string;
 }
 
-export function useModal({ open, onClose }: UseModalOptions) {
+export function useModal({ open, onClose, ariaLabelledBy }: UseModalOptions) {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
@@ -76,6 +77,7 @@ export function useModal({ open, onClose }: UseModalOptions) {
     modalProps: {
       role: 'dialog' as const,
       'aria-modal': true as const,
+      'aria-labelledby': ariaLabelledBy,
       tabIndex: -1,
       onKeyDown: handleKeyDown,
     },

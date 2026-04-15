@@ -18,12 +18,14 @@ export default function ConfirmModal({
   onCancel,
   header,
   description,
-  btnValue = 'Yes',
+  btnValue,
 }: ConfirmModalProps) {
   const { t } = useTranslation();
+  const resolvedBtnValue = btnValue || t('yes');
   const { modalRef, modalProps, backdropProps } = useModal({
     open,
     onClose: onCancel,
+    ariaLabelledBy: 'confirm-modal-title',
   });
 
   if (!open) return null;
@@ -39,7 +41,9 @@ export default function ConfirmModal({
       >
         <div className="p-4">
           <div className="flex items-center justify-between ">
-            <h3 className="text-xl font-semibold ">{header}</h3>
+            <h3 id="confirm-modal-title" className="text-xl font-semibold ">
+              {header}
+            </h3>
             <Button onClick={onCancel} aria-label={t('close')}>
               <IoCloseOutline className="text-2xl text-textSecondary" />
             </Button>
@@ -59,7 +63,7 @@ export default function ConfirmModal({
             onClick={onConfirm}
             className="px-4 bg-red text-white rounded-md  transition-colors font-poppins text-sm w-[91px] h-[42px]"
           >
-            {btnValue}
+            {resolvedBtnValue}
           </Button>
         </div>
       </div>
