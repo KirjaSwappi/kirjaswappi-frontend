@@ -23,14 +23,14 @@ export default function UserActionNavigation() {
             onClick={() => navigate('/profile/add-book')}
             className="bg-white text-[#1A1A1A] px-4 py-2 h-[34px] rounded-lg flex items-center gap-2 font-poppins font-medium text-xs border border-[#D9D9D9]"
           >
-            <Image src={pulsIcon} alt="pulsIcon" />
+            <Image src={pulsIcon} alt="" />
             {t('profile.addABook')}
           </Button>
           <Button
             onClick={() => navigate('/profile/edit-user')}
             className="bg-white text-[#1A1A1A] px-4 py-2 h-[34px] rounded-lg flex items-center gap-2 font-poppins font-medium text-xs border border-[#D9D9D9]"
           >
-            <Image src={editIcon} alt="editIcon" className="w-3" />
+            <Image src={editIcon} alt="" className="w-3" />
             {t('editProfile.title')}
           </Button>
         </div>

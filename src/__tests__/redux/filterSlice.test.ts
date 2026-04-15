@@ -199,20 +199,37 @@ describe('filterSlice', () => {
   });
 
   describe('setSortOrder', () => {
-    it('should set sort order to desc', () => {
-      const result = filterReducer(initialState, setSortOrder('desc'));
+    it('should set sort order to desc and reset pagination', () => {
+      const stateWithPagination = {
+        ...initialState,
+        filter: {
+          ...initialState.filter,
+          pageNumber: 3,
+          hasMore: true,
+        },
+      };
+      const result = filterReducer(stateWithPagination, setSortOrder('desc'));
 
       expect(result.filter.sortOrder).toBe('desc');
+      expect(result.filter.pageNumber).toBe(0);
+      expect(result.filter.hasMore).toBe(false);
     });
 
-    it('should set sort order to asc', () => {
+    it('should set sort order to asc and reset pagination', () => {
       const stateWithDesc = {
         ...initialState,
-        filter: { ...initialState.filter, sortOrder: 'desc' as const },
+        filter: {
+          ...initialState.filter,
+          sortOrder: 'desc' as const,
+          pageNumber: 2,
+          hasMore: true,
+        },
       };
       const result = filterReducer(stateWithDesc, setSortOrder('asc'));
 
       expect(result.filter.sortOrder).toBe('asc');
+      expect(result.filter.pageNumber).toBe(0);
+      expect(result.filter.hasMore).toBe(false);
     });
   });
 
