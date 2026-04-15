@@ -6,6 +6,12 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
+import { clearAllFilters } from '../../../redux/feature/filter/filterSlice';
+import { resetChat } from '../../../redux/feature/messages/messagesSlice';
+import { clearNotifications } from '../../../redux/feature/notification/notificationSlice';
+import { setOpen } from '../../../redux/feature/open/openSlice';
+import { setStep } from '../../../redux/feature/step/stepSlice';
+import { setResetSwapBook } from '../../../redux/feature/swap/swapSlice';
 import { useAppSelector } from '../../../redux/hooks';
 import Button from '../../shared/Button';
 import { showToast } from '../../shared/toast';
@@ -64,6 +70,12 @@ export default function UserMenuDropdown() {
             onClick={() => {
               dispatch(logout());
               dispatch(api.util.resetApiState());
+              dispatch(clearAllFilters());
+              dispatch(resetChat());
+              dispatch(setResetSwapBook());
+              dispatch(clearNotifications());
+              dispatch(setStep(0));
+              dispatch(setOpen(false));
               showToast('success', 'Logout successfully');
               navigate('/');
             }}

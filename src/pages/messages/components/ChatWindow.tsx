@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 import Image from '../../../components/shared/Image';
+import { api } from '../../../redux/api/apiSlice';
 import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
 import { addChatMessages, markChatRead } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
@@ -10,6 +11,7 @@ export default function ChatWindow() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const isInitialScroll = useRef(true);
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
   const { userInformation } = useAppSelector((state) => state.auth);
 
@@ -37,11 +39,20 @@ export default function ChatWindow() {
 
     dispatch(addChatMessages({ chatId: selectedChatId, messages: mapped }));
     dispatch(markChatRead(selectedChatId));
+    dispatch(api.util.invalidateTags(['Inbox']));
   }, [dispatch, selectedChatId, chatData, isChatSuccess]);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (!findChat?.messages?.length) return;
+    bottomRef.current?.scrollIntoView({
+      behavior: isInitialScroll.current ? 'instant' : 'smooth',
+    });
+    isInitialScroll.current = false;
   }, [findChat?.messages]);
+
+  useEffect(() => {
+    isInitialScroll.current = true;
+  }, [selectedChatId]);
 
   if (!selectedChatId) {
     return (
