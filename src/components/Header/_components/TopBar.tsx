@@ -17,7 +17,6 @@ import NotificationBell from './NotificationBell';
 
 export default function TopBar() {
   const { clicked, setClicked, reference } = useMouseClick();
-  const { userInformation } = useAppSelector((state) => state.auth);
   const totalUnreadCount = useAppSelector(selectTotalUnreadCount);
   const { pathname } = useLocation();
   const { t } = useTranslation();
@@ -144,7 +143,7 @@ export default function TopBar() {
             >
               <LanguageFlagButton clicked={clicked} setClicked={setClicked} />
               {clicked && <LanguageMenuDropdown />}
-              {userInformation.id && <NotificationBell />}
+              <NotificationBell />
               <HeaderUserProfile />
             </div>
           </div>

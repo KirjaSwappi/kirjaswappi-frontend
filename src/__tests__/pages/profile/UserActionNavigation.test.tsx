@@ -51,9 +51,9 @@ describe('UserActionNavigation', () => {
   });
 
   it('should render icons', () => {
-    renderWithProviders();
-    const icons = screen.getAllByAltText('pulsIcon');
-    expect(icons.length).toBeGreaterThanOrEqual(1);
+    const { container } = renderWithProviders();
+    const icons = container.querySelectorAll('img');
+    expect(icons.length).toBe(2);
   });
 
   it('should show loading skeletons when loading', () => {

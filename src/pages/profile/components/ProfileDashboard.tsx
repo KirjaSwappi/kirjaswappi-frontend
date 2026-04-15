@@ -98,8 +98,8 @@ export default function ProfileDashboard() {
             <UserProfile />
           </div>
           <div className="w-full lg:w-8/12 xl:w-9/12 px-4 lg:px-0">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-wrap gap-1 sm:gap-2 ">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {loading ? (
                   <TabsSkeleton />
                 ) : (
@@ -107,12 +107,12 @@ export default function ProfileDashboard() {
                     <Button
                       key={index}
                       onClick={() => setActiveTab(index)}
-                      className={`px-2 sm:px-3 h-8 rounded-full text-xs font-poppins font-medium flex items-center gap-2 ${
+                      className={`px-3 h-8 rounded-full text-xs font-poppins font-medium flex items-center gap-2 ${
                         index === activeTab
                           ? 'bg-primary text-white'
                           : 'text-grayDark border border-grayDark'
-                      } 
-                      ${tab.hideOnLg ? 'lg:hidden' : ''} 
+                      }
+                      ${tab.hideOnLg ? 'lg:hidden' : ''}
                       ${tab.hideOnMobile ? 'lg:flex hidden' : ''}`}
                     >
                       {tab.label}

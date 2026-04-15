@@ -82,6 +82,16 @@ vi.mock('react-icons/io', () => ({
   IoIosArrowUp: () => <span>up</span>,
 }));
 
+vi.mock('react-icons/lu', () => ({
+  LuArrowUpAZ: () => <span>asc</span>,
+  LuArrowDownAZ: () => <span>desc</span>,
+}));
+
+vi.mock('../../../../redux/hooks', () => ({
+  useAppDispatch: () => vi.fn(),
+  useAppSelector: () => 'asc',
+}));
+
 import FilterByLanguage from '../../../../components/Header/_components/BookFilter/FilterByLanguage';
 import FilterByCondition from '../../../../components/Header/_components/BookFilter/FilterByCondition';
 import FilterBySort from '../../../../components/Header/_components/BookFilter/FilterBySort';
@@ -130,8 +140,8 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
     expect(screen.getByText('filter.sortBy')).toBeInTheDocument();
-    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
-    expect(screen.getByText('filter.sortAuthorAZ')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortTitle')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortAuthor')).toBeInTheDocument();
   });
 });
 

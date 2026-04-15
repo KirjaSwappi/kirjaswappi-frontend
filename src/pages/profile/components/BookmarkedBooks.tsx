@@ -37,7 +37,7 @@ export default function BookmarkedBooks() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
       {favBooks.map((book) => (
-        <BookCard key={book.id} book={book} hasPermission={id === book.ownerId} />
+        <BookCard key={book.id} book={book} isProfile hasPermission={id === book.ownerId} />
       ))}
     </div>
   );

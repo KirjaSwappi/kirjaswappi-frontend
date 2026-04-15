@@ -2,18 +2,24 @@ import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { LuArrowDownAZ, LuArrowUpAZ } from 'react-icons/lu';
+import { setSortOrder } from '../../../../redux/feature/filter/filterSlice';
+import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
 import { SortByEnum } from '../../../../utility/enum';
 import Button from '../../../shared/Button';
 
 const sortLabelKeys: Record<SortByEnum, string> = {
-  [SortByEnum.title]: 'filter.sortTitleAZ',
-  [SortByEnum.author]: 'filter.sortAuthorAZ',
-  [SortByEnum.language]: 'filter.sortLanguageAZ',
-  [SortByEnum.condition]: 'filter.sortConditionAZ',
+  [SortByEnum.title]: 'filter.sortTitle',
+  [SortByEnum.author]: 'filter.sortAuthor',
+  [SortByEnum.language]: 'filter.sortLanguage',
+  [SortByEnum.condition]: 'filter.sortCondition',
+  [SortByEnum.createdAt]: 'filter.sortDateAdded',
 };
 
 export default function FilterBySort() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const sortOrder = useAppSelector((state) => state.filter.filter.sortOrder);
   const { control } = useFormContext();
   const [expanded, setExpanded] = useState(true);
 
@@ -35,6 +41,37 @@ export default function FilterBySort() {
 
             {expanded && (
               <div className="mt-2 space-y-2">
+                {/* =========== ASC / DESC TOGGLE =========== */}
+                <div className="flex items-center gap-1 px-2.5">
+                  <Button
+                    type="button"
+                    onClick={() => dispatch(setSortOrder('asc'))}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-sm font-poppins ${
+                      sortOrder === 'asc'
+                        ? 'bg-AntiFlashWhite text-primary'
+                        : 'text-blackOlive hover:bg-AntiFlashWhite'
+                    }`}
+                    aria-label={t('filter.ascending')}
+                    aria-pressed={sortOrder === 'asc'}
+                  >
+                    <LuArrowUpAZ className="text-base" />
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => dispatch(setSortOrder('desc'))}
+                    className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-sm font-poppins ${
+                      sortOrder === 'desc'
+                        ? 'bg-AntiFlashWhite text-primary'
+                        : 'text-blackOlive hover:bg-AntiFlashWhite'
+                    }`}
+                    aria-label={t('filter.descending')}
+                    aria-pressed={sortOrder === 'desc'}
+                  >
+                    <LuArrowDownAZ className="text-base" />
+                  </Button>
+                </div>
+
+                {/* =========== SORT FIELD OPTIONS =========== */}
                 {Object.entries(sortLabelKeys).map(([value, labelKey]) => {
                   const isChecked = field.value?.includes(value);
                   return (

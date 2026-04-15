@@ -24,7 +24,8 @@ export function buildBookQueryParams(filter: IFilterData) {
     filter.language.forEach((l) => params.append('languages', l));
   }
   if (filter.sortBy?.length) {
-    filter.sortBy.forEach((s) => params.append('sort', s));
+    const direction = filter.sortOrder || 'asc';
+    filter.sortBy.forEach((s) => params.append('sort', `${s},${direction}`));
   }
 
   if (filter.city) {

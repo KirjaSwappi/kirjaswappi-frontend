@@ -9,6 +9,7 @@ export interface IFilterInitialState {
     city?: string;
     search: string;
     sortBy: string[];
+    sortOrder: 'asc' | 'desc';
     pageNumber: number;
     hasMore: boolean;
   };
@@ -23,6 +24,7 @@ const initialState: IFilterInitialState = {
     condition: [],
     city: '',
     sortBy: [],
+    sortOrder: 'asc',
     search: '',
     pageNumber: 0,
     hasMore: false,
@@ -52,6 +54,11 @@ const filterSlice = createSlice({
     setSortByFilter: (state, action: PayloadAction<string[]>) => {
       state.filter.sortBy = [...action.payload];
     },
+    setSortOrder: (state, action: PayloadAction<'asc' | 'desc'>) => {
+      state.filter.sortOrder = action.payload;
+      state.filter.pageNumber = 0;
+      state.filter.hasMore = false;
+    },
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.filter.hasMore = action.payload;
     },
@@ -72,6 +79,7 @@ const filterSlice = createSlice({
       state.filter.pageNumber = 0;
       state.filter.search = '';
       state.filter.sortBy = [];
+      state.filter.sortOrder = 'asc';
     },
   },
 });
@@ -88,5 +96,6 @@ export const {
   clearAllFilters,
   setIsCategoryOrFilterOrSortBy,
   setSortByFilter,
+  setSortOrder,
 } = filterSlice.actions;
 export default filterSlice.reducer;

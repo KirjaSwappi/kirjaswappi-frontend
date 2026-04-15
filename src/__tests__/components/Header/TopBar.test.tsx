@@ -130,8 +130,8 @@ describe('TopBar', () => {
     expect(screen.getByTestId('notification-bell')).toBeInTheDocument();
   });
 
-  it('hides notification bell when logged out', () => {
+  it('shows notification bell even when logged out', () => {
     renderComponent('');
-    expect(screen.queryByTestId('notification-bell')).not.toBeInTheDocument();
+    expect(screen.getByTestId('notification-bell')).toBeInTheDocument();
   });
 });

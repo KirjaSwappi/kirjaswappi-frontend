@@ -7,6 +7,10 @@ import { configureStore } from '@reduxjs/toolkit';
 vi.mock('../../../../assets/category_filter.svg', () => ({ default: 'cat.svg' }));
 vi.mock('../../../../assets/deleteIcon.png', () => ({ default: 'del.png' }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('../../../../components/shared/Button', () => ({
   default: ({
     children,
@@ -55,16 +59,16 @@ function Wrapper({ filterType = 'FILTER' }: { filterType?: string }) {
 describe('BookFilterReset', () => {
   it('renders Book Filter title for FILTER mode', () => {
     render(<Wrapper filterType="FILTER" />);
-    expect(screen.getByText('Book Filter')).toBeInTheDocument();
+    expect(screen.getByText('filter.bookFilter')).toBeInTheDocument();
   });
 
   it('renders Category Filter title for CATEGORY mode', () => {
     render(<Wrapper filterType="CATEGORY" />);
-    expect(screen.getByText('Category Filter')).toBeInTheDocument();
+    expect(screen.getByText('filter.categoryFilter')).toBeInTheDocument();
   });
 
   it('renders Clear all button', () => {
     render(<Wrapper />);
-    expect(screen.getByText('Clear all')).toBeInTheDocument();
+    expect(screen.getByText('filter.clearAll')).toBeInTheDocument();
   });
 });
