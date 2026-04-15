@@ -51,7 +51,7 @@ export default function FilterBySort() {
                         ? 'bg-AntiFlashWhite text-primary'
                         : 'text-blackOlive hover:bg-AntiFlashWhite'
                     }`}
-                    aria-label={t('filter.sortBy') + ' ascending'}
+                    aria-label={t('filter.ascending')}
                     aria-pressed={sortOrder === 'asc'}
                   >
                     <LuArrowUpAZ className="text-base" />
@@ -64,7 +64,7 @@ export default function FilterBySort() {
                         ? 'bg-AntiFlashWhite text-primary'
                         : 'text-blackOlive hover:bg-AntiFlashWhite'
                     }`}
-                    aria-label={t('filter.sortBy') + ' descending'}
+                    aria-label={t('filter.descending')}
                     aria-pressed={sortOrder === 'desc'}
                   >
                     <LuArrowDownAZ className="text-base" />

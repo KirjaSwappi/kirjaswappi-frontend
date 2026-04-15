@@ -92,7 +92,7 @@ describe('FilterBySort', () => {
 
     const descButton = screen.getByTestId('icon-desc').closest('button')!;
     fireEvent.click(descButton);
-    expect(mockDispatch).toHaveBeenCalled();
+    expect(mockDispatch).toHaveBeenCalledWith(expect.objectContaining({ payload: 'desc' }));
   });
 
   it('selects a sort option on click', () => {

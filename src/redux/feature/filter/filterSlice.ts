@@ -56,6 +56,8 @@ const filterSlice = createSlice({
     },
     setSortOrder: (state, action: PayloadAction<'asc' | 'desc'>) => {
       state.filter.sortOrder = action.payload;
+      state.filter.pageNumber = 0;
+      state.filter.hasMore = false;
     },
     setHasMore: (state, action: PayloadAction<boolean>) => {
       state.filter.hasMore = action.payload;
