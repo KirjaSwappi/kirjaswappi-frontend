@@ -161,16 +161,22 @@ describe('Chat Messaging Flow (Functional)', () => {
       expect(screen.getAllByText('Test Book').length).toBeGreaterThan(0);
     });
 
-    // Step 2: Chat messages load automatically
+    // Step 2: Click a chat to select it
+    const chatButton = screen.getAllByText('Test Book')[0].closest('button');
+    if (chatButton) {
+      await user.click(chatButton);
+    }
+
+    // Step 3: Chat messages load after selection
     await waitFor(() => {
       expect(mockUseGetChatMessagesQuery).toHaveBeenCalled();
     });
 
-    // Step 3: Type and send a message
+    // Step 4: Type a message
     const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'New message from test');
 
-    // Step 4: Verify input has value
+    // Step 5: Verify input has value
     expect(input).toHaveValue('New message from test');
   });
 
@@ -184,15 +190,18 @@ describe('Chat Messaging Flow (Functional)', () => {
     });
   });
 
-  it('should auto-select first chat from inbox', async () => {
+  it('should not auto-select first chat from inbox', async () => {
     window.history.pushState({}, '', '/user/messages');
 
     const { store } = renderMessages();
 
     await waitFor(() => {
       const state = store.getState();
-      expect(state.chat.selectedChatId).toBeTruthy();
+      expect(state.chat.chats.length).toBeGreaterThan(0);
     });
+
+    const state = store.getState();
+    expect(state.chat.selectedChatId).toBe('');
   });
 
   it('should fetch messages for selected chat', async () => {

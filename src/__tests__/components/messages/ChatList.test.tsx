@@ -444,7 +444,7 @@ describe('ChatList Component', () => {
     expect(screen.getByText('📷 Image')).toBeInTheDocument();
   });
 
-  it('should auto-select first chat on initial load', async () => {
+  it('should not auto-select first chat on initial load', async () => {
     mockUseGetInboxQuery.mockReturnValue({
       data: mockInboxData,
       isLoading: false,
@@ -455,8 +455,11 @@ describe('ChatList Component', () => {
 
     await waitFor(() => {
       const state = store.getState();
-      expect(state.chat.selectedChatId).toBeTruthy();
+      expect(state.chat.chats.length).toBeGreaterThan(0);
     });
+
+    const state = store.getState();
+    expect(state.chat.selectedChatId).toBe('');
   });
 
   it('should navigate to chat on click', async () => {
