@@ -95,9 +95,7 @@ const chatSlice = createSlice({
     selectChat: (state, action: PayloadAction<string>) => {
       state.selectedChatId = action.payload;
     },
-    resetChat: (state) => {
-      state.selectedChatId = '';
-    },
+    resetChat: () => initialState,
     setInboxList: (state, action: PayloadAction<InboxItem[]>) => {
       // Deduplicate inbox items by ID before transforming (more efficient using Map)
       const uniqueItemsMap = new Map<string, InboxItem>();

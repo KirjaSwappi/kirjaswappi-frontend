@@ -14,11 +14,38 @@ vi.mock('react-icons/md', () => ({
 vi.mock('react-icons/tb', () => ({ TbUserCircle: () => <span>user</span> }));
 
 vi.mock('../../../redux/api/apiSlice', () => ({
-  api: { util: { resetApiState: () => ({ type: 'api/resetApiState' }) } },
+  api: {
+    util: { resetApiState: () => ({ type: 'api/resetApiState' }) },
+    injectEndpoints: vi.fn(() => ({ endpoints: {} })),
+  },
 }));
 
 vi.mock('../../../redux/feature/auth/authSlice', () => ({
   logout: () => ({ type: 'auth/logout' }),
+}));
+
+vi.mock('../../../redux/feature/filter/filterSlice', () => ({
+  clearAllFilters: () => ({ type: 'filter/clearAllFilters' }),
+}));
+
+vi.mock('../../../redux/feature/messages/messagesSlice', () => ({
+  resetChat: () => ({ type: 'chat/resetChat' }),
+}));
+
+vi.mock('../../../redux/feature/notification/notificationSlice', () => ({
+  clearNotifications: () => ({ type: 'notification/clearNotifications' }),
+}));
+
+vi.mock('../../../redux/feature/open/openSlice', () => ({
+  setOpen: (val: boolean) => ({ type: 'open/setOpen', payload: val }),
+}));
+
+vi.mock('../../../redux/feature/step/stepSlice', () => ({
+  setStep: (val: number) => ({ type: 'step/setStep', payload: val }),
+}));
+
+vi.mock('../../../redux/feature/swap/swapSlice', () => ({
+  setResetSwapBook: () => ({ type: 'swap/setResetSwapBook' }),
 }));
 
 vi.mock('../../../components/shared/Button', () => ({
