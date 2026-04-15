@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import category_filter from '../../../../assets/category_filter.svg';
 import deleteIcon from '../../../../assets/deleteIcon.png';
 import { useAppSelector } from '../../../../redux/hooks';
@@ -7,6 +8,7 @@ import Button from '../../../shared/Button';
 import Image from '../../../shared/Image';
 
 export default function BookFilterReset() {
+  const { t } = useTranslation();
   const { reset } = useFormContext();
   const { isCategoryOrFilterOrSortBy } = useAppSelector((state) => state.filter);
   return (
@@ -17,8 +19,8 @@ export default function BookFilterReset() {
         )}
         <h3 className="text-grayDark font-poppins font-medium text-sm">
           {isCategoryOrFilterOrSortBy === FilterItemEnum.CATEGORY
-            ? 'Category Filter'
-            : 'Book Filter'}
+            ? t('filter.categoryFilter')
+            : t('filter.bookFilter')}
         </h3>
       </div>
       <Button
@@ -29,7 +31,7 @@ export default function BookFilterReset() {
         <div className="w-3 h-3 flex items-center justify-center">
           <Image src={deleteIcon} alt="Delete Icon" className="h-fit" />
         </div>
-        Clear all
+        {t('filter.clearAll')}
       </Button>
     </div>
   );

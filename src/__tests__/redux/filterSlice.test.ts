@@ -6,6 +6,7 @@ import filterReducer, {
   setLanguageFilter,
   setConditionFilter,
   setSortByFilter,
+  setSortOrder,
   setHasMore,
   setPageNumber,
   setFilterOpen,
@@ -22,6 +23,7 @@ const initialState: IFilterInitialState = {
     condition: [],
     city: '',
     sortBy: [],
+    sortOrder: 'asc',
     search: '',
     pageNumber: 0,
     hasMore: false,
@@ -196,6 +198,24 @@ describe('filterSlice', () => {
     });
   });
 
+  describe('setSortOrder', () => {
+    it('should set sort order to desc', () => {
+      const result = filterReducer(initialState, setSortOrder('desc'));
+
+      expect(result.filter.sortOrder).toBe('desc');
+    });
+
+    it('should set sort order to asc', () => {
+      const stateWithDesc = {
+        ...initialState,
+        filter: { ...initialState.filter, sortOrder: 'desc' as const },
+      };
+      const result = filterReducer(stateWithDesc, setSortOrder('asc'));
+
+      expect(result.filter.sortOrder).toBe('asc');
+    });
+  });
+
   describe('setHasMore', () => {
     it('should set hasMore to true', () => {
       const result = filterReducer(initialState, setHasMore(true));
@@ -292,6 +312,7 @@ describe('filterSlice', () => {
           condition: ['NEW'],
           city: 'Helsinki',
           sortBy: ['title'],
+          sortOrder: 'desc',
           search: 'Harry Potter',
           pageNumber: 5,
           hasMore: true,
@@ -308,6 +329,7 @@ describe('filterSlice', () => {
       expect(result.filter.city).toBe('');
       expect(result.filter.search).toBe('');
       expect(result.filter.sortBy).toEqual([]);
+      expect(result.filter.sortOrder).toBe('asc');
       expect(result.filter.pageNumber).toBe(0);
     });
 

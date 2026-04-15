@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FormProvider, useForm } from 'react-hook-form';
 import FilterBySort from '../../../../components/Header/_components/BookFilter/FilterBySort';
@@ -12,15 +12,30 @@ vi.mock('../../../../components/shared/Button', () => ({
     children,
     onClick,
     className,
+    ...rest
   }: {
     children: React.ReactNode;
     onClick?: () => void;
     className?: string;
+    'aria-label'?: string;
+    'aria-pressed'?: boolean;
   }) => (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={className} {...rest}>
       {children}
     </button>
   ),
+}));
+
+vi.mock('react-icons/lu', () => ({
+  LuArrowUpAZ: () => <span data-testid="icon-asc">asc</span>,
+  LuArrowDownAZ: () => <span data-testid="icon-desc">desc</span>,
+}));
+
+const mockDispatch = vi.fn();
+vi.mock('../../../../redux/hooks', () => ({
+  useAppDispatch: () => mockDispatch,
+  useAppSelector: (selector: (state: { filter: { filter: { sortOrder: string } } }) => string) =>
+    selector({ filter: { filter: { sortOrder: 'asc' } } }),
 }));
 
 function Wrapper({ children }: { children: React.ReactNode }) {
@@ -29,6 +44,10 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 }
 
 describe('FilterBySort', () => {
+  beforeEach(() => {
+    mockDispatch.mockClear();
+  });
+
   it('renders Sort By label', () => {
     render(
       <Wrapper>
@@ -46,10 +65,34 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
 
-    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
-    expect(screen.getByText('filter.sortAuthorAZ')).toBeInTheDocument();
-    expect(screen.getByText('filter.sortLanguageAZ')).toBeInTheDocument();
-    expect(screen.getByText('filter.sortConditionAZ')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortTitle')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortAuthor')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortLanguage')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortCondition')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortDateAdded')).toBeInTheDocument();
+  });
+
+  it('renders asc/desc toggle icons', () => {
+    render(
+      <Wrapper>
+        <FilterBySort />
+      </Wrapper>,
+    );
+
+    expect(screen.getByTestId('icon-asc')).toBeInTheDocument();
+    expect(screen.getByTestId('icon-desc')).toBeInTheDocument();
+  });
+
+  it('dispatches setSortOrder on asc/desc click', () => {
+    render(
+      <Wrapper>
+        <FilterBySort />
+      </Wrapper>,
+    );
+
+    const descButton = screen.getByTestId('icon-desc').closest('button')!;
+    fireEvent.click(descButton);
+    expect(mockDispatch).toHaveBeenCalled();
   });
 
   it('selects a sort option on click', () => {
@@ -59,7 +102,7 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
 
-    const titleOption = screen.getByText('filter.sortTitleAZ').closest('button')!;
+    const titleOption = screen.getByText('filter.sortTitle').closest('button')!;
     fireEvent.click(titleOption);
     expect(titleOption).toHaveClass('bg-AntiFlashWhite');
   });
@@ -71,7 +114,7 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
 
-    const titleOption = screen.getByText('filter.sortTitleAZ').closest('button')!;
+    const titleOption = screen.getByText('filter.sortTitle').closest('button')!;
     fireEvent.click(titleOption);
     expect(titleOption).toHaveClass('bg-AntiFlashWhite');
 
@@ -86,13 +129,13 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
 
-    fireEvent.click(screen.getByText('filter.sortTitleAZ').closest('button')!);
-    fireEvent.click(screen.getByText('filter.sortAuthorAZ').closest('button')!);
+    fireEvent.click(screen.getByText('filter.sortTitle').closest('button')!);
+    fireEvent.click(screen.getByText('filter.sortAuthor').closest('button')!);
 
-    expect(screen.getByText('filter.sortTitleAZ').closest('button')).not.toHaveClass(
+    expect(screen.getByText('filter.sortTitle').closest('button')).not.toHaveClass(
       'bg-AntiFlashWhite',
     );
-    expect(screen.getByText('filter.sortAuthorAZ').closest('button')).toHaveClass(
+    expect(screen.getByText('filter.sortAuthor').closest('button')).toHaveClass(
       'bg-AntiFlashWhite',
     );
   });
@@ -104,12 +147,12 @@ describe('FilterBySort', () => {
       </Wrapper>,
     );
 
-    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortTitle')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('filter.sortBy').closest('button')!);
-    expect(screen.queryByText('filter.sortTitleAZ')).not.toBeInTheDocument();
+    expect(screen.queryByText('filter.sortTitle')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByText('filter.sortBy').closest('button')!);
-    expect(screen.getByText('filter.sortTitleAZ')).toBeInTheDocument();
+    expect(screen.getByText('filter.sortTitle')).toBeInTheDocument();
   });
 });
