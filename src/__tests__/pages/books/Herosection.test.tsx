@@ -71,7 +71,7 @@ describe('HeroSection', () => {
 
   it('renders dot indicators for all slides', () => {
     const { container } = render(<HeroSection />);
-    const dots = container.querySelectorAll('.rounded-full.bg-\\[\\#3B82F6\\]');
+    const dots = container.querySelectorAll('.rounded-full.bg-primary');
     expect(dots).toHaveLength(3);
   });
 });

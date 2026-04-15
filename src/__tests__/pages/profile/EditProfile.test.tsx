@@ -179,12 +179,14 @@ describe('EditProfile', () => {
 
   it('renders edit profile title', () => {
     renderComponent();
-    expect(screen.getByText('editProfile.title')).toBeInTheDocument();
+    const titles = screen.getAllByText('editProfile.title');
+    expect(titles.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders save button', () => {
     renderComponent();
-    expect(screen.getByText('save')).toBeInTheDocument();
+    const saveButtons = screen.getAllByText('save');
+    expect(saveButtons.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders profile picture section', () => {

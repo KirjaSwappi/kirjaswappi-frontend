@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ErrorState from '../../components/shared/ErrorState';
+import Spinner from '../../components/shared/Spinner';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../redux/hooks';
 import MapContainer from './_components/MapContainer';
@@ -9,6 +12,7 @@ import { useGeolocation } from './hooks/useGeolocation';
 import { IBookWithLocation } from './types/interface';
 
 export default function Map() {
+  const { t } = useTranslation();
   const { coords, permissionChecked } = useGeolocation();
   const { latitude, longitude } = coords;
 
@@ -54,19 +58,15 @@ export default function Map() {
   }, [data]);
 
   if (isError) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <p className="text-red-600">Error loading map data</p>
-      </div>
-    );
+    return <ErrorState message={t('map.errorLoading')} onRetry={() => window.location.reload()} />;
   }
 
   if (!latitude || !longitude) {
     return (
       <div className="h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Detecting your location...</p>
+          <Spinner />
+          <p className="text-grayDark font-poppins text-sm mt-4">{t('map.detectingLocation')}</p>
         </div>
       </div>
     );
@@ -79,8 +79,8 @@ export default function Map() {
       {isLoading ? (
         <div className="h-screen flex items-center justify-center bg-gray-100">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-            <p className="text-gray-600">Loading map...</p>
+            <Spinner />
+            <p className="text-grayDark font-poppins text-sm mt-4">{t('map.loadingMap')}</p>
           </div>
         </div>
       ) : (

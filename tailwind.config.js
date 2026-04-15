@@ -50,6 +50,12 @@ export default {
         black3a: '#0F1417',
         iceWhite: '#F7FAFC',
         charcoal: '#262626',
+        success: '#3FBA49',
+        textSecondary: '#6B6B6B',
+        textPrimary: '#0D121F',
+        borderLight: '#EFF0EF',
+        heroBg: '#BEC6D2',
+        mutedGray: '#999999',
       },
       fontSize: {
         sx: '10px',

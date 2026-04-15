@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IoIosSearch } from 'react-icons/io';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import book from '../../../assets/book3.png';
@@ -12,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
 
 export default function ChatList() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState('');
@@ -71,8 +73,8 @@ export default function ChatList() {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center h-full px-4 text-center">
-        <p className="text-red-500 font-medium">Failed to load conversations</p>
-        <p className="text-xs text-gray-400 mt-1">Please try refreshing the page</p>
+        <p className="text-red-500 font-medium">{t('chat.failedLoad')}</p>
+        <p className="text-xs text-gray-400 mt-1">{t('chat.refreshPage')}</p>
       </div>
     );
   }
@@ -94,8 +96,8 @@ export default function ChatList() {
       <div className="flex-1 overflow-y-auto custom-scrollbar">
         {filteredChats.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full px-4 text-center">
-            <p className="text-gray-500">No conversations yet</p>
-            <p className="text-xs text-gray-400 mt-1">Start a swap request to begin chatting</p>
+            <p className="text-gray-500">{t('chat.noConversations')}</p>
+            <p className="text-xs text-gray-400 mt-1">{t('chat.startSwap')}</p>
           </div>
         ) : (
           filteredChats.map((chat) => {

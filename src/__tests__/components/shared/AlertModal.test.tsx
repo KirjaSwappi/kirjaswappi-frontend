@@ -40,8 +40,7 @@ describe('AlertModal', () => {
 
   it('is hidden when showAlert is false', () => {
     const { container } = renderWithStore({}, { showAlert: false, message: 'Hidden' });
-    const overlay = container.firstChild as HTMLElement;
-    expect(overlay).toHaveClass('hidden');
+    expect(container.firstChild).toBeNull();
   });
 
   it('renders default title "Leave Page?"', () => {

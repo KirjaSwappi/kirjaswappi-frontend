@@ -8,6 +8,10 @@ vi.mock('@hookform/resolvers/yup', () => ({
   yupResolver: () => () => ({ values: {}, errors: {} }),
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('react-otp-input', () => ({
   default: ({ value, numInputs }: { value: string; numInputs: number }) => (
     <div data-testid="otp-input">
@@ -115,7 +119,7 @@ describe('ConfirmOTP', () => {
 
   it('renders verify button', () => {
     renderComponent();
-    expect(screen.getByText('OTP Verify')).toBeInTheDocument();
+    expect(screen.getByText('auth.otpVerify')).toBeInTheDocument();
   });
 
   it('renders resend button', () => {

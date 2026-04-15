@@ -8,6 +8,10 @@ vi.mock('../../../assets/authShape.png', () => ({ default: 'shape.png' }));
 vi.mock('../../../assets/leftArrow.png', () => ({ default: 'left.png' }));
 vi.mock('../../../assets/logo.png', () => ({ default: 'logo.png' }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('../../../components/shared/Button', () => ({
   default: ({
     children,
@@ -133,12 +137,12 @@ describe('ResetPassword', () => {
 
   it('renders continue button', () => {
     renderComponent(0);
-    expect(screen.getByText('Continue')).toBeInTheDocument();
+    expect(screen.getByText('auth.continue')).toBeInTheDocument();
   });
 
   it('renders Forget Password heading', () => {
     renderComponent(0);
-    expect(screen.getByText('Forget Password')).toBeInTheDocument();
+    expect(screen.getByText('resetPassword.title')).toBeInTheDocument();
   });
 
   it('renders back button', () => {
@@ -148,20 +152,16 @@ describe('ResetPassword', () => {
 
   it('renders brand description', () => {
     renderComponent(0);
-    expect(
-      screen.getByText(
-        'Swap books with readers near you. Join KirjaSwappi and give your books a second life.',
-      ),
-    ).toBeInTheDocument();
+    expect(screen.getByText('auth.tagline')).toBeInTheDocument();
   });
 
   it('renders confirm email heading on step 1', () => {
     renderComponent(1);
-    expect(screen.getByText('Confirm your Email')).toBeInTheDocument();
+    expect(screen.getByText('resetPassword.confirmEmail')).toBeInTheDocument();
   });
 
   it('renders email instruction on step 1', () => {
     renderComponent(1);
-    expect(screen.getByText(/Enter the code we/)).toBeInTheDocument();
+    expect(screen.getByText(/resetPassword\.enterCode/)).toBeInTheDocument();
   });
 });

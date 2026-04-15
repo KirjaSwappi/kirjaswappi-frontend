@@ -9,6 +9,10 @@ vi.mock('react-hook-form', async () => {
   return { ...actual };
 });
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 vi.mock('@hookform/resolvers/yup', () => ({
   yupResolver: () => () => ({ values: {}, errors: {} }),
 }));
@@ -132,16 +136,16 @@ describe('RegisterForm', () => {
 
   it('renders continue button', () => {
     renderComponent();
-    expect(screen.getByText('Continue')).toBeInTheDocument();
+    expect(screen.getByText('auth.continue')).toBeInTheDocument();
   });
 
   it('renders login link', () => {
     renderComponent();
-    expect(screen.getByText('Log In')).toBeInTheDocument();
+    expect(screen.getByText('auth.logIn')).toBeInTheDocument();
   });
 
   it('renders already have account text', () => {
     renderComponent();
-    expect(screen.getByText('Already have an account?')).toBeInTheDocument();
+    expect(screen.getByText('auth.alreadyHaveAccount')).toBeInTheDocument();
   });
 });

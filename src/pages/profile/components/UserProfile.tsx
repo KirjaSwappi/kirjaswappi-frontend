@@ -107,7 +107,7 @@ export default function UserProfile() {
                     {favItem}
                   </p>
                   <span
-                    className={`lg:hidden bg- ${
+                    className={`lg:hidden ${
                       data?.favGenres.length - 1 === index ? 'hidden' : 'block'
                     } inline-block mx-2 font-poppins font-light text-sm`}
                   >

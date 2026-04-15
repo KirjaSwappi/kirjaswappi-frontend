@@ -4,6 +4,10 @@ import { renderWithProviders } from '../../utils/test-utils';
 import ChatWindow from '../../../pages/messages/components/ChatWindow';
 import { RootState } from '../../../redux/store';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({ t: (key: string) => key }),
+}));
+
 const mockChatMessages = [
   {
     id: 'msg-1',
@@ -124,7 +128,7 @@ describe('ChatWindow Component', () => {
 
     renderWithProviders(<ChatWindow />, { preloadedState: stateWithoutSelection });
 
-    expect(screen.getByText('Select a chat to start messaging')).toBeInTheDocument();
+    expect(screen.getByText('chat.selectChat')).toBeInTheDocument();
   });
 
   it('should render chat messages correctly', async () => {

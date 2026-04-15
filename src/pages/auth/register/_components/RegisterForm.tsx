@@ -16,6 +16,7 @@ import { useAppSelector } from '../../../../redux/hooks';
 import ControlledPasswordField from '../../../../components/shared/ControllerFieldPassword';
 import ControlledInputField from '../../../../components/shared/ControllerField';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { registerSchema } from '../Schema';
 import { IRegisterForm } from '../interface';
@@ -23,6 +24,7 @@ import { IRegisterForm } from '../interface';
 export default function RegisterForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [register, { isLoading }] = useRegisterMutation();
   const { error, message } = useAppSelector((state) => state.auth);
   const { step } = useAppSelector((state) => state.step);
@@ -93,35 +95,35 @@ export default function RegisterForm() {
             <div>
               <ControlledInputField
                 name="firstName"
-                placeholder="First Name"
+                placeholder={t('auth.firstName')}
                 className="rounded-t-lg"
               />
             </div>
             <div>
               <ControlledInputField
                 name="lastName"
-                placeholder="Last Name"
+                placeholder={t('auth.lastName')}
                 className="border-t-0 focus:border-t"
               />
             </div>
             <div>
               <ControlledInputField
                 name="email"
-                placeholder="E-mail"
+                placeholder={t('auth.email')}
                 className="border-t-0 focus:border-t"
               />
             </div>
             <div>
               <ControlledPasswordField
                 name="password"
-                placeholder="Password"
+                placeholder={t('auth.password')}
                 className="border-t-0 focus:border-t"
               />
             </div>
             <div>
               <ControlledPasswordField
                 name="confirmPassword"
-                placeholder="Confirm Password"
+                placeholder={t('auth.confirmPassword')}
                 className="rounded-b-lg border-t-0 focus:border-t"
               />
             </div>
@@ -136,20 +138,23 @@ export default function RegisterForm() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-2xl text-sm"
+            className="w-full h-[48px] px-4 font-normal text-white bg-primary rounded-lg text-sm"
           >
-            {isLoading ? 'Loading...' : 'Continue'}
+            {isLoading ? t('common.loadingEllipsis') : t('auth.continue')}
           </Button>
           <div className="flex items-center justify-center gap-1 mt-4">
-            <p className="text-black text-sm font-light font-poppins">Already have an account?</p>
+            <p className="text-black text-sm font-light font-poppins">
+              {t('auth.alreadyHaveAccount')}
+            </p>
             <button
+              type="button"
               className="text-black text-sm font-light font-poppins underline"
               onClick={(e) => {
                 e.preventDefault();
                 navigate('/auth/login');
               }}
             >
-              Log In
+              {t('auth.logIn')}
             </button>
           </div>
         </form>

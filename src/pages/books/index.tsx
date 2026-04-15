@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import BookCard from '../../components/shared/BookCard';
 import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
+import ErrorState from '../../components/shared/ErrorState';
 import PageTitle from '../../components/shared/PageTitle';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
 import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
@@ -123,18 +124,11 @@ export default function Books() {
 
   if (isError)
     return (
-      <div className="container min-h-[60vh] flex items-center justify-center">
-        <div className="text-center">
-          <p className="font-poppins text-grayDark text-sm mb-4">{t('books.errorMessage')}</p>
-          <button
-            type="button"
-            onClick={() => window.location.reload()}
-            className="font-poppins text-sm text-white bg-primary px-4 py-2 rounded-lg cursor-pointer"
-          >
-            {t('books.tryAgain')}
-          </button>
-        </div>
-      </div>
+      <ErrorState
+        message={t('books.errorMessage')}
+        onRetry={() => window.location.reload()}
+        retryLabel={t('books.tryAgain')}
+      />
     );
 
   return (

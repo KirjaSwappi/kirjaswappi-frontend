@@ -1,10 +1,13 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { IoChatbubblesOutline } from 'react-icons/io5';
 import Image from '../../../components/shared/Image';
 import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
 import { addChatMessages, markChatRead } from '../../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 
 export default function ChatWindow() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
@@ -42,8 +45,9 @@ export default function ChatWindow() {
 
   if (!selectedChatId) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500">Select a chat to start messaging</p>
+      <div className="flex flex-col items-center justify-center h-full">
+        <IoChatbubblesOutline className="text-grayDark text-4xl mb-3" />
+        <p className="text-gray-500 font-poppins text-sm">{t('chat.selectChat')}</p>
       </div>
     );
   }

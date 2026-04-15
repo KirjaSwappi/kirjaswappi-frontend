@@ -49,8 +49,8 @@ vi.mock('../../../utility/helper', () => ({
 }));
 
 // Mock child components
-vi.mock('../../../components/shared/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+vi.mock('../../../components/shared/Spinner', () => ({
+  default: () => <div data-testid="spinner">Loading...</div>,
 }));
 
 vi.mock('../../../components/shared/Breadcrumb', () => ({
@@ -151,7 +151,7 @@ describe('BookDetails Page', () => {
 
     renderWithProviders(<BookDetails />);
 
-    expect(screen.getByTestId('loader')).toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('renders book title and author when loaded', () => {
