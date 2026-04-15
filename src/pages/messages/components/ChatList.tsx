@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosSearch } from 'react-icons/io';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -17,7 +17,6 @@ export default function ChatList() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState('');
-  const hasAutoSelected = useRef(false);
 
   const { chats, selectedChatId } = useAppSelector((state) => state.chat);
   const { userInformation } = useAppSelector((state) => state.auth);
@@ -34,22 +33,8 @@ export default function ChatList() {
 
   useEffect(() => {
     if (!isSuccess || !Array.isArray(inboxData) || inboxData.length === 0) return;
-
     dispatch(setInboxList(inboxData));
-
-    if (!hasAutoSelected.current && !selectedChatId) {
-      const firstChatId = inboxData[0].id;
-      hasAutoSelected.current = true;
-      dispatch(selectChat(firstChatId));
-      navigate(
-        {
-          pathname: '/user/messages',
-          search: `?${createSearchParams({ messageId: firstChatId })}`,
-        },
-        { replace: true },
-      );
-    }
-  }, [isSuccess, inboxData, dispatch, navigate, selectedChatId]);
+  }, [isSuccess, inboxData, dispatch]);
 
   const filteredChats = chats.filter((chat) => {
     if (!search) return true;
