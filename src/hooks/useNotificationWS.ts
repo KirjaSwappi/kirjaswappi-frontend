@@ -168,11 +168,13 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
     try {
       const userToken = getCookie('userToken');
       const token = userToken || WS_API_KEY;
-      const wsUrl = `${WS_URL}?userId=${encodeURIComponent(userId)}`;
+      const params = new URLSearchParams({ userId });
+      if (token) params.set('token', token);
+      const wsUrl = `${WS_URL}?${params.toString()}`;
 
       dispatch(setWSConnectionStatus('connecting'));
 
-      const ws = new WebSocket(wsUrl, token ? [token] : []);
+      const ws = new WebSocket(wsUrl);
 
       ws.onopen = handleOpen;
       ws.onmessage = handleMessage;
