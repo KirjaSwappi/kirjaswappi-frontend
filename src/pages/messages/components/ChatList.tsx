@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosSearch } from 'react-icons/io';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import book from '../../../assets/book3.png';
+import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import Input from '../../../components/shared/Input';
@@ -106,7 +106,7 @@ export default function ChatList() {
               >
                 <div className="relative">
                   <Image
-                    src={chat.bookToSwapWith?.coverPhotoUrl || book}
+                    src={chat.bookToSwapWith?.coverPhotoUrl || imagePlaceholder}
                     className="w-14 h-14 rounded-full object-cover"
                   />
                   {hasUnread && (

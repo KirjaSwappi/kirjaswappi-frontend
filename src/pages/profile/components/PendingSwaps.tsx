@@ -1,5 +1,5 @@
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import book from '../../../assets/book3.png';
+import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
 import ChatListSkeleton from '../../../components/shared/skeleton/ChatListSkeleton';
@@ -53,7 +53,7 @@ export default function PendingSwaps() {
             className="flex gap-3 p-3 bg-white rounded-lg border border-platinum hover:border-primary/30 transition-colors text-left"
           >
             <Image
-              src={item.bookToSwapWith?.coverPhotoUrl || book}
+              src={item.bookToSwapWith?.coverPhotoUrl || imagePlaceholder}
               className="w-16 h-20 rounded-md object-cover flex-shrink-0"
             />
             <div className="flex-1 min-w-0">

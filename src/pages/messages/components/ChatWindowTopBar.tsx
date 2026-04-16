@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
-import book3 from '../../../assets/book3.png';
+import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 import OwnerAvatar from '../../../components/shared/OwnerAvatar';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
@@ -138,7 +138,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
         <div className="border-t border-platinumMix">
           <div className="flex gap-4 py-[11px] px-4">
             <Image
-              src={selectedChat.bookToSwapWith?.coverPhotoUrl || book3}
+              src={selectedChat.bookToSwapWith?.coverPhotoUrl || imagePlaceholder}
               alt="Book"
               className="w-[37px] h-[37px] object-cover rounded"
             />
@@ -219,7 +219,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
               <div className="flex gap-4">
                 <Image
-                  src={selectedChat.bookToSwapWith?.coverPhotoUrl || book3}
+                  src={selectedChat.bookToSwapWith?.coverPhotoUrl || imagePlaceholder}
                   alt="Book"
                   className="w-[71px] h-[71px] object-cover rounded"
                 />
