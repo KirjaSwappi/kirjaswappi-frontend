@@ -114,9 +114,9 @@ describe('Filter', () => {
     expect(screen.getByTestId('category-slider')).toBeInTheDocument();
   });
 
-  it('navigates to profile when logged in user clicks Add Book', () => {
+  it('navigates to add book page when logged in user clicks Add Book', () => {
     renderComponent('user-123');
     fireEvent.click(screen.getByText(/books.addBook/));
-    expect(mockNavigate).toHaveBeenCalledWith('/profile/user-profile/user-123');
+    expect(mockNavigate).toHaveBeenCalledWith('/profile/add-book');
   });
 });

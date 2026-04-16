@@ -53,7 +53,6 @@ export default function ProfileDashboard() {
     {
       label: t('profile.bookmarked'),
       content: <BookmarkedBooks />,
-      hideOnMobile: true,
       permission: false,
       count: bookmarkedCount,
     },

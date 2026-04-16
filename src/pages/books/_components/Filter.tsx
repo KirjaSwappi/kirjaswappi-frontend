@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiPlus } from 'react-icons/fi';
-import { MdKeyboardArrowDown } from 'react-icons/md';
+
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import filtergrayIcon from '../../../assets/filtergray.svg';
@@ -81,7 +81,7 @@ export default function Filter() {
               className="bg-primary flex items-center gap-2 text-white px-4 py-2 rounded-lg font-poppins text-sm font-medium"
               onClick={() => {
                 if (userInformation.id) {
-                  navigate(`/profile/user-profile/${userInformation.id}`);
+                  navigate('/profile/add-book');
                 } else {
                   dispatch(setLoginModalOpen(true));
                 }
@@ -107,7 +107,6 @@ export default function Filter() {
               className="border border-platinum bg-white flex items-center gap-2 text-blackOlive px-4 py-2 rounded-lg font-poppins text-sm font-medium"
             >
               <Image src={sortByIcon} alt="sort" /> {t('books.sort')}
-              <MdKeyboardArrowDown />
             </Button>
           </div>
         </div>
