@@ -270,10 +270,22 @@ const chatSlice = createSlice({
       const { chatId, messages } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
-        // Merge messages, avoiding duplicates
-        const existingIds = new Set(chat.messages.map((m) => String(m.id)));
-        const newMessages = messages.filter((m) => !existingIds.has(String(m.id)));
-        chat.messages = [...chat.messages, ...newMessages].sort((a, b) => {
+        const existingMap = new Map(chat.messages.map((m) => [String(m.id), m]));
+
+        for (const msg of messages) {
+          const key = String(msg.id);
+          const existing = existingMap.get(key);
+          if (existing) {
+            // Always update image URLs — presigned URLs rotate on every fetch
+            if (msg.images) {
+              existing.images = msg.images;
+            }
+          } else {
+            existingMap.set(key, msg);
+          }
+        }
+
+        chat.messages = Array.from(existingMap.values()).sort((a, b) => {
           const timeA = new Date(a.time).getTime();
           const timeB = new Date(b.time).getTime();
           return timeA - timeB;
