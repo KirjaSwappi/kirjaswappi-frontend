@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import type { CredentialResponse } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { useLoginWithGoogleMutation } from '../../redux/feature/auth/authApi';
@@ -8,6 +9,18 @@ import { showToast } from './toast';
 export default function GoogleLoginButton() {
   const [loginWithGoogle] = useLoginWithGoogleMutation();
   const dispatch = useAppDispatch();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setButtonWidth(Math.floor(entry.contentRect.width));
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   const handleGoogleLogin = (credentialResponse: CredentialResponse): void => {
     const idToken = credentialResponse.credential;
     if (idToken) {
@@ -27,10 +40,11 @@ export default function GoogleLoginButton() {
   };
 
   return (
-    <div>
+    <div ref={containerRef}>
       <GoogleLogin
         onSuccess={handleGoogleLogin}
         onError={() => showToast('error', 'Something went wrong! Please try again.')}
+        width={buttonWidth}
       />
     </div>
   );
