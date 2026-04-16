@@ -1,45 +1,53 @@
-# KirjaSwappi Web-UI
+[![Release Pipeline](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/release.yml/badge.svg)](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/release.yml) [![Netlify Status](https://api.netlify.com/api/v1/badges/01648706-95ce-47a4-965e-364ea53b5317/deploy-status)](https://app.netlify.com/sites/kirjaswappi/deploys)
 
-[![Release Pipeline](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/release.yml/badge.svg)](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/release.yml) [![Publish Package](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/publish.yml/badge.svg)](https://github.com/kirjaswappi/kirjaswappi-frontend/actions/workflows/publish.yml) [![Netlify Status](https://api.netlify.com/api/v1/badges/01648706-95ce-47a4-965e-364ea53b5317/deploy-status)](https://app.netlify.com/sites/kirjaswappi/deploys)
+# KirjaSwappi Frontend
 
-## Installation:
+Web UI for [KirjaSwappi](https://kirjaswappi.fi) — a book exchange platform. Built with React 18 and TypeScript.
 
-```sh
-cd kirjaswappi-frontend
+## Tech Stack
+
+- React 18 + TypeScript 5.9
+- Vite 7.3
+- Redux Toolkit + RTK Query
+- Tailwind CSS
+- Vitest + React Testing Library
+
+## Getting Started
+
+```bash
 yarn install
 npm run dev
 ```
 
-To format the source code, you can run:
+Copy `.env.sample` to `.env` and fill in the values.
 
-```console
-npm run spotless
+## Scripts
+
+| Command            | Description                      |
+| ------------------ | -------------------------------- |
+| `npm run dev`      | Start dev server                 |
+| `npm run build`    | Type check + production build    |
+| `npm run test`     | Run tests with coverage          |
+| `npm run spotless` | Lint + format (ESLint + Prettier)|
+
+## Project Structure
+
+```text
+src/
+├── components/    # Reusable UI components
+├── pages/         # Feature pages
+├── redux/         # Store, API slices, feature slices
+├── hooks/         # Custom React hooks
+├── routes/        # Routing config
+├── locales/       # i18n translations (en, fi, sv)
+├── utility/       # Helper functions
+└── __tests__/     # Tests
 ```
 
-## Project Structure:
+## Links
 
-```
-my-react-app/
-├── node_modules/
-├── public/
-│   ├── index.html
-│   └── ...
-├── src/
-│   ├── components/
-│   │   └── ...
-│   ├── App.css
-│   ├── App.js
-│   ├── index.css
-│   ├── index.js
-│   └── ...
-├── .gitignore
-├── package.json
-├── README.md
-└── ...
-```
+- **Production:** <https://kirjaswappi.fi>
+- **Canary:** <https://canary.kirjaswappi.fi>
+- **API Docs:** [Swagger UI](https://api.kirjaswappi.fi/swagger-ui/index.html)
 
-**Canary UI**: https://canary.kirjaswappi.fi
-
-**Backeknd API Url**: https://api.kirjaswappi.fi
-
-**API Documentation**: [Open API Documentation](https://api.kirjaswappi.fi/swagger-ui/index.html)
+© 2025 KirjaSwappi. All rights reserved.
