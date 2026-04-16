@@ -6,6 +6,7 @@ import { setupTestStore } from '../utils/test-utils';
 import { MockWebSocket } from '../mocks/websocket';
 import { ReactNode } from 'react';
 import { initialState as authInitialState } from '../../redux/feature/auth/authSlice';
+import * as cookies from '../../utility/cookies';
 
 // Helper to wrap hook with Provider
 const wrapper = (store: ReturnType<typeof setupTestStore>) => {
@@ -73,6 +74,31 @@ describe('useNotificationWS', () => {
 
     await waitFor(() => {
       expect(store.getState().notification.wsConnectionStatus).toBe('connected');
+    });
+  });
+
+  it('should include token as query param when userToken cookie exists', async () => {
+    vi.spyOn(cookies, 'getCookie').mockReturnValue('jwt-token-123');
+    store = setupStoreWithUser();
+    renderHook(() => useNotificationWS(), { wrapper: wrapper(store) });
+
+    await waitFor(() => {
+      expect(MockWebSocket.lastInstance).not.toBeNull();
+      expect(MockWebSocket.lastInstance?.url).toContain('token=jwt-token-123');
+      expect(MockWebSocket.lastInstance?.url).toContain('userId=user-123');
+    });
+  });
+
+  it('should fall back to API key when no cookie exists', async () => {
+    vi.spyOn(cookies, 'getCookie').mockReturnValue(null);
+    store = setupStoreWithUser();
+    renderHook(() => useNotificationWS(), { wrapper: wrapper(store) });
+
+    await waitFor(() => {
+      expect(MockWebSocket.lastInstance).not.toBeNull();
+      expect(MockWebSocket.lastInstance?.url).toContain('userId=user-123');
+      // Falls back to VITE_NOTIFICATION_API_KEY when cookie is absent
+      expect(MockWebSocket.lastInstance?.url).toContain('token=');
     });
   });
 

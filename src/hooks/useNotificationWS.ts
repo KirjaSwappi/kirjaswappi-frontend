@@ -167,7 +167,8 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
     try {
       const userToken = getCookie('userToken');
-      const token = userToken || WS_API_KEY;
+      const token =
+        typeof userToken === 'string' && userToken.length > 0 ? userToken : WS_API_KEY;
       const params = new URLSearchParams({ userId });
       if (token) params.set('token', token);
       const wsUrl = `${WS_URL}?${params.toString()}`;
