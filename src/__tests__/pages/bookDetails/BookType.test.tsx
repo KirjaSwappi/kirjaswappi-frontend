@@ -21,13 +21,13 @@ describe('BookType', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('defaults language to English when not provided', () => {
-    render(<BookType condition="New" />);
-    expect(screen.getByText('English')).toBeInTheDocument();
+  it('shows dash for missing language', () => {
+    render(<BookType condition="New" language="" publishedYear="2020" />);
+    expect(screen.getByText('-')).toBeInTheDocument();
   });
 
   it('shows dash for missing publishedYear', () => {
-    render(<BookType condition="New" />);
+    render(<BookType condition="New" language="Finnish" />);
     expect(screen.getByText('-')).toBeInTheDocument();
   });
 

@@ -33,13 +33,22 @@ vi.mock('../../../redux/feature/genre/genreApi', () => ({
     data: {
       parentGenres: {
         Fiction: {
+          id: 'p1',
+          name: 'Fiction',
           childGenres: [
             { id: '1', name: 'Fantasy' },
             { id: '2', name: 'Sci-Fi' },
           ],
         },
         NonFiction: {
+          id: 'p2',
+          name: 'Non-Fiction',
           childGenres: [{ id: '3', name: 'Biography' }],
+        },
+        Poetry: {
+          id: 'p3',
+          name: 'Poetry',
+          childGenres: [],
         },
       },
     },
@@ -71,11 +80,12 @@ describe('AddGenre', () => {
       </Provider>,
     );
 
-  it('renders genre items', () => {
+  it('renders genre items including childless parents', () => {
     renderComponent();
     expect(screen.getByText('Fantasy')).toBeInTheDocument();
     expect(screen.getByText('Sci-Fi')).toBeInTheDocument();
     expect(screen.getByText('Biography')).toBeInTheDocument();
+    expect(screen.getByText('Poetry')).toBeInTheDocument();
   });
 
   it('renders side drawer with Genre title', () => {
@@ -91,6 +101,6 @@ describe('AddGenre', () => {
   it('shows plus icon for unselected genres', () => {
     renderComponent({ genresValue: [] });
     const addButtons = screen.getAllByAltText('Add');
-    expect(addButtons.length).toBe(3);
+    expect(addButtons.length).toBe(4);
   });
 });

@@ -1,4 +1,4 @@
-import React, { CSSProperties, RefObject, useEffect, useState } from 'react';
+import React, { CSSProperties, RefObject, useEffect, useRef, useState } from 'react';
 import NotFoundImg from '../../assets/notFoundIcon.png';
 import { cn } from '../../utility/cn';
 
@@ -16,10 +16,17 @@ interface IImageProps {
 const Image: React.FC<IImageProps> = (props) => {
   const { src, style, className } = props;
   const [isLoaded, setIsLoaded] = useState(false);
+  const hasEverLoaded = useRef(false);
 
   useEffect(() => {
-    setIsLoaded(false);
+    // Only show placeholder if we've never loaded an image.
+    // When src changes after a successful load (e.g. presigned URL rotation),
+    // keep the old image visible until the new one loads.
+    if (!hasEverLoaded.current) {
+      setIsLoaded(false);
+    }
   }, [src]);
+
   // Image Error Handling Function
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const img = event.target as HTMLImageElement;
@@ -34,7 +41,10 @@ const Image: React.FC<IImageProps> = (props) => {
         {...props}
         src={!src ? NotFoundImg : src}
         onError={handleImageError}
-        onLoad={() => setIsLoaded(true)}
+        onLoad={() => {
+          setIsLoaded(true);
+          hasEverLoaded.current = true;
+        }}
         loading="lazy"
         decoding="async"
         alt={props?.alt || 'image'}

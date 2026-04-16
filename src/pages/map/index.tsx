@@ -84,7 +84,7 @@ export default function Map() {
           </div>
         </div>
       ) : (
-        <MapContainer books={booksWithLocation} />
+        <MapContainer books={booksWithLocation} userCoords={coords} />
       )}
     </div>
   );

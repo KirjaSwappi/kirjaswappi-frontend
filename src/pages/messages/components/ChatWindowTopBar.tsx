@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoIosArrowBack, IoIosArrowDown } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,11 @@ import {
   useMuteUserMutation,
   useReportUserMutation,
 } from '../../../redux/feature/auth/userInteractionApi';
-import { resetChat, updateChatSwapStatus } from '../../../redux/feature/messages/messagesSlice';
+import {
+  resetChat,
+  makeSelectChatById,
+  updateChatSwapStatus,
+} from '../../../redux/feature/messages/messagesSlice';
 import { useUpdateSwapRequestStatusMutation } from '../../../redux/feature/swap/swapApi';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import ChatInfoDropdown from './ChatInfoDropdown';
@@ -34,13 +38,13 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedChatId, chats } = useAppSelector((state) => state.chat);
+  const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
+  const selectChatById = useMemo(makeSelectChatById, []);
+  const selectedChat = useAppSelector((state) => selectChatById(state, selectedChatId));
   const [updateStatus, { isLoading: isUpdatingStatus }] = useUpdateSwapRequestStatusMutation();
   const [blockUser] = useBlockUserMutation();
   const [muteUser] = useMuteUserMutation();
   const [reportUser] = useReportUserMutation();
-
-  const selectedChat = chats.find((chat) => chat.id === selectedChatId);
 
   if (!selectedChat) {
     return null;

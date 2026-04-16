@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useLocation } from 'react-router-dom';
 import useDrawerOutsideClick from '../../hooks/useDrawerOutsideClick';
@@ -47,7 +47,13 @@ export default function Header({ showOn404 = false }: { showOn404?: boolean }) {
     name: ['genre', 'language', 'condition', 'sortBy'],
   });
 
+  // Track previous values to avoid dispatching on every render
+  const prevRef = useRef<string>('');
   useEffect(() => {
+    const serialized = JSON.stringify(watchedFields);
+    if (serialized === prevRef.current) return;
+    prevRef.current = serialized;
+
     const [genre, language, condition, sortBy] = watchedFields;
     dispatch(setGenreFilter(genre));
     dispatch(setLanguageFilter(language));

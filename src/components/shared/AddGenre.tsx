@@ -37,14 +37,14 @@ export default function AddGenre({
 
   if (isLoading) return <Spinner variant="overlay" />;
 
-  const childGenres: IChildGenre[] = Object.values(data?.parentGenres || {}).flatMap(
-    (parent) => parent.childGenres,
+  const allGenres: IChildGenre[] = Object.values(data?.parentGenres || {}).flatMap((parent) =>
+    parent.childGenres.length > 0 ? parent.childGenres : [{ id: parent.id, name: parent.name }],
   );
 
   return (
     <SideDrawer title="Genre">
       <div className="flex flex-col gap-2 pb-4 mt-8">
-        {childGenres.map((genreItem) => {
+        {allGenres.map((genreItem) => {
           const isSelected = genresValue.includes(genreItem.name);
 
           return (
