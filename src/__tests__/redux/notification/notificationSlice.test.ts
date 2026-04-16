@@ -159,13 +159,12 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist notifications to localStorage', () => {
-      notificationReducer(initialState, addNotification(mockNotification));
+    it('should produce state that middleware will persist to localStorage', () => {
+      const state = notificationReducer(initialState, addNotification(mockNotification));
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'kirjaswappi_notifications',
-        expect.any(String),
-      );
+      // Reducer produces the right state; middleware handles persistence
+      expect(state.notifications).toHaveLength(1);
+      expect(state.unreadCount).toBe(1);
     });
   });
 
@@ -233,16 +232,18 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist changes to localStorage', () => {
+    it('should produce state that middleware will persist to localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
         unreadCount: 2,
       };
 
-      notificationReducer(stateWithNotifications, markNotificationsAsRead(['1']));
+      const state = notificationReducer(stateWithNotifications, markNotificationsAsRead(['1']));
 
-      expect(localStorageMock.setItem).toHaveBeenCalled();
+      // Reducer produces correct state; middleware handles persistence
+      expect(state.notifications[0].isRead).toBe(true);
+      expect(state.unreadCount).toBe(1);
     });
   });
 
@@ -280,16 +281,19 @@ describe('notificationSlice', () => {
       expect(state.unreadCount).toBe(0);
     });
 
-    it('should persist changes to localStorage', () => {
+    it('should produce state that middleware will persist to localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
         unreadCount: 2,
       };
 
-      notificationReducer(stateWithNotifications, markAllAsRead());
+      const state = notificationReducer(stateWithNotifications, markAllAsRead());
 
-      expect(localStorageMock.setItem).toHaveBeenCalled();
+      // Reducer produces correct state; middleware handles persistence
+      expect(state.notifications[0].isRead).toBe(true);
+      expect(state.notifications[1].isRead).toBe(true);
+      expect(state.unreadCount).toBe(0);
     });
   });
 
@@ -355,16 +359,18 @@ describe('notificationSlice', () => {
       expect(state.isNotificationPanelOpen).toBe(false);
     });
 
-    it('should remove notifications from localStorage', () => {
+    it('should produce state that middleware will clear from localStorage', () => {
       const stateWithNotifications = {
         ...initialState,
         notifications: mockNotifications,
         unreadCount: 1,
       };
 
-      notificationReducer(stateWithNotifications, clearNotifications());
+      const state = notificationReducer(stateWithNotifications, clearNotifications());
 
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('kirjaswappi_notifications');
+      // Reducer produces correct state; middleware handles localStorage removal
+      expect(state.notifications).toHaveLength(0);
+      expect(state.unreadCount).toBe(0);
     });
   });
 

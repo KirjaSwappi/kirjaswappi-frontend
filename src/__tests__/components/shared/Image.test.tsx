@@ -48,14 +48,13 @@ describe('Image Component', () => {
     expect(img).toHaveClass('opacity-100');
   });
 
-  it('calls onError and swaps src to notFoundIcon on image error', () => {
+  it('swaps src to notFoundIcon on image error', () => {
     render(<Image src="https://example.com/bad.jpg" alt="Bad" />);
     const img = screen.getByRole('img');
 
-    Object.defineProperty(img, 'src', { writable: true, value: 'https://example.com/bad.jpg' });
     fireEvent.error(img);
 
-    expect((img as HTMLImageElement).src).toContain('notFoundIcon.png');
+    expect(img).toHaveAttribute('src', 'notFoundIcon.png');
   });
 
   it('calls onClick when provided', () => {

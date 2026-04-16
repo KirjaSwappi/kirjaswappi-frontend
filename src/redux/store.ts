@@ -14,6 +14,7 @@ import authSlice, { IInitialState, initialState } from './feature/auth/authSlice
 import bookSlice, { IBookInitialState } from './feature/book/bookSlice';
 import filterSlice, { IFilterInitialState } from './feature/filter/filterSlice';
 import messagesSlice, { ChatState } from './feature/messages/messagesSlice';
+import { notificationPersistenceMiddleware } from './middleware/notificationPersistence';
 import notificationSlice, {
   INotificationInitialState,
 } from './feature/notification/notificationSlice';
@@ -75,7 +76,8 @@ const store: EnhancedStore<
     book: bookSlice,
   },
   preloadedState,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware, notificationPersistenceMiddleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

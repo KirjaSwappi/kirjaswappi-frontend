@@ -1,4 +1,4 @@
-import React, { CSSProperties, RefObject, useEffect, useState } from 'react';
+import React, { CSSProperties, RefObject, useEffect, useRef, useState } from 'react';
 import NotFoundImg from '../../assets/notFoundIcon.png';
 import { cn } from '../../utility/cn';
 
@@ -16,15 +16,16 @@ interface IImageProps {
 const Image: React.FC<IImageProps> = (props) => {
   const { src, style, className } = props;
   const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const hasEverLoaded = useRef(false);
 
   useEffect(() => {
-    setIsLoaded(false);
+    setHasError(false);
+    if (!hasEverLoaded.current) {
+      setIsLoaded(false);
+    }
   }, [src]);
-  // Image Error Handling Function
-  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = event.target as HTMLImageElement;
-    img.src = NotFoundImg;
-  };
+
   return (
     <picture>
       {!isLoaded && (
@@ -32,9 +33,12 @@ const Image: React.FC<IImageProps> = (props) => {
       )}
       <img
         {...props}
-        src={!src ? NotFoundImg : src}
-        onError={handleImageError}
-        onLoad={() => setIsLoaded(true)}
+        src={!src || hasError ? NotFoundImg : src}
+        onError={() => setHasError(true)}
+        onLoad={() => {
+          setIsLoaded(true);
+          hasEverLoaded.current = true;
+        }}
         loading="lazy"
         decoding="async"
         alt={props?.alt || 'image'}

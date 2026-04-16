@@ -1,8 +1,22 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { api } from '../../../redux/api/apiSlice';
+
+const OriginalResizeObserver = globalThis.ResizeObserver;
+
+beforeAll(() => {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+});
+
+afterAll(() => {
+  globalThis.ResizeObserver = OriginalResizeObserver;
+});
 
 // Mock @react-oauth/google before importing the component
 vi.mock('@react-oauth/google', () => ({

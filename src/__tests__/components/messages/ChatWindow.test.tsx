@@ -401,4 +401,48 @@ describe('ChatWindow Component', () => {
       }),
     );
   });
+
+  it('should call markAsRead when chat has unread messages', async () => {
+    const stateWithUnread: Partial<RootState> = {
+      ...preloadedState,
+      chat: {
+        chats: [
+          {
+            id: 'swap-123',
+            name: 'Test Book',
+            unread: true,
+            unreadMessageCount: 2,
+            messages: [],
+          },
+        ],
+        selectedChatId: 'swap-123',
+      },
+    };
+
+    mockUseGetChatMessagesQuery.mockReturnValue({
+      currentData: mockChatMessages,
+      isLoading: false,
+      isSuccess: true,
+    });
+
+    renderWithProviders(<ChatWindow />, { preloadedState: stateWithUnread });
+
+    await waitFor(() => {
+      expect(mockMarkAsRead).toHaveBeenCalledWith({ swapRequestId: 'swap-123' });
+    });
+  });
+
+  it('should not call markAsRead when chat has no unread messages', async () => {
+    mockUseGetChatMessagesQuery.mockReturnValue({
+      currentData: mockChatMessages,
+      isLoading: false,
+      isSuccess: true,
+    });
+
+    renderWithProviders(<ChatWindow />, { preloadedState });
+
+    await waitFor(() => {
+      expect(mockMarkAsRead).not.toHaveBeenCalled();
+    });
+  });
 });

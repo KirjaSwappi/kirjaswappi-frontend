@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Message {
   id: number | string;
@@ -307,8 +307,10 @@ const chatSlice = createSlice({
 });
 
 // =========== SELECTORS ===========
-export const selectTotalUnreadCount = (state: { chat: ChatState }) =>
-  state.chat.chats.reduce((total, chat) => {
+const selectChats = (state: { chat: ChatState }) => state.chat.chats;
+
+export const selectTotalUnreadCount = createSelector([selectChats], (chats) =>
+  chats.reduce((total, chat) => {
     const count =
       chat.unreadMessageCount && chat.unreadMessageCount > 0
         ? chat.unreadMessageCount
@@ -316,7 +318,14 @@ export const selectTotalUnreadCount = (state: { chat: ChatState }) =>
           ? 1
           : 0;
     return total + count;
-  }, 0);
+  }, 0),
+);
+
+export const makeSelectChatById = () =>
+  createSelector(
+    [selectChats, (_state: { chat: ChatState }, chatId: string) => chatId],
+    (chats, chatId) => chats.find((c) => c.id === chatId),
+  );
 
 export const {
   selectChat,

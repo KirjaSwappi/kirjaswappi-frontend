@@ -102,7 +102,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       isSuccess: true,
     });
     mockUseGetChatMessagesQuery.mockReturnValue({
-      data: mockChatMessages,
+      currentData: mockChatMessages,
       isLoading: false,
       isSuccess: true,
     });
@@ -388,6 +388,10 @@ describe('Chat Messaging Flow (Functional)', () => {
     await waitFor(() => {
       const state = store.getState();
       expect(state.chat.selectedChatId).toBe('swap-1');
+    });
+
+    await waitFor(() => {
+      expect(mockMarkAsRead).toHaveBeenCalledWith({ swapRequestId: 'swap-1' });
     });
   });
 

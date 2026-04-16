@@ -104,6 +104,7 @@ const USER_ONLY_ENDPOINTS = [
   'getInboxByStatus',
   'getChatMessages',
   'sendChatMessage',
+  'markChatAsRead',
   'updateSwapRequestStatus',
   'addFavouriteBook',
   'removeFavouriteBook',
