@@ -7,6 +7,7 @@ import {
   configureStore,
 } from '@reduxjs/toolkit';
 import { CombinedState } from '@reduxjs/toolkit/query';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { getCookie } from '../utility/cookies';
 import { api } from './api/apiSlice';
@@ -82,5 +83,7 @@ const store: EnhancedStore<
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+setupListeners(store.dispatch);
 
 export default store;

@@ -1,5 +1,5 @@
 import React, { CSSProperties, RefObject, useEffect, useRef, useState } from 'react';
-import NotFoundImg from '../../assets/notFoundIcon.png';
+import imagePlaceholder from '../../assets/imagePlaceholder.svg';
 import { cn } from '../../utility/cn';
 
 interface IImageProps {
@@ -18,13 +18,25 @@ const Image: React.FC<IImageProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const hasEverLoaded = useRef(false);
+  const retryCount = useRef(0);
+  const retryTimer = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     setHasError(false);
+    retryCount.current = 0;
     if (!hasEverLoaded.current) {
       setIsLoaded(false);
     }
+    return () => clearTimeout(retryTimer.current);
   }, [src]);
+
+  const handleError = () => {
+    if (retryCount.current < 1 && src) {
+      retryCount.current += 1;
+      retryTimer.current = setTimeout(() => setHasError(false), 3000);
+    }
+    setHasError(true);
+  };
 
   return (
     <picture>
@@ -33,8 +45,8 @@ const Image: React.FC<IImageProps> = (props) => {
       )}
       <img
         {...props}
-        src={!src || hasError ? NotFoundImg : src}
-        onError={() => setHasError(true)}
+        src={!src || hasError ? imagePlaceholder : src}
+        onError={handleError}
         onLoad={() => {
           setIsLoaded(true);
           hasEverLoaded.current = true;

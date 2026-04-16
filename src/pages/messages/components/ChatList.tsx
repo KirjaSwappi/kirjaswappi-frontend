@@ -29,6 +29,7 @@ export default function ChatList() {
   } = useGetInboxQuery(undefined, {
     skip: !userInformation.id,
     refetchOnMountOrArgChange: 30,
+    refetchOnFocus: true,
   });
 
   useEffect(() => {
