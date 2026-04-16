@@ -53,7 +53,6 @@ export default function ProfileDashboard() {
     {
       label: t('profile.bookmarked'),
       content: <BookmarkedBooks />,
-      hideOnMobile: true,
       permission: false,
       count: bookmarkedCount,
     },
@@ -112,8 +111,7 @@ export default function ProfileDashboard() {
                           ? 'bg-primary text-white'
                           : 'text-grayDark border border-grayDark'
                       }
-                      ${tab.hideOnLg ? 'lg:hidden' : ''}
-                      ${tab.hideOnMobile ? 'lg:flex hidden' : ''}`}
+                      ${tab.hideOnLg ? 'lg:hidden' : ''}`}
                     >
                       {tab.label}
                       {!tab.hideCount && (

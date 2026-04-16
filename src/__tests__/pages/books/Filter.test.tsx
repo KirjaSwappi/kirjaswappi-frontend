@@ -12,10 +12,6 @@ vi.mock('react-icons/fi', () => ({
   FiPlus: () => <span>+</span>,
 }));
 
-vi.mock('react-icons/md', () => ({
-  MdKeyboardArrowDown: () => <span>v</span>,
-}));
-
 vi.mock('../../../assets/categoryIcon.svg', () => ({ default: 'category.svg' }));
 vi.mock('../../../assets/filtergray.svg', () => ({ default: 'filter.svg' }));
 vi.mock('../../../assets/uiw_map.svg', () => ({ default: 'map.svg' }));
@@ -114,9 +110,9 @@ describe('Filter', () => {
     expect(screen.getByTestId('category-slider')).toBeInTheDocument();
   });
 
-  it('navigates to profile when logged in user clicks Add Book', () => {
+  it('navigates to add book page when logged in user clicks Add Book', () => {
     renderComponent('user-123');
     fireEvent.click(screen.getByText(/books.addBook/));
-    expect(mockNavigate).toHaveBeenCalledWith('/profile/user-profile/user-123');
+    expect(mockNavigate).toHaveBeenCalledWith('/profile/add-book');
   });
 });
