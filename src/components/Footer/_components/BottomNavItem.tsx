@@ -7,6 +7,7 @@ interface IBottomNavItem {
   readonly isActive: boolean;
   readonly value: string;
   readonly badgeCount?: number;
+  readonly onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
 export default function BottomNavItem({
@@ -15,12 +16,14 @@ export default function BottomNavItem({
   isActive,
   value,
   badgeCount,
+  onClick,
 }: IBottomNavItem) {
   const showBadge = !!badgeCount && badgeCount > 0;
 
   return (
     <Link
       to={route || '#'}
+      onClick={onClick}
       className={`flex flex-col items-center gap-1 p-1 relative`}
       style={{
         transition: 'background-color 0.2s ease-in-out',

@@ -2,14 +2,18 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { menu } from '../../../data/menu';
 import { selectTotalUnreadCount } from '../../../redux/feature/messages/messagesSlice';
-import { useAppSelector } from '../../../redux/hooks';
+import { setLoginModalOpen } from '../../../redux/feature/open/openSlice';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import NotificationBell from '../../Header/_components/NotificationBell';
 import BottomNavItem from './BottomNavItem';
 
 export default function BottomNav() {
   const { t } = useTranslation();
   const location = useLocation();
+  const dispatch = useAppDispatch();
   const totalUnreadCount = useAppSelector(selectTotalUnreadCount);
+  const { userInformation } = useAppSelector((state) => state.auth);
+  const isAuthenticated = Boolean(userInformation?.id && userInformation?.email);
   const pathname = location.pathname;
   const ignorePath: string[] = [`/book-details/${pathname?.split('/').reverse()[0]}`];
   const isFooterBarShow = ignorePath.includes(pathname);
@@ -27,6 +31,7 @@ export default function BottomNav() {
             const isActive = location.pathname === menuItem?.route;
             const isMessagesMenu = menuItem.value === 'messages';
             const badgeCount = isMessagesMenu ? totalUnreadCount : undefined;
+            const needsAuth = isMessagesMenu && !isAuthenticated;
             return (
               <div key={index} className={`${index === 2 && pathname === '/' ? 'pl-24' : ''}`}>
                 <BottomNavItem
@@ -35,6 +40,14 @@ export default function BottomNav() {
                   icon={menuItem.icon}
                   value={t(menuItem.value)}
                   badgeCount={badgeCount}
+                  onClick={
+                    needsAuth
+                      ? (e) => {
+                          e.preventDefault();
+                          dispatch(setLoginModalOpen(true));
+                        }
+                      : undefined
+                  }
                 />
               </div>
             );
