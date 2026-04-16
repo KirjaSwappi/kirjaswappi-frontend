@@ -291,7 +291,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       },
     };
 
-    const { store } = renderWithProviders(
+    renderWithProviders(
       <BrowserRouter>
         <Routes>
           <Route path="/user/messages" element={<Messages />} />
@@ -303,8 +303,6 @@ describe('Chat Messaging Flow (Functional)', () => {
     const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Test message');
 
-    const initialCount = store.getState().chat.chats[0].messages.length;
-
     const form = input.closest('form');
     if (form) {
       const submitButton = form.querySelector('button[type="submit"]');
@@ -314,8 +312,9 @@ describe('Chat Messaging Flow (Functional)', () => {
     }
 
     await waitFor(() => {
-      const newCount = store.getState().chat.chats[0].messages.length;
-      expect(newCount).toBeGreaterThan(initialCount);
+      expect(mockSendChatMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ swapRequestId: 'swap-1', message: 'Test message' }),
+      );
     });
   });
 

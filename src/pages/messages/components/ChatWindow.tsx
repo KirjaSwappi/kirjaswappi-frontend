@@ -33,7 +33,7 @@ export default function ChatWindow() {
     isSuccess: isChatSuccess,
   } = useGetChatMessagesQuery(
     { swapRequestId: selectedChatId as string },
-    { skip: !selectedChatId || !userInformation.id },
+    { skip: !selectedChatId || !userInformation.id, pollingInterval: 5 * 60 * 1000 },
   );
 
   useEffect(() => {
