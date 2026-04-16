@@ -13,9 +13,10 @@ export default function GoogleLoginButton() {
   const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(([entry]) => {
-      setButtonWidth(Math.floor(entry.contentRect.width));
+      const width = Math.floor(entry.contentRect.width);
+      setButtonWidth(width > 0 ? width : undefined);
     });
     observer.observe(containerRef.current);
     return () => observer.disconnect();
