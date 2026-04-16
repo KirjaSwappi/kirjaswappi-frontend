@@ -1,7 +1,11 @@
-import { BiSupport } from 'react-icons/bi';
-import { IoLogOut } from 'react-icons/io5';
-import { MdContactPage, MdFeedback, MdLock } from 'react-icons/md';
-import { TbUserCircle } from 'react-icons/tb';
+import {
+  IoPersonOutline,
+  IoChatbubbleEllipsesOutline,
+  IoHeartOutline,
+  IoMailOutline,
+  IoShieldCheckmarkOutline,
+  IoLogOutOutline,
+} from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
@@ -26,33 +30,33 @@ export default function UserMenuDropdown() {
   const UserMenu = [
     {
       label: 'View Profile',
-      icon: TbUserCircle,
+      icon: IoPersonOutline,
       location: '/profile/user-profile',
       isProfile: true,
     },
     {
-      label: 'Privacy Center',
-      icon: MdLock,
-      location: '/privacy-policy',
+      label: 'Feedback',
+      icon: IoChatbubbleEllipsesOutline,
+      location: '/feedback',
     },
     {
       label: 'Support Us',
-      icon: BiSupport,
+      icon: IoHeartOutline,
       location: '/support-us',
     },
     {
       label: 'Contact Us',
-      icon: MdContactPage,
+      icon: IoMailOutline,
       location: '/contact-us',
     },
     {
-      label: 'Feedback',
-      icon: MdFeedback,
-      location: '/feedback',
+      label: 'Privacy Center',
+      icon: IoShieldCheckmarkOutline,
+      location: '/privacy-policy',
     },
     {
       label: 'Log Out',
-      icon: IoLogOut,
+      icon: IoLogOutOutline,
       location: '/logout',
     },
   ];
@@ -65,28 +69,30 @@ export default function UserMenuDropdown() {
     <div className="absolute top-12 py-2 right-0 w-56 bg-white rounded-lg shadow-custom-box-shadow z-50 text-blackOlive">
       {UserMenu.map((menu, index) => {
         return menu.location === '/logout' ? (
-          <Button
-            key={`${menu.label}-${index}`}
-            onClick={() => {
-              dispatch(logout());
-              dispatch(api.util.resetApiState());
-              dispatch(clearAllFilters());
-              dispatch(resetChat());
-              dispatch(setResetSwapBook());
-              dispatch(clearNotifications());
-              dispatch(setStep(0));
-              dispatch(setOpen(false));
-              showToast('success', 'Logout successfully');
-              navigate('/');
-            }}
-            className="w-full"
-          >
-            <DropdownItem
-              className="group hover:bg-primary hover:text-white"
-              icon={<menu.icon className="text-primary group-hover:text-white" />}
-              label={menu.label}
-            />
-          </Button>
+          <div key={`${menu.label}-${index}`}>
+            <div className="my-1 border-t border-platinum" />
+            <Button
+              onClick={() => {
+                dispatch(logout());
+                dispatch(api.util.resetApiState());
+                dispatch(clearAllFilters());
+                dispatch(resetChat());
+                dispatch(setResetSwapBook());
+                dispatch(clearNotifications());
+                dispatch(setStep(0));
+                dispatch(setOpen(false));
+                showToast('success', 'Logout successfully');
+                navigate('/');
+              }}
+              className="w-full"
+            >
+              <DropdownItem
+                className="group hover:bg-primary hover:text-white"
+                icon={<menu.icon className="text-primary group-hover:text-white" />}
+                label={menu.label}
+              />
+            </Button>
+          </div>
         ) : (
           <Link to={getMenuLocation(menu)} key={`${menu.label}-${index}`}>
             <DropdownItem

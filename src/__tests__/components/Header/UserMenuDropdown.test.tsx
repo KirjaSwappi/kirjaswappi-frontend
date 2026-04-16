@@ -4,14 +4,14 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router-dom';
 
-vi.mock('react-icons/bi', () => ({ BiSupport: () => <span>support</span> }));
-vi.mock('react-icons/io5', () => ({ IoLogOut: () => <span>logout</span> }));
-vi.mock('react-icons/md', () => ({
-  MdContactPage: () => <span>contact</span>,
-  MdFeedback: () => <span>feedback</span>,
-  MdLock: () => <span>lock</span>,
+vi.mock('react-icons/io5', () => ({
+  IoPersonOutline: () => <span>person</span>,
+  IoChatbubbleEllipsesOutline: () => <span>chat</span>,
+  IoHeartOutline: () => <span>heart</span>,
+  IoMailOutline: () => <span>mail</span>,
+  IoShieldCheckmarkOutline: () => <span>shield</span>,
+  IoLogOutOutline: () => <span>logout</span>,
 }));
-vi.mock('react-icons/tb', () => ({ TbUserCircle: () => <span>user</span> }));
 
 vi.mock('../../../redux/api/apiSlice', () => ({
   api: {
