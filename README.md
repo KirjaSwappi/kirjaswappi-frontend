@@ -15,7 +15,7 @@ Web UI for [KirjaSwappi](https://kirjaswappi.fi) — a book exchange platform. B
 ## Getting Started
 
 ```bash
-npm install
+yarn install
 npm run dev
 ```
 
