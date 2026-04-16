@@ -2,8 +2,10 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChatbubblesOutline } from 'react-icons/io5';
 import Image from '../../../components/shared/Image';
-import { api } from '../../../redux/api/apiSlice';
-import { useGetChatMessagesQuery } from '../../../redux/feature/messages/inboxApi';
+import {
+  useGetChatMessagesQuery,
+  useMarkChatAsReadMutation,
+} from '../../../redux/feature/messages/inboxApi';
 import {
   addChatMessages,
   markChatRead,
@@ -23,13 +25,19 @@ export default function ChatWindow() {
   const selectChatById = useMemo(makeSelectChatById, []);
   const findChat = useAppSelector((state) => selectChatById(state, selectedChatId));
 
+  const [markAsRead] = useMarkChatAsReadMutation();
+
   const {
     currentData: chatData,
     isLoading: isChatLoading,
     isSuccess: isChatSuccess,
   } = useGetChatMessagesQuery(
     { swapRequestId: selectedChatId as string },
-    { skip: !selectedChatId || !userInformation.id },
+    {
+      skip: !selectedChatId || !userInformation.id,
+      pollingInterval: 5 * 60 * 1000,
+      refetchOnFocus: true,
+    },
   );
 
   useEffect(() => {
@@ -44,9 +52,12 @@ export default function ChatWindow() {
     }));
 
     dispatch(addChatMessages({ chatId: selectedChatId, messages: mapped }));
-    dispatch(markChatRead(selectedChatId));
-    dispatch(api.util.invalidateTags(['Inbox']));
-  }, [dispatch, selectedChatId, chatData, isChatSuccess]);
+
+    if (findChat?.unread) {
+      dispatch(markChatRead(selectedChatId));
+      markAsRead({ swapRequestId: selectedChatId });
+    }
+  }, [dispatch, selectedChatId, chatData, isChatSuccess, markAsRead, findChat?.unread]);
 
   useEffect(() => {
     if (!findChat?.messages?.length) return;

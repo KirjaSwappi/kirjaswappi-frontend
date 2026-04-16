@@ -88,6 +88,14 @@ export const inboxApi = api.injectEndpoints({
         'Inbox',
       ],
     }),
+
+    markChatAsRead: builder.mutation<void, { swapRequestId: string }>({
+      query: ({ swapRequestId }) => ({
+        url: `/swap-requests/${swapRequestId}/chat/read`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['Inbox'],
+    }),
   }),
 });
 
@@ -96,4 +104,5 @@ export const {
   useGetInboxByStatusQuery,
   useGetChatMessagesQuery,
   useSendChatMessageMutation,
+  useMarkChatAsReadMutation,
 } = inboxApi;

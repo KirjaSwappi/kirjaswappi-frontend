@@ -546,6 +546,50 @@ describe('messagesSlice', () => {
       expect(result.chats[0].messages[1].text).toBe('Second');
       expect(result.chats[0].messages[2].text).toBe('Third');
     });
+
+    it('should update image URLs on existing messages when refetched', () => {
+      const stateWithChats: ChatState = {
+        chats: [
+          {
+            id: 'chat-1',
+            name: 'Test Chat',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: '',
+                time: '2024-01-01T10:00:00Z',
+                images: ['https://s3.example.com/old-presigned-url?expires=111'],
+              },
+            ],
+          },
+        ],
+        selectedChatId: '',
+      };
+
+      const result = messagesSlice(
+        stateWithChats,
+        addChatMessages({
+          chatId: 'chat-1',
+          messages: [
+            {
+              id: 'msg-1',
+              sender: 'them',
+              text: '',
+              time: '2024-01-01T10:00:00Z',
+              images: ['https://s3.example.com/fresh-presigned-url?expires=999'],
+            },
+          ],
+        }),
+      );
+
+      expect(result.chats[0].messages).toHaveLength(1);
+      expect(result.chats[0].messages[0].images).toEqual([
+        'https://s3.example.com/fresh-presigned-url?expires=999',
+      ]);
+    });
   });
 
   describe('selectTotalUnreadCount', () => {

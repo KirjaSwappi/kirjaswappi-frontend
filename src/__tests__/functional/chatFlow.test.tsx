@@ -19,10 +19,13 @@ vi.mock('../../hooks/useChatWS', () => ({
   })),
 }));
 
+const mockMarkAsRead = vi.fn();
+
 vi.mock('../../redux/feature/messages/inboxApi', () => ({
   useGetInboxQuery: vi.fn(),
   useGetChatMessagesQuery: vi.fn(),
   useSendChatMessageMutation: vi.fn(),
+  useMarkChatAsReadMutation: () => [mockMarkAsRead],
 }));
 
 import {
@@ -99,7 +102,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       isSuccess: true,
     });
     mockUseGetChatMessagesQuery.mockReturnValue({
-      data: mockChatMessages,
+      currentData: mockChatMessages,
       isLoading: false,
       isSuccess: true,
     });
@@ -288,7 +291,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       },
     };
 
-    const { store } = renderWithProviders(
+    renderWithProviders(
       <BrowserRouter>
         <Routes>
           <Route path="/user/messages" element={<Messages />} />
@@ -300,8 +303,6 @@ describe('Chat Messaging Flow (Functional)', () => {
     const input = screen.getByPlaceholderText('chat.writeHere');
     await user.type(input, 'Test message');
 
-    const initialCount = store.getState().chat.chats[0].messages.length;
-
     const form = input.closest('form');
     if (form) {
       const submitButton = form.querySelector('button[type="submit"]');
@@ -311,8 +312,9 @@ describe('Chat Messaging Flow (Functional)', () => {
     }
 
     await waitFor(() => {
-      const newCount = store.getState().chat.chats[0].messages.length;
-      expect(newCount).toBeGreaterThan(initialCount);
+      expect(mockSendChatMessage).toHaveBeenCalledWith(
+        expect.objectContaining({ swapRequestId: 'swap-1', message: 'Test message' }),
+      );
     });
   });
 
@@ -385,6 +387,10 @@ describe('Chat Messaging Flow (Functional)', () => {
     await waitFor(() => {
       const state = store.getState();
       expect(state.chat.selectedChatId).toBe('swap-1');
+    });
+
+    await waitFor(() => {
+      expect(mockMarkAsRead).toHaveBeenCalledWith({ swapRequestId: 'swap-1' });
     });
   });
 

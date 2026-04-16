@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import Image from '../../../components/shared/Image';
 
-vi.mock('../../../assets/notFoundIcon.png', () => ({ default: 'notFoundIcon.png' }));
+vi.mock('../../../assets/imagePlaceholder.svg', () => ({ default: 'imagePlaceholder.svg' }));
 
 describe('Image Component', () => {
   it('renders an img inside a picture element', () => {
@@ -17,7 +17,7 @@ describe('Image Component', () => {
 
   it('falls back to notFoundIcon when src is undefined', () => {
     render(<Image src={undefined} alt="missing" />);
-    expect(screen.getByRole('img')).toHaveAttribute('src', 'notFoundIcon.png');
+    expect(screen.getByRole('img')).toHaveAttribute('src', 'imagePlaceholder.svg');
   });
 
   it('applies the alt text', () => {
@@ -54,7 +54,7 @@ describe('Image Component', () => {
 
     fireEvent.error(img);
 
-    expect(img).toHaveAttribute('src', 'notFoundIcon.png');
+    expect(img).toHaveAttribute('src', 'imagePlaceholder.svg');
   });
 
   it('calls onClick when provided', () => {
@@ -79,5 +79,28 @@ describe('Image Component', () => {
   it('has async decoding attribute', () => {
     render(<Image src="https://example.com/photo.jpg" alt="Async" />);
     expect(screen.getByRole('img')).toHaveAttribute('decoding', 'async');
+  });
+
+  it('retries once after an error before settling on fallback', () => {
+    vi.useFakeTimers();
+    render(<Image src="https://example.com/bad.jpg" alt="Retry" />);
+    const img = screen.getByRole('img');
+
+    // First error → hasError true → shows fallback
+    fireEvent.error(img);
+    expect(img).toHaveAttribute('src', 'imagePlaceholder.svg');
+
+    // After 3s retry timer fires → hasError resets → retries original URL
+    act(() => vi.advanceTimersByTime(3000));
+    expect(img).toHaveAttribute('src', 'https://example.com/bad.jpg');
+
+    // Second error → stays on fallback (no more retries)
+    fireEvent.error(img);
+    expect(img).toHaveAttribute('src', 'imagePlaceholder.svg');
+
+    act(() => vi.advanceTimersByTime(5000));
+    expect(img).toHaveAttribute('src', 'imagePlaceholder.svg');
+
+    vi.useRealTimers();
   });
 });
