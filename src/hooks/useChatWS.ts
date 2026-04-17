@@ -197,8 +197,7 @@ export const useChatWS = (): UseChatWSReturn => {
     }
 
     try {
-      const userToken = getCookie('userToken');
-      const jwtToken = userToken || getCookie('jwtToken');
+      const jwtToken = getCookie('userToken');
       if (!jwtToken) return;
 
       // SockJS does not support custom headers on the HTTP transport.
@@ -223,7 +222,6 @@ export const useChatWS = (): UseChatWSReturn => {
         heartbeatOutgoing: 4000,
         connectHeaders: {
           Authorization: `Bearer ${jwtToken}`,
-          ...(userToken ? {} : { userId: userId as string }),
         },
         debug: (str) => {
           if (import.meta.env.DEV) {
