@@ -12,11 +12,11 @@ describe('i18n Utility Functions', () => {
     changeLanguageSpy = vi.spyOn(i18n, 'changeLanguage');
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     localStorage.clear();
-    // Restore English for other tests
-    localStorage.setItem('language', 'en');
     changeLanguageSpy.mockRestore();
+    await i18n.changeLanguage('en');
+    localStorage.setItem('language', 'en');
   });
 
   describe('setLanguage', () => {

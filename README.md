@@ -23,12 +23,12 @@ Copy `.env.sample` to `.env` and fill in the values.
 
 ## Scripts
 
-| Command            | Description                      |
-| ------------------ | -------------------------------- |
-| `npm run dev`      | Start dev server                 |
-| `npm run build`    | Type check + production build    |
-| `npm run test`     | Run tests with coverage          |
-| `npm run spotless` | Lint + format (ESLint + Prettier)|
+| Command            | Description                       |
+| ------------------ | --------------------------------- |
+| `npm run dev`      | Start dev server                  |
+| `npm run build`    | Type check + production build     |
+| `npm run test`     | Run tests with coverage           |
+| `npm run spotless` | Lint + format (ESLint + Prettier) |
 
 ## Project Structure
 

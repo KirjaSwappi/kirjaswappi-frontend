@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 
 interface IStep {
-  label: string;
+  labelKey: string;
   isCompleted: boolean;
   isActive: boolean;
 }
@@ -51,7 +51,7 @@ const Stepper = ({ steps }: { steps: IStep[] }) => {
                     step.isActive ? 'text-[#1A1A1A] font-medium' : ''
                   }`}
                 >
-                  {step.label}
+                  {t(step.labelKey)}
                 </p>
                 <p className="hidden lg:block text-xs text-[#808080]">
                   {t('addBook.stepSubtitle')}

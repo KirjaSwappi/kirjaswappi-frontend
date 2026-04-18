@@ -126,7 +126,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               {partnerName || t('chat.chat')}
             </button>
           ) : (
-            <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
+            <h1 className="font-poppins text-sm">{partnerName || t('chat.chat')}</h1>
           )}
           <ChatInfoDropdown
             onViewProfile={goPartnerProfile}

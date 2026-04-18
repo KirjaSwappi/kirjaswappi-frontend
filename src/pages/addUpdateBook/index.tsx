@@ -75,17 +75,17 @@ export default function AddUpdateBook() {
 
   const [steps, setSteps] = useState([
     {
-      label: t('addBook.bookDetails'),
+      labelKey: 'addBook.bookDetails',
       isCompleted: false,
       isActive: true,
     },
     {
-      label: t('addBook.otherDetails'),
+      labelKey: 'addBook.otherDetails',
       isCompleted: false,
       isActive: false,
     },
     {
-      label: t('addBook.swapCondition'),
+      labelKey: 'addBook.swapCondition',
       isCompleted: false,
       isActive: false,
     },
@@ -180,7 +180,7 @@ export default function AddUpdateBook() {
                 <div className="w-full lg:w-[68%] xl:w-[70%]">
                   <FormProvider {...methods}>
                     <h1 className="font-poppins lg:mt-0 mb-2 font-semibold text-[20px] hidden lg:block">
-                      {steps[active].label}
+                      {t(steps[active].labelKey)}
                     </h1>
                     <AddGenre
                       genresValue={active === 1 ? watch('genres') : watch('swappableGenres')}

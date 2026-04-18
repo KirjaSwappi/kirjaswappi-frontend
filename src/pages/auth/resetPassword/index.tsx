@@ -67,7 +67,7 @@ export default function ResetPassword() {
   const validatePasswordStrength = (value: string): string | null => {
     if (value.length < 8) return t('validation.passwordMinLength');
     if (!/[A-Z]/.test(value)) return t('validation.passwordUppercase');
-    if (!/[a-z]/.test(value)) return 'Password must contain at least one lowercase letter.';
+    if (!/[a-z]/.test(value)) return t('validation.passwordLowercase');
     if (!/[0-9]/.test(value)) return t('validation.passwordNumber');
     return null;
   };

@@ -74,10 +74,10 @@ vi.mock('../../../pages/map/hooks/useGeolocation', () => ({
 }));
 
 vi.mock('../../../pages/addUpdateBook/_components/Stepper', () => ({
-  default: ({ steps }: { steps: { label: string }[] }) => (
+  default: ({ steps }: { steps: { labelKey: string }[] }) => (
     <div data-testid="stepper">
       {steps.map((s, i) => (
-        <span key={i}>{s.label}</span>
+        <span key={i}>{s.labelKey}</span>
       ))}
     </div>
   ),

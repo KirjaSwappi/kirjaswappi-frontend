@@ -125,7 +125,7 @@ export default function SwapModal() {
           // Error is handled by RTK Query and displayed via errorMessage state
         });
     },
-    [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal],
+    [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal, t],
   );
 
   // =========== DERIVED VALUES ===========
