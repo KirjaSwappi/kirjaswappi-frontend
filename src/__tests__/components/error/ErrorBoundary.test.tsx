@@ -54,8 +54,6 @@ describe('ErrorBoundary Component', () => {
 
     expect(MockGlobalError).toHaveBeenCalledWith(
       expect.objectContaining({
-        title: 'Something went wrong',
-        message: 'Test error',
         onRetry: expect.any(Function),
       }),
       {},
@@ -147,7 +145,7 @@ describe('ErrorBoundary Component', () => {
 
     expect(MockGlobalError).toHaveBeenCalledWith(
       expect.objectContaining({
-        message: 'An unexpected error occurred',
+        onRetry: expect.any(Function),
       }),
       {},
     );

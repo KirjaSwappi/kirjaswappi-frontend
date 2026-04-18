@@ -1,3 +1,8 @@
+// Set default language to English for tests
+localStorage.setItem('language', 'en');
+import i18n from '../utility/i18n';
+i18n.changeLanguage('en');
+
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';

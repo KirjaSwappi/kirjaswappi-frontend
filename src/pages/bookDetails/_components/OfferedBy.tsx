@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import locationIcon from '../../../assets/location-icon.png';
 import profileIcon from '../../../assets/profileIcon.png';
@@ -16,6 +17,7 @@ export default function OfferedBy({
   location: ILocation;
 }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col lg:flex-row-reverse lg:justify-end lg:gap-8 mt-5 xl:mt-12">
       {location?.city && (
@@ -28,7 +30,9 @@ export default function OfferedBy({
       <div>
         <div className="flex gap-8 items-end">
           <div>
-            <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">Offered by</h3>
+            <h3 className="text-xs font-normal font-poppins text-grayDark mb-2">
+              {t('bookDetails.offeredBy')}
+            </h3>
             <Button
               type="button"
               onClick={() => navigate(`/profile/user-profile/${ownerId}`)}

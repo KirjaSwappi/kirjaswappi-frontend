@@ -65,10 +65,10 @@ export default function ResetPassword() {
   };
 
   const validatePasswordStrength = (value: string): string | null => {
-    if (value.length < 8) return 'Password must be at least 8 characters long.';
-    if (!/[A-Z]/.test(value)) return 'Password must contain at least one uppercase letter.';
-    if (!/[a-z]/.test(value)) return 'Password must contain at least one lowercase letter.';
-    if (!/[0-9]/.test(value)) return 'Password must contain at least one digit.';
+    if (value.length < 8) return t('validation.passwordMinLength');
+    if (!/[A-Z]/.test(value)) return t('validation.passwordUppercase');
+    if (!/[a-z]/.test(value)) return t('validation.passwordLowercase');
+    if (!/[0-9]/.test(value)) return t('validation.passwordNumber');
     return null;
   };
 
@@ -81,30 +81,30 @@ export default function ResetPassword() {
         if (name === 'email') {
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           if (!value) {
-            stateObj[name] = 'Please enter email.';
+            stateObj[name] = t('validation.emailRequired');
           } else if (!emailRegex.test(value)) {
-            stateObj[name] = 'Please enter a valid email.';
+            stateObj[name] = t('validation.emailInvalid');
           }
         }
       } else if (step === 2) {
         if (name === 'password') {
           if (!value) {
-            stateObj[name] = 'Please enter Password.';
+            stateObj[name] = t('validation.newPasswordRequired');
           } else {
             const strengthError = validatePasswordStrength(value);
             if (strengthError) {
               stateObj[name] = strengthError;
             } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
-              stateObj['confirmPassword'] = 'Password and Confirm Password do not match.';
+              stateObj['confirmPassword'] = t('validation.passwordsMustMatch');
             } else {
               stateObj['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
             }
           }
         } else if (name === 'confirmPassword') {
           if (!value) {
-            stateObj[name] = 'Please enter Confirm Password.';
+            stateObj[name] = t('validation.confirmPasswordRequired');
           } else if (userPass.password && value !== userPass.password) {
-            stateObj[name] = 'Password and Confirm Password do not match.';
+            stateObj[name] = t('validation.passwordsMustMatch');
           }
         }
       }
@@ -123,10 +123,10 @@ export default function ResetPassword() {
       if (step === 0 && typedKey === 'email') {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!value) {
-          newErrors[typedKey] = 'Please enter email.';
+          newErrors[typedKey] = t('validation.emailRequired');
           allValid = false;
         } else if (!emailRegex.test(value)) {
-          newErrors[typedKey] = 'Please enter a valid email.';
+          newErrors[typedKey] = t('validation.emailInvalid');
           allValid = false;
         } else {
           newErrors[typedKey] = '';
@@ -134,7 +134,7 @@ export default function ResetPassword() {
       } else if (step === 2 && (typedKey === 'password' || typedKey === 'confirmPassword')) {
         if (typedKey === 'password') {
           if (!value) {
-            newErrors[typedKey] = 'Please enter Password.';
+            newErrors[typedKey] = t('validation.newPasswordRequired');
             allValid = false;
           } else {
             const strengthError = validatePasswordStrength(value);
@@ -142,7 +142,7 @@ export default function ResetPassword() {
               newErrors[typedKey] = strengthError;
               allValid = false;
             } else if (userPass.confirmPassword && value !== userPass.confirmPassword) {
-              newErrors['confirmPassword'] = 'Password and Confirm Password do not match.';
+              newErrors['confirmPassword'] = t('validation.passwordsMustMatch');
               allValid = false;
             } else {
               newErrors['confirmPassword'] = userPass.confirmPassword ? '' : errors.confirmPassword;
@@ -151,10 +151,10 @@ export default function ResetPassword() {
         }
         if (typedKey === 'confirmPassword') {
           if (!value) {
-            newErrors[typedKey] = 'Please enter Confirm Password.';
+            newErrors[typedKey] = t('validation.confirmPasswordRequired');
             allValid = false;
           } else if (userPass.password && value !== userPass.password) {
-            newErrors[typedKey] = 'Password and Confirm Password do not match.';
+            newErrors[typedKey] = t('validation.passwordsMustMatch');
             allValid = false;
           }
         }

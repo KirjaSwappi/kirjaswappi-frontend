@@ -149,7 +149,7 @@ export default function BookDetails() {
             <button
               type="button"
               onClick={handleShare}
-              title="Share"
+              title={t('bookDetails.share')}
               className="cursor-pointer bg-transparent border-0 p-0"
             >
               <IoShareSocialOutline className="w-5 h-5 text-black" />
@@ -165,7 +165,7 @@ export default function BookDetails() {
               <button
                 type="button"
                 onClick={handleBookmark}
-                title="Bookmark"
+                title={t('bookDetails.bookmark')}
                 className="cursor-pointer bg-transparent border-0 p-0"
               >
                 {isBookmarked ? (

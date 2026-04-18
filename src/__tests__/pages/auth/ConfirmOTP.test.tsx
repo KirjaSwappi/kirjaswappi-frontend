@@ -109,7 +109,7 @@ describe('ConfirmOTP', () => {
 
   it('renders confirm email heading', () => {
     renderComponent();
-    expect(screen.getByText('Confirm your Email')).toBeInTheDocument();
+    expect(screen.getByText('auth.confirmEmail')).toBeInTheDocument();
   });
 
   it('renders OTP input', () => {
@@ -124,16 +124,16 @@ describe('ConfirmOTP', () => {
 
   it('renders resend button', () => {
     renderComponent();
-    expect(screen.getByText('Send again')).toBeInTheDocument();
+    expect(screen.getByText('auth.sendAgain')).toBeInTheDocument();
   });
 
   it('renders instruction text', () => {
     renderComponent();
-    expect(screen.getByText(/Enter the code/)).toBeInTheDocument();
+    expect(screen.getByText(/auth.enterOtpCode/)).toBeInTheDocument();
   });
 
   it('renders "Haven\'t received" text', () => {
     renderComponent();
-    expect(screen.getByText(/Haven't received a code/)).toBeInTheDocument();
+    expect(screen.getByText(/auth.noCodeReceived/)).toBeInTheDocument();
   });
 });

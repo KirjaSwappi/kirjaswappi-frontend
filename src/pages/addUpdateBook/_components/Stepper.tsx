@@ -1,9 +1,12 @@
+import { useTranslation } from 'react-i18next';
+
 interface IStep {
-  label: string;
+  labelKey: string;
   isCompleted: boolean;
   isActive: boolean;
 }
 const Stepper = ({ steps }: { steps: IStep[] }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex lg:flex-col justify-between sm:gap-4 w-full pt-6 lg:pt-0 pb-3">
       {steps.map((step, index) => {
@@ -48,12 +51,14 @@ const Stepper = ({ steps }: { steps: IStep[] }) => {
                     step.isActive ? 'text-[#1A1A1A] font-medium' : ''
                   }`}
                 >
-                  {step.label}
+                  {t(step.labelKey)}
                 </p>
-                <p className="hidden lg:block text-xs text-[#808080]">Add your book details here</p>
+                <p className="hidden lg:block text-xs text-[#808080]">
+                  {t('addBook.stepSubtitle')}
+                </p>
                 {step.isCompleted && (
                   <p className="text-[#3FBA49] font-poppins font-semibold text-xs hidden lg:block">
-                    Completed
+                    {t('addBook.stepCompleted')}
                   </p>
                 )}
               </div>

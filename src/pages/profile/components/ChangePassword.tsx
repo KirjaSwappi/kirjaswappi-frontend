@@ -15,11 +15,11 @@ interface ChangePasswordForm {
   confirmPassword: string;
 }
 
-const validatePasswordStrength = (value: string): string | null => {
-  if (value.length < 8) return 'Password must be at least 8 characters long.';
-  if (!/[A-Z]/.test(value)) return 'Password must contain at least one uppercase letter.';
-  if (!/[a-z]/.test(value)) return 'Password must contain at least one lowercase letter.';
-  if (!/[0-9]/.test(value)) return 'Password must contain at least one digit.';
+const validatePasswordStrength = (value: string, t: (key: string) => string): string | null => {
+  if (value.length < 8) return t('validation.passwordMinLength');
+  if (!/[A-Z]/.test(value)) return t('validation.passwordUppercase');
+  if (!/[a-z]/.test(value)) return t('validation.passwordLowercase');
+  if (!/[0-9]/.test(value)) return t('validation.passwordNumber');
   return null;
 };
 
@@ -47,23 +47,23 @@ export default function ChangePassword() {
     setErrors((prev) => {
       const next = { ...prev };
       if (name === 'currentPassword') {
-        next[name] = !value ? t('changePassword.currentPassword') + ' is required.' : null;
+        next[name] = !value ? t('validation.currentPasswordRequired') : null;
       } else if (name === 'newPassword') {
         if (!value) {
-          next[name] = 'Please enter new password.';
+          next[name] = t('validation.newPasswordRequired');
         } else {
-          next[name] = validatePasswordStrength(value);
+          next[name] = validatePasswordStrength(value, t);
           if (!next[name] && form.confirmPassword && value !== form.confirmPassword) {
-            next['confirmPassword'] = t('changePassword.mismatch');
+            next['confirmPassword'] = t('validation.passwordsMustMatch');
           } else if (form.confirmPassword && value === form.confirmPassword) {
             next['confirmPassword'] = null;
           }
         }
       } else if (name === 'confirmPassword') {
         if (!value) {
-          next[name] = 'Please enter confirm password.';
+          next[name] = t('validation.confirmPasswordRequired');
         } else if (form.newPassword && value !== form.newPassword) {
-          next[name] = t('changePassword.mismatch');
+          next[name] = t('validation.passwordsMustMatch');
         } else {
           next[name] = null;
         }
@@ -75,18 +75,18 @@ export default function ChangePassword() {
   const validate = (): boolean => {
     const newErrors: { [key: string]: string | null } = {};
     if (!form.currentPassword) {
-      newErrors.currentPassword = 'Current password is required.';
+      newErrors.currentPassword = t('validation.currentPasswordRequired');
     }
     if (!form.newPassword) {
-      newErrors.newPassword = 'Please enter new password.';
+      newErrors.newPassword = t('validation.newPasswordRequired');
     } else {
-      const strengthError = validatePasswordStrength(form.newPassword);
+      const strengthError = validatePasswordStrength(form.newPassword, t);
       if (strengthError) newErrors.newPassword = strengthError;
     }
     if (!form.confirmPassword) {
-      newErrors.confirmPassword = 'Please enter confirm password.';
+      newErrors.confirmPassword = t('validation.confirmPasswordRequired');
     } else if (form.newPassword !== form.confirmPassword) {
-      newErrors.confirmPassword = t('changePassword.mismatch');
+      newErrors.confirmPassword = t('validation.passwordsMustMatch');
     }
     setErrors(newErrors);
     return Object.values(newErrors).every((e) => !e);

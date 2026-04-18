@@ -95,7 +95,7 @@ export default function ChatInboxInput() {
     } catch (error) {
       dispatch(removeTempMessages({ chatId: selectedChatId }));
       objectUrls.forEach((url) => URL.revokeObjectURL(url));
-      showToast('error', 'Failed to send message');
+      showToast('error', t('toast.messageSendFailed'));
       console.error('Failed to send message:', error);
     }
   };

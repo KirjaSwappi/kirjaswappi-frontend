@@ -41,7 +41,7 @@ export default function ConfirmOTP() {
 
   const handleOTPChange = (value: string) => {
     dispatch(setOtp(value.split('')));
-    if (value.length === 0) setError('otp', { type: 'manual', message: 'OTP is required' });
+    if (value.length === 0) setError('otp', { type: 'manual', message: t('auth.otpRequired') });
     else if (errors.otp) clearErrors('otp');
   };
 
@@ -50,11 +50,9 @@ export default function ConfirmOTP() {
     try {
       const res = await verifyEmail({ email: userEmail, otp: otpString });
       if ('error' in res) {
-        setError('otp', { type: 'manual', message: 'The OTP you entered is incorrect' });
+        setError('otp', { type: 'manual', message: t('auth.otpIncorrect') });
       } else {
-        dispatch(
-          setMessages({ type: SUCCESS, isShow: true, message: 'Email verified successfully!' }),
-        );
+        dispatch(setMessages({ type: SUCCESS, isShow: true, message: t('auth.emailVerified') }));
         setTimeout(() => {
           dispatch(setMessages({ type: '', isShow: false, message: '' }));
           dispatch(setOtp(Array(6).fill('')));
@@ -67,7 +65,7 @@ export default function ConfirmOTP() {
         setMessages({
           type: ERROR,
           isShow: true,
-          message: 'An error occurred during verification',
+          message: t('auth.verificationError'),
         }),
       );
     } finally {
@@ -78,11 +76,11 @@ export default function ConfirmOTP() {
   return (
     <div className="bg-white absolute lg:static bottom-0 left-0 w-full rounded-t-3xl transition-all duration-500 ease-in-out transform translate-y-0 h-[80vh] lg:h-auto">
       <div className="text-center py-6 border-b border-[#E6E6E6]">
-        <h1>Confirm your Email</h1>
+        <h1>{t('auth.confirmEmail')}</h1>
       </div>
       <div className="px-6">
         <p className="text-sm font-light text-grayDark font-poppins text-center pt-8 pb-10">
-          Enter the code we&apos;ve sent to your Email
+          {t('auth.enterOtpCode')}
         </p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex gap-2 justify-between mb-5">
@@ -123,9 +121,9 @@ export default function ConfirmOTP() {
           </Button>
         </form>
         <div className="flex items-center justify-center mt-10 gap-2 text-grayDark text-sm font-poppins">
-          <p>Haven&apos;t received a code?</p>
+          <p>{t('auth.noCodeReceived')}</p>
           <Button className="underline text-sm" onClick={() => sentOTP({ email: userEmail })}>
-            Send again
+            {t('auth.sendAgain')}
           </Button>
         </div>
       </div>

@@ -13,13 +13,7 @@ const AppErrorBoundary: React.FC<AppErrorBoundaryProps> = ({ children }) => {
   return (
     <NoInternetConnection>
       <ErrorBoundary
-        FallbackComponent={({ error, resetErrorBoundary }) => (
-          <GlobalError
-            title="Something went wrong"
-            message={error.message || 'An unexpected error occurred'}
-            onRetry={resetErrorBoundary}
-          />
-        )}
+        FallbackComponent={({ resetErrorBoundary }) => <GlobalError onRetry={resetErrorBoundary} />}
         onReset={() => navigate('/')}
       >
         {children}

@@ -7,6 +7,7 @@ import {
   IoLogOutOutline,
 } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
@@ -24,38 +25,39 @@ import DropdownItem from './DropdownItem';
 export default function UserMenuDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
   const UserMenu = [
     {
-      label: 'View Profile',
+      label: t('menu.viewProfile'),
       icon: IoPersonOutline,
       location: '/profile/user-profile',
       isProfile: true,
     },
     {
-      label: 'Feedback',
+      label: t('menu.feedback'),
       icon: IoChatbubbleEllipsesOutline,
       location: '/feedback',
     },
     {
-      label: 'Support Us',
+      label: t('menu.supportUs'),
       icon: IoHeartOutline,
       location: '/support-us',
     },
     {
-      label: 'Contact Us',
+      label: t('menu.contactUs'),
       icon: IoMailOutline,
       location: '/contact-us',
     },
     {
-      label: 'Privacy Center',
+      label: t('menu.privacyCenter'),
       icon: IoShieldCheckmarkOutline,
       location: '/privacy-policy',
     },
     {
-      label: 'Log Out',
+      label: t('menu.logOut'),
       icon: IoLogOutOutline,
       location: '/logout',
     },
@@ -81,7 +83,7 @@ export default function UserMenuDropdown() {
                 dispatch(clearNotifications());
                 dispatch(setStep(0));
                 dispatch(setOpen(false));
-                showToast('success', 'Logout successfully');
+                showToast('success', t('toast.logoutSuccess'));
                 navigate('/');
               }}
               className="w-full"

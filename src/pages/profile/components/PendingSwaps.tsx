@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import imagePlaceholder from '../../../assets/imagePlaceholder.svg';
 import Button from '../../../components/shared/Button';
@@ -8,6 +9,7 @@ import { useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
 
 export default function PendingSwaps() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { userInformation } = useAppSelector((state) => state.auth);
 
@@ -29,8 +31,8 @@ export default function PendingSwaps() {
   if (!data || data.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-grayDark font-medium">No pending swaps</p>
-        <p className="text-xs text-gray mt-1">Your pending swap requests will appear here</p>
+        <p className="text-grayDark font-medium">{t('profile.noPendingSwaps')}</p>
+        <p className="text-xs text-gray mt-1">{t('profile.pendingSwapsHint')}</p>
       </div>
     );
   }
@@ -58,10 +60,12 @@ export default function PendingSwaps() {
             />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-sm truncate">
-                {truncateText(item.bookToSwapWith?.title || 'Unknown Book', 30)}
+                {truncateText(item.bookToSwapWith?.title || t('profile.unknownBook'), 30)}
               </p>
               <p className="text-xs text-grayDark mt-0.5">
-                {isSent ? `Sent to ${partnerName}` : `From ${partnerName}`}
+                {isSent
+                  ? t('profile.sentTo', { name: partnerName })
+                  : t('profile.from', { name: partnerName })}
               </p>
               <div className="flex items-center gap-1.5 mt-2">
                 <span className="inline-block w-2 h-2 rounded-full bg-yellow" />

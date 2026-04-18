@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Lottie from 'lottie-react';
+import { useTranslation } from 'react-i18next';
 import LoadingPaperplane from '../../../../assets/LoadingPaperplane.json';
 export default function RequestProcessingAnimation({ isLoading }: { isLoading: boolean }) {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       {isLoading && (
@@ -23,7 +25,7 @@ export default function RequestProcessingAnimation({ isLoading }: { isLoading: b
             transition={{ delay: 0.2, duration: 0.3 }}
             className="font-poppins text-sm"
           >
-            Request Sending...
+            {t('swap.requestSending')}
           </motion.h3>
         </motion.div>
       )}

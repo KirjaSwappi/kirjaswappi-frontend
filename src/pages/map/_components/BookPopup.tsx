@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Image from '../../../components/shared/Image';
 import { IBookWithLocation } from '../types/interface';
 
 export default function BookPopup({ books }: { books: IBookWithLocation[] }) {
+  const { t } = useTranslation();
   const isSingle = books.length === 1;
 
   return (
@@ -38,7 +40,7 @@ export default function BookPopup({ books }: { books: IBookWithLocation[] }) {
                 {book.title}
               </h3>
               <p className="text-xs text-white truncate font-light font-poppins !my-0">
-                By {book.author}
+                {t('by')} {book.author}
               </p>
               <p className="text-[8px] text-gray font-light font-poppins !my-0 ">
                 {book.createdAt}

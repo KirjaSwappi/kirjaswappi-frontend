@@ -4,24 +4,24 @@ import { describe, expect, it } from 'vitest';
 import Stepper from '../../../pages/addUpdateBook/_components/Stepper';
 
 const baseSteps = [
-  { label: 'Details', isCompleted: false, isActive: true },
-  { label: 'Condition', isCompleted: false, isActive: false },
-  { label: 'Photos', isCompleted: false, isActive: false },
+  { labelKey: 'addBook.bookDetails', isCompleted: false, isActive: true },
+  { labelKey: 'addBook.otherDetails', isCompleted: false, isActive: false },
+  { labelKey: 'addBook.swapCondition', isCompleted: false, isActive: false },
 ];
 
 describe('Stepper', () => {
   it('should render all step labels', () => {
     render(<Stepper steps={baseSteps} />);
-    expect(screen.getByText('Details')).toBeInTheDocument();
-    expect(screen.getByText('Condition')).toBeInTheDocument();
-    expect(screen.getByText('Photos')).toBeInTheDocument();
+    expect(screen.getByText('Book Details')).toBeInTheDocument();
+    expect(screen.getByText('Other Details')).toBeInTheDocument();
+    expect(screen.getByText('Swap Condition')).toBeInTheDocument();
   });
 
   it('should show "Completed" text for completed steps', () => {
     const steps = [
-      { label: 'Details', isCompleted: true, isActive: false },
-      { label: 'Condition', isCompleted: false, isActive: true },
-      { label: 'Photos', isCompleted: false, isActive: false },
+      { labelKey: 'addBook.bookDetails', isCompleted: true, isActive: false },
+      { labelKey: 'addBook.otherDetails', isCompleted: false, isActive: true },
+      { labelKey: 'addBook.swapCondition', isCompleted: false, isActive: false },
     ];
     render(<Stepper steps={steps} />);
     expect(screen.getByText('Completed')).toBeInTheDocument();

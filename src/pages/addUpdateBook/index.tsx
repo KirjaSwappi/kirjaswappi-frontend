@@ -75,17 +75,17 @@ export default function AddUpdateBook() {
 
   const [steps, setSteps] = useState([
     {
-      label: 'Book Details',
+      labelKey: 'addBook.bookDetails',
       isCompleted: false,
       isActive: true,
     },
     {
-      label: 'Other Details',
+      labelKey: 'addBook.otherDetails',
       isCompleted: false,
       isActive: false,
     },
     {
-      label: 'Swap Condition',
+      labelKey: 'addBook.swapCondition',
       isCompleted: false,
       isActive: false,
     },
@@ -131,10 +131,10 @@ export default function AddUpdateBook() {
         : addBook(formData);
 
       await mutation.unwrap();
-      toast.success(bookData?.id ? 'Book updated successfully!' : 'Book created successfully!');
+      toast.success(bookData?.id ? t('toast.bookUpdated') : t('toast.bookCreated'));
       navigate(`/profile/user-profile/${userInformation.id}`);
     } catch (error) {
-      toast.error('Failed to save book. Please try again.');
+      toast.error(t('toast.bookSaveFailed'));
     }
   };
 
@@ -152,7 +152,7 @@ export default function AddUpdateBook() {
       <div className="container px-4 lg:px-0 lg:pt-[47px] lg:pr-7 xl:pr-[47px] 2xl:pr-48 bg-[#F2F4F8] lg:bg-white rounded-lg lg:min-h-[87vh] ">
         <div className="w-full">
           <BookAddUpdateHeader
-            title={`${id ? t('update') : t('add')} Book`}
+            title={t('addBook.addBookTitle', { action: id ? t('update') : t('add') })}
             onBack={() => navigate(`/profile/user-profile/${userInformation.id}`)}
           />
           <div className="pt-7 lg:pt-0">
@@ -168,7 +168,7 @@ export default function AddUpdateBook() {
                   <Image src={prevArrowIcon_3} alt="left" className="w-4 h-4" />
                 </Button>
                 <h3 className="font-poppins text-base font-bold text-[#19191C] ml-2 lg:text-2xl">
-                  {id ? t('update') : t('add')} Book
+                  {t('addBook.addBookTitle', { action: id ? t('update') : t('add') })}
                 </h3>
               </div>
               <div className="lg:flex xl:gap-28 pt-8 lg:pt-4 pb-3">
@@ -180,7 +180,7 @@ export default function AddUpdateBook() {
                 <div className="w-full lg:w-[68%] xl:w-[70%]">
                   <FormProvider {...methods}>
                     <h1 className="font-poppins lg:mt-0 mb-2 font-semibold text-[20px] hidden lg:block">
-                      {steps[active].label}
+                      {t(steps[active].labelKey)}
                     </h1>
                     <AddGenre
                       genresValue={active === 1 ? watch('genres') : watch('swappableGenres')}
@@ -203,7 +203,7 @@ export default function AddUpdateBook() {
                             type="button"
                             className="bg-primary-light text-primary w-full lg:w-[112px] py-4 rounded-lg border border-primary flex items-center justify-center font-poppins text-base font-medium"
                           >
-                            <Image src={PrevArrowIcon} alt="Next" className="w-4" /> Back
+                            <Image src={PrevArrowIcon} alt="Next" className="w-4" /> {t('back')}
                           </Button>
                         )}
                         {active <= 1 && (
@@ -212,7 +212,7 @@ export default function AddUpdateBook() {
                             type="button"
                             className="bg-primary text-white w-full lg:w-[112px] py-4 rounded-lg flex items-center justify-center font-poppins text-base font-medium"
                           >
-                            Next <Image src={NextArrowIcon} alt="Next" className="w-4" />
+                            {t('next')} <Image src={NextArrowIcon} alt="Next" className="w-4" />
                           </Button>
                         )}
                         {active === 2 && (

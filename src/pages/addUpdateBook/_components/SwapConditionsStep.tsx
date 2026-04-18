@@ -39,10 +39,10 @@ export default function SwapConditionsStep({ errors }: { errors: any }) {
 
   // =========== SWAP TYPES FROM API ===========
   const SWAP_TYPE_LABELS: Record<string, string> = {
-    OpenForOffers: 'Open To Offers',
-    ByBooks: 'By Books',
-    ByGenres: 'By Genres',
-    GiveAway: 'Give Away',
+    OpenForOffers: t('addBook.openToOffers'),
+    ByBooks: t('addBook.byBooks'),
+    ByGenres: t('addBook.byGenres'),
+    GiveAway: t('addBook.giveAwayType'),
   };
   const { data: apiSwapTypes } = useGetSupportedSwapTypesQuery();
   const swapTypes = apiSwapTypes

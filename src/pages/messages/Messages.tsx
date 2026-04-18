@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import PageTitle from '../../components/shared/PageTitle';
 import { selectChat } from '../../redux/feature/messages/messagesSlice';
@@ -10,6 +11,7 @@ import ChatWindowTopBar from './components/ChatWindowTopBar';
 import UserProfile from './components/UserProfile';
 
 export default function Messages() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [bookOpen, setBookOpen] = useState(true);
   const { selectedChatId } = useAppSelector((state) => state.chat);
@@ -24,7 +26,7 @@ export default function Messages() {
 
   return (
     <div className="lg:container flex gap-3 lg:gap-5 lg:mt-3 xl:mt-6">
-      <PageTitle title="Messages" />
+      <PageTitle title={t('messages.title')} />
       <aside
         className={`h-[calc(100dvh-134px)] lg:h-[85vh] xl:h-[82vh] custom-scrollbar overflow-hidden w-full lg:w-[40%] xl:w-[25%] lg:bg-white rounded-xl py-5 xl:py-[30px] ${
           selectedChatId || messageId ? 'hidden' : 'block'

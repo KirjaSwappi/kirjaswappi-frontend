@@ -4,27 +4,29 @@ import Open from '../../../assets/3d-condition-icon-Open-to-Offer.png';
 import book from '../../../assets/3d-condition-icon-by-book.png';
 import Image from '../../../components/shared/Image';
 
+import { useTranslation } from 'react-i18next';
 import { SwapType } from '../../../../types/enum';
 
 export default function ConditionMessageBox({ swapType }: { swapType: string }) {
+  const { t } = useTranslation();
   if (!swapType) return null;
 
   const swapConditionList: Record<string, { image: string; message: string }> = {
     [SwapType.BYGENRES]: {
       image: byGenres,
-      message: "Click 'Add' to add your preferable genre",
+      message: t('addBook.conditionByGenres'),
     },
     [SwapType.BYBOOKS]: {
       image: book,
-      message: 'Swap with specific book(s).',
+      message: t('addBook.conditionByBooks'),
     },
     [SwapType.OPENTOOFFERS]: {
       image: Open,
-      message: 'You will receive offers of all sorts of books',
+      message: t('addBook.conditionOpenToOffers'),
     },
     [SwapType.GIVEAWAY]: {
       image: Giveaway,
-      message: 'You will receive offers for giveaway',
+      message: t('addBook.conditionGiveAway'),
     },
   };
 

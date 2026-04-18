@@ -1,5 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   MapContainer as LeafletMapContainer,
   Marker,
@@ -21,6 +22,7 @@ interface MapContainerProps {
 const normalize = (num: number, precision = 4) => Number(num.toFixed(precision));
 
 export default function MapContainer({ books, userCoords }: MapContainerProps) {
+  const { t } = useTranslation();
   const { latitude, longitude } = userCoords;
 
   /* =========================
@@ -70,7 +72,7 @@ export default function MapContainer({ books, userCoords }: MapContainerProps) {
   if (latitude == null || longitude == null) {
     return (
       <div className="h-full flex items-center justify-center bg-gray-100">
-        <p>Loading map…</p>
+        <p>{t('map.loadingMap')}</p>
       </div>
     );
   }
@@ -86,7 +88,7 @@ export default function MapContainer({ books, userCoords }: MapContainerProps) {
 
       {/* USER LOCATION */}
       <Marker position={[latitude, longitude]} icon={userLocationIcon}>
-        <Popup>You are here</Popup>
+        <Popup>{t('map.youAreHere')}</Popup>
       </Marker>
 
       {/* 📚 GROUPED BOOK MARKERS */}

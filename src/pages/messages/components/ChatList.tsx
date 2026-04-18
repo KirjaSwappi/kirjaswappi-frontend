@@ -71,7 +71,7 @@ export default function ChatList() {
         <div className="relative h-[40px]">
           <IoIosSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-xl" />
           <Input
-            placeholder="Search messages..."
+            placeholder={t('messages.searchMessages')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 rounded-full h-[40px]"
@@ -145,7 +145,7 @@ export default function ChatList() {
                       }`}
                     >
                       {lastMsg.images && lastMsg.images.length > 0
-                        ? '📷 Image'
+                        ? '📷 ' + t('chat.image')
                         : truncateText(lastMsg.text || '', 30)}
                     </p>
                   )}

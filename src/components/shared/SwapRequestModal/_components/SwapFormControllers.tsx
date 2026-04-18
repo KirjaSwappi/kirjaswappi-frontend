@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SwapType } from '../../../../../types/enum';
 import Button from '../../Button';
 import { ISwapBook } from '../types/interface';
@@ -17,6 +18,7 @@ const SwapFormControllers = ({
   books: ISwapBook[];
 }) => {
   const { control } = useFormContext();
+  const { t } = useTranslation();
   return (
     <div className="-mt-3">
       <Controller
@@ -38,26 +40,26 @@ const SwapFormControllers = ({
 
       {swapType === SwapType.BYGENRES && (
         <SwapController
-          swapTitle="Select from your library"
+          swapTitle={t('swap.selectFromLibrary')}
           swapType={SwapType.BYGENRES}
           books={data}
-          swapDescription="You can offer from your library or, ask for genres"
+          swapDescription={t('swap.selectFromLibraryDesc')}
         />
       )}
 
       {swapType === SwapType.OPENTOOFFERS && (
         <SwapController
-          swapTitle="Select from your library"
+          swapTitle={t('swap.selectFromLibrary')}
           swapType={SwapType.OPENTOOFFERS}
           books={books}
-          swapDescription="You can offer from your library or, ask for open to offer"
+          swapDescription={t('swap.selectFromLibraryDesc')}
         />
       )}
 
       <SwapController
-        swapTitle="Ask for giveaway"
+        swapTitle={t('swap.askForGiveaway')}
         swapType={SwapType.GIVEAWAY}
-        swapDescription="You can offer from your library or, ask for giveaway"
+        swapDescription={t('swap.askForGiveawayDesc')}
       />
     </div>
   );

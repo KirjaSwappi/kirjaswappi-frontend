@@ -40,7 +40,7 @@ describe('BookPopup', () => {
         <BookPopup books={books as any} />
       </MemoryRouter>,
     );
-    expect(screen.getByText('By Test Author')).toBeInTheDocument();
+    expect(screen.getByText('by Test Author')).toBeInTheDocument();
   });
 
   it('links to book details', () => {

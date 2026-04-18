@@ -41,13 +41,7 @@ class ErrorBoundary extends Component<Props, State> {
           />
         );
       }
-      return (
-        <GlobalError
-          title="Something went wrong"
-          message={this.state.error?.message || 'An unexpected error occurred'}
-          onRetry={this.resetErrorBoundary}
-        />
-      );
+      return <GlobalError onRetry={this.resetErrorBoundary} />;
     }
 
     return this.props.children;

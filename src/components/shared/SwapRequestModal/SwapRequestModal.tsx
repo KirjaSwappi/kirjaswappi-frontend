@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useEffect, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SwapType } from '../../../../types/enum';
 import { ERROR } from '../../../constant/MESSAGETYPE';
 import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
@@ -33,6 +34,7 @@ import { ISwapRequestForm, TOrganizedData } from './types/interface';
 export default function SwapModal() {
   // =========== REDUX STATE ===========
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { swapModalOpen, swapBookInformation, bookIdToSwapWith, errorMessage, swapFilterGenre } =
     useAppSelector((state) => state.swapBook);
   const {
@@ -102,7 +104,7 @@ export default function SwapModal() {
         case SwapType.BYGENRES:
         case SwapType.OPENTOOFFERS:
           if (data.selectedBook) {
-            const message = `I would like to offer my book: ${data.selectedBook.title}`;
+            const message = t('swap.offerMessage', { bookTitle: data.selectedBook.title });
             organizedData.note = organizedData.note
               ? `${organizedData.note}\n\n${message}`
               : message;
@@ -123,7 +125,7 @@ export default function SwapModal() {
           // Error is handled by RTK Query and displayed via errorMessage state
         });
     },
-    [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal],
+    [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal, t],
   );
 
   // =========== DERIVED VALUES ===========
@@ -209,11 +211,11 @@ export default function SwapModal() {
                   </div>
                   <Line className="mt-2 bg-AntiFlashWhite" />
                   <div>
-                    <InputLabel label="Short Note" className="mt-3 lg:mt-0 lg:mb-2" />
+                    <InputLabel label={t('swap.shortNote')} className="mt-3 lg:mt-0 lg:mb-2" />
                     <ControlledInputField
                       type="textarea"
                       name="note"
-                      placeholder="Write a short note"
+                      placeholder={t('swap.writeShortNote')}
                       className="rounded-md h-[83px] bg-white"
                     />
                   </div>

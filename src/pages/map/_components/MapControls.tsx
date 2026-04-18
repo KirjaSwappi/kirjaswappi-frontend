@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { BiCurrentLocation } from 'react-icons/bi';
 import { HiOutlineMinusSm, HiOutlinePlusSm } from 'react-icons/hi';
 import { useMap } from 'react-leaflet';
@@ -9,6 +10,7 @@ type MapControlsProps = {
 };
 
 export default function MapControls({ latitude, longitude }: MapControlsProps) {
+  const { t } = useTranslation();
   const map = useMap();
 
   return (
@@ -31,7 +33,7 @@ export default function MapControls({ latitude, longitude }: MapControlsProps) {
       <Button
         onClick={() => map.flyTo([latitude, longitude], 16, { animate: true })}
         className="w-10 h-10 bg-white rounded-full shadow-md flex items-center justify-center"
-        title="My location"
+        title={t('map.myLocation')}
       >
         <BiCurrentLocation size={20} className="text-[#2B2B2B]" />
       </Button>

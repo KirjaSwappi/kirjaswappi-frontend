@@ -1,4 +1,5 @@
 import { FaRegUser } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 import campaign from '../../../assets/Campaign.jpg';
 import locationIcon from '../../../assets/location-icon.png';
 import Image from '../../../components/shared/Image';
@@ -10,6 +11,7 @@ import { useGetAllBooksQuery } from '../../../redux/feature/book/bookApi';
 import { useAppSelector } from '../../../redux/hooks';
 
 export default function UserProfile() {
+  const { t } = useTranslation();
   const { selectedChatId, chats } = useAppSelector((state) => state.chat);
 
   const selectedChat = chats.find((chat) => chat.id === selectedChatId);
@@ -36,7 +38,7 @@ export default function UserProfile() {
   if (!selectedChat || !partnerId) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-gray-500 text-sm">Select a chat to view profile</p>
+        <p className="text-gray-500 text-sm">{t('profile.selectChatToView')}</p>
       </div>
     );
   }
@@ -97,12 +99,16 @@ export default function UserProfile() {
       <div className="hidden lg:block border-y border-AntiFlashWhite 2xl:mt-5 text-center">
         <div className="flex items-center py-2 px-4 justify-evenly">
           <div className="flex flex-col gap-1 items-center">
-            <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
+            <h4 className="font-poppins text-xs font-light text-[#262626]">
+              {t('profile.totalSwaps')}
+            </h4>
             <p className="font-poppins text-xs font-medium text-smokyBlack">-</p>
           </div>
           <span className="h-12 w-[1px] block bg-platinumMix"></span>
           <div className="flex flex-col gap-1 items-center">
-            <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
+            <h4 className="font-poppins text-xs font-light text-[#262626]">
+              {t('profile.booksListed')}
+            </h4>
             <p className="font-poppins text-xs font-medium text-smokyBlack">{booksCount}</p>
           </div>
         </div>
@@ -111,7 +117,7 @@ export default function UserProfile() {
         <div className="flex flex-row gap-1 items-center">
           <Image src={locationIcon} alt="edit" className="w-4" />
           <p className="font-poppins text-xs font-light text-blackOlive">
-            {data?.city || 'Location not specified'}
+            {data?.city || t('profile.locationNotSpecified')}
           </p>
         </div>
       </div>

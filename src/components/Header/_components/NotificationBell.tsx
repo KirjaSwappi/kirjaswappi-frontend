@@ -93,7 +93,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
             ? 'p-0 flex flex-col items-center gap-1'
             : 'p-2 hover:bg-light rounded-full border border-platinumMix focus:ring-2 focus:ring-primary focus:ring-offset-2',
         )}
-        aria-label={`Notifications, ${unreadCount} unread`}
+        aria-label={t('notification.ariaLabel', { count: unreadCount })}
         aria-expanded={isNotificationPanelOpen}
         aria-haspopup="true"
       >
@@ -146,7 +146,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
           <span
             className="absolute bottom-0 right-0 w-3 h-3 bg-yellow border-2 border-white rounded-full"
             aria-label="Connection error"
-            title="Unable to connect to notification service"
+            title={t('notification.connectionErrorTooltip')}
           />
         )}
       </button>

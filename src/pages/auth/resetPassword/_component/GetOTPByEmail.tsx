@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Input from '../../../../components/shared/Input';
 
 interface GetOTPByEmailProps {
@@ -15,6 +16,7 @@ export default function GetOTPByEmail({
   handleChange,
   validateInput,
 }: GetOTPByEmailProps) {
+  const { t } = useTranslation();
   return (
     <div>
       <Input
@@ -23,14 +25,12 @@ export default function GetOTPByEmail({
         value={userInfo.email}
         name="email"
         onChange={handleChange}
-        placeholder="Enter email"
+        placeholder={t('auth.enterEmail')}
         error={error}
         className="rounded-lg"
         onBlur={validateInput}
       />
-      <p className="mt-4 text-sm text-[#808080] font-light">
-        An OTP will be sent to the email address
-      </p>
+      <p className="mt-4 text-sm text-[#808080] font-light">{t('auth.otpWillBeSent')}</p>
     </div>
   );
 }

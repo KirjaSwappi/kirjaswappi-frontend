@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaLocationDot } from 'react-icons/fa6';
 import { IoSearch } from 'react-icons/io5';
 import useDebounce from '../../hooks/useDebounce';
@@ -40,6 +41,7 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
   ) => {
     const { city, search } = useAppSelector((state) => state.filter.filter);
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const internalInputRef = useRef<HTMLInputElement | null>(null);
     const { reference } = useMouseClick();
@@ -82,7 +84,7 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
               ref={setRefs}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={placeholder || 'Search Books...'}
+              placeholder={placeholder || t('common.searchBooks')}
               type="text"
               className="w-full h-full outline-none border-none px-3 py-1 !bg-white placeholder:text-grayDark placeholder:text-xs"
             />
@@ -96,10 +98,10 @@ const Search = forwardRef<HTMLInputElement, SearchProps>(
               >
                 <SelectTrigger className="flex items-center gap-1 rounded-full bg-primary-light h-8 px-2 text-primary">
                   <FaLocationDot />
-                  <SelectValue placeholder="All cities" />
+                  <SelectValue placeholder={t('common.allCities')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__all">All cities</SelectItem>
+                  <SelectItem value="__all">{t('common.allCities')}</SelectItem>
                   {data?.map((c: { name: string }) => (
                     <SelectItem key={c.name} value={c.name}>
                       {c.name}

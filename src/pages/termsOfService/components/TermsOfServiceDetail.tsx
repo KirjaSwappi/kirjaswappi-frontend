@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import TermsOfServiceHeader from './TermsOfServiceHeader';
 import { useTermsOfServiceData } from './useTermsOfServiceData';
 
 const TermsOfServiceDetail: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { sectionKey } = useParams<{ sectionKey: string }>();
 
@@ -27,8 +29,8 @@ const TermsOfServiceDetail: React.FC = () => {
         <div className="pt-[56px] lg:max-w-3xl lg:mx-auto lg:px-12">
           <TermsOfServiceHeader onBack={() => navigate('/terms-of-service')} />
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Section not found</h2>
-            <p>The requested section could not be found.</p>
+            <h2 className="text-xl font-semibold mb-4">{t('error.sectionNotFound')}</h2>
+            <p>{t('error.sectionNotFoundDesc')}</p>
           </div>
         </div>
       </div>
