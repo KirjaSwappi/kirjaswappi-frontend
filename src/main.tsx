@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <GoogleOAuthProvider clientId={clientID}>
       <Provider store={store}>
         <Authenticate />
+        <Analytics />
       </Provider>
     </GoogleOAuthProvider>
   </React.StrictMode>,
