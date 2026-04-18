@@ -22,6 +22,7 @@ export default function MoreFromThisUserBooks({ bookId }: { bookId: string | und
   const isInitialLoading = isFetching || isLoading;
 
   if (!bookId) return null;
+  if (!isInitialLoading && (!moreBooks || moreBooks.length === 0)) return null;
 
   // Get owner ID from the first book in the list
   const ownerId = moreBooks?.[0]?.owner?.id;

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import filterIcon from '../../../assets/filter.png';
 import Button from '../../../components/shared/Button';
 import Image from '../../../components/shared/Image';
@@ -10,6 +11,7 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { FilterItemEnum } from '../../../utility/enum';
 
 export default function MapSearchAndFilterBooks() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   return (
@@ -27,7 +29,7 @@ export default function MapSearchAndFilterBooks() {
 
         <Search
           className="h-[54px] rounded-full justify-between placeholder:pl-3 !md:placeholder:pl-0"
-          placeholder="Find books"
+          placeholder={t('map.findBooks')}
         />
       </div>
     </div>

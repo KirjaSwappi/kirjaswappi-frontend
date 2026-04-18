@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import PasswordInput from '../../../../components/shared/PasswordInput';
 
 interface NewPasswordProps {
@@ -19,6 +20,7 @@ export default function NewPassword({
   errors,
   validateInput,
 }: NewPasswordProps) {
+  const { t } = useTranslation();
   return (
     <div>
       <PasswordInput
@@ -26,7 +28,7 @@ export default function NewPassword({
         name="password"
         value={userPass.password}
         onChange={handleChange}
-        placeholder="Password"
+        placeholder={t('auth.passwordPlaceholder')}
         error={errors.password}
         className="rounded-t-lg"
         onBlur={validateInput}
@@ -37,7 +39,7 @@ export default function NewPassword({
         name="confirmPassword"
         value={userPass.confirmPassword}
         onChange={handleChange}
-        placeholder="Confirm Password"
+        placeholder={t('auth.confirmPasswordPlaceholder')}
         error={errors.confirmPassword}
         className="rounded-b-lg"
         onBlur={validateInput}

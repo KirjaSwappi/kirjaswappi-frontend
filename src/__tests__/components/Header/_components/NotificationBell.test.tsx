@@ -104,7 +104,7 @@ describe('NotificationBell', () => {
     const { store } = renderWithProviders(<NotificationBell />, { preloadedState });
 
     // Click the bell to open the panel
-    const bellButton = screen.getByRole('button', { name: /notifications/i });
+    const bellButton = screen.getByRole('button', { name: /notification.ariaLabel/i });
     act(() => {
       bellButton.click();
     });

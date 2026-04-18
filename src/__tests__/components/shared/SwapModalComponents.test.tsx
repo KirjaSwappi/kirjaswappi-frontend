@@ -70,7 +70,7 @@ describe('SubmitButton', () => {
 
 describe('ConditionDisplay', () => {
   it('renders condition label and image', () => {
-    render(<ConditionDisplay conditionItem={{ image: 'swap.png', label: 'By Books' }} />);
+    render(<ConditionDisplay conditionItem={{ image: 'swap.png', labelKey: 'swap.byBooks' }} />);
     expect(screen.getByText('By Books')).toBeInTheDocument();
   });
 

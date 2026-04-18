@@ -62,9 +62,9 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
     if (partnerId) navigate(`/profile/user-profile/${partnerId}`);
   };
 
-  const bookTitle = selectedChat.bookToSwapWith?.title || 'Unknown Book';
-  const bookAuthor = selectedChat.bookToSwapWith?.author || 'Unknown Author';
-  const bookCondition = selectedChat.bookToSwapWith?.condition || 'N/A';
+  const bookTitle = selectedChat.bookToSwapWith?.title || t('chat.unknownBook');
+  const bookAuthor = selectedChat.bookToSwapWith?.author || t('chat.unknownAuthor');
+  const bookCondition = selectedChat.bookToSwapWith?.condition || t('chat.notAvailable');
 
   const rawStatus = selectedChat.swapStatus || 'PENDING';
   const swapStatus = rawStatus.toUpperCase();
@@ -94,12 +94,12 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
   };
 
   const statusDisplayLabels: Record<string, string> = {
-    PENDING: 'Pending',
-    ACCEPTED: 'Accepted',
-    REJECTED: 'Rejected',
-    COMPLETED: 'Completed',
-    CANCELLED: 'Cancelled',
-    EXPIRED: 'Expired',
+    PENDING: t('chat.pending'),
+    ACCEPTED: t('chat.accepted'),
+    REJECTED: t('chat.rejected'),
+    COMPLETED: t('chat.completed'),
+    CANCELLED: t('chat.cancelled'),
+    EXPIRED: t('chat.expired'),
   };
 
   return (
@@ -123,7 +123,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
               className="font-poppins text-sm cursor-pointer hover:underline text-left bg-transparent border-0 p-0"
               onClick={goPartnerProfile}
             >
-              {partnerName || 'Chat'}
+              {partnerName || t('chat.chat')}
             </button>
           ) : (
             <h1 className="font-poppins text-sm">{partnerName || 'Chat'}</h1>
@@ -145,7 +145,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             <div className="flex flex-col gap-1">
               <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
               <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
-                by {bookAuthor}
+                {t('chat.byAuthor', { author: bookAuthor })}
               </p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
                 <div className="flex flex-col gap-1">
                   <h3 className="font-poppins text-xs text-smokyBlack font-medium">{bookTitle}</h3>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
-                    by {bookAuthor}
+                    {t('chat.byAuthor', { author: bookAuthor })}
                   </p>
                   <p className="font-poppins font-light text-[10px] mt-[2px] leading-[13.77px] text-gray-600">
                     {t('chat.bookCondition')}:{' '}

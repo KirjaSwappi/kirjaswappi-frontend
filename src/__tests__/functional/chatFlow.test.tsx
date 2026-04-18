@@ -475,7 +475,7 @@ describe('Chat Messaging Flow (Functional)', () => {
       { preloadedState: stateWithMultiple },
     );
 
-    const searchInput = screen.getByPlaceholderText('Search messages...');
+    const searchInput = screen.getByPlaceholderText('messages.searchMessages');
     await user.type(searchInput, 'JavaScript');
 
     await waitFor(() => {
@@ -489,7 +489,7 @@ describe('Chat Messaging Flow (Functional)', () => {
     renderMessages();
 
     await waitFor(() => {
-      expect(screen.queryByPlaceholderText('Search messages...')).toBeInTheDocument();
+      expect(screen.queryByPlaceholderText('messages.searchMessages')).toBeInTheDocument();
     });
   });
 });

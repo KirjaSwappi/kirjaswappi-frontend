@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
@@ -14,6 +15,7 @@ import { useAppSelector } from '../../../redux/hooks';
 import ConfirmOTP from './_components/ConfirmOTP';
 import RegisterForm from './_components/RegisterForm';
 export default function Register() {
+  const { t } = useTranslation();
   const { step } = useAppSelector((state) => state.step);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,14 +37,12 @@ export default function Register() {
   }, [location.pathname, dispatch]);
   return (
     <div>
-      <PageTitle title="Register" />
+      <PageTitle title={t('auth.register')} />
       <div className="container lg:bg-white min-h-svh lg:min-h-[calc(100vh-128px)] relative lg:rounded-lg lg:grid lg:grid-cols-2 lg:mt-5 overflow-hidden">
         <div className="hidden bg-primary-light lg:flex flex-col items-center justify-center">
           <Image src={authShape} alt="auth shape" className="max-w-[396px] mb-14" />
           <Image src={logo} alt="logo" className="max-w-[310px]" />
-          <p className="text-center text-grayDark text-xs px-20 mt-5">
-            Swap books with readers near you. Join KirjaSwappi and give your books a second life.
-          </p>
+          <p className="text-center text-grayDark text-xs px-20 mt-5">{t('auth.tagline')}</p>
         </div>
         <div className="flex flex-col justify-center lg:px-20">
           <div className="lg:hidden pt-4 pb-6 flex items-center gap-4">
@@ -67,7 +67,7 @@ export default function Register() {
             >
               <Image src={leftArrowIcon} alt="left" />
             </button>
-            <h3 className="font-poppins text-base font-medium ">log in or Signup</h3>
+            <h3 className="font-poppins text-base font-medium ">{t('auth.logInOrSignup')}</h3>
           </div>
           {renderStepsContent()}
           <div className="relative my-4">
@@ -75,7 +75,7 @@ export default function Register() {
               <div className="w-full border-t border-platinum"></div>
             </div>
             <div className="relative flex justify-center text-xs font-poppins">
-              <span className="bg-light lg:bg-white px-2 text-grayDark">Or</span>
+              <span className="bg-light lg:bg-white px-2 text-grayDark">{t('common.or')}</span>
             </div>
           </div>
           <GoogleLoginButton />

@@ -11,22 +11,22 @@ import { SwapConditionList } from '../../../components/shared/SwapRequestModal/_
 describe('SwapConditionList', () => {
   it('has entry for ByGenres', () => {
     expect(SwapConditionList[SwapType.BYGENRES]).toBeDefined();
-    expect(SwapConditionList[SwapType.BYGENRES].label).toBe('By Genre');
+    expect(SwapConditionList[SwapType.BYGENRES].labelKey).toBe('swap.byGenre');
   });
 
   it('has entry for ByBooks', () => {
     expect(SwapConditionList[SwapType.BYBOOKS]).toBeDefined();
-    expect(SwapConditionList[SwapType.BYBOOKS].label).toBe('By Books');
+    expect(SwapConditionList[SwapType.BYBOOKS].labelKey).toBe('swap.byBooks');
   });
 
   it('has entry for OpenForOffers', () => {
     expect(SwapConditionList[SwapType.OPENTOOFFERS]).toBeDefined();
-    expect(SwapConditionList[SwapType.OPENTOOFFERS].label).toBe('Open To Offer');
+    expect(SwapConditionList[SwapType.OPENTOOFFERS].labelKey).toBe('swap.openToOffer');
   });
 
   it('has entry for GiveAway', () => {
     expect(SwapConditionList[SwapType.GIVEAWAY]).toBeDefined();
-    expect(SwapConditionList[SwapType.GIVEAWAY].label).toBe('Giveaway');
+    expect(SwapConditionList[SwapType.GIVEAWAY].labelKey).toBe('swap.giveaway');
   });
 
   it('has 4 entries total', () => {

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { CredentialResponse } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
 import { useLoginWithGoogleMutation } from '../../redux/feature/auth/authApi';
@@ -9,6 +10,7 @@ import { showToast } from './toast';
 export default function GoogleLoginButton() {
   const [loginWithGoogle] = useLoginWithGoogleMutation();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
 
@@ -28,15 +30,15 @@ export default function GoogleLoginButton() {
       loginWithGoogle({ idToken })
         .then((res) => {
           if (res.data) {
-            showToast('success', 'Login successful');
+            showToast('success', t('toast.googleLoginSuccess'));
             dispatch(setLoginModalOpen(false));
           }
         })
         .catch(() => {
-          showToast('error', 'Google login failed. Please try again.');
+          showToast('error', t('toast.googleLoginFailed'));
         });
     } else {
-      showToast('error', 'Something went wrong! Please try again.');
+      showToast('error', t('toast.somethingWentWrong'));
     }
   };
 
@@ -44,7 +46,7 @@ export default function GoogleLoginButton() {
     <div ref={containerRef}>
       <GoogleLogin
         onSuccess={handleGoogleLogin}
-        onError={() => showToast('error', 'Something went wrong! Please try again.')}
+        onError={() => showToast('error', t('toast.somethingWentWrong'))}
         width={buttonWidth}
       />
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import plusIcon from '../../assets/plusIcon.png';
 import tickMarkIcon from '../../assets/tickmark.png';
 import SideDrawer from '../../pages/profile/components/SideDrawer';
@@ -25,6 +26,7 @@ export default function AddGenre({
     data: IGenresResponse | undefined;
     isLoading: boolean;
   };
+  const { t } = useTranslation();
 
   const handleAddGenre = (genre: string) => {
     if (!genresValue.includes(genre)) {
@@ -42,7 +44,7 @@ export default function AddGenre({
   );
 
   return (
-    <SideDrawer title="Genre">
+    <SideDrawer title={t('common.genre')}>
       <div className="flex flex-col gap-2 pb-4 mt-8">
         {allGenres.map((genreItem) => {
           const isSelected = genresValue.includes(genreItem.name);

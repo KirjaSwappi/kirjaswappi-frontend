@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import BookCard from '../../../components/shared/BookCard';
 import BookSkeleton from '../../../components/shared/skeleton/BookSkeleton';
@@ -6,6 +7,7 @@ import { useGetUserByIdQuery } from '../../../redux/feature/auth/authApi';
 import { useAppSelector } from '../../../redux/hooks';
 
 export default function BookmarkedBooks() {
+  const { t } = useTranslation();
   const { id: userId } = useParams();
   const {
     userInformation: { id },
@@ -28,8 +30,8 @@ export default function BookmarkedBooks() {
   if (favBooks.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-gray-500 font-medium">No bookmarked books</p>
-        <p className="text-xs text-gray-400 mt-1">Books you bookmark will appear here</p>
+        <p className="text-gray-500 font-medium">{t('profile.noBookmarks')}</p>
+        <p className="text-xs text-gray-400 mt-1">{t('profile.bookmarksHint')}</p>
       </div>
     );
   }

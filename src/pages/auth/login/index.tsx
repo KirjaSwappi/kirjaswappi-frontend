@@ -48,7 +48,7 @@ export default function Login() {
         dispatch(setMessages({ type: '', isShow: false, message: '' }));
         dispatch(setAuthMessage(''));
         dispatch(setAuthSuccess(false));
-        showToast('success', 'Login Successfully Done.');
+        showToast('success', t('toast.loginSuccess'));
       }, 2000);
       return () => clearTimeout(timer);
     } catch (error) {
@@ -70,7 +70,7 @@ export default function Login() {
 
   return (
     <div className=" relative font-poppins">
-      <PageTitle title="Login" />
+      <PageTitle title={t('auth.login')} />
       <div className="lg:hidden absolute top-[18%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center">
         <Image src={profileIcon || '/placeholder.svg'} />
       </div>

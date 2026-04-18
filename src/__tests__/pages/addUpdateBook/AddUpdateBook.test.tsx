@@ -134,9 +134,9 @@ describe('AddUpdateBook', () => {
   it('renders stepper with steps', () => {
     renderComponent();
     expect(screen.getByTestId('stepper')).toBeInTheDocument();
-    expect(screen.getAllByText('Book Details').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('Other Details')).toBeInTheDocument();
-    expect(screen.getByText('Swap Condition')).toBeInTheDocument();
+    expect(screen.getAllByText('addBook.bookDetails').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('addBook.otherDetails')).toBeInTheDocument();
+    expect(screen.getByText('addBook.swapCondition')).toBeInTheDocument();
   });
 
   it('renders header with add title', () => {
@@ -151,7 +151,7 @@ describe('AddUpdateBook', () => {
 
   it('renders Next button on first step', () => {
     renderComponent();
-    expect(screen.getByText('Next')).toBeInTheDocument();
+    expect(screen.getByText('next')).toBeInTheDocument();
   });
 
   it('renders add genre component', () => {

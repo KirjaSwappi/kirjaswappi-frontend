@@ -56,7 +56,7 @@ export default function LoginModal() {
         dispatch(setMessages({ type: '', isShow: false, message: '' }));
         dispatch(setAuthMessage(''));
         dispatch(setAuthSuccess(false));
-        showToast('success', 'Login Successfully Done.');
+        showToast('success', t('toast.loginSuccess'));
         dispatch(setLoginModalOpen(false));
       }, 2000);
       return () => clearTimeout(timer);

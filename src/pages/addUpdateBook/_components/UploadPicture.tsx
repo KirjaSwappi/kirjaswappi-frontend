@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Input, { IInputFieldProps } from '../../../components/shared/Input';
 import { cn } from '../../../utility/cn';
 interface UploadPictureProps extends IInputFieldProps {
@@ -11,6 +12,7 @@ const UploadPicture = ({
   isShow = true,
   ...props
 }: UploadPictureProps) => {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(
@@ -24,7 +26,9 @@ const UploadPicture = ({
       >
         <span className="text-grayDark text-3xl font-poppins font-extralight">+</span>
         {isShow && (
-          <span className="text-grayDark text-xs font-poppins font-normal">Upload Picture</span>
+          <span className="text-grayDark text-xs font-poppins font-normal">
+            {t('addBook.uploadPicture')}
+          </span>
         )}
 
         <Input multiple id={id} type="file" className="hidden" {...props} />

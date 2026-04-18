@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { FieldError, FieldErrors, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { BiTargetLock } from 'react-icons/bi';
 import addGenreIcon from '../../../assets/addGenre.png';
 import closeIcon from '../../../assets/closeIcon.png';
@@ -14,6 +15,7 @@ import { ISearchResult } from '../types/interface';
 import LocationMap from './LocationMap';
 
 export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
+  const { t } = useTranslation();
   const { open } = useAppSelector((state) => state.open);
   const dispatch = useAppDispatch();
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
@@ -131,7 +133,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
     try {
       // Check if geolocation is available
       if (!('geolocation' in navigator)) {
-        throw new Error('Geolocation is not supported by your browser');
+        throw new Error(t('addBook.geoNotSupported'));
       }
 
       // Get user's current position
@@ -186,27 +188,26 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
     } catch (error) {
       console.error('Geolocation failed:', error);
 
-      let errorMessage = 'Failed to get your location. ';
+      let errorMessage = '';
 
       if (error instanceof GeolocationPositionError) {
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage += 'Please allow location access in your browser settings and try again.';
+            errorMessage = t('addBook.geoPermissionDenied');
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage +=
-              'Location information is unavailable. Please try searching for a location.';
+            errorMessage = t('addBook.geoPositionUnavailable');
             break;
           case error.TIMEOUT:
-            errorMessage += 'Location request timed out. Please try again.';
+            errorMessage = t('addBook.geoTimeout');
             break;
           default:
-            errorMessage += 'Please try again or search for a location.';
+            errorMessage = t('addBook.geoUnknownError');
         }
       } else if (error instanceof Error) {
-        errorMessage += error.message;
+        errorMessage = error.message;
       } else {
-        errorMessage += 'Please try again or search for a location.';
+        errorMessage = t('addBook.geoUnknownError');
       }
 
       setLocationError(errorMessage);
@@ -238,7 +239,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 xl:gap-10 2xl:gap-20 md:gap-4">
         <div className="w-full">
           <div className="flex items-center justify-between border-b lg:border-b-0 border-platinumDark">
-            <InputLabel label="Genre" required className="mb-0" />
+            <InputLabel label={t('common.genre')} required className="mb-0" />
           </div>
           <div>
             {genres && genres.length > 0 ? (
@@ -267,9 +268,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   <Image src={addGenreIcon} alt="genre" className="w-[68px] h-[60px]" />
                   <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
                 </div>
-                <p className="text-xs text-grayDark font-poppins">
-                  Click &apos;Here&apos; to add genre
-                </p>
+                <p className="text-xs text-grayDark font-poppins">{t('addBook.clickToAddGenre')}</p>
               </div>
             )}
             {errors && errors['genres'] && (
@@ -281,7 +280,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
         </div>
         <div className="w-full">
           <div className="border-b lg:border-b-0 border-platinumDark">
-            <InputLabel label="Location" required={false} className="mb-2" />
+            <InputLabel label={t('editProfile.location')} required={false} className="mb-2" />
             <div ref={searchRef} className="relative">
               <div className="flex gap-2 bg-AntiFlashWhite border border-gray rounded-md">
                 <div className="flex-1 relative">
@@ -290,7 +289,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                     value={searchQuery}
                     onChange={(e) => handleSearchInputChange(e.target.value)}
                     onFocus={() => searchQuery && setShowSearchDropdown(true)}
-                    placeholder="Search for a location..."
+                    placeholder={t('addBook.searchLocation')}
                     className="w-full px-4 py-3 bg-transparent 
   border-none focus:border-transparent 
   focus:ring-0 focus:outline-none 
@@ -307,7 +306,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   onClick={handleCurrentLocation}
                   disabled={isLoadingAddress}
                   className="px-4 py-3  disabled:opacity-50 flex items-center justify-center min-w-[50px]"
-                  title="Use current location"
+                  title={t('addBook.useCurrentLocation')}
                 >
                   {isLoadingAddress ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#3879E9]"></div>
@@ -334,7 +333,9 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
 
               {showSearchDropdown && searchQuery && !isSearching && searchResults.length === 0 && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-platinum rounded-lg shadow-lg z-10 p-4">
-                  <div className="text-sm text-gray-500 text-center">No locations found</div>
+                  <div className="text-sm text-gray-500 text-center">
+                    {t('addBook.noLocationsFound')}
+                  </div>
                 </div>
               )}
             </div>
@@ -376,9 +377,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                     }
                   }}
                 />
-                <p className="text-xs text-gray-500 text-center">
-                  Drag the marker to adjust your location
-                </p>
+                <p className="text-xs text-gray-500 text-center">{t('addBook.dragMarker')}</p>
               </div>
             ) : (
               <div
@@ -393,7 +392,7 @@ export default function OtherDetailsStep({ errors }: { errors: FieldErrors }) {
                   <Image src={genreAddGenreIcon} alt="genre" className="w-4 h-4 mt-1" />
                 </div>
                 <p className="text-xs text-grayDark font-poppins">
-                  Click &apos;Here&apos; to add location
+                  {t('addBook.clickToAddLocation')}
                 </p>
               </div>
             )}

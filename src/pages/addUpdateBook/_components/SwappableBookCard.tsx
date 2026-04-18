@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PiDotsThreeBold } from 'react-icons/pi';
 import deleteIcon from '../../../assets/deleteIconRed.png';
 import editIcon from '../../../assets/editBlack.png';
@@ -51,6 +52,7 @@ function SwappableBookCard({
   editAnotherBook,
   deleteSwappableBookByIndex,
 }: ISwappableBookCard) {
+  const { t } = useTranslation();
   const handleClickDots = () => {
     const isSame = swappableBookIndex === index && clicked;
     setSwappableBookIndex(isSame ? null : index);
@@ -67,7 +69,9 @@ function SwappableBookCard({
       </div>
       <div className="w-3/4 pr-7 relative">
         <h3 className="text-sm font-poppins font-medium line-clamp-2">{title}</h3>
-        <h3 className="text-xs font-poppins font-light mt-2">by {author}</h3>
+        <h3 className="text-xs font-poppins font-light mt-2">
+          {t('by')} {author}
+        </h3>
 
         <PiDotsThreeBold
           size={24}
@@ -87,7 +91,7 @@ function SwappableBookCard({
               type="button"
             >
               <Image src={editIcon} alt="edit" className="h-[18px]" />
-              <p className="font-poppins font-normal text-sm">Edit</p>
+              <p className="font-poppins font-normal text-sm">{t('edit')}</p>
             </Button>
             <Button
               onClick={() => deleteSwappableBookByIndex(index)}
@@ -97,7 +101,7 @@ function SwappableBookCard({
             >
               <Image src={deleteIcon} alt="delete" className="h-[18px]" />
               <p className="font-poppins font-normal text-sm text-[#EA244E] cursor-pointer">
-                Delete
+                {t('delete')}
               </p>
             </Button>
           </div>

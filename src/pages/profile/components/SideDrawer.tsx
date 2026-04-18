@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import leftArrowIcon from '../../../assets/leftArrow.png';
@@ -10,13 +11,14 @@ export default function SideDrawer({
   children,
   isShowSave = false,
   onSave,
-  title = 'More Options',
+  title,
 }: {
   children: React.ReactNode;
   isShowSave?: boolean;
   onSave?: () => void;
   title?: string;
 }) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { open } = useAppSelector((state) => state.open);
   return (
@@ -36,14 +38,16 @@ export default function SideDrawer({
               <Image className="lg:hidden" src={leftArrowIcon} alt="left" />
               <IoCloseOutline className="hidden lg:block text-2xl text-red" />
             </button>
-            <h3 className="font-poppins text-base font-medium ">{title}</h3>
+            <h3 className="font-poppins text-base font-medium ">
+              {title || t('common.moreOptions')}
+            </h3>
           </div>
           {isShowSave && (
             <Button
               onClick={onSave}
               className="text-primary underline font-poppins font-normal text-sm"
             >
-              Save
+              {t('save')}
             </Button>
           )}
         </div>

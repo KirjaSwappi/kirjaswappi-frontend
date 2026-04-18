@@ -1,4 +1,5 @@
 import { FaRegUser } from 'react-icons/fa6';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import locationIcon from '../../../assets/location-icon.png';
 import profileCover from '../../../assets/profileCover.jpg';
@@ -13,6 +14,7 @@ import { useGetInboxByStatusQuery } from '../../../redux/feature/messages/inboxA
 import { useAppSelector } from '../../../redux/hooks';
 import { isFetchBaseQueryError } from '../../../utility/rtkError';
 export default function UserProfile() {
+  const { t } = useTranslation();
   const params = useParams();
   const {
     userInformation: { id },
@@ -124,12 +126,16 @@ export default function UserProfile() {
         <div className="hidden lg:block border-y border-AntiFlashWhite mt-5 text-center">
           <div className="flex items-center py-2 px-4 justify-evenly">
             <div className="flex flex-col gap-1 items-center">
-              <h4 className="font-poppins text-xs font-light text-[#262626]">Total Swaps</h4>
+              <h4 className="font-poppins text-xs font-light text-[#262626]">
+                {t('profile.totalSwaps')}
+              </h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">{swapsCount}</p>
             </div>
             <span className="h-12 w-[1px] block bg-platinumMix"></span>
             <div className="flex flex-col gap-1 items-center">
-              <h4 className="font-poppins text-xs font-light text-[#262626]">Books Listed</h4>
+              <h4 className="font-poppins text-xs font-light text-[#262626]">
+                {t('profile.booksListed')}
+              </h4>
               <p className="font-poppins text-xs font-medium text-smokyBlack">{booksCount}</p>
             </div>
           </div>

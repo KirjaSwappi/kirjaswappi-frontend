@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Lottie from 'lottie-react';
+import { useTranslation } from 'react-i18next';
 import FailedAnimation from '../../../../assets/FailedAnimation.json';
 import { useAppSelector } from '../../../../redux/hooks';
 
 export default function RequestFailedAnimation({ isFailed }: { isFailed: boolean }) {
+  const { t } = useTranslation();
   const { errorMessage } = useAppSelector((state) => state.swapBook);
   return (
     <div
@@ -24,7 +26,7 @@ export default function RequestFailedAnimation({ isFailed }: { isFailed: boolean
             transition={{ delay: 0.2, duration: 0.3 }}
             className="font-poppins text-sm lg:text-base text-[#2B2B2B] font-semibold text-center"
           >
-            {errorMessage ? errorMessage : 'Swap Failed'}
+            {errorMessage ? errorMessage : t('swap.failedTitle')}
           </motion.h3>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -32,7 +34,7 @@ export default function RequestFailedAnimation({ isFailed }: { isFailed: boolean
             transition={{ delay: 0.2, duration: 0.3 }}
             className="font-poppins text-xs text-[#6F6E77] font-light"
           >
-            Please try again
+            {t('swap.failedMessage')}
           </motion.p>
         </motion.div>
       </AnimatePresence>

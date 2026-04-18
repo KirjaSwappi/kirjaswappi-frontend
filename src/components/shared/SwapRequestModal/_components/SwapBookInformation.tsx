@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../../redux/hooks';
 
 export default function SwapBookInformation() {
+  const { t } = useTranslation();
   const { swapBookInformation } = useAppSelector((state) => state.swapBook);
   const { title, genres, condition, author } = swapBookInformation;
   return (
@@ -10,7 +12,9 @@ export default function SwapBookInformation() {
           <h1 className="font-medium text-smokyBlack text-sm lg:text-xl leading-none mb-1 font-poppins">
             {title}
           </h1>
-          <p className="text-smokyBlack font-normal text-xs lg:text-sm font-poppins">by {author}</p>
+          <p className="text-smokyBlack font-normal text-xs lg:text-sm font-poppins">
+            {t('by')} {author}
+          </p>
           <div className="flex gap-1 items-center flex-wrap mt-4">
             {genres?.map((genre: string, index: number) => (
               <div
@@ -31,7 +35,7 @@ export default function SwapBookInformation() {
             ))}
           </div>
           <p className="text-smokyBlack font-normal text-xs font-poppins mt-4">
-            <span className="font-light">Book Condition:</span>{' '}
+            <span className="font-light">{t('swap.bookCondition')}</span>{' '}
             <span className="text-[#3FBA49] bg-[#3FBA4914] py-[2px] px-[6px] rounded-lg">
               {condition}
             </span>

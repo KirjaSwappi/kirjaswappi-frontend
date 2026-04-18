@@ -68,10 +68,10 @@ export default function BookCard({
     try {
       await deleteBookById({ id }).unwrap();
       setClicked(false);
-      showToast('success', 'Book deleted successfully!');
+      showToast('success', t('toast.bookDeleted'));
       setOpen(false);
     } catch (error) {
-      showToast('error', 'Failed to delete book.');
+      showToast('error', t('toast.bookDeleteFailed'));
     }
   };
 
@@ -127,7 +127,7 @@ export default function BookCard({
       <div className="h-full flex flex-col relative">
         <div id="deleteEditPopup" className="relative">
           <DeleteConfirmModal
-            title="Are You Sure?"
+            title={t('common.areYouSure')}
             open={open}
             onClose={(e) => {
               e?.stopPropagation();
@@ -176,7 +176,7 @@ export default function BookCard({
                 type="button"
               >
                 <Image src={editIcon} alt="edit" className="h-[18px]" />
-                <p className="font-poppins font-normal text-sm">Edit</p>
+                <p className="font-poppins font-normal text-sm">{t('edit')}</p>
               </Button>
               <Button
                 onClick={(e) => {
@@ -188,7 +188,7 @@ export default function BookCard({
               >
                 <Image src={deleteIcon} alt="delete" className="h-[18px]" />
                 <p className="font-poppins font-normal text-sm text-[#EA244E] cursor-pointer">
-                  Delete
+                  {t('delete')}
                 </p>
               </Button>
             </div>
@@ -234,13 +234,13 @@ export default function BookCard({
               ${isProfile ? '' : 'mb-2'} `}
           >
             {' '}
-            by {author}
+            {t('by')} {author}
           </p>
           <div className={`${isProfile ? 'hidden' : 'block'}`}>
             <div className="flex items-center mb-1.5 lg:mb-2">
               <Image src={locationIcon} alt="Location" className="mr-1 flex-shrink-0 w-4 h-4" />
               <span className="font-poppins font-normal text-[10px] leading-[13.77px] text-gray-700 capitalize">
-                {book?.location?.city || book?.bookLocation || 'Unknown'}
+                {book?.location?.city || book?.bookLocation || t('common.unknown')}
               </span>
             </div>
             <div className="flex items-center justify-between">

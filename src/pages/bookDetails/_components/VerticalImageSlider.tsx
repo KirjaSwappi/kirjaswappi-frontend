@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
 import Button from '../../../components/shared/Button';
 import { Carousel, CarouselContent, CarouselItem } from '../../../components/shared/Carousel';
 import Image from '../../../components/shared/Image';
 
 export default function VerticalImageSlider({ images }: { images: string[] }) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
   const changeImage = (index: number) => {
@@ -73,14 +75,14 @@ export default function VerticalImageSlider({ images }: { images: string[] }) {
             className="bg-white border border-[#F2F2F2] w-8 h-8 flex items-center justify-center rounded-full"
           >
             <BiChevronLeft className="text-[#262626] text-xl" />
-            <span className="sr-only">Previous</span>
+            <span className="sr-only">{t('a11y.previous')}</span>
           </Button>
           <Button
             onClick={goNext}
             className="bg-white border border-[#F2F2F2] w-8 h-8 flex items-center justify-center rounded-full"
           >
             <BiChevronRight className="text-[#262626] text-xl" />
-            <span className="sr-only">Next</span>
+            <span className="sr-only">{t('a11y.next')}</span>
           </Button>
         </div>
       </div>

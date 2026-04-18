@@ -1,5 +1,6 @@
 import Lottie from 'lottie-react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SwapType } from '../../../../../types/enum';
 import giveaway from '../../../../assets/giveaway.png';
 import library from '../../../../assets/library.png';
@@ -20,6 +21,7 @@ export default function SwapController({
   books?: ISwapBook[];
 }) {
   const { control, watch } = useFormContext();
+  const { t } = useTranslation();
   const currentSwapType = watch('swapType');
   const radioId = `swap-type-radio-${swapType}`;
   return (
@@ -87,7 +89,7 @@ export default function SwapController({
                       className="w-[200px] h-[90px]"
                     />
                     <p className="text-xs font-poppins text-[#6F6E77] font-light">
-                      Books not found in your library
+                      {t('swap.booksNotFound')}
                     </p>
                   </div>
                 )}

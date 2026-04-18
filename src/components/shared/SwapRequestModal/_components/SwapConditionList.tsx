@@ -4,21 +4,21 @@ import givewayIcon from '../../../../assets/givewayIcon.png';
 import openToOffer from '../../../../assets/openToOffer.png';
 import swap from '../../../../assets/swap.png';
 
-export const SwapConditionList: Record<string, { image: string; label: string }> = {
+export const SwapConditionList: Record<string, { image: string; labelKey: string }> = {
   [SwapType.BYGENRES]: {
     image: genre,
-    label: 'By Genre',
+    labelKey: 'swap.byGenre',
   },
   [SwapType.BYBOOKS]: {
     image: swap,
-    label: 'By Books',
+    labelKey: 'swap.byBooks',
   },
   [SwapType.OPENTOOFFERS]: {
     image: openToOffer,
-    label: 'Open To Offer',
+    labelKey: 'swap.openToOffer',
   },
   [SwapType.GIVEAWAY]: {
     image: givewayIcon,
-    label: 'Giveaway',
+    labelKey: 'swap.giveaway',
   },
 };

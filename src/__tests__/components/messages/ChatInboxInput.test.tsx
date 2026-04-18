@@ -164,7 +164,7 @@ describe('ChatInboxInput Component', () => {
     await user.type(input, 'Test message{Enter}');
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith('error', 'Failed to send message');
+      expect(mockShowToast).toHaveBeenCalledWith('error', 'toast.messageSendFailed');
     });
   });
 

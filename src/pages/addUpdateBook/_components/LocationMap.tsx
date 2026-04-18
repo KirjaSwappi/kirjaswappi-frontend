@@ -2,6 +2,7 @@ import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCallback, useEffect } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { useTranslation } from 'react-i18next';
 
 // Fix for default markers in react-leaflet
 delete (Icon.Default.prototype as { _getIconUrl?: () => void })._getIconUrl;
@@ -47,6 +48,7 @@ export default function LocationMap({
   isEditing,
   onPositionChange,
 }: LocationMapProps) {
+  const { t } = useTranslation();
   const handlePositionChange = useCallback(
     (newPos: [number, number]) => {
       onPositionChange?.(newPos);
@@ -74,7 +76,7 @@ export default function LocationMap({
         <button
           onClick={getCurrentLocation}
           className="absolute bottom-4 right-4 z-[1000] bg-white rounded-lg shadow-md p-2 hover:bg-gray-50 transition-colors"
-          title="Get current location"
+          title={t('addBook.getCurrentLocation')}
         >
           <svg
             className="w-6 h-6 text-gray-700"
