@@ -1,16 +1,17 @@
-import CryptoJS from 'crypto-js';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 
-export const setCookie = (name: string, value: unknown, time: number) => {
-  const encryptedValue = CryptoJS.AES.encrypt(
-    JSON.stringify(value),
-    import.meta.env.VITE_SECRET_KEY,
-  ).toString();
+// NOTE: Tokens stored here are JS-readable; the previous AES wrapping with a
+// VITE_SECRET_KEY bundled into the SPA was security theatre (the key was
+// public). The real fix is to migrate to httpOnly Secure SameSite cookies set
+// by the backend (tracked as H1 in the launch audit). Until then, treat any
+// JWT in document.cookie as XSS-exposed and keep access-token TTLs short.
 
+export const setCookie = (name: string, value: unknown, time: number) => {
+  const serialised = encodeURIComponent(JSON.stringify(value));
   const date = new Date();
   date.setTime(date.getTime() + time * 60 * 1000);
   const expires = 'expires=' + date.toUTCString();
-  document.cookie = `${name}=${encryptedValue}; ${expires}; path=/; Secure; SameSite=Strict`;
+  document.cookie = `${name}=${serialised}; ${expires}; path=/; Secure; SameSite=Strict`;
 };
 
 export const getCookie = (name: string) => {
@@ -21,13 +22,12 @@ export const getCookie = (name: string) => {
     const cookie = cookiesArray[i].trim();
 
     if (cookie.indexOf(nameEQ) === 0) {
-      const encryptedValue = cookie.substring(nameEQ.length, cookie.length);
-      const decryptedValue = CryptoJS.AES.decrypt(
-        encryptedValue,
-        import.meta.env.VITE_SECRET_KEY,
-      ).toString(CryptoJS.enc.Utf8);
-
-      return JSON.parse(decryptedValue);
+      const raw = cookie.substring(nameEQ.length, cookie.length);
+      try {
+        return JSON.parse(decodeURIComponent(raw));
+      } catch {
+        return null;
+      }
     }
   }
   return null;

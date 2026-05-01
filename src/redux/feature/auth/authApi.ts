@@ -1,17 +1,18 @@
-import { FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { setCookie } from '../../../utility/cookies';
 
 import { api } from '../../api/apiSlice';
 import { bookApi } from '../book/bookApi';
 
 type LoginResponse = { id: string; email: string; userToken: string; userRefreshToken: string };
-const handleLoginCookie = async (
-  queryFulfilled: Promise<{ data: LoginResponse; meta: FetchBaseQueryMeta | undefined }>,
-) => {
+
+// `queryFulfilled` is the PromiseWithKnownReason that RTK Query passes into
+// `onQueryStarted`. We accept `unknown`-shaped data and narrow inside the
+// helper, which keeps the helper compatible with both the older generic
+// fetchBaseQuery signature and the new baseQueryWithReauth wrapper.
+const handleLoginCookie = async (queryFulfilled: PromiseLike<{ data: unknown }>) => {
   try {
-    const {
-      data: { id, email, userToken, userRefreshToken },
-    } = await queryFulfilled;
+    const { data } = await queryFulfilled;
+    const { id, email, userToken, userRefreshToken } = data as Partial<LoginResponse>;
     if (id && email) {
       setCookie('user', { id, email }, 240);
     }
@@ -111,6 +112,13 @@ export const authApi = api.injectEndpoints({
           method: 'DELETE',
         };
       },
+    }),
+    logoutUser: builder.mutation<void, { userRefreshToken: string }>({
+      query: (body) => ({
+        url: '/users/logout',
+        method: 'POST',
+        body,
+      }),
     }),
     getUserById: builder.query({
       query: ({ userId }: { userId: string }) => {
@@ -275,4 +283,5 @@ export const {
   useAddFavouriteBookMutation,
   useRemoveFavouriteBookMutation,
   useChangePasswordMutation,
+  useLogoutUserMutation,
 } = authApi;

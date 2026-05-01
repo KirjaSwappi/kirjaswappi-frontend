@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
+import SafeHtml from '../../../components/shared/SafeHtml';
 import PrivacyPolicyHeader from './PrivacyPolicyHeader';
 import { usePrivacyPolicyData } from './usePrivacyPolicyData';
 
@@ -66,10 +67,11 @@ const PrivacyPolicyDetail: React.FC = () => {
 
               <ul className=" pl-8 pt-2 ">
                 {item?.points?.map((point, idx) => (
-                  <li
+                  <SafeHtml
                     key={idx}
+                    as="li"
+                    html={point}
                     className="list-disc  text-left  text-[16px] leading-[28px] text-smokyBlack "
-                    dangerouslySetInnerHTML={{ __html: point }}
                   />
                 ))}
               </ul>
@@ -77,9 +79,10 @@ const PrivacyPolicyDetail: React.FC = () => {
           ))}
 
           {sectionData?.paragraph && (
-            <p
+            <SafeHtml
+              as="p"
+              html={sectionData.paragraph}
               className={` mt-6 text-[14px] leading-[24px] text-black3a  ${sectionData?.category === 'Data Security' && 'pl-6  '}   `}
-              dangerouslySetInnerHTML={{ __html: sectionData?.paragraph }}
             />
           )}
         </div>
