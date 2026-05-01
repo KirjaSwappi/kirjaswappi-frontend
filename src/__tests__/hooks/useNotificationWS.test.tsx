@@ -7,6 +7,15 @@ import { MockWebSocket } from '../mocks/websocket';
 import { ReactNode } from 'react';
 import { initialState as authInitialState } from '../../redux/feature/auth/authSlice';
 
+// Mock cookies so the hook always sees a valid JWT (real cookies use AES with VITE_SECRET_KEY).
+vi.mock('../../utility/cookies', () => ({
+  getCookie: vi.fn((name: string) => (name === 'userToken' ? 'test-jwt' : null)),
+  setCookie: vi.fn(),
+  clearCookie: vi.fn(),
+  isCookieExpired: vi.fn(() => false),
+  handleExpiredCookie: vi.fn(),
+}));
+
 // Helper to wrap hook with Provider
 const wrapper = (store: ReturnType<typeof setupTestStore>) => {
   const ReduxProviderWrapper = ({ children }: { children: ReactNode }) => (

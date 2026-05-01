@@ -4,6 +4,17 @@ import { MemoryRouter } from 'react-router-dom';
 import PrivateRoute from '../../routes/PrivateRoute';
 import { renderWithProviders } from '../utils/test-utils';
 
+// Mock cookies so PrivateRoute can read a valid refresh token. Default: a
+// non-expired token is present, so authenticated paths render children. Tests
+// for the missing/expired-cookie branch override these mocks per test.
+vi.mock('../../utility/cookies', () => ({
+  getCookie: vi.fn((name: string) => (name === 'userRefreshToken' ? 'fake-refresh' : null)),
+  setCookie: vi.fn(),
+  clearCookie: vi.fn(),
+  isCookieExpired: vi.fn(() => false),
+  handleExpiredCookie: vi.fn(),
+}));
+
 // Mock React Router hooks
 const mockUseLocation = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -209,8 +220,10 @@ describe('PrivateRoute Component', () => {
     const navigateElement = screen.getByTestId('navigate');
     const state = JSON.parse(navigateElement.getAttribute('data-state') || '{}');
 
+    // PrivateRoute now preserves the query string so login redirects can
+    // honour deep links (audit I4): path = pathname + search.
     expect(state).toEqual({
-      path: '/protected-route',
+      path: '/protected-route?param=value',
       from: mockLocation,
     });
   });
