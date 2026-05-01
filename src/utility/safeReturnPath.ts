@@ -13,6 +13,7 @@ export function safeReturnPath(raw: string | null | undefined): string {
       !path.startsWith('//') &&
       !path.startsWith('/\\') &&
       !path.includes('://') &&
+      // eslint-disable-next-line no-control-regex
       !/[\x00-\x1f\\]/.test(path)
     ) {
       return path;
