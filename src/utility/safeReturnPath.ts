@@ -8,7 +8,13 @@ export function safeReturnPath(raw: string | null | undefined): string {
   }
   try {
     const path = decodeURIComponent(raw);
-    if (path.startsWith('/') && !path.startsWith('//') && !path.includes('://')) {
+    if (
+      path.startsWith('/') &&
+      !path.startsWith('//') &&
+      !path.startsWith('/\\') &&
+      !path.includes('://') &&
+      !/[\x00-\x1f\\]/.test(path)
+    ) {
       return path;
     }
   } catch {
