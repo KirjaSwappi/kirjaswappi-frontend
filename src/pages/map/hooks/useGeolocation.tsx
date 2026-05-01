@@ -55,10 +55,9 @@ export const useGeolocation = (options: UseGeolocationOptions = {}) => {
     const onError = (error: GeolocationPositionError) => {
       console.warn('Geolocation error:', error);
 
-      if (error.code === error.PERMISSION_DENIED) {
-        setCoords(fallback);
-      }
-
+      // Always end in a usable state. PERMISSION_DENIED, POSITION_UNAVAILABLE,
+      // and TIMEOUT all fall back to the same coords so the map renders.
+      setCoords(fallback);
       setPermissionChecked(true);
     };
 

@@ -100,7 +100,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
         <div className="relative h-7 flex items-center justify-center">
           <img
             src={notificationIcon}
-            alt="Notifications"
+            alt={t('notification.bellAlt', 'Notifications')}
             className={isBottomNav ? 'w-5 h-5' : 'w-6 h-6'}
             style={
               isBottomNav
@@ -123,7 +123,9 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
                   ? '-top-2 -right-3 bg-red text-white text-[10px] min-w-[18px] h-[18px] px-1'
                   : '-top-3 -right-3 bg-red text-white text-xs min-w-[20px] h-5 px-1.5',
               )}
-              aria-label={`${unreadCount} unread notifications`}
+              aria-label={t('notification.unreadCountAria', '{{count}} unread notifications', {
+                count: unreadCount,
+              })}
             >
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
@@ -145,7 +147,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
         {!isBottomNav && wsConnectionStatus === 'error' && (
           <span
             className="absolute bottom-0 right-0 w-3 h-3 bg-yellow border-2 border-white rounded-full"
-            aria-label="Connection error"
+            aria-label={t('notification.connectionErrorAria', 'Connection error')}
             title={t('notification.connectionErrorTooltip')}
           />
         )}
@@ -161,7 +163,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
               : 'right-0 mt-2 animate-fadeIn',
           )}
           role="menu"
-          aria-label="Notification list"
+          aria-label={t('notification.listAria', 'Notification list')}
         >
           {/* Header */}
           <div className="px-4 py-3 border-b border-platinum bg-light">
@@ -189,7 +191,7 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ className, variant 
                 <div className="flex flex-col items-center gap-2">
                   <img
                     src={notificationIcon}
-                    alt="No notifications"
+                    alt={t('notification.noNotificationsAlt', 'No notifications')}
                     className="w-12 h-12 opacity-30"
                   />
                   <p className="text-sm font-normal font-poppins text-gray">

@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IoChatbubblesOutline } from 'react-icons/io5';
@@ -31,6 +32,8 @@ export default function ChatWindow() {
     currentData: chatData,
     isLoading: isChatLoading,
     isSuccess: isChatSuccess,
+    isError: isChatError,
+    refetch: refetchChat,
   } = useGetChatMessagesQuery(
     { swapRequestId: selectedChatId as string },
     {
@@ -94,6 +97,19 @@ export default function ChatWindow() {
               <div key={i} className="h-4 bg-gray-200 rounded mb-3 w-3/4" />
             ))}
           </div>
+        ) : isChatError ? (
+          <div className="flex flex-col items-center justify-center p-8 gap-3">
+            <p className="text-grayDark font-poppins text-sm text-center">
+              {t('chat.loadMessagesFailed', 'Could not load messages. Please try again.')}
+            </p>
+            <button
+              type="button"
+              onClick={() => refetchChat()}
+              className="px-4 py-2 rounded-md bg-primary text-white font-poppins text-sm"
+            >
+              {t('chat.retry', 'Retry')}
+            </button>
+          </div>
         ) : (
           <>
             {(findChat?.messages || []).map((msg) => (
@@ -134,7 +150,7 @@ export default function ChatWindow() {
                       msg.sender === 'me' ? 'text-right pr-1' : 'text-left pl-1'
                     }`}
                   >
-                    {new Date(msg.time).toLocaleTimeString('en-US', {
+                    {new Date(msg.time).toLocaleTimeString(i18n.language || undefined, {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}

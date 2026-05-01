@@ -5,7 +5,7 @@ import BookSkeleton from '../../components/shared/skeleton/BookSkeleton';
 import ErrorState from '../../components/shared/ErrorState';
 import PageTitle from '../../components/shared/PageTitle';
 import { useGetAllBooksQuery } from '../../redux/feature/book/bookApi';
-import { clearAllFilters, setPageNumber } from '../../redux/feature/filter/filterSlice';
+import { setPageNumber } from '../../redux/feature/filter/filterSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import Filter from './_components/Filter';
 import HeroSection from './_components/Herosection';
@@ -93,12 +93,9 @@ export default function Books() {
     dispatch,
   ]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setPageNumber(0));
-      dispatch(clearAllFilters());
-    };
-  }, [dispatch]);
+  // Intentionally do NOT clear filters on unmount. The browse-to-detail-and-back
+  // flow should preserve search/filter state so users return to the same view
+  // they came from. Filters are still reset by the explicit "clear filters" UI.
 
   // Intersection Observer for infinite scroll
   const lastBookRef = useCallback(

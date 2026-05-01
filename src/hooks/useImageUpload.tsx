@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export function useImageUpload() {
+  const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState<string>('');
   const [imageFile, setImageFile] = useState<File | undefined | string>(undefined);
   const [error, setError] = useState<string>('');
@@ -17,11 +19,15 @@ export function useImageUpload() {
     const errorsOfFile: string[] = [];
     // checking file type & file size
     if (!allowedTypes.includes(file.type)) {
-      errorsOfFile.push(`Please upload .jpeg or .png files. `);
+      errorsOfFile.push(t('upload.invalidType', 'Please upload .jpeg or .png files. '));
     }
     // checking file size
     if (file.size > maxsize) {
-      errorsOfFile.push(`File size limit ${maxsize / (1024 * 1024)}MB.`);
+      errorsOfFile.push(
+        t('upload.sizeLimit', 'File size limit {{size}}MB.', {
+          size: maxsize / (1024 * 1024),
+        }),
+      );
     }
     if (errorsOfFile.length > 0) {
       setError(errorsOfFile.join(' '));
