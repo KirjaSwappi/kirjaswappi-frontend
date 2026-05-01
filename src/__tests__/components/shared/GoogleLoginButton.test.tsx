@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeAll, afterAll } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { MemoryRouter } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
 
 const OriginalResizeObserver = globalThis.ResizeObserver;
@@ -66,7 +67,9 @@ describe('GoogleLoginButton', () => {
     });
     return render(
       <Provider store={store}>
-        <GoogleLoginButton />
+        <MemoryRouter>
+          <GoogleLoginButton />
+        </MemoryRouter>
       </Provider>,
     );
   };

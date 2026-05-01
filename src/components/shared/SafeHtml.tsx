@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import DOMPurify from 'dompurify';
 
 /**
@@ -9,6 +10,16 @@ import DOMPurify from 'dompurify';
 const ALLOWED_TAGS = ['b', 'strong', 'i', 'em', 'u', 'a', 'br', 'p', 'span', 'ul', 'ol', 'li'];
 const ALLOWED_ATTR = ['href', 'target', 'rel'];
 
+let anchorHookInstalled = false;
+if (typeof window !== 'undefined' && !anchorHookInstalled) {
+  DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+    if (node.tagName === 'A' && node.getAttribute('target') === '_blank') {
+      node.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+  anchorHookInstalled = true;
+}
+
 export default function SafeHtml({
   html,
   className,
@@ -16,7 +27,7 @@ export default function SafeHtml({
 }: {
   html: string;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
+  as?: keyof JSX.IntrinsicElements;
 }) {
   const clean = DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: clean }} />;

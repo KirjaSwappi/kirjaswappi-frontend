@@ -5,6 +5,7 @@ import {
   fetchBaseQuery,
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import { USER_TOKEN_COOKIE_MINUTES } from '../../constants/session';
 import { clearCookie, getCookie, isCookieExpired, setCookie } from '../../utility/cookies';
 
 // =========== User Token ===========
@@ -28,7 +29,7 @@ const performRefresh = async (): Promise<string | null> => {
   }
   const data = await response.json();
   if (!data?.userToken) return null;
-  setCookie('userToken', data.userToken, 100);
+  setCookie('userToken', data.userToken, USER_TOKEN_COOKIE_MINUTES);
   // Rotation: backend now returns a new refresh token and revokes the old one.
   // Persist the rotated token so the next refresh has the live secret.
   if (data?.userRefreshToken) {
@@ -86,7 +87,8 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       // Refresh failed (or unavailable) — drop the session and redirect once.
       clearSession();
       if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/auth/')) {
-        window.location.href = '/auth/login';
+        const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.href = `/auth/login?returnTo=${returnTo}`;
       }
     }
   }

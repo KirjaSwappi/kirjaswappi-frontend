@@ -7,7 +7,7 @@ import { MockWebSocket } from '../mocks/websocket';
 import { ReactNode } from 'react';
 import { initialState as authInitialState } from '../../redux/feature/auth/authSlice';
 
-// Mock cookies so the hook always sees a valid JWT (real cookies use AES with VITE_SECRET_KEY).
+// Mock cookies so the hook always sees a JWT (production cookies are URL-encoded JSON).
 vi.mock('../../utility/cookies', () => ({
   getCookie: vi.fn((name: string) => (name === 'userToken' ? 'test-jwt' : null)),
   setCookie: vi.fn(),

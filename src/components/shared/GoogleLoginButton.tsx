@@ -2,14 +2,18 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { CredentialResponse } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useLoginWithGoogleMutation } from '../../redux/feature/auth/authApi';
 import { setLoginModalOpen } from '../../redux/feature/open/openSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import { safeReturnPath } from '../../utility/safeReturnPath';
 import { showToast } from './toast';
 
 export default function GoogleLoginButton() {
   const [loginWithGoogle] = useLoginWithGoogleMutation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [buttonWidth, setButtonWidth] = useState<number | undefined>(undefined);
@@ -32,6 +36,7 @@ export default function GoogleLoginButton() {
           if (res.data) {
             showToast('success', t('toast.googleLoginSuccess'));
             dispatch(setLoginModalOpen(false));
+            navigate(safeReturnPath(searchParams.get('returnTo')), { replace: true });
           }
         })
         .catch(() => {

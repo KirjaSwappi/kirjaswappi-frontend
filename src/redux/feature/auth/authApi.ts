@@ -1,3 +1,4 @@
+import { USER_TOKEN_COOKIE_MINUTES } from '../../../constants/session';
 import { setCookie } from '../../../utility/cookies';
 
 import { api } from '../../api/apiSlice';
@@ -17,7 +18,7 @@ const handleLoginCookie = async (queryFulfilled: PromiseLike<{ data: unknown }>)
       setCookie('user', { id, email }, 240);
     }
     if (userToken) {
-      setCookie('userToken', userToken, 200);
+      setCookie('userToken', userToken, USER_TOKEN_COOKIE_MINUTES);
     }
     if (userRefreshToken) {
       setCookie('userRefreshToken', userRefreshToken, 10080); // 7 days

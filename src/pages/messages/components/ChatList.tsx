@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
 
 export default function ChatList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState('');
@@ -131,9 +131,8 @@ export default function ChatList() {
                     {lastMsg && (
                       <span className="text-xs text-gray-400 flex-shrink-0">
                         {new Date(lastMsg.time).toLocaleDateString(
-                          // i18n.language is supplied by react-i18next; fall back to
-                          // the browser locale if it is not yet initialised.
-                          (typeof navigator !== 'undefined' ? navigator.language : undefined) ??
+                          (i18n?.language ||
+                            (typeof navigator !== 'undefined' ? navigator.language : undefined)) ??
                             undefined,
                           {
                             month: 'short',
