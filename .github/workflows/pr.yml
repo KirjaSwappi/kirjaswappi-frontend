@@ -40,7 +40,8 @@ jobs:
 
       - name: Run Tests and Generate Coverage Report
         run: |
-          npx vitest run --coverage --passWithNoTests || true
+          # Fail the job on any failing test (no `|| true`).
+          npx vitest run --coverage
 
           if [ ! -f coverage/coverage-summary.json ]; then
             mkdir -p coverage

@@ -24,6 +24,10 @@ vi.mock('../../../redux/feature/auth/authSlice', () => ({
   logout: () => ({ type: 'auth/logout' }),
 }));
 
+vi.mock('../../../redux/feature/auth/authApi', () => ({
+  useLogoutUserMutation: () => [vi.fn(), { isLoading: false }],
+}));
+
 vi.mock('../../../redux/feature/filter/filterSlice', () => ({
   clearAllFilters: () => ({ type: 'filter/clearAllFilters' }),
 }));
@@ -66,6 +70,10 @@ vi.mock('../../../components/shared/Button', () => ({
 
 vi.mock('../../../components/shared/toast', () => ({
   showToast: vi.fn(),
+}));
+
+vi.mock('../../../utility/cookies', () => ({
+  getCookie: () => 'mock-refresh-token',
 }));
 
 vi.mock('../../../components/Header/_components/DropdownItem', () => ({

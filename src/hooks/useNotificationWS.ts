@@ -10,7 +10,6 @@ import { getCookie } from '../utility/cookies';
 
 // WebSocket configuration constants
 const WS_URL = import.meta.env.VITE_NOTIFICATION_WS_URL || '';
-const WS_API_KEY = import.meta.env.VITE_NOTIFICATION_API_KEY || '';
 const MAX_RECONNECT_ATTEMPTS = 5;
 const INITIAL_RECONNECT_DELAY = 1000; // 1 second
 const MAX_RECONNECT_DELAY = 30000; // 30 seconds
@@ -167,9 +166,14 @@ export const useNotificationWS = (): UseNotificationWSReturn => {
 
     try {
       const userToken = getCookie('userToken');
-      const token = userToken || WS_API_KEY;
-      const params = new URLSearchParams({ userId });
-      if (token) params.set('token', token);
+      if (!userToken) {
+        // No JWT available — do not connect with a shared API key.
+        // The notification service derives userId from the JWT subject, so
+        // sending a query-string userId without a JWT would be unauthenticated.
+        dispatch(setWSConnectionStatus('disconnected'));
+        return;
+      }
+      const params = new URLSearchParams({ userId, token: userToken });
       const wsUrl = `${WS_URL}?${params.toString()}`;
 
       dispatch(setWSConnectionStatus('connecting'));

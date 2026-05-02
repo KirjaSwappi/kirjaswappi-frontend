@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../../redux/api/apiSlice';
 import { logout } from '../../../redux/feature/auth/authSlice';
+import { useLogoutUserMutation } from '../../../redux/feature/auth/authApi';
 import { clearAllFilters } from '../../../redux/feature/filter/filterSlice';
 import { resetChat } from '../../../redux/feature/messages/messagesSlice';
 import { clearNotifications } from '../../../redux/feature/notification/notificationSlice';
@@ -18,6 +19,7 @@ import { setOpen } from '../../../redux/feature/open/openSlice';
 import { setStep } from '../../../redux/feature/step/stepSlice';
 import { setResetSwapBook } from '../../../redux/feature/swap/swapSlice';
 import { useAppSelector } from '../../../redux/hooks';
+import { getCookie } from '../../../utility/cookies';
 import Button from '../../shared/Button';
 import { showToast } from '../../shared/toast';
 import DropdownItem from './DropdownItem';
@@ -26,6 +28,7 @@ export default function UserMenuDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [logoutUser] = useLogoutUserMutation();
   const {
     userInformation: { id },
   } = useAppSelector((state) => state.auth);
@@ -75,6 +78,10 @@ export default function UserMenuDropdown() {
             <div className="my-1 border-t border-platinum" />
             <Button
               onClick={() => {
+                const refreshToken = getCookie('userRefreshToken') as string;
+                if (refreshToken) {
+                  logoutUser({ userRefreshToken: refreshToken }).catch(() => {});
+                }
                 dispatch(logout());
                 dispatch(api.util.resetApiState());
                 dispatch(clearAllFilters());

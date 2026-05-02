@@ -7,27 +7,6 @@ import {
   handleExpiredCookie,
 } from '../../utility/cookies';
 
-vi.mock('crypto-js', () => ({
-  default: {
-    AES: {
-      encrypt: vi.fn((value: string) => ({
-        toString: () => `encrypted:${value}`,
-      })),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      decrypt: vi.fn((value: string, _key: string) => ({
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        toString: (_enc: unknown) => {
-          const match = value.match(/^encrypted:(.+)$/);
-          return match ? match[1] : '';
-        },
-      })),
-    },
-    enc: {
-      Utf8: 'Utf8',
-    },
-  },
-}));
-
 vi.mock('jwt-decode', () => ({
   jwtDecode: vi.fn(),
 }));
@@ -49,13 +28,14 @@ describe('cookies utility', () => {
   });
 
   describe('setCookie', () => {
-    it('sets a cookie with encrypted value', () => {
+    it('sets a cookie with the JSON-encoded value', () => {
       const cookieSpy = vi.spyOn(document, 'cookie', 'set');
       setCookie('testCookie', 'testValue', 60);
       expect(cookieSpy).toHaveBeenCalled();
       const callArg = cookieSpy.mock.calls[0][0];
       expect(callArg).toContain('testCookie=');
-      expect(callArg).toContain('encrypted:');
+      // Value is JSON-stringified then URL-encoded; check the encoded form.
+      expect(callArg).toContain(encodeURIComponent('"testValue"'));
     });
 
     it('sets cookie with Secure flag', () => {

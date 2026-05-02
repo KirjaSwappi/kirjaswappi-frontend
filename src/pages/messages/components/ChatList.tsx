@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { truncateText } from '../../../utility/helper';
 
 export default function ChatList() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState('');
@@ -33,7 +33,9 @@ export default function ChatList() {
   });
 
   useEffect(() => {
-    if (!isSuccess || !Array.isArray(inboxData) || inboxData.length === 0) return;
+    // Always sync the inbox slice on success — including the empty case, so
+    // the UI clears stale conversations when the last swap is deleted.
+    if (!isSuccess || !Array.isArray(inboxData)) return;
     dispatch(setInboxList(inboxData));
   }, [isSuccess, inboxData, dispatch]);
 
@@ -128,10 +130,15 @@ export default function ChatList() {
                     </p>
                     {lastMsg && (
                       <span className="text-xs text-gray-400 flex-shrink-0">
-                        {new Date(lastMsg.time).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                        })}
+                        {new Date(lastMsg.time).toLocaleDateString(
+                          (i18n?.language ||
+                            (typeof navigator !== 'undefined' ? navigator.language : undefined)) ??
+                            undefined,
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                          },
+                        )}
                       </span>
                     )}
                   </div>

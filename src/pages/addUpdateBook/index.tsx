@@ -45,8 +45,9 @@ export default function AddUpdateBook() {
   const { data: bookData, isLoading: bookLoading } = useGetBookByIdQuery({ id: id }, { skip: !id });
 
   // ADD BOOK & UPDATE BOOK MUTATION
-  const [addBook, { isLoading }] = useAddBookMutation();
-  const [updateBook] = useUpdateBookMutation();
+  const [addBook, { isLoading: isAdding }] = useAddBookMutation();
+  const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
+  const isLoading = isAdding || isUpdating;
 
   const methods = useForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

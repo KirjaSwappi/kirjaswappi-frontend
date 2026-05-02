@@ -78,9 +78,19 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
     try {
       await updateStatus({ id: selectedChat.id, status: newStatus }).unwrap();
       dispatch(updateChatSwapStatus({ chatId: selectedChat.id, swapStatus: newStatus }));
-      showToast('success', `Swap request ${newStatus.toLowerCase()}.`);
+      showToast(
+        'success',
+        t('chat.swapStatusUpdated', 'Swap request {{status}}.', {
+          status: newStatus.toLowerCase(),
+        }),
+      );
     } catch {
-      showToast('error', `Failed to ${newStatus.toLowerCase()} swap request.`);
+      showToast(
+        'error',
+        t('chat.swapStatusUpdateFailed', 'Failed to {{status}} swap request.', {
+          status: newStatus.toLowerCase(),
+        }),
+      );
     }
   };
 

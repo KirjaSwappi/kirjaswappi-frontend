@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import SafeHtml from '../../components/shared/SafeHtml';
 import TermsOfServiceHeader from './components/TermsOfServiceHeader';
 import TermsOfServiceSection from './components/TermsOfServiceSection';
 import { useTermsOfServiceData } from './components/useTermsOfServiceData';
@@ -51,10 +52,11 @@ const TermsOfService = () => {
 
                   <ul className=" pl-5 ">
                     {item?.points?.map((point, idx) => (
-                      <li
+                      <SafeHtml
                         key={idx}
+                        as="li"
+                        html={point}
                         className="list-disc text-left text-[14px] leading-[24px] text-smokyBlack "
-                        dangerouslySetInnerHTML={{ __html: point }}
                       />
                     ))}
                   </ul>
@@ -62,9 +64,10 @@ const TermsOfService = () => {
               ))}
 
               {section?.paragraph && (
-                <p
+                <SafeHtml
+                  as="p"
+                  html={section.paragraph}
                   className=" text-[14px] leading-[24px] text-smokyBlack mt-6 "
-                  dangerouslySetInnerHTML={{ __html: section?.paragraph }}
                 />
               )}
             </div>

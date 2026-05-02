@@ -20,6 +20,7 @@ import MessageToastify from '../MessageToastify';
 import RequestFailedAnimation from './_components/RequestErrorAnimation';
 import RequestProcessingAnimation from './_components/RequestProcessingAnimation';
 import RequestSuccessAnimation from './_components/RequestSuccessAnimation';
+import { showToast } from '../toast';
 import SwapBookInformation from './_components/SwapBookInformation';
 import { SwapConditionList } from './_components/SwapConditionList';
 import SwapFormControllers from './_components/SwapFormControllers';
@@ -115,15 +116,24 @@ export default function SwapModal() {
           break;
       }
 
-      swapRequest(organizedData)
-        .then((res) => {
-          if (res.data) {
-            handleCloseModal();
-          }
-        })
-        .catch(() => {
-          // Error is handled by RTK Query and displayed via errorMessage state
-        });
+      try {
+        const res = await swapRequest(organizedData);
+        if (res.data) {
+          handleCloseModal();
+          return;
+        }
+        if (res.error) {
+          showToast(
+            'error',
+            t('swap.requestFailed', 'Failed to send swap request. Please try again.'),
+          );
+        }
+      } catch {
+        showToast(
+          'error',
+          t('swap.requestFailed', 'Failed to send swap request. Please try again.'),
+        );
+      }
     },
     [id, owner.id, bookIdToSwapWith, swapRequest, handleCloseModal, t],
   );
@@ -224,7 +234,7 @@ export default function SwapModal() {
                       <MessageToastify isShow={true} type={ERROR} value={errorMessage} />
                     </div>
                   )}
-                  <SubmitButton disabled={isSendDisabled} />
+                  <SubmitButton disabled={isSendDisabled} isLoading={isLoading} />
                 </form>
               </FormProvider>
             </div>

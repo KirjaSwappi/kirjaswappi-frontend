@@ -231,10 +231,13 @@ describe('ChatList Component', () => {
       },
     };
 
+    // Mock the API as not-yet-successful so ChatList does not overwrite the
+    // preloaded chat slice with an empty inbox response. Audit E1 means the
+    // success branch always syncs the slice, including the empty array case.
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     renderChatList(stateWithManyUnread);
@@ -271,9 +274,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     renderChatList(stateWithMultipleChats);
@@ -319,9 +322,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     renderChatList(stateWithChats);
@@ -360,9 +363,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     const { container } = renderChatList(stateWithSelection);
@@ -397,9 +400,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     renderChatList(stateWithMessages);
@@ -434,9 +437,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     renderChatList(stateWithImageMessage);
@@ -482,9 +485,9 @@ describe('ChatList Component', () => {
     };
 
     mockUseGetInboxQuery.mockReturnValue({
-      data: [],
+      data: undefined,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
     });
 
     const { store } = renderChatList(stateWithChats);

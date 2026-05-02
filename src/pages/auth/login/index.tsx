@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import authShape from '../../../assets/authShape.png';
 import bookDetailsBg from '../../../assets/bookdetailsbg.jpg';
 import logo from '../../../assets/logo.png';
@@ -19,12 +19,14 @@ import { useLoginMutation } from '../../../redux/feature/auth/authApi';
 import { setAuthMessage, setAuthSuccess, setError } from '../../../redux/feature/auth/authSlice';
 import { setMessages } from '../../../redux/feature/notification/notificationSlice';
 import { useAppSelector } from '../../../redux/hooks';
+import { safeReturnPath } from '../../../utility/safeReturnPath';
 import { ILoginForm } from './interface';
 import { loginSchema } from './Schema';
 export default function Login() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [login, { isLoading }] = useLoginMutation();
   const { error: authError, message: authMessage } = useAppSelector((state) => state.auth);
 
@@ -44,13 +46,13 @@ export default function Login() {
 
     try {
       await login(data).unwrap();
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         dispatch(setMessages({ type: '', isShow: false, message: '' }));
         dispatch(setAuthMessage(''));
         dispatch(setAuthSuccess(false));
         showToast('success', t('toast.loginSuccess'));
       }, 2000);
-      return () => clearTimeout(timer);
+      navigate(safeReturnPath(searchParams.get('returnTo')), { replace: true });
     } catch (error) {
       // Login error handled by RTK Query
     }
