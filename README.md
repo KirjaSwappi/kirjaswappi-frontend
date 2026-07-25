@@ -46,8 +46,7 @@ src/
 
 ## Links
 
-- **Production:** <https://kirjaswappi.fi>
-- **Canary:** <https://canary.kirjaswappi.fi>
+- **Web UI:** <https://kirjaswappi.fi>
 - **API Docs:** [Swagger UI](https://api.kirjaswappi.fi/swagger-ui/index.html)
 
-© 2025 KirjaSwappi. All rights reserved.
+© 2026 KirjaSwappi. All rights reserved.
