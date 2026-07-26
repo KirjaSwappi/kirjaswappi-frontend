@@ -74,15 +74,18 @@ describe('notificationSlice', () => {
   });
 
   describe('setAlert', () => {
-    it('should set alert with message and type', () => {
+    it('should set alertMessage and not affect state.message', () => {
+      const stateWithMessage = { ...initialState, message: 'existing toast message' };
       const state = notificationReducer(
-        initialState,
+        stateWithMessage,
         setAlert({ showAlert: true, message: 'Alert message', alertType: 'WARNING' }),
       );
 
       expect(state.showAlert).toBe(true);
-      expect(state.message).toBe('Alert message');
+      expect(state.alertMessage).toBe('Alert message');
       expect(state.alertType).toBe('WARNING');
+      // state.message (toast field) must not be touched
+      expect(state.message).toBe('existing toast message');
     });
 
     it('should hide alert when showAlert is false', () => {

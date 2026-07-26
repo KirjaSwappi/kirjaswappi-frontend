@@ -7,6 +7,7 @@ import messagesSlice, {
   sendMessage,
   receiveMessage,
   addChatMessages,
+  removeTempMessages,
   selectTotalUnreadCount,
   ChatState,
   InboxItem,
@@ -589,6 +590,58 @@ describe('messagesSlice', () => {
       expect(result.chats[0].messages[0].images).toEqual([
         'https://s3.example.com/fresh-presigned-url?expires=999',
       ]);
+    });
+  });
+
+  describe('removeTempMessages', () => {
+    it('should remove only the targeted tempId, leaving others intact', () => {
+      const stateWithChats: ChatState = {
+        chats: [
+          {
+            id: 'chat-1',
+            name: 'Test Chat',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [
+              { id: 'temp-1', sender: 'me', text: 'Optimistic 1', time: '2024-01-01T10:00:00Z' },
+              { id: 'temp-2', sender: 'me', text: 'Optimistic 2', time: '2024-01-01T10:01:00Z' },
+            ],
+          },
+        ],
+        selectedChatId: '',
+      };
+
+      const result = messagesSlice(
+        stateWithChats,
+        removeTempMessages({ chatId: 'chat-1', tempId: 'temp-1' }),
+      );
+
+      expect(result.chats[0].messages).toHaveLength(1);
+      expect(result.chats[0].messages[0].id).toBe('temp-2');
+    });
+
+    it('should be a no-op when tempId is not found', () => {
+      const stateWithChats: ChatState = {
+        chats: [
+          {
+            id: 'chat-1',
+            name: 'Test Chat',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [
+              { id: 'temp-1', sender: 'me', text: 'Optimistic 1', time: '2024-01-01T10:00:00Z' },
+            ],
+          },
+        ],
+        selectedChatId: '',
+      };
+
+      const result = messagesSlice(
+        stateWithChats,
+        removeTempMessages({ chatId: 'chat-1', tempId: 'temp-99' }),
+      );
+
+      expect(result.chats[0].messages).toHaveLength(1);
     });
   });
 

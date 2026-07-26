@@ -144,12 +144,12 @@ export default function Books() {
             {books.map((book: IBook, idx: number) => {
               if (idx === books.length - 1) {
                 return (
-                  <div ref={lastBookRef} key={idx}>
+                  <div ref={lastBookRef} key={book.id}>
                     <BookCard book={book} hasPermission={id === book.ownerId} />
                   </div>
                 );
               }
-              return <BookCard book={book} key={idx} hasPermission={id === book.ownerId} />;
+              return <BookCard book={book} key={book.id} hasPermission={id === book.ownerId} />;
             })}
             {isInitialLoading &&
               Array.from({ length: 6 }, (_, index) => <BookSkeleton key={index} />)}

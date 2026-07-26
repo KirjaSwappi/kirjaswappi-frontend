@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import PageTitle from '../../components/shared/PageTitle';
-import { useChatWS } from '../../hooks/useChatWS';
+import { useChatWSContext } from '../../contexts/ChatWSContext';
 import { selectChat } from '../../redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ChatInboxInput from './components/ChatInboxInput';
@@ -17,7 +17,7 @@ export default function Messages() {
   const [bookOpen, setBookOpen] = useState(true);
   const { selectedChatId } = useAppSelector((state) => state.chat);
   const userId = useAppSelector((state) => state.auth.userInformation.id);
-  const { isConnected: chatConnected } = useChatWS();
+  const { isConnected: chatConnected } = useChatWSContext();
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get('messageId');
 

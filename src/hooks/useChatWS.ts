@@ -217,7 +217,7 @@ export const useChatWS = (): UseChatWSReturn => {
       // Create STOMP client over SockJS
       const client = new Client({
         webSocketFactory: () => socket,
-        reconnectDelay: INITIAL_RECONNECT_DELAY,
+        reconnectDelay: 0,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
         connectHeaders: {
@@ -246,7 +246,23 @@ export const useChatWS = (): UseChatWSReturn => {
             body: JSON.stringify({}),
           });
 
-          // Subscribe to currently selected chat if any
+          // Re-subscribe to all previously subscribed chats (restores subscriptions after reconnect)
+          const prevChats = Array.from(subscribedChatsRef.current);
+          subscribedChatsRef.current.clear();
+          subscriptionMapRef.current.clear();
+          for (const chatId of prevChats) {
+            try {
+              const sub = client.subscribe(`/user/queue/chat.${chatId}`, (message) =>
+                handleChatMessage(chatId, message),
+              );
+              subscribedChatsRef.current.add(chatId);
+              subscriptionMapRef.current.set(chatId, sub);
+            } catch (error) {
+              console.error(`[ChatWS] Error re-subscribing to chat ${chatId}:`, error);
+            }
+          }
+
+          // Also subscribe to selected chat if not already covered
           if (selectedChatId && !subscribedChatsRef.current.has(selectedChatId)) {
             try {
               const sub = client.subscribe(`/user/queue/chat.${selectedChatId}`, (message) =>
@@ -276,7 +292,8 @@ export const useChatWS = (): UseChatWSReturn => {
         },
         onWebSocketClose: (event) => {
           setIsConnected(false);
-          subscribedChatsRef.current.clear();
+          // Clear stale subscription objects — the old client is gone.
+          // Keep subscribedChatsRef so onConnect can re-subscribe to all chats.
           subscriptionMapRef.current.clear();
 
           // Don't reconnect if we've hit max attempts or if it was an auth error
@@ -296,8 +313,6 @@ export const useChatWS = (): UseChatWSReturn => {
         },
         onDisconnect: () => {
           setIsConnected(false);
-          subscribedChatsRef.current.clear();
-          subscriptionMapRef.current.clear();
         },
       });
 

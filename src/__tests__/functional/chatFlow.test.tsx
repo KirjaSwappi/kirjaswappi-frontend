@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -17,6 +18,16 @@ vi.mock('../../hooks/useChatWS', () => ({
     subscribeToChat: vi.fn(),
     unsubscribeFromChat: vi.fn(),
   })),
+}));
+
+vi.mock('../../contexts/ChatWSContext', () => ({
+  useChatWSContext: vi.fn(() => ({
+    isConnected: true,
+    sendChatMessage: vi.fn(),
+    subscribeToChat: vi.fn(),
+    unsubscribeFromChat: vi.fn(),
+  })),
+  ChatWSProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 const mockMarkAsRead = vi.fn();
