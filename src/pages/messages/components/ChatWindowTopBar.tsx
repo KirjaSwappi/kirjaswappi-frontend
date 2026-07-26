@@ -226,7 +226,7 @@ export default function ChatWindowTopBar({ bookOpen, setBookOpen }: IChatWindowT
             </div>
           )}
           {bookOpen && (
-            <div className="absolute left-0 w-full bg-[#DEE7F5] px-4 pb-3 mt-3">
+            <div className="w-full bg-[#DEE7F5] pb-3 mt-3">
               <div className="flex gap-4">
                 <Image
                   src={selectedChat.bookToSwapWith?.coverPhotoUrl || imagePlaceholder}
