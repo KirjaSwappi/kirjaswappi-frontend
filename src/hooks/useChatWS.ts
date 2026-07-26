@@ -292,8 +292,9 @@ export const useChatWS = (): UseChatWSReturn => {
         },
         onWebSocketClose: (event) => {
           setIsConnected(false);
-          // Do NOT clear subscribedChatsRef/subscriptionMapRef here — they are
-          // preserved so onConnect can re-subscribe to all chats after reconnect.
+          // Clear stale subscription objects — the old client is gone.
+          // Keep subscribedChatsRef so onConnect can re-subscribe to all chats.
+          subscriptionMapRef.current.clear();
 
           // Don't reconnect if we've hit max attempts or if it was an auth error
           if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) return;

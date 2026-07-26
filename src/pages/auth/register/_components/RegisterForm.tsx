@@ -69,6 +69,7 @@ export default function RegisterForm() {
     try {
       await register(data).then(async (res) => {
         if ('data' in res) {
+          if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
           stepTimerRef.current = setTimeout(() => {
             dispatch(
               setMessages({
