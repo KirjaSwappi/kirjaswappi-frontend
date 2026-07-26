@@ -95,7 +95,7 @@ const notificationSlice = createSlice({
     ) => {
       const { showAlert, message, alertType } = action.payload;
       state.showAlert = showAlert;
-      state.message = message;
+      state.alertMessage = message;
       state.alertType = alertType;
     },
     // Add incoming notification

@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useGetUserByIdQuery } from './redux/feature/auth/authApi';
 import { logout, setUserInformation } from './redux/feature/auth/authSlice';
+import { resetChat } from './redux/feature/messages/messagesSlice';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import routes from './routes/route';
 import { isFetchBaseQueryError } from './utility/rtkError';
@@ -29,6 +30,7 @@ export default function Authenticate() {
     if (!error) return;
     if (isFetchBaseQueryError(error) && (error.status === 401 || error.status === 403)) {
       dispatch(logout());
+      dispatch(resetChat());
     }
   }, [error, dispatch]);
 

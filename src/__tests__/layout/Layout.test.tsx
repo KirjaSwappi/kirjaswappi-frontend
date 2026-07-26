@@ -1,4 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 vi.mock('react-router-dom', () => ({
@@ -25,8 +26,14 @@ vi.mock('../../hooks/useNotificationWS', () => ({
   useNotificationWS: vi.fn(),
 }));
 
-vi.mock('../../hooks/useChatWS', () => ({
-  useChatWS: vi.fn(),
+vi.mock('../../contexts/ChatWSContext', () => ({
+  ChatWSProvider: ({ children }: { children: React.ReactNode }) => children,
+  useChatWSContext: vi.fn(() => ({
+    isConnected: false,
+    sendChatMessage: vi.fn(),
+    subscribeToChat: vi.fn(),
+    unsubscribeFromChat: vi.fn(),
+  })),
 }));
 
 import Layout from '../../layout';

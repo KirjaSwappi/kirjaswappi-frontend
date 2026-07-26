@@ -6,15 +6,15 @@ import { setupTestStore } from '../../utils/test-utils';
 
 const renderWithStore = (
   props: Parameters<typeof AlertModal>[0] = {},
-  notificationState: { showAlert: boolean; message?: string },
+  notificationState: { showAlert: boolean; alertMessage?: string },
 ) => {
   const store = setupTestStore({
     notification: {
       isShow: false,
       messageType: '',
-      message: notificationState.message ?? '',
+      message: '',
       showAlert: notificationState.showAlert,
-      alertMessage: '',
+      alertMessage: notificationState.alertMessage ?? '',
       alertType: '',
       notifications: [],
       unreadCount: 0,
@@ -34,12 +34,12 @@ const renderWithStore = (
 
 describe('AlertModal', () => {
   it('is visible when showAlert is true', () => {
-    renderWithStore({}, { showAlert: true, message: 'Are you sure?' });
+    renderWithStore({}, { showAlert: true, alertMessage: 'Are you sure?' });
     expect(screen.getByText('Are you sure?')).toBeInTheDocument();
   });
 
   it('is hidden when showAlert is false', () => {
-    const { container } = renderWithStore({}, { showAlert: false, message: 'Hidden' });
+    const { container } = renderWithStore({}, { showAlert: false, alertMessage: 'Hidden' });
     expect(container.firstChild).toBeNull();
   });
 

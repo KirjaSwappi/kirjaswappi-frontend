@@ -22,7 +22,7 @@ export default function AlertModal({
   noBtnValue = 'No',
   loading = false,
 }: IAlert) {
-  const { showAlert, message } = useAppSelector((state) => state.notification);
+  const { showAlert, alertMessage } = useAppSelector((state) => state.notification);
   const dispatch = useDispatch();
 
   const handleClose = useCallback(() => dispatch(setAlert({ showAlert: false })), [dispatch]);
@@ -52,7 +52,7 @@ export default function AlertModal({
             <Image src={close} alt="close" />
           </Button>
         </div>
-        <p className="px-3 py-3  text-base font-poppins">{message}</p>
+        <p className="px-3 py-3  text-base font-poppins">{alertMessage}</p>
         <div className="px-3 pb-3 flex justify-end">
           <Button
             onClick={no}

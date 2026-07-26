@@ -292,11 +292,11 @@ const chatSlice = createSlice({
         });
       }
     },
-    removeTempMessages: (state, action: PayloadAction<{ chatId: string }>) => {
-      const { chatId } = action.payload;
+    removeTempMessages: (state, action: PayloadAction<{ chatId: string; tempId: string }>) => {
+      const { chatId, tempId } = action.payload;
       const chat = state.chats.find((c) => c.id === chatId);
       if (chat) {
-        chat.messages = chat.messages.filter((m) => !String(m.id).startsWith('temp-'));
+        chat.messages = chat.messages.filter((m) => String(m.id) !== tempId);
       }
     },
     markChatRead: (state, action: PayloadAction<string>) => {

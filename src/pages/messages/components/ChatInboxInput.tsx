@@ -60,13 +60,14 @@ export default function ChatInboxInput() {
     const imageFiles = files?.filter((file): file is File => file instanceof File) || [];
 
     // Optimistic update
+    const tempId = `temp-${Date.now()}`;
     const objectUrls: string[] = [];
     if (trimmedMessage || imageFiles.length > 0) {
       const urls =
         imageFiles.length > 0 ? imageFiles.map((f) => URL.createObjectURL(f)) : undefined;
       if (urls) objectUrls.push(...urls);
       const optimisticMessage = {
-        id: `temp-${Date.now()}`,
+        id: tempId,
         sender: 'me' as const,
         text: trimmedMessage || '',
         time: new Date().toISOString(),
@@ -88,12 +89,12 @@ export default function ChatInboxInput() {
         images: imageFiles.length > 0 ? imageFiles : undefined,
       }).unwrap();
 
-      // Remove temp optimistic messages after successful send
-      dispatch(removeTempMessages({ chatId: selectedChatId }));
+      // Remove the specific temp optimistic message after successful send
+      dispatch(removeTempMessages({ chatId: selectedChatId, tempId }));
       objectUrls.forEach((url) => URL.revokeObjectURL(url));
       reset();
     } catch (error) {
-      dispatch(removeTempMessages({ chatId: selectedChatId }));
+      dispatch(removeTempMessages({ chatId: selectedChatId, tempId }));
       objectUrls.forEach((url) => URL.revokeObjectURL(url));
       showToast('error', t('toast.messageSendFailed'));
       console.error('Failed to send message:', error);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../../components/shared/Button';
@@ -28,6 +28,13 @@ export default function RegisterForm() {
   const [register, { isLoading }] = useRegisterMutation();
   const { error, message } = useAppSelector((state) => state.auth);
   const { step } = useAppSelector((state) => state.step);
+  const stepTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (stepTimerRef.current) clearTimeout(stepTimerRef.current);
+    };
+  }, []);
 
   const methods = useForm<IRegisterForm>({
     resolver: yupResolver(registerSchema),
@@ -62,7 +69,7 @@ export default function RegisterForm() {
     try {
       await register(data).then(async (res) => {
         if ('data' in res) {
-          const timer = setTimeout(() => {
+          stepTimerRef.current = setTimeout(() => {
             dispatch(
               setMessages({
                 type: '',
@@ -75,7 +82,6 @@ export default function RegisterForm() {
             dispatch(setOtp(Array(6).fill('')));
             dispatch(setStep(step + 1));
           }, 2000);
-          return () => clearTimeout(timer);
         }
       });
     } catch (error) {
