@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import PageTitle from '../../components/shared/PageTitle';
@@ -20,6 +20,23 @@ export default function Messages() {
   const { isConnected: chatConnected } = useChatWSContext();
   const [searchParams] = useSearchParams();
   const messageId = searchParams.get('messageId');
+
+  // Measure the (absolutely-positioned) top bar so the scrollable message list
+  // can pad exactly enough to clear it. A hardcoded padding drifts out of sync
+  // whenever the bar's height changes (Accept/Reject buttons, wrapped titles,
+  // the expandable book detail), causing the first message to slide under it.
+  const topBarRef = useRef<HTMLDivElement>(null);
+  const [topBarHeight, setTopBarHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    const el = topBarRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => {
+      setTopBarHeight(entry.contentRect.height);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [selectedChatId, bookOpen]);
 
   useEffect(() => {
     if (messageId) {
@@ -57,14 +74,13 @@ export default function Messages() {
           selectedChatId || messageId ? 'block' : 'hidden'
         } lg:block relative`}
       >
-        <div className="absolute w-full z-20 left-0 top-0">
+        <div ref={topBarRef} className="absolute w-full z-20 left-0 top-0">
           <ChatWindowTopBar bookOpen={bookOpen} setBookOpen={setBookOpen} />
         </div>
 
         <div
-          className={`overflow-y-auto custom-scrollbar h-[86%] px-4 ${
-            !bookOpen ? 'pt-[170px] xl:pt-[186px]' : 'pt-[270px] xl:pt-[286px]'
-          } pb-40`}
+          className="overflow-y-auto custom-scrollbar h-[86%] px-4 pb-40"
+          style={{ paddingTop: topBarHeight ? topBarHeight + 16 : undefined }}
         >
           <ChatWindow />
         </div>
