@@ -1,7 +1,7 @@
 # KirjaSwappi Frontend
 
 [![Release Pipeline](https://github.com/KirjaSwappi/kirjaswappi-frontend/actions/workflows/release.yml/badge.svg)](https://github.com/KirjaSwappi/kirjaswappi-frontend/actions/workflows/release.yml)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/01648706-95ce-47a4-965e-364ea53b5317/deploy-status)](https://app.netlify.com/sites/kirjaswappi/deploys)
+[![Vercel](https://img.shields.io/badge/deployed%20on-Vercel-black?logo=vercel)](https://kirjaswappi.fi)
 
 React web app for [KirjaSwappi](https://kirjaswappi.fi) — a Finnish book exchange platform where users list books, negotiate swaps, and communicate in real time.
 
