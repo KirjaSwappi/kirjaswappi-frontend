@@ -25,9 +25,7 @@ const blobCache = new Map<string, string>();
 const pathKey = (url: string) => url.split('?')[0];
 
 const Image: React.FC<IImageProps> = (props) => {
-  const { src, style, className, persist } = props;
-  const domProps = { ...props };
-  delete domProps.persist;
+  const { src, style, className, persist, alt, ref, onMouseOver, onClick, onKeyDown } = props;
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [cachedSrc, setCachedSrc] = useState<string | undefined>(() =>
@@ -89,7 +87,10 @@ const Image: React.FC<IImageProps> = (props) => {
         <div className={cn('bg-platinum animate-pulse', className)} aria-hidden="true" />
       )}
       <img
-        {...domProps}
+        ref={ref}
+        onMouseOver={onMouseOver}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
         src={!effectiveSrc || hasError ? imagePlaceholder : effectiveSrc}
         onError={handleError}
         onLoad={() => {
@@ -98,7 +99,7 @@ const Image: React.FC<IImageProps> = (props) => {
         }}
         loading="lazy"
         decoding="async"
-        alt={props?.alt || 'image'}
+        alt={alt || 'image'}
         style={style}
         className={cn(
           `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`,
