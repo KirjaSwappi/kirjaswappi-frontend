@@ -77,6 +77,12 @@ const initialState: ChatState = {
   selectedChatId: '',
 };
 
+// Compare image lists by object path, ignoring the presigned-URL signature
+// (query string), which rotates on every fetch for identical objects.
+const imagePath = (url: string) => url.split('?')[0];
+const sameImagePaths = (a: string[] | undefined, b: string[]): boolean =>
+  !!a && a.length === b.length && a.every((url, i) => imagePath(url) === imagePath(b[i]));
+
 // Helper function to move chat to front
 const moveChatToFront = (chats: Chat[], chatId: string): Chat[] => {
   const chatIndex = chats.findIndex((c) => c.id === chatId);
@@ -276,8 +282,11 @@ const chatSlice = createSlice({
           const key = String(msg.id);
           const existing = existingMap.get(key);
           if (existing) {
-            // Always update image URLs — presigned URLs rotate on every fetch
-            if (msg.images) {
+            // Presigned URLs rotate their signature on every fetch while
+            // pointing at the same object. Only swap when the object path
+            // actually changed, so the <img src> stays stable and the browser
+            // doesn't drop and re-request the image (blinking) on every refetch.
+            if (msg.images && !sameImagePaths(existing.images, msg.images)) {
               existing.images = msg.images;
             }
           } else {
