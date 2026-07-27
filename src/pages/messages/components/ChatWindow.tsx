@@ -130,6 +130,7 @@ export default function ChatWindow() {
                         <Image
                           key={index}
                           src={img}
+                          persist
                           alt={msg.text || 'Image'}
                           className="rounded-xl max-w-[140px] xl:max-w-[200px] mb-0.5"
                         />
