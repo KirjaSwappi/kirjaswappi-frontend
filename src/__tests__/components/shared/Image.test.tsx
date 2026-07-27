@@ -60,7 +60,7 @@ describe('Image Component', () => {
   it('calls onClick when provided', () => {
     const onClick = vi.fn();
     render(<Image src="https://example.com/photo.jpg" alt="Clickable" onClick={onClick} />);
-    fireEvent.click(screen.getByRole('img'));
+    fireEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 
@@ -102,5 +102,26 @@ describe('Image Component', () => {
     expect(img).toHaveAttribute('src', 'imagePlaceholder.svg');
 
     vi.useRealTimers();
+  });
+
+  it('persist mode fetches the bytes and serves a cached object URL', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, blob: () => Promise.resolve(new Blob(['x'])) });
+    vi.stubGlobal('fetch', fetchMock);
+    const createObjectURL = vi.fn(() => 'blob:cached');
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL: vi.fn() });
+
+    render(<Image src="https://s3.example.com/photo.jpg?sig=1" persist alt="Chat" />);
+
+    // Bytes fetched from the presigned URL while it's still valid.
+    expect(fetchMock).toHaveBeenCalledWith('https://s3.example.com/photo.jpg?sig=1');
+
+    // Once cached, the img serves the local object URL, not the expiring link.
+    await vi.waitFor(() =>
+      expect(screen.getByRole('img')).toHaveAttribute('src', 'blob:cached'),
+    );
+
+    vi.unstubAllGlobals();
   });
 });

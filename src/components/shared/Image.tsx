@@ -11,12 +11,23 @@ interface IImageProps {
   onClick?: () => void;
   onKeyDown?: () => void;
   style?: CSSProperties;
+  persist?: boolean;
 }
 
+// Session cache keyed by object path (ignoring the rotating presigned
+// signature). Object URLs are never revoked — chat images are few and the
+// cache dies with the tab. ponytail: bounded by conversation size; if that
+// ever grows large, add an LRU cap here.
+const blobCache = new Map<string, string>();
+const pathKey = (url: string) => url.split('?')[0];
+
 const Image: React.FC<IImageProps> = (props) => {
-  const { src, style, className } = props;
+  const { src, style, className, persist, alt, ref, onMouseOver, onClick, onKeyDown } = props;
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [cachedSrc, setCachedSrc] = useState<string | undefined>(() =>
+    persist && src ? blobCache.get(pathKey(src)) : undefined,
+  );
   const hasEverLoaded = useRef(false);
   const retryCount = useRef(0);
   const retryTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -30,6 +41,33 @@ const Image: React.FC<IImageProps> = (props) => {
     return () => clearTimeout(retryTimer.current);
   }, [src]);
 
+  // Fetch-once-and-cache for persist mode: grab the bytes while the presigned
+  // URL is still valid, then serve the object URL from then on.
+  useEffect(() => {
+    if (!persist || !src) return;
+    const key = pathKey(src);
+    const existing = blobCache.get(key);
+    if (existing) {
+      setCachedSrc(existing);
+      return;
+    }
+    let revoked = false;
+    fetch(src)
+      .then((r) => (r.ok ? r.blob() : Promise.reject(r.status)))
+      .then((blob) => {
+        if (revoked) return;
+        const objectUrl = URL.createObjectURL(blob);
+        blobCache.set(key, objectUrl);
+        setCachedSrc(objectUrl);
+      })
+      .catch(() => {
+        // CORS/expiry — fall back to the raw URL (existing behavior).
+      });
+    return () => {
+      revoked = true;
+    };
+  }, [persist, src]);
+
   const handleError = () => {
     if (retryCount.current < 1 && src) {
       retryCount.current += 1;
@@ -38,14 +76,23 @@ const Image: React.FC<IImageProps> = (props) => {
     setHasError(true);
   };
 
+  const effectiveSrc = cachedSrc || src;
+
   return (
     <picture>
       {!isLoaded && (
         <div className={cn('bg-platinum animate-pulse', className)} aria-hidden="true" />
       )}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/mouse-events-have-key-events */}
       <img
-        {...props}
-        src={!src || hasError ? imagePlaceholder : src}
+        ref={ref}
+        role={onClick || onKeyDown ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        onMouseOver={onMouseOver}
+        onFocus={onMouseOver}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+        src={!effectiveSrc || hasError ? imagePlaceholder : effectiveSrc}
         onError={handleError}
         onLoad={() => {
           setIsLoaded(true);
@@ -53,7 +100,7 @@ const Image: React.FC<IImageProps> = (props) => {
         }}
         loading="lazy"
         decoding="async"
-        alt={props?.alt || 'image'}
+        alt={alt || 'image'}
         style={style}
         className={cn(
           `transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0 h-0 overflow-hidden'}`,
