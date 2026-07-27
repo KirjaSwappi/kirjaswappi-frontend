@@ -60,7 +60,7 @@ describe('Image Component', () => {
   it('calls onClick when provided', () => {
     const onClick = vi.fn();
     render(<Image src="https://example.com/photo.jpg" alt="Clickable" onClick={onClick} />);
-    fireEvent.click(screen.getByRole('img'));
+    fireEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledTimes(1);
   });
 

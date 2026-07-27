@@ -11,9 +11,6 @@ interface IImageProps {
   onClick?: () => void;
   onKeyDown?: () => void;
   style?: CSSProperties;
-  // Cache the fetched bytes as an object URL and serve those instead of the
-  // original URL. Use for presigned/expiring URLs (e.g. chat images) so a
-  // later repaint doesn't re-request an expired link and fail.
   persist?: boolean;
 }
 
@@ -86,9 +83,13 @@ const Image: React.FC<IImageProps> = (props) => {
       {!isLoaded && (
         <div className={cn('bg-platinum animate-pulse', className)} aria-hidden="true" />
       )}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/mouse-events-have-key-events */}
       <img
         ref={ref}
+        role={onClick || onKeyDown ? 'button' : undefined}
+        tabIndex={onClick ? 0 : undefined}
         onMouseOver={onMouseOver}
+        onFocus={onMouseOver}
         onClick={onClick}
         onKeyDown={onKeyDown}
         src={!effectiveSrc || hasError ? imagePlaceholder : effectiveSrc}
