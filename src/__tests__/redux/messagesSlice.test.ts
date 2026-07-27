@@ -591,6 +591,50 @@ describe('messagesSlice', () => {
         'https://s3.example.com/fresh-presigned-url?expires=999',
       ]);
     });
+
+    it('should keep the existing URL when only the presigned signature rotates', () => {
+      const stateWithChats: ChatState = {
+        chats: [
+          {
+            id: 'chat-1',
+            name: 'Test Chat',
+            unread: false,
+            unreadMessageCount: 0,
+            messages: [
+              {
+                id: 'msg-1',
+                sender: 'them',
+                text: '',
+                time: '2024-01-01T10:00:00Z',
+                images: ['https://s3.example.com/photo.jpg?sig=111'],
+              },
+            ],
+          },
+        ],
+        selectedChatId: '',
+      };
+
+      const result = messagesSlice(
+        stateWithChats,
+        addChatMessages({
+          chatId: 'chat-1',
+          messages: [
+            {
+              id: 'msg-1',
+              sender: 'them',
+              text: '',
+              time: '2024-01-01T10:00:00Z',
+              images: ['https://s3.example.com/photo.jpg?sig=999'],
+            },
+          ],
+        }),
+      );
+
+      // Same object path -> keep the original URL so the <img> doesn't blink.
+      expect(result.chats[0].messages[0].images).toEqual([
+        'https://s3.example.com/photo.jpg?sig=111',
+      ]);
+    });
   });
 
   describe('removeTempMessages', () => {
